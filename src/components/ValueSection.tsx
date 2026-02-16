@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import brandLogo2 from "@/assets/brand-os.jpg";
 
 const services = [
-{ icon: Database, title: "100K+ Property Database", desc: "Greece's largest structured property dataset for institutional-grade analysis." },
+{ icon: Database, title: "500K+ Property Datapoints", desc: "Greece's largest structured property dataset for institutional-grade analysis." },
 { icon: BarChart3, title: "Market Analytics Engine", desc: "Real-time valuations, price trends & neighborhood comparables at your fingertips." },
 { icon: Brain, title: "AI-Powered Due Diligence", desc: "Automated Valuation Models leveraging latest AI models." },
 { icon: PieChart, title: "Portfolio Optimization", desc: "Diversification modeling across locations, asset types & risk profiles." },
