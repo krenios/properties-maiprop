@@ -1,6 +1,6 @@
 import { Database, BarChart3, Brain, PieChart, Target, LineChart, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import brandLogo2 from "@/assets/brand-os.png";
+import brandLogo2 from "@/assets/brand-os.jpg";
 
 const services = [
 { icon: Database, title: "100K+ Property Database", desc: "Greece's largest structured property dataset for institutional-grade analysis." },
