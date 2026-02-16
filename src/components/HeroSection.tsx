@@ -5,7 +5,7 @@ const WHATSAPP_URL = "https://wa.me/306900000000?text=Hi%2C%20I'm%20interested%2
 
 const stats = [
   { value: "€250K", label: "Minimum Investment" },
-  { value: "2-3 Months", label: "To Visa Approval" },
+  { value: "6-9 Months", label: "To Visa Approval" },
   { value: "27 Countries", label: "Schengen Access" },
   
 ];
