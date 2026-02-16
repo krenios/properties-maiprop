@@ -7,7 +7,7 @@ const services = [
 { icon: BarChart3, title: "Market Analytics Engine", desc: "Real-time valuations, price trends & neighborhood comparables at your fingertips." },
 { icon: Brain, title: "AI-Powered Due Diligence", desc: "Automated Valuation Models leveraging latest AI models." },
 { icon: PieChart, title: "Portfolio Optimization", desc: "Diversification modeling across locations, asset types & risk profiles." },
-{ icon: Target, title: "Deal Origination", desc: "Off-market sourcing with data-driven pricing below market benchmarks." },
+
 { icon: LineChart, title: "ROI Forecasting", desc: "Rental yield projections, capital appreciation models & IRR calculations." }];
 
 

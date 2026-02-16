@@ -9,7 +9,9 @@ const tools = [
 { icon: ShieldCheck, title: "Visa Eligibility Checker", desc: "Instantly verify property Golden Visa qualification" }];
 
 
-const PlatformReference = () => {};
+const PlatformReference = () => {
+  return null;
+};
 
 
 
