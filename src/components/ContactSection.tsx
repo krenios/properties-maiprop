@@ -20,7 +20,7 @@ const ContactSection = () =>
         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary">
           <Sparkles className="h-4 w-4" /> Start Your Application
         </div>
-        <h2 className="text-1xl font-bold sm:text-1xl lg:text-6x4">
+        <h2 className="text-1xl font-bold sm:text-1xl lg:text-6x4 text-5xl">
           Begin Your{" "}
           <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             Golden Visa
