@@ -2,7 +2,7 @@ import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Bed, Maximize, TrendingUp, MessageCircle, ChevronLeft, ChevronRight, ExternalLink, Tag, ArrowRight } from "lucide-react";
+import { MapPin, Bed, Maximize, TrendingUp, MessageCircle, ChevronLeft, ChevronRight, ExternalLink, Tag, ArrowRight, Building, Calendar, LayoutGrid } from "lucide-react";
 import { useState } from "react";
 
 const WHATSAPP_URL = "https://wa.me/306971853470?text=Hi%2C%20I'm%20interested%20in%20";
@@ -149,11 +149,19 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
             </a>
           </div>
 
-          {/* Floor plan */}
+          {/* Floor Plan */}
           {property.floorPlan && (
-            <div>
-              <h4 className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Floor Plan</h4>
-              <img src={property.floorPlan} alt="Floor plan" className="w-full rounded-lg border border-border" />
+            <div className="rounded-xl border-2 border-primary/20 bg-primary/5 p-5">
+              <div className="mb-3 flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/15">
+                  <LayoutGrid className="h-4 w-4 text-primary" />
+                </div>
+                <h4 className="text-sm font-semibold uppercase tracking-wider text-primary">Floor Plan</h4>
+              </div>
+              <img src={property.floorPlan} alt="Floor plan" className="w-full rounded-lg border border-border bg-background" />
+              {property.floor && (
+                <p className="mt-2 text-center text-xs text-muted-foreground">Floor: {property.floor}</p>
+              )}
             </div>
           )}
 
