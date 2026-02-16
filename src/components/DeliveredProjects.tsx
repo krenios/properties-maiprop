@@ -92,10 +92,10 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={() => { onClose(); setImgIdx(0); }}>
-      <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto border-border bg-card p-0">
+      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto border-border bg-card p-0">
         {/* Scrollable Photo Gallery */}
         {hasPhotos && (
-          <div className="relative aspect-video w-full overflow-hidden">
+          <div className="relative h-[180px] w-full overflow-hidden">
             <img src={allPhotos[imgIdx % allPhotos.length]} alt={property.title} className="h-full w-full object-cover" />
             {allPhotos.length > 1 && (
               <>
@@ -133,9 +133,9 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
           </div>
         )}
 
-        <div className="space-y-6 p-6">
+        <div className="space-y-3 p-4">
           <DialogHeader>
-            <DialogTitle className="text-2xl">{property.title}</DialogTitle>
+            <DialogTitle className="text-xl">{property.title}</DialogTitle>
             <button
               onClick={() => window.open(mapsUrl, "_blank")}
               className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary">
@@ -237,7 +237,7 @@ const BeforeAfterSlider = ({ before, after }: { before: string; after: string })
   return (
     <div
       ref={containerRef}
-      className="relative aspect-[4/3] w-full cursor-col-resize select-none overflow-hidden rounded-lg border border-border"
+      className="relative h-[180px] w-full cursor-col-resize select-none overflow-hidden rounded-lg border border-border"
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
