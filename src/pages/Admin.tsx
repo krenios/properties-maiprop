@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { useProperties } from "@/contexts/PropertyContext";
+import { useAuth } from "@/hooks/useAuth";
 import { Property } from "@/data/properties";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,7 +17,7 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Plus, Pencil, Trash2, AlertTriangle, ArrowUpDown, Home, ArrowRightCircle, CheckCircle } from "lucide-react";
+import { Plus, Pencil, Trash2, AlertTriangle, ArrowUpDown, Home, ArrowRightCircle, CheckCircle, LogOut } from "lucide-react";
 import ImageUpload from "@/components/ImageUpload";
 import { Link } from "react-router-dom";
 
@@ -30,6 +31,7 @@ const emptyProperty: Omit<Property, "id" | "date_added"> = {
 
 const Admin = () => {
   const { properties, addProperty, updateProperty, deleteProperty, bulkUpdateStatus } = useProperties();
+  const { signOut } = useAuth();
   const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingType, setEditingType] = useState<"new" | "delivered">("new");
@@ -127,6 +129,7 @@ const Admin = () => {
             <h1 className="text-2xl font-bold">Property Admin</h1>
           </div>
           <Button onClick={openNew} className="gap-2 rounded-full"><Plus className="h-4 w-4" /> Add Property</Button>
+            <Button variant="outline" onClick={signOut} className="gap-2 rounded-full"><LogOut className="h-4 w-4" /> Sign Out</Button>
         </div>
 
         {/* ── PORTFOLIO SECTION ── */}
