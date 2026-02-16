@@ -167,34 +167,6 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
 
           <p className="text-sm text-muted-foreground">{property.description}</p>
 
-          {/* Property Specs */}
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {property.price &&
-            <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
-                <p className="text-xs text-muted-foreground">Price</p>
-                <p className="text-lg font-bold text-primary">€{property.price.toLocaleString()}</p>
-              </div>
-            }
-            {property.size &&
-            <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
-                <Maximize className="mx-auto h-4 w-4 text-muted-foreground" />
-                <p className="text-lg font-bold">{property.size} m²</p>
-              </div>
-            }
-            {property.bedrooms &&
-            <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
-                <Bed className="mx-auto h-4 w-4 text-muted-foreground" />
-                <p className="text-lg font-bold">{property.bedrooms} BR</p>
-              </div>
-            }
-            {property.yield &&
-            <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
-                <TrendingUp className="mx-auto h-4 w-4 text-muted-foreground" />
-                <p className="text-lg font-bold">{property.yield}</p>
-              </div>
-            }
-          </div>
-
           {/* Before & After Slider */}
           {hasBeforeAfter &&
           <div>
@@ -203,11 +175,6 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
             </div>
           }
 
-          <Button asChild size="lg" className="w-full gap-2 rounded-full">
-            <a href={`${WHATSAPP_URL}${encodeURIComponent(property.title)}`} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="h-5 w-5" /> Inquire via WhatsApp
-            </a>
-          </Button>
         </div>
       </DialogContent>
     </Dialog>);
