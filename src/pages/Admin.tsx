@@ -24,7 +24,7 @@ type SortDir = "asc" | "desc";
 
 const emptyProperty: Omit<Property, "id" | "dateAdded"> = {
   title: "", description: "", images: [], beforeImage: "", afterImage: "", price: null, size: null, bedrooms: null,
-  floorPlan: "", location: "", poi: [], tags: [], status: "", projectType: "new", yield: "",
+  floorPlan: "", location: "", poi: [], tags: [], status: "", projectType: "new", yield: "", floor: "", constructionYear: "",
 };
 
 const Admin = () => {
@@ -80,7 +80,7 @@ const Admin = () => {
   const openEdit = (p: Property) => {
     setEditingId(p.id);
     setEditingType(p.projectType);
-    setForm({ title: p.title, description: p.description, images: p.images, beforeImage: p.beforeImage, afterImage: p.afterImage, price: p.price, size: p.size, bedrooms: p.bedrooms, floorPlan: p.floorPlan, location: p.location, poi: p.poi, tags: p.tags, status: p.status, projectType: p.projectType, yield: p.yield });
+    setForm({ title: p.title, description: p.description, images: p.images, beforeImage: p.beforeImage, afterImage: p.afterImage, price: p.price, size: p.size, bedrooms: p.bedrooms, floorPlan: p.floorPlan, location: p.location, poi: p.poi, tags: p.tags, status: p.status, projectType: p.projectType, yield: p.yield, floor: p.floor, constructionYear: p.constructionYear });
     setFormOpen(true);
   };
 

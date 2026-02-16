@@ -16,6 +16,8 @@ export interface Property {
   projectType: "new" | "delivered";
   yield: string;
   dateAdded: string;
+  floor: string;
+  constructionYear: string;
 }
 
 export const initialProperties: Property[] = [
@@ -40,6 +42,8 @@ export const initialProperties: Property[] = [
     projectType: "new",
     yield: "5.2%",
     dateAdded: "2024-12-01",
+    floor: "3rd",
+    constructionYear: "2024",
   },
   {
     id: "2",
@@ -54,7 +58,7 @@ export const initialProperties: Property[] = [
     price: 320000,
     size: 78,
     bedrooms: 1,
-    floorPlan: "",
+    floorPlan: "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?w=800",
     location: "Kolonaki, Athens",
     poi: ["Syntagma Square 800m", "Lycabettus Hill 300m"],
     tags: ["Studio", "Terrace", "City Center"],
@@ -62,6 +66,8 @@ export const initialProperties: Property[] = [
     projectType: "new",
     yield: "4.8%",
     dateAdded: "2025-01-15",
+    floor: "5th",
+    constructionYear: "2025",
   },
   {
     id: "3",
@@ -83,6 +89,8 @@ export const initialProperties: Property[] = [
     projectType: "new",
     yield: "6.1%",
     dateAdded: "2025-02-01",
+    floor: "2nd",
+    constructionYear: "2023",
   },
   {
     id: "4",
@@ -104,6 +112,8 @@ export const initialProperties: Property[] = [
     projectType: "delivered",
     yield: "5.5%",
     dateAdded: "2024-06-01",
+    floor: "1st–3rd",
+    constructionYear: "2023",
   },
   {
     id: "5",
@@ -125,5 +135,7 @@ export const initialProperties: Property[] = [
     projectType: "delivered",
     yield: "4.2%",
     dateAdded: "2024-03-15",
+    floor: "Ground + 1st",
+    constructionYear: "2022",
   },
 ];

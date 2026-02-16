@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 import { useProperties } from "@/contexts/PropertyContext";
-import { CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag, MessageCircle, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
+import { CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag, MessageCircle, ExternalLink, ChevronLeft, ChevronRight, Building, Calendar } from "lucide-react";
 import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
@@ -166,6 +166,38 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
           }
 
           <p className="text-sm text-muted-foreground">{property.description}</p>
+
+          {/* Property Specs */}
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {property.size && (
+              <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
+                <Maximize className="mx-auto h-4 w-4 text-muted-foreground" />
+                <p className="text-lg font-bold">{property.size} m²</p>
+                <p className="text-xs text-muted-foreground">Size</p>
+              </div>
+            )}
+            {property.bedrooms && (
+              <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
+                <Bed className="mx-auto h-4 w-4 text-muted-foreground" />
+                <p className="text-lg font-bold">{property.bedrooms} BR</p>
+                <p className="text-xs text-muted-foreground">Bedrooms</p>
+              </div>
+            )}
+            {property.floor && (
+              <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
+                <Building className="mx-auto h-4 w-4 text-muted-foreground" />
+                <p className="text-lg font-bold">{property.floor}</p>
+                <p className="text-xs text-muted-foreground">Floor</p>
+              </div>
+            )}
+            {property.constructionYear && (
+              <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
+                <Calendar className="mx-auto h-4 w-4 text-muted-foreground" />
+                <p className="text-lg font-bold">{property.constructionYear}</p>
+                <p className="text-xs text-muted-foreground">Built</p>
+              </div>
+            )}
+          </div>
 
           {/* Before & After Slider */}
           {hasBeforeAfter &&
