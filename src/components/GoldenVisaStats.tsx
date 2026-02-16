@@ -3,7 +3,7 @@ import { Globe, Users, Zap, Home, TrendingUp, Sun } from "lucide-react";
 const benefits = [
   { icon: Globe, title: "EU Residency", desc: "Live, work, and travel freely across 27 Schengen countries" },
   { icon: Users, title: "Family Inclusion", desc: "Spouse, children under 21, and parents in one application" },
-  { icon: Zap, title: "Fast Processing", desc: "Permanent residency in 2-3 months with streamlined application" },
+  { icon: Zap, title: "Fast Processing", desc: "Permanent residency in 6-9 months with streamlined application" },
   { icon: Home, title: "No Stay Required", desc: "Maintain residency without minimum stay obligations" },
   { icon: TrendingUp, title: "Strong Market Growth", desc: "8%+ annual appreciation with strong rental income potential" },
   { icon: Sun, title: "Mediterranean Lifestyle", desc: "300+ days of sunshine, world-class cuisine, and rich culture" },
