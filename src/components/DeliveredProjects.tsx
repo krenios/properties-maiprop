@@ -160,6 +160,11 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
 
           {/* Property Specs as pills */}
           <div className="flex flex-wrap gap-2">
+            {property.price && (
+              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                <span className="text-primary font-semibold">€{property.price.toLocaleString()}</span>
+              </Badge>
+            )}
             {property.size && (
               <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
                 <Maximize className="h-3.5 w-3.5 text-muted-foreground" /> {property.size} m²
@@ -178,6 +183,11 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
             {property.construction_year && (
               <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
                 <Calendar className="h-3.5 w-3.5 text-muted-foreground" /> Built {property.construction_year}
+              </Badge>
+            )}
+            {property.yield && (
+              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" /> {property.yield}
               </Badge>
             )}
           </div>
