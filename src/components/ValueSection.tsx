@@ -3,16 +3,16 @@ import { Button } from "@/components/ui/button";
 import brandLogo2 from "@/assets/brand-2.png";
 
 const services = [
-  { icon: Database, title: "100K+ Property Database", desc: "Greece's largest structured property dataset for institutional-grade analysis." },
-  { icon: BarChart3, title: "Market Analytics Engine", desc: "Real-time valuations, price trends & neighborhood comparables at your fingertips." },
-  { icon: Brain, title: "AI-Powered Due Diligence", desc: "Automated risk scoring, legal compliance checks & investment grading." },
-  { icon: PieChart, title: "Portfolio Optimization", desc: "Diversification modeling across locations, asset types & risk profiles." },
-  { icon: Target, title: "Deal Origination", desc: "Off-market sourcing with data-driven pricing below market benchmarks." },
-  { icon: LineChart, title: "ROI Forecasting", desc: "Rental yield projections, capital appreciation models & IRR calculations." },
-];
+{ icon: Database, title: "100K+ Property Database", desc: "Greece's largest structured property dataset for institutional-grade analysis." },
+{ icon: BarChart3, title: "Market Analytics Engine", desc: "Real-time valuations, price trends & neighborhood comparables at your fingertips." },
+{ icon: Brain, title: "AI-Powered Due Diligence", desc: "Automated risk scoring, legal compliance checks & investment grading." },
+{ icon: PieChart, title: "Portfolio Optimization", desc: "Diversification modeling across locations, asset types & risk profiles." },
+{ icon: Target, title: "Deal Origination", desc: "Off-market sourcing with data-driven pricing below market benchmarks." },
+{ icon: LineChart, title: "ROI Forecasting", desc: "Rental yield projections, capital appreciation models & IRR calculations." }];
 
-const ValueSection = () => (
-  <section id="value" className="relative bg-section-purple py-24">
+
+const ValueSection = () =>
+<section id="value" className="relative bg-section-purple py-24">
     <div className="pointer-events-none absolute left-1/4 bottom-0 h-[350px] w-[350px] rounded-full bg-secondary/10 blur-[120px]" />
     <div className="relative container mx-auto px-6">
       <div className="mb-14 text-center">
@@ -26,23 +26,23 @@ const ValueSection = () => (
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {services.map((s) => (
-          <div
-            key={s.title}
-            className="group rounded-xl border border-secondary/20 bg-background/30 p-6 backdrop-blur transition-all hover:border-secondary/40 hover:shadow-[0_0_30px_hsl(263_86%_64%/0.1)]"
-          >
+        {services.map((s) =>
+      <div
+        key={s.title}
+        className="group rounded-xl border border-secondary/20 bg-background/30 p-6 backdrop-blur transition-all hover:border-secondary/40 hover:shadow-[0_0_30px_hsl(263_86%_64%/0.1)]">
+
             <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-secondary/15 transition-colors group-hover:bg-secondary/25">
               <s.icon className="h-5 w-5 text-secondary" />
             </div>
             <h3 className="mb-1 font-semibold">{s.title}</h3>
             <p className="text-sm text-muted-foreground">{s.desc}</p>
           </div>
-        ))}
+      )}
       </div>
 
       {/* Platform CTA */}
       <div className="mt-14 flex flex-col items-center gap-4">
-        <img src={brandLogo2} alt="mAI prop OS" className="h-12 w-auto brightness-0 invert" />
+        
         <Button asChild size="lg" className="gap-2 rounded-full bg-primary px-10 text-lg font-semibold text-primary-foreground shadow-[0_0_30px_hsl(179_90%_63%/0.4)] transition-all hover:bg-primary/90 hover:shadow-[0_0_50px_hsl(179_90%_63%/0.6)]">
           <a href="https://os.maiprop.co" target="_blank" rel="noopener noreferrer">
             Get Platform Access <ExternalLink className="h-5 w-5" />
@@ -51,7 +51,7 @@ const ValueSection = () => (
         <p className="text-sm text-muted-foreground">100K+ property database · Self-service analytics · Instant visa eligibility</p>
       </div>
     </div>
-  </section>
-);
+  </section>;
+
 
 export default ValueSection;
