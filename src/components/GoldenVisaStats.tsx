@@ -1,7 +1,7 @@
 import { Globe, Users, Zap, Home, TrendingUp, Sun } from "lucide-react";
 
 const benefits = [
-{ icon: Globe, title: "EU Residency", desc: "Live, work, and travel freely across 27 Schengen countries. Access to mAI Prop OS" },
+{ icon: Globe, title: "EU Residency", desc: "Live, work, and travel freely across 27 Schengen countries — Access to mAI Prop OS" },
 { icon: Users, title: "Family Inclusion", desc: "Spouse, children under 21, and parents in one application" },
 { icon: Zap, title: "Fast Processing", desc: "Permanent residency in 6-9 months with streamlined application" },
 { icon: Home, title: "No Stay Required", desc: "Maintain residency without minimum stay obligations" },
