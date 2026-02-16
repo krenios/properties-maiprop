@@ -2,7 +2,7 @@ import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Bed, Maximize, TrendingUp, MessageCircle, ChevronLeft, ChevronRight, ExternalLink, Tag, ArrowRight, Building, Calendar, LayoutGrid } from "lucide-react";
+import { MapPin, Bed, Maximize, TrendingUp, MessageCircle, ChevronLeft, ChevronRight, ExternalLink, Building, Calendar, LayoutGrid } from "lucide-react";
 import { useState } from "react";
 
 const WHATSAPP_URL = "https://wa.me/306971853470?text=Hi%2C%20I'm%20interested%20in%20";
@@ -64,20 +64,6 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
             </button>
           </DialogHeader>
 
-          {/* Classification tags */}
-          {property.tags && property.tags.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2">
-              <Tag className="h-4 w-4 text-secondary" />
-              {property.tags.map((tag) => (
-                <Badge key={tag} className="border-secondary/30 bg-secondary/15 text-secondary">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          )}
-
-          <p className="text-sm text-muted-foreground">{property.description}</p>
-
           {/* Key specs as pills */}
           <div className="flex flex-wrap gap-2">
             {property.price && (
@@ -111,27 +97,6 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
               </Badge>
             )}
           </div>
-
-          {/* Before & After for delivered projects */}
-          {hasBeforeAfter && (
-            <div>
-              <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Before & After</h4>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="relative overflow-hidden rounded-lg border border-border">
-                  <img src={property.before_image} alt="Before" className="aspect-[4/3] w-full object-cover grayscale-[40%]" />
-                  <span className="absolute bottom-2 left-2 rounded-full bg-destructive/80 px-3 py-1 text-xs font-semibold text-destructive-foreground backdrop-blur">
-                    Before
-                  </span>
-                </div>
-                <div className="relative overflow-hidden rounded-lg border border-primary/30">
-                  <img src={property.after_image} alt="After" className="aspect-[4/3] w-full object-cover" />
-                  <span className="absolute bottom-2 left-2 rounded-full bg-primary/80 px-3 py-1 text-xs font-semibold text-primary-foreground backdrop-blur">
-                    After
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* Embedded Google Map */}
           <div className="overflow-hidden rounded-lg border border-border">
@@ -167,21 +132,6 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                 <h4 className="text-sm font-semibold uppercase tracking-wider text-primary">Floor Plan</h4>
               </div>
               <img src={property.floor_plan} alt="Floor plan" className="w-full rounded-lg border border-border bg-background" />
-              {property.floor && (
-                <p className="mt-2 text-center text-xs text-muted-foreground">Floor: {property.floor}</p>
-              )}
-            </div>
-          )}
-
-          {/* POI */}
-          {property.poi.length > 0 && (
-            <div>
-              <h4 className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Points of Interest</h4>
-              <div className="flex flex-wrap gap-2">
-                {property.poi.map((p) => (
-                  <Badge key={p} variant="outline" className="border-border text-muted-foreground">{p}</Badge>
-                ))}
-              </div>
             </div>
           )}
 
