@@ -10,7 +10,7 @@ const benefits = [
 
 
 const GoldenVisaStats = () =>
-<section id="overview" className="relative bg-section-mid py-24 bg-muted">
+<section id="overview" className="relative bg-section-mid py-24 bg-primary-foreground">
     <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
     <div className="relative container mx-auto px-6">
       <div className="mb-14 text-center">
