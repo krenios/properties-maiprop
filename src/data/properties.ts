@@ -3,6 +3,8 @@ export interface Property {
   title: string;
   description: string;
   images: string[];
+  beforeImage: string;
+  afterImage: string;
   price: number | null;
   size: number | null;
   bedrooms: number | null;
@@ -25,6 +27,8 @@ export const initialProperties: Property[] = [
       "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800",
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
     ],
+    beforeImage: "",
+    afterImage: "",
     price: 280000,
     size: 95,
     bedrooms: 2,
@@ -45,6 +49,8 @@ export const initialProperties: Property[] = [
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800",
     ],
+    beforeImage: "",
+    afterImage: "",
     price: 320000,
     size: 78,
     bedrooms: 1,
@@ -64,6 +70,8 @@ export const initialProperties: Property[] = [
     images: [
       "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
     ],
+    beforeImage: "",
+    afterImage: "",
     price: 195000,
     size: 65,
     bedrooms: 1,
@@ -83,6 +91,8 @@ export const initialProperties: Property[] = [
     images: [
       "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800",
     ],
+    beforeImage: "https://images.unsplash.com/photo-1464146072230-91cabc968266?w=800",
+    afterImage: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800",
     price: 420000,
     size: 120,
     bedrooms: 3,
@@ -102,6 +112,8 @@ export const initialProperties: Property[] = [
     images: [
       "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800",
     ],
+    beforeImage: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800",
+    afterImage: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800",
     price: 580000,
     size: 180,
     bedrooms: 4,
