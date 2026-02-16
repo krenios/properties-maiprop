@@ -302,6 +302,16 @@ const Admin = () => {
             )}
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
+                <Label>Floor</Label>
+                <Input value={form.floor} onChange={(e) => setForm({ ...form, floor: e.target.value })} placeholder="e.g. 3rd" />
+              </div>
+              <div className="grid gap-2">
+                <Label>Construction Year</Label>
+                <Input value={form.constructionYear} onChange={(e) => setForm({ ...form, constructionYear: e.target.value })} placeholder="e.g. 2024" />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
                 <Label>Before Image URL</Label>
                 <Input value={form.beforeImage} onChange={(e) => setForm({ ...form, beforeImage: e.target.value })} placeholder="For delivered projects" />
               </div>
