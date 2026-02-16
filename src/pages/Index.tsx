@@ -29,7 +29,7 @@ const Index = () =>
           
         </div>
         <p className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} MaiProp. All rights reserved.
+          © {new Date().getFullYear()} mAI Prop. All rights reserved.
         </p>
       </div>
     </footer>
