@@ -46,7 +46,7 @@ AI-powered platform for independent assessment.
           <a href="#opportunities">View Properties</a>
         </Button>
         <Button asChild variant="secondary" size="lg" className="gap-2 rounded-full px-8">
-          <a href="#platform">Access mAI Prop OS: Your Data Partner</a>
+          <a href="https://os.maiprop.co/" target="_blank" rel="noopener noreferrer">Access mAI Prop OS: Your Data Partner</a>
         </Button>
       </div>
 
