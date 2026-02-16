@@ -15,14 +15,13 @@ interface Props {
 
 const PropertyModal = ({ property, open, onClose }: Props) => {
   const [imgIdx, setImgIdx] = useState(0);
-  const [showBefore, setShowBefore] = useState(true);
 
   if (!property) return null;
 
   const images = property.images.length > 0 ? property.images : ["/placeholder.svg"];
   const currentImg = images[imgIdx % images.length];
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
-  const hasBeforeAfter = property.beforeImage && property.afterImage;
+  const hasBeforeAfter = property.before_image && property.after_image;
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -101,9 +100,9 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                 <Building className="h-3.5 w-3.5 text-muted-foreground" /> Floor {property.floor}
               </Badge>
             )}
-            {property.constructionYear && (
+            {property.construction_year && (
               <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
-                <Calendar className="h-3.5 w-3.5 text-muted-foreground" /> Built {property.constructionYear}
+                <Calendar className="h-3.5 w-3.5 text-muted-foreground" /> Built {property.construction_year}
               </Badge>
             )}
             {property.yield && (
@@ -119,13 +118,13 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
               <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Before & After</h4>
               <div className="grid grid-cols-2 gap-3">
                 <div className="relative overflow-hidden rounded-lg border border-border">
-                  <img src={property.beforeImage} alt="Before" className="aspect-[4/3] w-full object-cover grayscale-[40%]" />
+                  <img src={property.before_image} alt="Before" className="aspect-[4/3] w-full object-cover grayscale-[40%]" />
                   <span className="absolute bottom-2 left-2 rounded-full bg-destructive/80 px-3 py-1 text-xs font-semibold text-destructive-foreground backdrop-blur">
                     Before
                   </span>
                 </div>
                 <div className="relative overflow-hidden rounded-lg border border-primary/30">
-                  <img src={property.afterImage} alt="After" className="aspect-[4/3] w-full object-cover" />
+                  <img src={property.after_image} alt="After" className="aspect-[4/3] w-full object-cover" />
                   <span className="absolute bottom-2 left-2 rounded-full bg-primary/80 px-3 py-1 text-xs font-semibold text-primary-foreground backdrop-blur">
                     After
                   </span>
@@ -156,7 +155,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
           </div>
 
           {/* Floor Plan */}
-          {property.floorPlan && (
+          {property.floor_plan && (
             <div className="rounded-xl border-2 border-primary/20 bg-primary/5 p-5">
               <div className="mb-3 flex items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/15">
@@ -164,7 +163,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                 </div>
                 <h4 className="text-sm font-semibold uppercase tracking-wider text-primary">Floor Plan</h4>
               </div>
-              <img src={property.floorPlan} alt="Floor plan" className="w-full rounded-lg border border-border bg-background" />
+              <img src={property.floor_plan} alt="Floor plan" className="w-full rounded-lg border border-border bg-background" />
               {property.floor && (
                 <p className="mt-2 text-center text-xs text-muted-foreground">Floor: {property.floor}</p>
               )}

@@ -19,12 +19,12 @@ import {
 import { Plus, Pencil, Trash2, AlertTriangle, ArrowUpDown, Home, ArrowRightCircle, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
-type SortKey = "title" | "price" | "status" | "dateAdded";
+type SortKey = "title" | "price" | "status" | "date_added";
 type SortDir = "asc" | "desc";
 
-const emptyProperty: Omit<Property, "id" | "dateAdded"> = {
-  title: "", description: "", images: [], beforeImage: "", afterImage: "", price: null, size: null, bedrooms: null,
-  floorPlan: "", location: "", poi: [], tags: [], status: "", projectType: "new", yield: "", floor: "", constructionYear: "",
+const emptyProperty: Omit<Property, "id" | "date_added"> = {
+  title: "", description: "", images: [], before_image: "", after_image: "", price: null, size: null, bedrooms: null,
+  floor_plan: "", location: "", poi: [], tags: [], status: "", project_type: "new", yield: "", floor: "", construction_year: "",
 };
 
 const Admin = () => {
@@ -36,13 +36,13 @@ const Admin = () => {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkStatus, setBulkStatus] = useState<Property["status"]>("available");
-  const [sortKey, setSortKey] = useState<SortKey>("dateAdded");
+  const [sortKey, setSortKey] = useState<SortKey>("date_added");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
-  const [deliveredSortKey, setDeliveredSortKey] = useState<SortKey>("dateAdded");
+  const [deliveredSortKey, setDeliveredSortKey] = useState<SortKey>("date_added");
   const [deliveredSortDir, setDeliveredSortDir] = useState<SortDir>("desc");
 
-  const portfolioProperties = useMemo(() => properties.filter((p) => p.projectType === "new"), [properties]);
-  const deliveredProperties = useMemo(() => properties.filter((p) => p.projectType === "delivered"), [properties]);
+  const portfolioProperties = useMemo(() => properties.filter((p) => p.project_type === "new"), [properties]);
+  const deliveredProperties = useMemo(() => properties.filter((p) => p.project_type === "delivered"), [properties]);
 
   const sortList = (list: Property[], key: SortKey, dir: SortDir) => {
     return [...list].sort((a, b) => {
@@ -50,7 +50,7 @@ const Admin = () => {
       if (key === "title") cmp = a.title.localeCompare(b.title);
       else if (key === "price") cmp = (a.price || 0) - (b.price || 0);
       else if (key === "status") cmp = (a.status || "").localeCompare(b.status || "");
-      else cmp = a.dateAdded.localeCompare(b.dateAdded);
+      else cmp = a.date_added.localeCompare(b.date_added);
       return dir === "asc" ? cmp : -cmp;
     });
   };
@@ -79,8 +79,8 @@ const Admin = () => {
   const openNew = () => { setEditingId(null); setEditingType("new"); setForm(emptyProperty); setFormOpen(true); };
   const openEdit = (p: Property) => {
     setEditingId(p.id);
-    setEditingType(p.projectType);
-    setForm({ title: p.title, description: p.description, images: p.images, beforeImage: p.beforeImage, afterImage: p.afterImage, price: p.price, size: p.size, bedrooms: p.bedrooms, floorPlan: p.floorPlan, location: p.location, poi: p.poi, tags: p.tags, status: p.status, projectType: p.projectType, yield: p.yield, floor: p.floor, constructionYear: p.constructionYear });
+    setEditingType(p.project_type);
+    setForm({ title: p.title, description: p.description, images: p.images, before_image: p.before_image, after_image: p.after_image, price: p.price, size: p.size, bedrooms: p.bedrooms, floor_plan: p.floor_plan, location: p.location, poi: p.poi, tags: p.tags, status: p.status, project_type: p.project_type, yield: p.yield, floor: p.floor, construction_year: p.construction_year });
     setFormOpen(true);
   };
 
@@ -95,7 +95,7 @@ const Admin = () => {
   };
 
   const transferToDelivered = (id: string) => {
-    updateProperty(id, { projectType: "delivered", status: "sold", floorPlan: "" });
+    updateProperty(id, { project_type: "delivered", status: "sold", floor_plan: "" });
   };
 
   const toggleSelect = (id: string) => {
@@ -113,7 +113,7 @@ const Admin = () => {
     </button>
   );
 
-  const isDeliveredForm = editingType === "delivered" || form.projectType === "delivered";
+  const isDeliveredForm = editingType === "delivered" || form.project_type === "delivered";
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -157,7 +157,7 @@ const Admin = () => {
                   <TableHead><SortBtn k="title" label="Title" onToggle={toggleSort} /></TableHead>
                   <TableHead><SortBtn k="price" label="Price" onToggle={toggleSort} /></TableHead>
                   <TableHead><SortBtn k="status" label="Status" onToggle={toggleSort} /></TableHead>
-                  <TableHead><SortBtn k="dateAdded" label="Date" onToggle={toggleSort} /></TableHead>
+                  <TableHead><SortBtn k="date_added" label="Date" onToggle={toggleSort} /></TableHead>
                   <TableHead>Info</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -179,7 +179,7 @@ const Admin = () => {
                       <TableCell>
                         <Badge variant="outline" className="text-xs capitalize">{p.status || "none"}</Badge>
                       </TableCell>
-                      <TableCell className="text-sm text-muted-foreground">{p.dateAdded}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground">{p.date_added}</TableCell>
                       <TableCell>
                         {missing.length > 0 && (
                           <div className="flex items-center gap-1 text-destructive" title={`Missing: ${missing.join(", ")}`}>
@@ -221,7 +221,7 @@ const Admin = () => {
                   <TableHead><SortBtn k="title" label="Title" onToggle={toggleDeliveredSort} /></TableHead>
                   <TableHead><SortBtn k="price" label="Price" onToggle={toggleDeliveredSort} /></TableHead>
                   <TableHead>Yield</TableHead>
-                  <TableHead><SortBtn k="dateAdded" label="Date" onToggle={toggleDeliveredSort} /></TableHead>
+                  <TableHead><SortBtn k="date_added" label="Date" onToggle={toggleDeliveredSort} /></TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -234,7 +234,7 @@ const Admin = () => {
                     <TableCell className="font-medium">{p.title}</TableCell>
                     <TableCell>{p.price ? `€${p.price.toLocaleString()}` : "—"}</TableCell>
                     <TableCell className="text-sm">{p.yield || "—"}</TableCell>
-                    <TableCell className="text-sm text-muted-foreground">{p.dateAdded}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">{p.date_added}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-1">
                         <Button size="icon" variant="ghost" onClick={() => openEdit(p)}><Pencil className="h-4 w-4" /></Button>
@@ -297,7 +297,7 @@ const Admin = () => {
             {!isDeliveredForm && (
               <div className="grid gap-2">
                 <Label>Floor Plan URL</Label>
-                <Input value={form.floorPlan} onChange={(e) => setForm({ ...form, floorPlan: e.target.value })} placeholder="Paste floor plan image URL" />
+                <Input value={form.floor_plan} onChange={(e) => setForm({ ...form, floor_plan: e.target.value })} placeholder="Paste floor plan image URL" />
               </div>
             )}
             <div className="grid grid-cols-2 gap-4">
@@ -307,17 +307,17 @@ const Admin = () => {
               </div>
               <div className="grid gap-2">
                 <Label>Construction Year</Label>
-                <Input value={form.constructionYear} onChange={(e) => setForm({ ...form, constructionYear: e.target.value })} placeholder="e.g. 2024" />
+                <Input value={form.construction_year} onChange={(e) => setForm({ ...form, construction_year: e.target.value })} placeholder="e.g. 2024" />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label>Before Image URL</Label>
-                <Input value={form.beforeImage} onChange={(e) => setForm({ ...form, beforeImage: e.target.value })} placeholder="For delivered projects" />
+                <Input value={form.before_image} onChange={(e) => setForm({ ...form, before_image: e.target.value })} placeholder="For delivered projects" />
               </div>
               <div className="grid gap-2">
                 <Label>After Image URL</Label>
-                <Input value={form.afterImage} onChange={(e) => setForm({ ...form, afterImage: e.target.value })} placeholder="For delivered projects" />
+                <Input value={form.after_image} onChange={(e) => setForm({ ...form, after_image: e.target.value })} placeholder="For delivered projects" />
               </div>
             </div>
             <div className="grid gap-2">
@@ -342,7 +342,7 @@ const Admin = () => {
               </div>
               <div className="grid gap-2">
                 <Label>Project Type</Label>
-                <Select value={form.projectType} onValueChange={(v) => setForm({ ...form, projectType: v as "new" | "delivered" })}>
+                <Select value={form.project_type} onValueChange={(v) => setForm({ ...form, project_type: v as "new" | "delivered" })}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="new">New</SelectItem>
