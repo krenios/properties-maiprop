@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useProperties } from "@/contexts/PropertyContext";
 import { CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag, MessageCircle, ExternalLink } from "lucide-react";
 import { Property } from "@/data/properties";
@@ -149,24 +149,11 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
             }
           </div>
 
-          {/* Before & After */}
+          {/* Before & After Slider */}
           {hasBeforeAfter &&
           <div>
               <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Before & After</h4>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="relative overflow-hidden rounded-lg border border-border">
-                  <img src={property.beforeImage} alt="Before" className="aspect-[4/3] w-full object-cover grayscale-[40%]" />
-                  <span className="absolute bottom-2 left-2 rounded-full bg-destructive/80 px-3 py-1 text-xs font-semibold text-destructive-foreground backdrop-blur">
-                    Before
-                  </span>
-                </div>
-                <div className="relative overflow-hidden rounded-lg border border-primary/30">
-                  <img src={property.afterImage} alt="After" className="aspect-[4/3] w-full object-cover" />
-                  <span className="absolute bottom-2 left-2 rounded-full bg-primary/80 px-3 py-1 text-xs font-semibold text-primary-foreground backdrop-blur">
-                    After
-                  </span>
-                </div>
-              </div>
+              <BeforeAfterSlider before={property.beforeImage!} after={property.afterImage!} />
             </div>
           }
 
@@ -179,6 +166,70 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
       </DialogContent>
     </Dialog>);
 
+};
+
+/* ─── Before / After Slider ─── */
+const BeforeAfterSlider = ({ before, after }: { before: string; after: string }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState(50);
+  const dragging = useRef(false);
+
+  const updatePosition = useCallback((clientX: number) => {
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+    setPosition((x / rect.width) * 100);
+  }, []);
+
+  const onPointerDown = useCallback((e: React.PointerEvent) => {
+    dragging.current = true;
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    updatePosition(e.clientX);
+  }, [updatePosition]);
+
+  const onPointerMove = useCallback((e: React.PointerEvent) => {
+    if (!dragging.current) return;
+    updatePosition(e.clientX);
+  }, [updatePosition]);
+
+  const onPointerUp = useCallback(() => {
+    dragging.current = false;
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative aspect-[4/3] w-full cursor-col-resize select-none overflow-hidden rounded-lg border border-border"
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+    >
+      {/* After (full background) */}
+      <img src={after} alt="After" className="absolute inset-0 h-full w-full object-cover" />
+
+      {/* Before (clipped) */}
+      <div className="absolute inset-0 overflow-hidden" style={{ width: `${position}%` }}>
+        <img src={before} alt="Before" className="h-full w-full object-cover grayscale-[40%]" style={{ width: containerRef.current?.offsetWidth ?? '100%' }} />
+      </div>
+
+      {/* Divider line + handle */}
+      <div className="absolute top-0 bottom-0 z-10 w-0.5 bg-primary" style={{ left: `${position}%` }}>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary bg-card shadow-lg">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-primary">
+            <path d="M6 10L2 10M2 10L4.5 7.5M2 10L4.5 12.5M14 10L18 10M18 10L15.5 7.5M18 10L15.5 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+      {/* Labels */}
+      <span className="absolute bottom-2 left-2 z-20 rounded-full bg-destructive/80 px-3 py-1 text-xs font-semibold text-destructive-foreground backdrop-blur">
+        Before
+      </span>
+      <span className="absolute bottom-2 right-2 z-20 rounded-full bg-primary/80 px-3 py-1 text-xs font-semibold text-primary-foreground backdrop-blur">
+        After
+      </span>
+    </div>
+  );
 };
 
 export default DeliveredProjects;
