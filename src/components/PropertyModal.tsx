@@ -133,24 +133,27 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
             </div>
           )}
 
-          {/* Map link */}
+          {/* Embedded Google Map */}
           <div className="overflow-hidden rounded-lg border border-border">
+            <iframe
+              title={`Map of ${property.location}`}
+              src={`https://www.google.com/maps?q=${encodeURIComponent(property.location + ", Greece")}&output=embed`}
+              className="aspect-video w-full border-0"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
             <a
               href={mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center justify-between bg-muted/30 p-4 transition-colors hover:bg-muted/50"
+              className="group flex items-center justify-between bg-muted/30 p-3 transition-colors hover:bg-muted/50"
             >
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <MapPin className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <p className="font-medium">View on Google Maps</p>
-                  <p className="text-xs text-muted-foreground">{property.location}, Greece</p>
-                </div>
+              <div className="flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-primary" />
+                <p className="text-sm font-medium">{property.location}, Greece</p>
               </div>
-              <ExternalLink className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-primary" />
+              <ExternalLink className="h-3.5 w-3.5 text-muted-foreground transition-colors group-hover:text-primary" />
             </a>
           </div>
 
