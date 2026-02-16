@@ -3,33 +3,59 @@ import { Button } from "@/components/ui/button";
 
 const WHATSAPP_URL = "https://wa.me/306900000000?text=Hi%2C%20I'm%20interested%20in%20Golden%20Visa%20investment%20opportunities";
 
-const HeroSection = () => (
-  <section className="relative flex min-h-[85vh] flex-col items-center justify-center overflow-hidden px-6 text-center">
-    {/* Gradient orbs */}
-    <div className="pointer-events-none absolute -top-40 left-1/4 h-[500px] w-[500px] rounded-full bg-primary/20 blur-[120px]" />
-    <div className="pointer-events-none absolute -bottom-40 right-1/4 h-[400px] w-[400px] rounded-full bg-secondary/20 blur-[120px]" />
+const stats = [
+  { value: "€250K", label: "Minimum Investment" },
+  { value: "2-3 Months", label: "To Visa Approval" },
+  { value: "27 Countries", label: "Schengen Access" },
+  { value: "100%", label: "Visa Success Rate" },
+];
 
-    <span className="mb-4 inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-primary">
-      Greek Golden Visa
-    </span>
-    <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-tight sm:text-6xl lg:text-7xl">
-      Your Gateway to{" "}
-      <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-        European Residency
+const HeroSection = () => (
+  <section className="relative flex min-h-screen flex-col justify-end overflow-hidden">
+    {/* Background image */}
+    <div className="absolute inset-0">
+      <img
+        src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=1920&q=80"
+        alt="Greece"
+        className="h-full w-full object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
+    </div>
+
+    {/* Content */}
+    <div className="relative z-10 container mx-auto px-6 pb-10 pt-32">
+      <span className="mb-4 inline-block rounded-full border border-primary/40 bg-primary/10 px-5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary backdrop-blur-sm">
+        Greek Golden Visa Program | EU Residency Through Real Estate
       </span>
-    </h1>
-    <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-      Curated real estate investments in Athens — deal origination, due diligence & asset management under one roof.
-    </p>
-    <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-      <Button asChild size="lg" className="gap-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 px-8">
-        <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-          Speak to an Advisor <ArrowRight className="h-4 w-4" />
-        </a>
-      </Button>
-      <Button asChild variant="outline" size="lg" className="rounded-full border-border px-8">
-        <a href="#opportunities">View Opportunities</a>
-      </Button>
+      <h1 className="max-w-3xl text-5xl font-bold leading-[1.1] tracking-tight sm:text-6xl lg:text-7xl">
+        Secure Your European{" "}
+        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          Golden Visa in Greece
+        </span>
+      </h1>
+      <p className="mt-6 max-w-xl text-lg text-muted-foreground">
+        EU residency through €250K+ Greek real estate investments — AI-powered platform for independent assessment.
+      </p>
+      <div className="mt-8 flex flex-wrap items-center gap-4">
+        <Button asChild size="lg" className="gap-2 rounded-full px-8">
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+            Start Your Golden Visa <ArrowRight className="h-4 w-4" />
+          </a>
+        </Button>
+        <Button asChild variant="outline" size="lg" className="rounded-full border-border/50 bg-background/20 px-8 backdrop-blur-sm">
+          <a href="#opportunities">View Properties</a>
+        </Button>
+      </div>
+
+      {/* Stats bar */}
+      <div className="mt-12 grid grid-cols-2 gap-6 border-t border-border/40 pt-8 sm:grid-cols-4">
+        {stats.map((s) => (
+          <div key={s.label}>
+            <p className="text-2xl font-bold sm:text-3xl">{s.value}</p>
+            <p className="text-sm text-muted-foreground">{s.label}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 );

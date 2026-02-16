@@ -1,25 +1,40 @@
-import { TrendingUp, Home, Globe, ShieldCheck } from "lucide-react";
+import { Globe, Users, Zap, Home, TrendingUp, Sun } from "lucide-react";
 
-const stats = [
-  { icon: Home, label: "Min. Investment", value: "€250K", sub: "Property threshold" },
-  { icon: Globe, label: "EU Residency", value: "Schengen", sub: "Travel 27 countries" },
-  { icon: TrendingUp, label: "Avg. Yield", value: "5–7%", sub: "Net rental return" },
-  { icon: ShieldCheck, label: "Processing", value: "60 Days", sub: "Fast-track approval" },
+const benefits = [
+  { icon: Globe, title: "EU Residency", desc: "Live, work, and travel freely across 27 Schengen countries" },
+  { icon: Users, title: "Family Inclusion", desc: "Spouse, children under 21, and parents in one application" },
+  { icon: Zap, title: "Fast Processing", desc: "Permanent residency in 2-3 months with streamlined application" },
+  { icon: Home, title: "No Stay Required", desc: "Maintain residency without minimum stay obligations" },
+  { icon: TrendingUp, title: "Strong Market Growth", desc: "8%+ annual appreciation with strong rental income potential" },
+  { icon: Sun, title: "Mediterranean Lifestyle", desc: "300+ days of sunshine, world-class cuisine, and rich culture" },
 ];
 
 const GoldenVisaStats = () => (
-  <section id="overview" className="border-y border-border bg-card/50 py-16">
-    <div className="container mx-auto grid grid-cols-2 gap-8 px-6 lg:grid-cols-4">
-      {stats.map((s) => (
-        <div key={s.label} className="flex flex-col items-center text-center">
-          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-            <s.icon className="h-6 w-6 text-primary" />
+  <section id="overview" className="relative bg-card py-24">
+    {/* Subtle gradient accent */}
+    <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background to-transparent opacity-40" />
+    <div className="relative container mx-auto px-6">
+      <div className="mb-14 text-center">
+        <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-widest text-primary">
+          Greek Golden Visa Program
+        </span>
+        <h2 className="text-3xl font-bold sm:text-4xl">Why Golden Visa Greece?</h2>
+        <p className="mt-2 text-muted-foreground">European residency with investment returns and lifestyle benefits.</p>
+      </div>
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {benefits.map((b) => (
+          <div
+            key={b.title}
+            className="rounded-xl border border-border bg-background/50 p-6 backdrop-blur transition-all hover:border-primary/30 hover:shadow-[0_0_30px_hsl(179_90%_63%/0.06)]"
+          >
+            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10">
+              <b.icon className="h-5 w-5 text-primary" />
+            </div>
+            <h3 className="mb-1 font-semibold">{b.title}</h3>
+            <p className="text-sm text-muted-foreground">{b.desc}</p>
           </div>
-          <p className="text-2xl font-bold sm:text-3xl">{s.value}</p>
-          <p className="text-sm font-medium text-foreground">{s.label}</p>
-          <p className="text-xs text-muted-foreground">{s.sub}</p>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   </section>
 );
