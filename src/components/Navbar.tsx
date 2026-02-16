@@ -37,10 +37,6 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between px-6 py-4">
         <a href="/" className="flex items-center gap-2">
           <img src={brandLogo} alt="MaiProp" className="h-8 w-auto brightness-0 invert" />
-          <div className="hidden sm:block">
-            <span className="text-sm font-bold">mAI prop</span>
-            <span className="block text-[10px] text-muted-foreground">Golden Visa</span>
-          </div>
         </a>
 
         {/* Desktop nav */}
