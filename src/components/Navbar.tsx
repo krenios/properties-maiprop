@@ -37,7 +37,7 @@ const Navbar = () => {
 
       <div className="container mx-auto flex items-center justify-between px-6 py-4 text-sidebar-primary bg-transparent">
         <a href="/" className="flex items-center gap-2">
-          <img src={brandLight} alt="MaiProp" className="h-12 w-auto object-fill" />
+          <img alt="MaiProp" className="h-12 w-auto object-fill opacity-100 rounded-none" src="/lovable-uploads/3c02ed5d-5638-402e-b7c8-0daa01b502d0.png" />
         </a>
 
         {/* Desktop nav */}
