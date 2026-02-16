@@ -45,7 +45,7 @@ AI-powered platform for independent assessment.
         <Button asChild variant="outline" size="lg" className="rounded-full border-border/50 bg-background/20 px-8 backdrop-blur-sm">
           <a href="#opportunities">View Properties</a>
         </Button>
-        <Button asChild size="lg" className="gap-2 rounded-full bg-purple px-8 text-white hover:bg-purple-glow">
+        <Button asChild size="lg" className="gap-2 rounded-full bg-[hsl(210,80%,60%)] px-8 text-white hover:bg-[hsl(210,80%,70%)]">
           <a href="https://os.maiprop.co/" target="_blank" rel="noopener noreferrer">Access mAI Prop OS: Your Data Partner</a>
         </Button>
       </div>
