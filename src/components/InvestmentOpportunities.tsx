@@ -11,12 +11,14 @@ const InvestmentOpportunities = () => {
   const current = properties.filter((p) => p.projectType === "new");
 
   return (
-    <section id="opportunities" className="py-20">
-      <div className="container mx-auto px-6">
+    <section id="opportunities" className="relative py-24">
+      {/* Accent glow */}
+      <div className="pointer-events-none absolute right-0 top-0 h-[400px] w-[400px] rounded-full bg-primary/10 blur-[150px]" />
+      <div className="relative container mx-auto px-6">
         <div className="mb-12 text-center">
-          <span className="mb-2 inline-block text-xs font-medium uppercase tracking-widest text-primary">Proprietary Assets</span>
-          <h2 className="text-3xl font-bold sm:text-4xl">Investment Opportunities</h2>
-          <p className="mt-2 text-muted-foreground">Golden Visa-eligible properties curated by MaiProp.</p>
+          <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-widest text-primary">Golden Visa Eligible Properties</span>
+          <h2 className="text-3xl font-bold sm:text-4xl">Visa-Ready Real Estate Portfolio</h2>
+          <p className="mt-2 text-muted-foreground">Pre-verified Golden Visa properties with full compliance — analyze and compare independently.</p>
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {current.map((p) => (

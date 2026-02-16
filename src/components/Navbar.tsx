@@ -4,11 +4,10 @@ import { Menu, X } from "lucide-react";
 import brandLogo from "@/assets/brand-1.png";
 
 const navLinks = [
-  { label: "Overview", href: "#overview" },
-  { label: "Opportunities", href: "#opportunities" },
-  { label: "Delivered", href: "#delivered" },
+  { label: "Portfolio", href: "#opportunities" },
+  { label: "Benefits", href: "#overview" },
+  { label: "Process", href: "#journey" },
   { label: "Platform", href: "#platform" },
-  { label: "Why MaiProp", href: "#value" },
 ];
 
 const WHATSAPP_URL = "https://wa.me/306900000000?text=Hi%2C%20I'm%20interested%20in%20Golden%20Visa%20investment%20opportunities";
@@ -38,6 +37,10 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between px-6 py-4">
         <a href="/" className="flex items-center gap-2">
           <img src={brandLogo} alt="MaiProp" className="h-8 w-auto brightness-0 invert" />
+          <div className="hidden sm:block">
+            <span className="text-sm font-bold">mAI prop</span>
+            <span className="block text-[10px] text-muted-foreground">Golden Visa</span>
+          </div>
         </a>
 
         {/* Desktop nav */}
@@ -52,7 +55,7 @@ const Navbar = () => {
             </button>
           ))}
           <Button asChild size="sm" className="rounded-full px-6">
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">Get in Touch</a>
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">Get Started</a>
           </Button>
         </nav>
 
@@ -76,7 +79,7 @@ const Navbar = () => {
               </button>
             ))}
             <Button asChild size="sm" className="mt-2 rounded-full">
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">Get in Touch</a>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">Get Started</a>
             </Button>
           </nav>
         </div>

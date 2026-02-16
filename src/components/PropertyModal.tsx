@@ -2,7 +2,7 @@ import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Bed, Maximize, TrendingUp, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { MapPin, Bed, Maximize, TrendingUp, MessageCircle, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { useState } from "react";
 
 const WHATSAPP_URL = "https://wa.me/306900000000?text=Hi%2C%20I'm%20interested%20in%20";
@@ -20,6 +20,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
 
   const images = property.images.length > 0 ? property.images : ["/placeholder.svg"];
   const currentImg = images[imgIdx % images.length];
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -43,14 +44,24 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
               </button>
             </>
           )}
+          {/* Image counter */}
+          {images.length > 1 && (
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-background/70 px-3 py-1 text-xs backdrop-blur">
+              {(imgIdx % images.length) + 1} / {images.length}
+            </div>
+          )}
         </div>
 
         <div className="space-y-6 p-6">
           <DialogHeader>
             <DialogTitle className="text-2xl">{property.title}</DialogTitle>
-            <div className="flex items-center gap-2 text-muted-foreground">
+            <button
+              onClick={() => window.open(mapsUrl, "_blank")}
+              className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
+            >
               <MapPin className="h-4 w-4" /> {property.location}
-            </div>
+              <ExternalLink className="h-3 w-3" />
+            </button>
           </DialogHeader>
 
           <p className="text-sm text-muted-foreground">{property.description}</p>
@@ -81,6 +92,27 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                 <p className="text-lg font-bold">{property.yield}</p>
               </div>
             )}
+          </div>
+
+          {/* Map link */}
+          <div className="overflow-hidden rounded-lg border border-border">
+            <a
+              href={mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center justify-between bg-muted/30 p-4 transition-colors hover:bg-muted/50"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                  <MapPin className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <p className="font-medium">View on Google Maps</p>
+                  <p className="text-xs text-muted-foreground">{property.location}, Greece</p>
+                </div>
+              </div>
+              <ExternalLink className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-primary" />
+            </a>
           </div>
 
           {/* Floor plan */}

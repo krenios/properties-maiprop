@@ -5,6 +5,8 @@ import InvestmentOpportunities from "@/components/InvestmentOpportunities";
 import DeliveredProjects from "@/components/DeliveredProjects";
 import ValueSection from "@/components/ValueSection";
 import PlatformReference from "@/components/PlatformReference";
+import JourneySection from "@/components/JourneySection";
+import ContactSection from "@/components/ContactSection";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 const Index = () => (
@@ -14,8 +16,10 @@ const Index = () => (
     <GoldenVisaStats />
     <InvestmentOpportunities />
     <DeliveredProjects />
-    <ValueSection />
     <PlatformReference />
+    <ValueSection />
+    <JourneySection />
+    <ContactSection />
     <footer className="border-t border-border py-8 text-center text-sm text-muted-foreground">
       © {new Date().getFullYear()} MaiProp. All rights reserved.
     </footer>
