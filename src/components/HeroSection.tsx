@@ -45,6 +45,9 @@ AI-powered platform for independent assessment.
         <Button asChild variant="outline" size="lg" className="rounded-full border-border/50 bg-background/20 px-8 backdrop-blur-sm">
           <a href="#opportunities">View Properties</a>
         </Button>
+        <Button asChild variant="secondary" size="lg" className="gap-2 rounded-full px-8">
+          <a href="#platform">Access mAI Prop OS: Your Data Partner</a>
+        </Button>
       </div>
 
       {/* Stats bar */}
