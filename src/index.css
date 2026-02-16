@@ -37,11 +37,11 @@
     --radius: 0.75rem;
 
     /* Section-specific backgrounds */
-    --section-deep: 235 100% 5%;
-    --section-mid: 235 60% 10%;
-    --section-elevated: 235 50% 15%;
-    --section-purple: 263 60% 10%;
-    --section-cyan: 179 40% 8%;
+    --section-deep: 235 100% 4%;
+    --section-mid: 220 45% 16%;
+    --section-elevated: 225 35% 22%;
+    --section-purple: 255 40% 16%;
+    --section-cyan: 185 30% 14%;
 
     --sidebar-background: 235 60% 10%;
     --sidebar-foreground: 180 90% 95%;
