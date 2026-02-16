@@ -11,7 +11,7 @@ const InvestmentOpportunities = () => {
   const current = properties.filter((p) => p.project_type === "new");
 
   return (
-    <section id="opportunities" className="relative bg-section-deep py-24 bg-accent-foreground bg-[sidebar-primary-foreground]">
+    <section id="opportunities" className="relative bg-section-deep py-24 bg-[sidebar-primary-foreground] bg-secondary-foreground">
       <div className="pointer-events-none absolute right-0 top-0 h-[500px] w-[500px] rounded-full bg-primary/8 blur-[180px]" />
       <div className="relative container mx-auto px-6">
         <div className="mb-12 text-center">
