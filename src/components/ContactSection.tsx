@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 const WHATSAPP_URL = "https://wa.me/306900000000?text=Hi%2C%20I'm%20interested%20in%20Golden%20Visa%20investment%20opportunities";
 
 const bullets = [
-  "Pre-verified properties with full compliance",
-  "Self-assessment platform for independent analysis",
-  "Full visa support from investment to approval",
-];
+"Pre-verified properties with full compliance",
+"Self-assessment platform for independent analysis",
+"Full visa support from investment to approval"];
 
-const ContactSection = () => (
-  <section id="contact" className="relative overflow-hidden bg-section-deep py-28">
+
+const ContactSection = () =>
+<section id="contact" className="relative overflow-hidden bg-section-deep py-28">
     {/* Dramatic glow effects */}
     <div className="pointer-events-none absolute left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/15 blur-[150px]" />
     <div className="pointer-events-none absolute bottom-0 left-1/4 h-[300px] w-[300px] rounded-full bg-secondary/10 blur-[100px]" />
@@ -31,15 +31,15 @@ const ContactSection = () => (
           Connect with our Golden Visa specialists on WhatsApp for instant guidance.
         </p>
 
-        <div className="my-10 flex flex-col items-center gap-4">
-          {bullets.map((b) => (
-            <div key={b} className="flex items-center gap-3 text-sm">
+        <div className="my-10 gap-4 flex-row flex items-center justify-center shadow-sm rounded-xl">
+          {bullets.map((b) =>
+        <div key={b} className="flex items-center gap-3 text-sm">
               <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/20">
                 <Check className="h-3.5 w-3.5 text-primary" />
               </div>
               <span className="text-muted-foreground">{b}</span>
             </div>
-          ))}
+        )}
         </div>
 
         <Button asChild size="lg" className="gap-2 rounded-full bg-primary px-12 text-lg font-semibold text-primary-foreground shadow-[0_0_40px_hsl(179_90%_63%/0.4)] transition-all hover:bg-primary/90 hover:shadow-[0_0_60px_hsl(179_90%_63%/0.6)]">
@@ -52,7 +52,7 @@ const ContactSection = () => (
         </p>
       </div>
     </div>
-  </section>
-);
+  </section>;
+
 
 export default ContactSection;
