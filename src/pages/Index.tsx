@@ -26,7 +26,7 @@ const Index = () =>
       <div className="container mx-auto flex flex-col items-center gap-4 px-6">
         <div className="flex items-center gap-6">
           
-          <img src={brandLogo2} alt="MaiProp OS" className="h-8 w-auto brightness-0 invert" />
+          
         </div>
         <p className="text-sm text-muted-foreground">
           © {new Date().getFullYear()} MaiProp. All rights reserved.
