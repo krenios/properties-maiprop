@@ -33,8 +33,8 @@ const HeroSection = () =>
           Golden Visa in Greece
         </span>
       </h1>
-      <p className="mt-6 max-w-xl text-lg text-muted-foreground text-justify">EU residency through €250K+ Greek real estate investments. 
-AI-powered platform for independent assessment.
+      <p className="mt-6 max-w-xl text-lg text-muted-foreground text-justify">EU residency through €250K+ Greek real estate investments.
+ AI-powered platform for independent assessment.
     </p>
       <div className="mt-8 flex flex-wrap items-center gap-4">
         <Button asChild size="lg" className="gap-2 rounded-full px-8">
@@ -44,9 +44,6 @@ AI-powered platform for independent assessment.
         </Button>
         <Button asChild variant="outline" size="lg" className="rounded-full border-border/50 bg-background/20 px-8 backdrop-blur-sm">
           <a href="#opportunities">View Properties</a>
-        </Button>
-        <Button asChild size="lg" className="gap-2 rounded-full bg-[hsl(210,80%,60%)] px-8 text-white hover:bg-[hsl(210,80%,70%)]">
-          <a href="https://os.maiprop.co/" target="_blank" rel="noopener noreferrer">Access mAI Prop OS: Your Data Partner</a>
         </Button>
       </div>
 
