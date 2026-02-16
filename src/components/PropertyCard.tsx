@@ -30,6 +30,23 @@ const PropertyCard = ({ property, onClick }: Props) => (
           {property.status.replace("-", " ")}
         </Badge>
       )}
+      <div className="absolute bottom-2 left-2 flex flex-wrap gap-1.5">
+        {property.bedrooms && (
+          <Badge variant="outline" className="border-background/30 bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
+            {property.bedrooms} BR
+          </Badge>
+        )}
+        {property.floor && (
+          <Badge variant="outline" className="border-background/30 bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
+            Floor {property.floor}
+          </Badge>
+        )}
+        {property.construction_year && (
+          <Badge variant="outline" className="border-background/30 bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
+            {property.construction_year}
+          </Badge>
+        )}
+      </div>
     </div>
     <div className="p-5">
       <h3 className="text-lg font-semibold">{property.title}</h3>
