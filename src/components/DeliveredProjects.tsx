@@ -23,7 +23,7 @@ const DeliveredProjects = () => {
   if (delivered.length === 0) return null;
 
   return (
-    <section id="delivered" className="bg-section-deep py-20">
+    <section id="delivered" className="bg-section-deep py-20 bg-sidebar-accent">
       <div className="container mx-auto px-6">
         {/* Track record stats */}
         <div className="mb-16 text-center">
@@ -85,53 +85,53 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
   const hasBeforeAfter = property.before_image && property.after_image;
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
   const allPhotos = [
-    ...property.images,
-    ...(property.after_image ? [property.after_image] : []),
-  ].filter(Boolean);
+  ...property.images,
+  ...(property.after_image ? [property.after_image] : [])].
+  filter(Boolean);
   const hasPhotos = allPhotos.length > 0;
 
   return (
-    <Dialog open={open} onOpenChange={() => { onClose(); setImgIdx(0); }}>
+    <Dialog open={open} onOpenChange={() => {onClose();setImgIdx(0);}}>
       <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto border-border bg-card p-0">
         {/* Scrollable Photo Gallery */}
-        {hasPhotos && (
-          <div className="relative h-[300px] w-full overflow-hidden">
+        {hasPhotos &&
+        <div className="relative h-[300px] w-full overflow-hidden">
             <img src={allPhotos[imgIdx % allPhotos.length]} alt={property.title} className="h-full w-full object-cover" />
-            {allPhotos.length > 1 && (
-              <>
+            {allPhotos.length > 1 &&
+          <>
                 <button
-                  onClick={() => setImgIdx((i) => (i - 1 + allPhotos.length) % allPhotos.length)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur transition-colors hover:bg-background"
-                >
+              onClick={() => setImgIdx((i) => (i - 1 + allPhotos.length) % allPhotos.length)}
+              className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur transition-colors hover:bg-background">
+
                   <ChevronLeft className="h-5 w-5" />
                 </button>
                 <button
-                  onClick={() => setImgIdx((i) => (i + 1) % allPhotos.length)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur transition-colors hover:bg-background"
-                >
+              onClick={() => setImgIdx((i) => (i + 1) % allPhotos.length)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur transition-colors hover:bg-background">
+
                   <ChevronRight className="h-5 w-5" />
                 </button>
                 <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-background/70 px-3 py-1 text-xs backdrop-blur">
-                  {(imgIdx % allPhotos.length) + 1} / {allPhotos.length}
+                  {imgIdx % allPhotos.length + 1} / {allPhotos.length}
                 </div>
               </>
-            )}
+          }
             {/* Thumbnail strip */}
-            {allPhotos.length > 1 && (
-              <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-1.5">
-                {allPhotos.map((src, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setImgIdx(i)}
-                    className={`h-10 w-14 overflow-hidden rounded border-2 transition-all ${i === imgIdx % allPhotos.length ? "border-primary shadow-lg" : "border-transparent opacity-60 hover:opacity-100"}`}
-                  >
+            {allPhotos.length > 1 &&
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-1.5">
+                {allPhotos.map((src, i) =>
+            <button
+              key={i}
+              onClick={() => setImgIdx(i)}
+              className={`h-10 w-14 overflow-hidden rounded border-2 transition-all ${i === imgIdx % allPhotos.length ? "border-primary shadow-lg" : "border-transparent opacity-60 hover:opacity-100"}`}>
+
                     <img src={src} alt="" className="h-full w-full object-cover" />
                   </button>
-                ))}
-              </div>
             )}
+              </div>
+          }
           </div>
-        )}
+        }
 
         <div className="space-y-3 p-4">
           <DialogHeader>
@@ -160,36 +160,36 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
 
           {/* Property Specs as pills */}
           <div className="flex flex-wrap gap-2">
-            {property.price && (
-              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+            {property.price &&
+            <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
                 <span className="text-primary font-semibold">€{property.price.toLocaleString()}</span>
               </Badge>
-            )}
-            {property.size && (
-              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+            }
+            {property.size &&
+            <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
                 <Maximize className="h-3.5 w-3.5 text-muted-foreground" /> {property.size} m²
               </Badge>
-            )}
-            {property.bedrooms && (
-              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+            }
+            {property.bedrooms &&
+            <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
                 <Bed className="h-3.5 w-3.5 text-muted-foreground" /> {property.bedrooms} BR
               </Badge>
-            )}
-            {property.floor && (
-              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+            }
+            {property.floor &&
+            <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
                 <Building className="h-3.5 w-3.5 text-muted-foreground" /> Floor {property.floor}
               </Badge>
-            )}
-            {property.construction_year && (
-              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+            }
+            {property.construction_year &&
+            <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
                 <Calendar className="h-3.5 w-3.5 text-muted-foreground" /> Built {property.construction_year}
               </Badge>
-            )}
-            {property.yield && (
-              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+            }
+            {property.yield &&
+            <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
                 <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" /> {property.yield}
               </Badge>
-            )}
+            }
           </div>
 
           {/* Before & After Slider */}
@@ -207,7 +207,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
 };
 
 /* ─── Before / After Slider ─── */
-const BeforeAfterSlider = ({ before, after }: { before: string; after: string }) => {
+const BeforeAfterSlider = ({ before, after }: {before: string;after: string;}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(50);
   const dragging = useRef(false);
@@ -216,7 +216,7 @@ const BeforeAfterSlider = ({ before, after }: { before: string; after: string })
     const rect = containerRef.current?.getBoundingClientRect();
     if (!rect) return;
     const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
-    setPosition((x / rect.width) * 100);
+    setPosition(x / rect.width * 100);
   }, []);
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
@@ -240,8 +240,8 @@ const BeforeAfterSlider = ({ before, after }: { before: string; after: string })
       className="relative h-[180px] w-full cursor-col-resize select-none overflow-hidden rounded-lg border border-border"
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-    >
+      onPointerUp={onPointerUp}>
+
       {/* After (full background) */}
       <img src={after} alt="After" className="absolute inset-0 h-full w-full object-cover" />
 
@@ -254,7 +254,7 @@ const BeforeAfterSlider = ({ before, after }: { before: string; after: string })
       <div className="absolute top-0 bottom-0 z-10 w-0.5 bg-primary" style={{ left: `${position}%` }}>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary bg-card shadow-lg">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-primary">
-            <path d="M6 10L2 10M2 10L4.5 7.5M2 10L4.5 12.5M14 10L18 10M18 10L15.5 7.5M18 10L15.5 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M6 10L2 10M2 10L4.5 7.5M2 10L4.5 12.5M14 10L18 10M18 10L15.5 7.5M18 10L15.5 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
       </div>
@@ -266,8 +266,8 @@ const BeforeAfterSlider = ({ before, after }: { before: string; after: string })
       <span className="absolute bottom-2 right-2 z-20 rounded-full bg-primary/80 px-3 py-1 text-xs font-semibold text-primary-foreground backdrop-blur">
         After
       </span>
-    </div>
-  );
+    </div>);
+
 };
 
 export default DeliveredProjects;
