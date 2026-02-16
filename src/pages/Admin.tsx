@@ -16,7 +16,7 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Plus, Pencil, Trash2, AlertTriangle, ArrowUpDown, Home } from "lucide-react";
+import { Plus, Pencil, Trash2, AlertTriangle, ArrowUpDown, Home, ArrowRightCircle, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
 type SortKey = "title" | "price" | "status" | "dateAdded";
@@ -31,27 +31,41 @@ const Admin = () => {
   const { properties, addProperty, updateProperty, deleteProperty, bulkUpdateStatus } = useProperties();
   const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingType, setEditingType] = useState<"new" | "delivered">("new");
   const [form, setForm] = useState(emptyProperty);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkStatus, setBulkStatus] = useState<Property["status"]>("available");
   const [sortKey, setSortKey] = useState<SortKey>("dateAdded");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
+  const [deliveredSortKey, setDeliveredSortKey] = useState<SortKey>("dateAdded");
+  const [deliveredSortDir, setDeliveredSortDir] = useState<SortDir>("desc");
 
-  const sorted = useMemo(() => {
-    return [...properties].sort((a, b) => {
+  const portfolioProperties = useMemo(() => properties.filter((p) => p.projectType === "new"), [properties]);
+  const deliveredProperties = useMemo(() => properties.filter((p) => p.projectType === "delivered"), [properties]);
+
+  const sortList = (list: Property[], key: SortKey, dir: SortDir) => {
+    return [...list].sort((a, b) => {
       let cmp = 0;
-      if (sortKey === "title") cmp = a.title.localeCompare(b.title);
-      else if (sortKey === "price") cmp = (a.price || 0) - (b.price || 0);
-      else if (sortKey === "status") cmp = (a.status || "").localeCompare(b.status || "");
+      if (key === "title") cmp = a.title.localeCompare(b.title);
+      else if (key === "price") cmp = (a.price || 0) - (b.price || 0);
+      else if (key === "status") cmp = (a.status || "").localeCompare(b.status || "");
       else cmp = a.dateAdded.localeCompare(b.dateAdded);
-      return sortDir === "asc" ? cmp : -cmp;
+      return dir === "asc" ? cmp : -cmp;
     });
-  }, [properties, sortKey, sortDir]);
+  };
+
+  const sortedPortfolio = useMemo(() => sortList(portfolioProperties, sortKey, sortDir), [portfolioProperties, sortKey, sortDir]);
+  const sortedDelivered = useMemo(() => sortList(deliveredProperties, deliveredSortKey, deliveredSortDir), [deliveredProperties, deliveredSortKey, deliveredSortDir]);
 
   const toggleSort = (key: SortKey) => {
     if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
     else { setSortKey(key); setSortDir("asc"); }
+  };
+
+  const toggleDeliveredSort = (key: SortKey) => {
+    if (deliveredSortKey === key) setDeliveredSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    else { setDeliveredSortKey(key); setDeliveredSortDir("asc"); }
   };
 
   const missingInfo = (p: Property) => {
@@ -62,9 +76,10 @@ const Admin = () => {
     return missing;
   };
 
-  const openNew = () => { setEditingId(null); setForm(emptyProperty); setFormOpen(true); };
+  const openNew = () => { setEditingId(null); setEditingType("new"); setForm(emptyProperty); setFormOpen(true); };
   const openEdit = (p: Property) => {
     setEditingId(p.id);
+    setEditingType(p.projectType);
     setForm({ title: p.title, description: p.description, images: p.images, beforeImage: p.beforeImage, afterImage: p.afterImage, price: p.price, size: p.size, bedrooms: p.bedrooms, floorPlan: p.floorPlan, location: p.location, poi: p.poi, tags: p.tags, status: p.status, projectType: p.projectType, yield: p.yield });
     setFormOpen(true);
   };
@@ -79,6 +94,10 @@ const Admin = () => {
     if (deleteId) { deleteProperty(deleteId); setDeleteId(null); setSelected((s) => { s.delete(deleteId); return new Set(s); }); }
   };
 
+  const transferToDelivered = (id: string) => {
+    updateProperty(id, { projectType: "delivered", status: "sold", floorPlan: "" });
+  };
+
   const toggleSelect = (id: string) => {
     setSelected((prev) => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
   };
@@ -88,11 +107,13 @@ const Admin = () => {
     setSelected(new Set());
   };
 
-  const SortBtn = ({ k, label }: { k: SortKey; label: string }) => (
-    <button onClick={() => toggleSort(k)} className="flex items-center gap-1 font-medium">
+  const SortBtn = ({ k, label, onToggle }: { k: SortKey; label: string; onToggle: (k: SortKey) => void }) => (
+    <button onClick={() => onToggle(k)} className="flex items-center gap-1 font-medium">
       {label} <ArrowUpDown className="h-3 w-3 text-muted-foreground" />
     </button>
   );
+
+  const isDeliveredForm = editingType === "delivered" || form.projectType === "delivered";
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -107,60 +128,113 @@ const Admin = () => {
           <Button onClick={openNew} className="gap-2 rounded-full"><Plus className="h-4 w-4" /> Add Property</Button>
         </div>
 
-        {/* Bulk actions */}
-        {selected.size > 0 && (
-          <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-primary/30 bg-primary/5 p-3">
-            <span className="text-sm font-medium">{selected.size} selected</span>
-            <Select value={bulkStatus} onValueChange={(v) => setBulkStatus(v as Property["status"])}>
-              <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="available">Available</SelectItem>
-                <SelectItem value="sold">Sold</SelectItem>
-                <SelectItem value="under-construction">Under Construction</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button size="sm" onClick={handleBulk}>Update Status</Button>
-            <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>Clear</Button>
-          </div>
-        )}
+        {/* ── PORTFOLIO SECTION ── */}
+        <div className="mb-12">
+          <h2 className="mb-4 text-lg font-semibold">Portfolio</h2>
 
-        <div className="overflow-x-auto rounded-xl border border-border">
-          <Table>
-            <TableHeader>
-              <TableRow className="border-border hover:bg-muted/50">
-                <TableHead className="w-10" />
-                <TableHead><SortBtn k="title" label="Title" /></TableHead>
-                <TableHead><SortBtn k="price" label="Price" /></TableHead>
-                <TableHead><SortBtn k="status" label="Status" /></TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead><SortBtn k="dateAdded" label="Date" /></TableHead>
-                <TableHead>Info</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {sorted.map((p) => {
-                const missing = missingInfo(p);
-                return (
+          {/* Bulk actions */}
+          {selected.size > 0 && (
+            <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-primary/30 bg-primary/5 p-3">
+              <span className="text-sm font-medium">{selected.size} selected</span>
+              <Select value={bulkStatus} onValueChange={(v) => setBulkStatus(v as Property["status"])}>
+                <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="available">Available</SelectItem>
+                  <SelectItem value="sold">Sold</SelectItem>
+                  <SelectItem value="under-construction">Under Construction</SelectItem>
+                </SelectContent>
+              </Select>
+              <Button size="sm" onClick={handleBulk}>Update Status</Button>
+              <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>Clear</Button>
+            </div>
+          )}
+
+          <div className="overflow-x-auto rounded-xl border border-border">
+            <Table>
+              <TableHeader>
+                <TableRow className="border-border hover:bg-muted/50">
+                  <TableHead className="w-10" />
+                  <TableHead><SortBtn k="title" label="Title" onToggle={toggleSort} /></TableHead>
+                  <TableHead><SortBtn k="price" label="Price" onToggle={toggleSort} /></TableHead>
+                  <TableHead><SortBtn k="status" label="Status" onToggle={toggleSort} /></TableHead>
+                  <TableHead><SortBtn k="dateAdded" label="Date" onToggle={toggleSort} /></TableHead>
+                  <TableHead>Info</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {sortedPortfolio.length === 0 && (
+                  <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">No portfolio properties</TableCell></TableRow>
+                )}
+                {sortedPortfolio.map((p) => {
+                  const missing = missingInfo(p);
+                  const isSold = p.status === "sold";
+                  return (
+                    <TableRow key={p.id} className="border-border hover:bg-muted/30">
+                      <TableCell>
+                        <Checkbox checked={selected.has(p.id)} onCheckedChange={() => toggleSelect(p.id)} />
+                      </TableCell>
+                      <TableCell className="font-medium">{p.title}</TableCell>
+                      <TableCell>{p.price ? `€${p.price.toLocaleString()}` : "—"}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="text-xs capitalize">{p.status || "none"}</Badge>
+                      </TableCell>
+                      <TableCell className="text-sm text-muted-foreground">{p.dateAdded}</TableCell>
+                      <TableCell>
+                        {missing.length > 0 && (
+                          <div className="flex items-center gap-1 text-destructive" title={`Missing: ${missing.join(", ")}`}>
+                            <AlertTriangle className="h-4 w-4" />
+                            <span className="text-xs">{missing.join(", ")}</span>
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1">
+                          {isSold && (
+                            <Button size="icon" variant="ghost" title="Transfer to Delivered" onClick={() => transferToDelivered(p.id)} className="text-secondary">
+                              <ArrowRightCircle className="h-4 w-4" />
+                            </Button>
+                          )}
+                          <Button size="icon" variant="ghost" onClick={() => openEdit(p)}><Pencil className="h-4 w-4" /></Button>
+                          <Button size="icon" variant="ghost" className="text-destructive" onClick={() => setDeleteId(p.id)}><Trash2 className="h-4 w-4" /></Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+
+        {/* ── SUCCESSFULLY DELIVERED SECTION ── */}
+        <div>
+          <div className="mb-4 flex items-center gap-2">
+            <CheckCircle className="h-5 w-5 text-secondary" />
+            <h2 className="text-lg font-semibold">Successfully Delivered</h2>
+          </div>
+
+          <div className="overflow-x-auto rounded-xl border border-border">
+            <Table>
+              <TableHeader>
+                <TableRow className="border-border hover:bg-muted/50">
+                  <TableHead><SortBtn k="title" label="Title" onToggle={toggleDeliveredSort} /></TableHead>
+                  <TableHead><SortBtn k="price" label="Price" onToggle={toggleDeliveredSort} /></TableHead>
+                  <TableHead>Yield</TableHead>
+                  <TableHead><SortBtn k="dateAdded" label="Date" onToggle={toggleDeliveredSort} /></TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {sortedDelivered.length === 0 && (
+                  <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-8">No delivered properties yet</TableCell></TableRow>
+                )}
+                {sortedDelivered.map((p) => (
                   <TableRow key={p.id} className="border-border hover:bg-muted/30">
-                    <TableCell>
-                      <Checkbox checked={selected.has(p.id)} onCheckedChange={() => toggleSelect(p.id)} />
-                    </TableCell>
                     <TableCell className="font-medium">{p.title}</TableCell>
                     <TableCell>{p.price ? `€${p.price.toLocaleString()}` : "—"}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className="text-xs capitalize">{p.status || "none"}</Badge>
-                    </TableCell>
-                    <TableCell className="capitalize text-sm">{p.projectType}</TableCell>
+                    <TableCell className="text-sm">{p.yield || "—"}</TableCell>
                     <TableCell className="text-sm text-muted-foreground">{p.dateAdded}</TableCell>
-                    <TableCell>
-                      {missing.length > 0 && (
-                        <div className="flex items-center gap-1 text-destructive" title={`Missing: ${missing.join(", ")}`}>
-                          <AlertTriangle className="h-4 w-4" />
-                          <span className="text-xs">{missing.join(", ")}</span>
-                        </div>
-                      )}
-                    </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-1">
                         <Button size="icon" variant="ghost" onClick={() => openEdit(p)}><Pencil className="h-4 w-4" /></Button>
@@ -168,10 +242,10 @@ const Admin = () => {
                       </div>
                     </TableCell>
                   </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
 
@@ -216,12 +290,16 @@ const Admin = () => {
             </div>
             <div className="grid gap-2">
               <Label>Image URLs (comma-separated)</Label>
-              <Input value={form.images.join(", ")} onChange={(e) => setForm({ ...form, images: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} />
+              <Input value={form.images.join(", ")} onChange={(e) => setForm({ ...form, images: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} placeholder="Paste URLs from OneDrive, Google Drive, or any host" />
+              <p className="text-xs text-muted-foreground">Supports any publicly accessible URL including cloud storage (OneDrive, Google Drive, etc.)</p>
             </div>
-            <div className="grid gap-2">
-              <Label>Floor Plan URL</Label>
-              <Input value={form.floorPlan} onChange={(e) => setForm({ ...form, floorPlan: e.target.value })} />
-            </div>
+            {/* Floor Plan — hidden for delivered projects */}
+            {!isDeliveredForm && (
+              <div className="grid gap-2">
+                <Label>Floor Plan URL</Label>
+                <Input value={form.floorPlan} onChange={(e) => setForm({ ...form, floorPlan: e.target.value })} placeholder="Paste floor plan image URL" />
+              </div>
+            )}
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label>Before Image URL</Label>
