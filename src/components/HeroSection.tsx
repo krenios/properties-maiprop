@@ -4,21 +4,21 @@ import { Button } from "@/components/ui/button";
 const WHATSAPP_URL = "https://wa.me/306971853470?text=Hi%2C%20I'm%20interested%20in%20Golden%20Visa%20investment%20opportunities";
 
 const stats = [
-  { value: "€250K", label: "Minimum Investment" },
-  { value: "6-9 Months", label: "To Visa Approval" },
-  { value: "27 Countries", label: "Schengen Access" },
-  
-];
+{ value: "€250K", label: "Minimum Investment" },
+{ value: "6-9 Months", label: "To Visa Approval" },
+{ value: "27 Countries", label: "Schengen Access" }];
 
-const HeroSection = () => (
-  <section className="relative flex min-h-screen flex-col justify-end overflow-hidden">
+
+
+const HeroSection = () =>
+<section className="relative flex min-h-screen flex-col justify-end overflow-hidden">
     {/* Background image */}
     <div className="absolute inset-0">
       <img
-        src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=1920&q=80"
-        alt="Greece"
-        className="h-full w-full object-cover"
-      />
+      src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=1920&q=80"
+      alt="Greece"
+      className="h-full w-full object-cover" />
+
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
     </div>
 
@@ -33,9 +33,9 @@ const HeroSection = () => (
           Golden Visa in Greece
         </span>
       </h1>
-      <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-        EU residency through €250K+ Greek real estate investments — AI-powered platform for independent assessment.
-      </p>
+      <p className="mt-6 max-w-xl text-lg text-muted-foreground text-justify">EU residency through €250K+ Greek real estate investments. 
+AI-powered platform for independent assessment.
+    </p>
       <div className="mt-8 flex flex-wrap items-center gap-4">
         <Button asChild size="lg" className="gap-2 rounded-full px-8">
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
@@ -49,15 +49,15 @@ const HeroSection = () => (
 
       {/* Stats bar */}
       <div className="mt-12 grid grid-cols-2 gap-6 border-t border-border/40 pt-8 sm:grid-cols-4">
-        {stats.map((s) => (
-          <div key={s.label}>
+        {stats.map((s) =>
+      <div key={s.label}>
             <p className="text-2xl font-bold sm:text-3xl">{s.value}</p>
             <p className="text-sm text-muted-foreground">{s.label}</p>
           </div>
-        ))}
+      )}
       </div>
     </div>
-  </section>
-);
+  </section>;
+
 
 export default HeroSection;
