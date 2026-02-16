@@ -23,7 +23,7 @@ const DeliveredProjects = () => {
   if (delivered.length === 0) return null;
 
   return (
-    <section id="delivered" className="bg-section-deep py-20 bg-gray-100">
+    <section id="delivered" className="bg-section-deep py-20 bg-gray-200">
       <div className="container mx-auto px-6">
         {/* Track record stats */}
         <div className="mb-16 text-center">
