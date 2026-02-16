@@ -33,7 +33,7 @@ const HeroSection = () =>
           Golden Visa in Greece
         </span>
       </h1>
-      <p className="mt-6 max-w-xl text-lg text-muted-foreground text-justify">EU residency through €250K+ Greek real estate investments. 
+      <p className="mt-6 max-w-xl text-lg text-muted-foreground text-justify">EU residency through €250K+ Greek real estate investments.  
 AI-powered platform for independent assessment.
     </p>
       <div className="mt-8 flex flex-wrap items-center gap-4">
