@@ -9,11 +9,11 @@ import { Button } from "@/components/ui/button";
 const WHATSAPP_URL = "https://wa.me/306900000000?text=Hi%2C%20I'm%20interested%20in%20";
 
 const trackRecord = [
-  { value: "€6.3M", label: "Successfully Closed" },
-  { value: "19", label: "Projects Delivered" },
-  { value: "100%", label: "Visa Success Rate" },
-  { value: "6.4%", label: "Avg Portfolio ROI" },
-];
+{ value: "€6.3M", label: "Successfully Closed" },
+{ value: "19", label: "Projects Delivered" },
+{ value: "100%", label: "Visa Success Rate" },
+{ value: "6.4%", label: "Avg Portfolio ROI" }];
+
 
 const DeliveredProjects = () => {
   const { properties } = useProperties();
@@ -30,35 +30,35 @@ const DeliveredProjects = () => {
           <Badge className="mb-4 border-primary/30 bg-primary/10 text-primary">
             <CheckCircle className="mr-1 h-3 w-3" /> Track Record
           </Badge>
-          <h2 className="mb-4 text-3xl font-bold md:text-4xl">Successfully Delivered</h2>
+          <h2 className="mb-4 text-3xl font-bold md:text-4xl text-secondary-foreground">Successfully Delivered</h2>
           <p className="mx-auto max-w-2xl text-muted-foreground">
             A proven portfolio of completed projects — renovated, rented, and generating returns.
           </p>
         </div>
 
-        <div className="mb-12 grid grid-cols-2 gap-4 md:grid-cols-4">
-          {trackRecord.map((stat) => (
-            <div key={stat.label} className="rounded-xl border border-border bg-card p-5 text-center">
-              <p className="text-2xl font-bold text-primary">{stat.value}</p>
-              <p className="mt-1 text-xs text-muted-foreground">{stat.label}</p>
-            </div>
-          ))}
-        </div>
+        
+
+
+
+
+
+
+
 
         {/* Property cards */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {delivered.map((p) => (
-            <button
-              key={p.id}
-              onClick={() => setSelected(p)}
-              className="group overflow-hidden rounded-xl border border-border bg-card text-left transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5"
-            >
+          {delivered.map((p) =>
+          <button
+            key={p.id}
+            onClick={() => setSelected(p)}
+            className="group overflow-hidden rounded-xl border border-border bg-card text-left transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5">
+
               <div className="relative aspect-video overflow-hidden">
                 <img
-                  src={p.images[0] || p.afterImage || "/placeholder.svg"}
-                  alt={p.title}
-                  className="h-full w-full object-cover transition-transform group-hover:scale-105"
-                />
+                src={p.images[0] || p.afterImage || "/placeholder.svg"}
+                alt={p.title}
+                className="h-full w-full object-cover transition-transform group-hover:scale-105" />
+
                 <Badge className="absolute right-3 top-3 border-none bg-primary/90 text-primary-foreground">
                   Delivered
                 </Badge>
@@ -70,14 +70,14 @@ const DeliveredProjects = () => {
                 </p>
               </div>
             </button>
-          ))}
+          )}
         </div>
       </div>
 
       {/* Delivered Modal — only before/after + specs */}
       <DeliveredModal property={selected} open={!!selected} onClose={() => setSelected(null)} />
-    </section>
-  );
+    </section>);
+
 };
 
 interface ModalProps {
@@ -100,58 +100,58 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
             <DialogTitle className="text-2xl">{property.title}</DialogTitle>
             <button
               onClick={() => window.open(mapsUrl, "_blank")}
-              className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
-            >
+              className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary">
+
               <MapPin className="h-4 w-4" /> {property.location}
               <ExternalLink className="h-3 w-3" />
             </button>
           </DialogHeader>
 
           {/* Tags */}
-          {property.tags && property.tags.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2">
+          {property.tags && property.tags.length > 0 &&
+          <div className="flex flex-wrap items-center gap-2">
               <Tag className="h-4 w-4 text-secondary" />
-              {property.tags.map((tag) => (
-                <Badge key={tag} className="border-secondary/30 bg-secondary/15 text-secondary">
+              {property.tags.map((tag) =>
+            <Badge key={tag} className="border-secondary/30 bg-secondary/15 text-secondary">
                   {tag}
                 </Badge>
-              ))}
+            )}
             </div>
-          )}
+          }
 
           <p className="text-sm text-muted-foreground">{property.description}</p>
 
           {/* Property Specs */}
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {property.price && (
-              <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
+            {property.price &&
+            <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
                 <p className="text-xs text-muted-foreground">Price</p>
                 <p className="text-lg font-bold text-primary">€{property.price.toLocaleString()}</p>
               </div>
-            )}
-            {property.size && (
-              <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
+            }
+            {property.size &&
+            <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
                 <Maximize className="mx-auto h-4 w-4 text-muted-foreground" />
                 <p className="text-lg font-bold">{property.size} m²</p>
               </div>
-            )}
-            {property.bedrooms && (
-              <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
+            }
+            {property.bedrooms &&
+            <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
                 <Bed className="mx-auto h-4 w-4 text-muted-foreground" />
                 <p className="text-lg font-bold">{property.bedrooms} BR</p>
               </div>
-            )}
-            {property.yield && (
-              <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
+            }
+            {property.yield &&
+            <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
                 <TrendingUp className="mx-auto h-4 w-4 text-muted-foreground" />
                 <p className="text-lg font-bold">{property.yield}</p>
               </div>
-            )}
+            }
           </div>
 
           {/* Before & After */}
-          {hasBeforeAfter && (
-            <div>
+          {hasBeforeAfter &&
+          <div>
               <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Before & After</h4>
               <div className="grid grid-cols-2 gap-3">
                 <div className="relative overflow-hidden rounded-lg border border-border">
@@ -168,7 +168,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
                 </div>
               </div>
             </div>
-          )}
+          }
 
           <Button asChild size="lg" className="w-full gap-2 rounded-full">
             <a href={`${WHATSAPP_URL}${encodeURIComponent(property.title)}`} target="_blank" rel="noopener noreferrer">
@@ -177,8 +177,8 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
           </Button>
         </div>
       </DialogContent>
-    </Dialog>
-  );
+    </Dialog>);
+
 };
 
 export default DeliveredProjects;
