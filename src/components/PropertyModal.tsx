@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Bed, Maximize, TrendingUp, MessageCircle, ChevronLeft, ChevronRight, ExternalLink, Tag, ArrowRight } from "lucide-react";
 import { useState } from "react";
 
-const WHATSAPP_URL = "https://wa.me/306900000000?text=Hi%2C%20I'm%20interested%20in%20";
+const WHATSAPP_URL = "https://wa.me/306971853470?text=Hi%2C%20I'm%20interested%20in%20";
 
 interface Props {
   property: Property | null;
