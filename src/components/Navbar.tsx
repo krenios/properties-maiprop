@@ -35,7 +35,7 @@ const Navbar = () => {
       scrolled ? "border-b border-border bg-background/80 backdrop-blur-xl" : "bg-transparent"}`
       }>
 
-      <div className="container mx-auto flex items-center justify-between px-6 py-4 bg-transparent">
+      <div className="container mx-auto flex items-center justify-between px-6 py-4 bg-neutral-100 text-sidebar-primary">
         <a href="/" className="flex items-center gap-2">
           <img src={brandLight} alt="MaiProp" className="h-10 w-auto" />
         </a>
