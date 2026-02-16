@@ -2,7 +2,7 @@ import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Bed, Maximize, TrendingUp, MessageCircle, ChevronLeft, ChevronRight, ExternalLink, Tag } from "lucide-react";
+import { MapPin, Bed, Maximize, TrendingUp, MessageCircle, ChevronLeft, ChevronRight, ExternalLink, Tag, ArrowRight } from "lucide-react";
 import { useState } from "react";
 
 const WHATSAPP_URL = "https://wa.me/306900000000?text=Hi%2C%20I'm%20interested%20in%20";
@@ -15,12 +15,14 @@ interface Props {
 
 const PropertyModal = ({ property, open, onClose }: Props) => {
   const [imgIdx, setImgIdx] = useState(0);
+  const [showBefore, setShowBefore] = useState(true);
 
   if (!property) return null;
 
   const images = property.images.length > 0 ? property.images : ["/placeholder.svg"];
   const currentImg = images[imgIdx % images.length];
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
+  const hasBeforeAfter = property.beforeImage && property.afterImage;
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -104,6 +106,27 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
               </div>
             )}
           </div>
+
+          {/* Before & After for delivered projects */}
+          {hasBeforeAfter && (
+            <div>
+              <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Before & After</h4>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="relative overflow-hidden rounded-lg border border-border">
+                  <img src={property.beforeImage} alt="Before" className="aspect-[4/3] w-full object-cover grayscale-[40%]" />
+                  <span className="absolute bottom-2 left-2 rounded-full bg-destructive/80 px-3 py-1 text-xs font-semibold text-destructive-foreground backdrop-blur">
+                    Before
+                  </span>
+                </div>
+                <div className="relative overflow-hidden rounded-lg border border-primary/30">
+                  <img src={property.afterImage} alt="After" className="aspect-[4/3] w-full object-cover" />
+                  <span className="absolute bottom-2 left-2 rounded-full bg-primary/80 px-3 py-1 text-xs font-semibold text-primary-foreground backdrop-blur">
+                    After
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Map link */}
           <div className="overflow-hidden rounded-lg border border-border">

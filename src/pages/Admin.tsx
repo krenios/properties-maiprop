@@ -23,7 +23,7 @@ type SortKey = "title" | "price" | "status" | "dateAdded";
 type SortDir = "asc" | "desc";
 
 const emptyProperty: Omit<Property, "id" | "dateAdded"> = {
-  title: "", description: "", images: [], price: null, size: null, bedrooms: null,
+  title: "", description: "", images: [], beforeImage: "", afterImage: "", price: null, size: null, bedrooms: null,
   floorPlan: "", location: "", poi: [], tags: [], status: "", projectType: "new", yield: "",
 };
 
@@ -65,7 +65,7 @@ const Admin = () => {
   const openNew = () => { setEditingId(null); setForm(emptyProperty); setFormOpen(true); };
   const openEdit = (p: Property) => {
     setEditingId(p.id);
-    setForm({ title: p.title, description: p.description, images: p.images, price: p.price, size: p.size, bedrooms: p.bedrooms, floorPlan: p.floorPlan, location: p.location, poi: p.poi, tags: p.tags, status: p.status, projectType: p.projectType, yield: p.yield });
+    setForm({ title: p.title, description: p.description, images: p.images, beforeImage: p.beforeImage, afterImage: p.afterImage, price: p.price, size: p.size, bedrooms: p.bedrooms, floorPlan: p.floorPlan, location: p.location, poi: p.poi, tags: p.tags, status: p.status, projectType: p.projectType, yield: p.yield });
     setFormOpen(true);
   };
 
@@ -221,6 +221,16 @@ const Admin = () => {
             <div className="grid gap-2">
               <Label>Floor Plan URL</Label>
               <Input value={form.floorPlan} onChange={(e) => setForm({ ...form, floorPlan: e.target.value })} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label>Before Image URL</Label>
+                <Input value={form.beforeImage} onChange={(e) => setForm({ ...form, beforeImage: e.target.value })} placeholder="For delivered projects" />
+              </div>
+              <div className="grid gap-2">
+                <Label>After Image URL</Label>
+                <Input value={form.afterImage} onChange={(e) => setForm({ ...form, afterImage: e.target.value })} placeholder="For delivered projects" />
+              </div>
             </div>
             <div className="grid gap-2">
               <Label>POI (comma-separated)</Label>

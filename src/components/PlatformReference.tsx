@@ -1,5 +1,6 @@
 import { ExternalLink, Search, BarChart3, ShieldCheck, LineChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import brandLogo2 from "@/assets/brand-2.png";
 
 const tools = [
   { icon: Search, title: "Self-Service Property Search", desc: "AI-powered platform to browse and filter Golden Visa properties" },
@@ -12,7 +13,7 @@ const PlatformReference = () => (
   <section id="platform" className="relative bg-section-cyan py-24">
     <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/8 via-transparent to-transparent" />
     <div className="relative container mx-auto px-6">
-      <div className="mb-14 text-center">
+      <div className="mb-6 text-center">
         <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-widest text-primary">
           How We Support You
         </span>
@@ -22,7 +23,18 @@ const PlatformReference = () => (
         <p className="mt-2 text-muted-foreground">Technology-powered independent property evaluation tools.</p>
       </div>
 
-      <div className="mb-12 grid gap-6 sm:grid-cols-2">
+      {/* mAI prop OS logo + CTA */}
+      <div className="mb-14 flex flex-col items-center gap-4">
+        <img src={brandLogo2} alt="mAI prop OS" className="h-12 w-auto brightness-0 invert" />
+        <Button asChild size="lg" className="gap-2 rounded-full bg-primary px-10 text-lg font-semibold text-primary-foreground shadow-[0_0_30px_hsl(179_90%_63%/0.4)] transition-all hover:bg-primary/90 hover:shadow-[0_0_50px_hsl(179_90%_63%/0.6)]">
+          <a href="https://os.maiprop.co" target="_blank" rel="noopener noreferrer">
+            Get Platform Access <ExternalLink className="h-5 w-5" />
+          </a>
+        </Button>
+        <p className="text-sm text-muted-foreground">100K+ property database · Self-service analytics · Instant visa eligibility</p>
+      </div>
+
+      <div className="grid gap-6 sm:grid-cols-2">
         {tools.map((t) => (
           <div key={t.title} className="flex gap-4 rounded-xl border border-primary/20 bg-background/40 p-5 backdrop-blur transition-all hover:border-primary/40 hover:bg-background/60">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary/15">
@@ -34,15 +46,6 @@ const PlatformReference = () => (
             </div>
           </div>
         ))}
-      </div>
-
-      <div className="text-center">
-        <Button asChild size="lg" className="gap-2 rounded-full bg-primary px-10 text-lg font-semibold text-primary-foreground shadow-[0_0_30px_hsl(179_90%_63%/0.4)] transition-all hover:bg-primary/90 hover:shadow-[0_0_50px_hsl(179_90%_63%/0.6)]">
-          <a href="https://os.maiprop.co" target="_blank" rel="noopener noreferrer">
-            Get Platform Access <ExternalLink className="h-5 w-5" />
-          </a>
-        </Button>
-        <p className="mt-3 text-sm text-muted-foreground">100K+ property database · Self-service analytics · Instant visa eligibility</p>
       </div>
     </div>
   </section>

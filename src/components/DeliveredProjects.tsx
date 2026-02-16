@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { useProperties } from "@/contexts/PropertyContext";
 import { CheckCircle, MapPin } from "lucide-react";
+import PropertyModal from "@/components/PropertyModal";
+import { Property } from "@/data/properties";
 
 const trackRecord = [
   { value: "€6.3M", label: "Successfully Closed" },
@@ -11,6 +14,7 @@ const trackRecord = [
 const DeliveredProjects = () => {
   const { properties } = useProperties();
   const delivered = properties.filter((p) => p.projectType === "delivered");
+  const [selected, setSelected] = useState<Property | null>(null);
 
   if (delivered.length === 0) return null;
 
@@ -26,9 +30,10 @@ const DeliveredProjects = () => {
 
         <div className="mb-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {delivered.map((p) => (
-            <div
+            <button
               key={p.id}
-              className="group relative overflow-hidden rounded-xl border border-border bg-background/40 backdrop-blur transition-all hover:border-secondary/40"
+              onClick={() => setSelected(p)}
+              className="group relative overflow-hidden rounded-xl border border-border bg-background/40 text-left backdrop-blur transition-all hover:border-secondary/40"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <img
@@ -50,7 +55,7 @@ const DeliveredProjects = () => {
                   <p className="mt-2 text-xs text-muted-foreground">{p.yield} ROI achieved</p>
                 )}
               </div>
-            </div>
+            </button>
           ))}
         </div>
 
@@ -64,6 +69,8 @@ const DeliveredProjects = () => {
           ))}
         </div>
       </div>
+
+      <PropertyModal property={selected} open={!!selected} onClose={() => setSelected(null)} />
     </section>
   );
 };
