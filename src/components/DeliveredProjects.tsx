@@ -167,35 +167,27 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
 
           <p className="text-sm text-muted-foreground">{property.description}</p>
 
-          {/* Property Specs */}
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {/* Property Specs as pills */}
+          <div className="flex flex-wrap gap-2">
             {property.size && (
-              <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
-                <Maximize className="mx-auto h-4 w-4 text-muted-foreground" />
-                <p className="text-lg font-bold">{property.size} m²</p>
-                <p className="text-xs text-muted-foreground">Size</p>
-              </div>
+              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                <Maximize className="h-3.5 w-3.5 text-muted-foreground" /> {property.size} m²
+              </Badge>
             )}
             {property.bedrooms && (
-              <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
-                <Bed className="mx-auto h-4 w-4 text-muted-foreground" />
-                <p className="text-lg font-bold">{property.bedrooms} BR</p>
-                <p className="text-xs text-muted-foreground">Bedrooms</p>
-              </div>
+              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                <Bed className="h-3.5 w-3.5 text-muted-foreground" /> {property.bedrooms} BR
+              </Badge>
             )}
             {property.floor && (
-              <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
-                <Building className="mx-auto h-4 w-4 text-muted-foreground" />
-                <p className="text-lg font-bold">{property.floor}</p>
-                <p className="text-xs text-muted-foreground">Floor</p>
-              </div>
+              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                <Building className="h-3.5 w-3.5 text-muted-foreground" /> Floor {property.floor}
+              </Badge>
             )}
             {property.constructionYear && (
-              <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
-                <Calendar className="mx-auto h-4 w-4 text-muted-foreground" />
-                <p className="text-lg font-bold">{property.constructionYear}</p>
-                <p className="text-xs text-muted-foreground">Built</p>
-              </div>
+              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                <Calendar className="h-3.5 w-3.5 text-muted-foreground" /> Built {property.constructionYear}
+              </Badge>
             )}
           </div>
 

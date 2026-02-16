@@ -79,31 +79,37 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
 
           <p className="text-sm text-muted-foreground">{property.description}</p>
 
-          {/* Key specs */}
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {/* Key specs as pills */}
+          <div className="flex flex-wrap gap-2">
             {property.price && (
-              <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
-                <p className="text-xs text-muted-foreground">Price</p>
-                <p className="text-lg font-bold text-primary">€{property.price.toLocaleString()}</p>
-              </div>
+              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                <span className="text-primary font-semibold">€{property.price.toLocaleString()}</span>
+              </Badge>
             )}
             {property.size && (
-              <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
-                <Maximize className="mx-auto h-4 w-4 text-muted-foreground" />
-                <p className="text-lg font-bold">{property.size} m²</p>
-              </div>
+              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                <Maximize className="h-3.5 w-3.5 text-muted-foreground" /> {property.size} m²
+              </Badge>
             )}
             {property.bedrooms && (
-              <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
-                <Bed className="mx-auto h-4 w-4 text-muted-foreground" />
-                <p className="text-lg font-bold">{property.bedrooms} BR</p>
-              </div>
+              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                <Bed className="h-3.5 w-3.5 text-muted-foreground" /> {property.bedrooms} BR
+              </Badge>
+            )}
+            {property.floor && (
+              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                <Building className="h-3.5 w-3.5 text-muted-foreground" /> Floor {property.floor}
+              </Badge>
+            )}
+            {property.constructionYear && (
+              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                <Calendar className="h-3.5 w-3.5 text-muted-foreground" /> Built {property.constructionYear}
+              </Badge>
             )}
             {property.yield && (
-              <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
-                <TrendingUp className="mx-auto h-4 w-4 text-muted-foreground" />
-                <p className="text-lg font-bold">{property.yield}</p>
-              </div>
+              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" /> {property.yield}
+              </Badge>
             )}
           </div>
 
