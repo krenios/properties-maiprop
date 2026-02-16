@@ -2,6 +2,7 @@ import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { MapPin, Bed, Maximize, TrendingUp, MessageCircle, ChevronLeft, ChevronRight, ExternalLink, Building, Calendar, LayoutGrid } from "lucide-react";
 import { useState } from "react";
 
@@ -21,7 +22,6 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
   const images = property.images.length > 0 ? property.images : ["/placeholder.svg"];
   const currentImg = images[imgIdx % images.length];
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
-  const hasBeforeAfter = property.before_image && property.after_image;
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -52,7 +52,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
           )}
         </div>
 
-        <div className="space-y-6 p-6">
+        <div className="space-y-5 p-6">
           <DialogHeader>
             <DialogTitle className="text-2xl">{property.title}</DialogTitle>
             <button
@@ -63,6 +63,8 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
               <ExternalLink className="h-3 w-3" />
             </button>
           </DialogHeader>
+
+          <Separator className="bg-border" />
 
           {/* Key specs as pills */}
           <div className="flex flex-wrap gap-2">
@@ -98,6 +100,8 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
             )}
           </div>
 
+          <Separator className="bg-border" />
+
           {/* Embedded Google Map */}
           <div className="overflow-hidden rounded-lg border border-border">
             <iframe
@@ -124,16 +128,21 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
 
           {/* Floor Plan */}
           {property.floor_plan && (
-            <div className="rounded-xl border-2 border-primary/20 bg-primary/5 p-5">
-              <div className="mb-3 flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/15">
-                  <LayoutGrid className="h-4 w-4 text-primary" />
+            <>
+              <Separator className="bg-border" />
+              <div className="rounded-xl border-2 border-primary/20 bg-primary/5 p-5">
+                <div className="mb-3 flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/15">
+                    <LayoutGrid className="h-4 w-4 text-primary" />
+                  </div>
+                  <h4 className="text-sm font-semibold uppercase tracking-wider text-primary">Floor Plan</h4>
                 </div>
-                <h4 className="text-sm font-semibold uppercase tracking-wider text-primary">Floor Plan</h4>
+                <img src={property.floor_plan} alt="Floor plan" className="w-full rounded-lg border border-border bg-background" />
               </div>
-              <img src={property.floor_plan} alt="Floor plan" className="w-full rounded-lg border border-border bg-background" />
-            </div>
+            </>
           )}
+
+          <Separator className="bg-border" />
 
           <Button asChild size="lg" className="w-full gap-2 rounded-full">
             <a href={`${WHATSAPP_URL}${encodeURIComponent(property.title)}`} target="_blank" rel="noopener noreferrer">
