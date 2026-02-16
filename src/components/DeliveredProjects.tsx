@@ -8,7 +8,7 @@ const DeliveredProjects = () => {
   if (delivered.length === 0) return null;
 
   return (
-    <section className="py-20">
+    <section id="delivered" className="py-20">
       <div className="container mx-auto px-6">
         <div className="mb-12 text-center">
           <span className="mb-2 inline-block text-xs font-medium uppercase tracking-widest text-secondary">Track Record</span>

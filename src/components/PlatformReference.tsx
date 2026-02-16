@@ -2,7 +2,7 @@ import { ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const PlatformReference = () => (
-  <section className="border-t border-border py-20">
+  <section id="platform" className="border-t border-border py-20">
     <div className="container mx-auto flex flex-col items-center px-6 text-center">
       <span className="mb-2 text-xs font-medium uppercase tracking-widest text-primary">Self-Service Tool</span>
       <h2 className="max-w-xl text-3xl font-bold sm:text-4xl">

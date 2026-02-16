@@ -8,7 +8,7 @@ const stats = [
 ];
 
 const GoldenVisaStats = () => (
-  <section className="border-y border-border bg-card/50 py-16">
+  <section id="overview" className="border-y border-border bg-card/50 py-16">
     <div className="container mx-auto grid grid-cols-2 gap-8 px-6 lg:grid-cols-4">
       {stats.map((s) => (
         <div key={s.label} className="flex flex-col items-center text-center">
