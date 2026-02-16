@@ -12,7 +12,7 @@ import brandLogo1 from "@/assets/brand-1.png";
 import brandLogo2 from "@/assets/brand-2.png";
 
 const Index = () =>
-<main className="min-h-screen bg-slate-200">
+<main className="min-h-screen bg-background">
     <Navbar />
     <HeroSection />
     <GoldenVisaStats />
