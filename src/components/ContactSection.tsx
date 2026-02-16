@@ -47,9 +47,9 @@ const ContactSection = () =>
             Continue on WhatsApp <ArrowRight className="h-5 w-5" />
           </a>
         </Button>
-        <p className="mt-4 text-sm text-muted-foreground">
-          Click to open WhatsApp and chat with our team instantly
-        </p>
+        
+
+
       </div>
     </div>
   </section>;
