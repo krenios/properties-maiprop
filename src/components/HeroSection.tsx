@@ -7,7 +7,7 @@ const stats = [
   { value: "€250K", label: "Minimum Investment" },
   { value: "2-3 Months", label: "To Visa Approval" },
   { value: "27 Countries", label: "Schengen Access" },
-  { value: "100%", label: "Visa Success Rate" },
+  
 ];
 
 const HeroSection = () => (
