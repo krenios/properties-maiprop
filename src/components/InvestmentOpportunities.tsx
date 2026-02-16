@@ -11,9 +11,8 @@ const InvestmentOpportunities = () => {
   const current = properties.filter((p) => p.projectType === "new");
 
   return (
-    <section id="opportunities" className="relative py-24">
-      {/* Accent glow */}
-      <div className="pointer-events-none absolute right-0 top-0 h-[400px] w-[400px] rounded-full bg-primary/10 blur-[150px]" />
+    <section id="opportunities" className="relative bg-section-deep py-24">
+      <div className="pointer-events-none absolute right-0 top-0 h-[500px] w-[500px] rounded-full bg-primary/8 blur-[180px]" />
       <div className="relative container mx-auto px-6">
         <div className="mb-12 text-center">
           <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-widest text-primary">Golden Visa Eligible Properties</span>

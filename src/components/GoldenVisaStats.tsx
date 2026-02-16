@@ -10,9 +10,8 @@ const benefits = [
 ];
 
 const GoldenVisaStats = () => (
-  <section id="overview" className="relative bg-card py-24">
-    {/* Subtle gradient accent */}
-    <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background to-transparent opacity-40" />
+  <section id="overview" className="relative bg-section-mid py-24">
+    <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
     <div className="relative container mx-auto px-6">
       <div className="mb-14 text-center">
         <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-widest text-primary">
@@ -25,7 +24,7 @@ const GoldenVisaStats = () => (
         {benefits.map((b) => (
           <div
             key={b.title}
-            className="rounded-xl border border-border bg-background/50 p-6 backdrop-blur transition-all hover:border-primary/30 hover:shadow-[0_0_30px_hsl(179_90%_63%/0.06)]"
+            className="rounded-xl border border-border bg-background/40 p-6 backdrop-blur transition-all hover:border-primary/30 hover:shadow-[0_0_30px_hsl(179_90%_63%/0.06)]"
           >
             <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10">
               <b.icon className="h-5 w-5 text-primary" />

@@ -20,7 +20,7 @@ const Index = () => (
     <ValueSection />
     <JourneySection />
     <ContactSection />
-    <footer className="border-t border-border py-8 text-center text-sm text-muted-foreground">
+    <footer className="border-t border-border bg-section-deep py-8 text-center text-sm text-muted-foreground">
       © {new Date().getFullYear()} MaiProp. All rights reserved.
     </footer>
     <WhatsAppButton />
