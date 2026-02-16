@@ -48,7 +48,7 @@ const ValueSection = () =>
             Get Platform Access <ExternalLink className="h-5 w-5" />
           </a>
         </Button>
-        <p className="text-sm text-muted-foreground">100K+ property database · Self-service analytics · Instant visa eligibility</p>
+        
       </div>
     </div>
   </section>;
