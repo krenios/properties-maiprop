@@ -5,11 +5,11 @@ import PropertyModal from "@/components/PropertyModal";
 import { Property } from "@/data/properties";
 
 const trackRecord = [
-  { value: "€6.3M", label: "Successfully Closed" },
-  { value: "19", label: "Projects Delivered" },
-  { value: "100%", label: "Visa Success Rate" },
-  { value: "6.4%", label: "Avg Portfolio ROI" },
-];
+{ value: "€6.3M", label: "Successfully Closed" },
+{ value: "19", label: "Projects Delivered" },
+{ value: "100%", label: "Visa Success Rate" },
+{ value: "6.4%", label: "Avg Portfolio ROI" }];
+
 
 const DeliveredProjects = () => {
   const { properties } = useProperties();
@@ -29,19 +29,19 @@ const DeliveredProjects = () => {
         </div>
 
         <div className="mb-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {delivered.map((p) => (
-            <button
-              key={p.id}
-              onClick={() => setSelected(p)}
-              className="group relative overflow-hidden rounded-xl border border-border bg-background/40 text-left backdrop-blur transition-all hover:border-secondary/40"
-            >
+          {delivered.map((p) =>
+          <button
+            key={p.id}
+            onClick={() => setSelected(p)}
+            className="group relative overflow-hidden rounded-xl border border-border bg-background/40 text-left backdrop-blur transition-all hover:border-secondary/40">
+
               <div className="relative aspect-[4/3] overflow-hidden">
                 <img
-                  src={p.images[0] || "/placeholder.svg"}
-                  alt={p.title}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 grayscale-[30%]"
-                  loading="lazy"
-                />
+                src={p.images[0] || "/placeholder.svg"}
+                alt={p.title}
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 grayscale-[30%]"
+                loading="lazy" />
+
                 <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-secondary/90 px-3 py-1 text-xs font-medium text-secondary-foreground">
                   <CheckCircle className="h-3 w-3" /> Delivered
                 </div>
@@ -51,28 +51,28 @@ const DeliveredProjects = () => {
                 <div className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
                   <MapPin className="h-3.5 w-3.5" /> {p.location}
                 </div>
-                {p.yield && (
-                  <p className="mt-2 text-xs text-muted-foreground">{p.yield} ROI achieved</p>
-                )}
+                {p.yield &&
+              <p className="mt-2 text-xs text-muted-foreground">{p.yield} ROI achieved</p>
+              }
               </div>
             </button>
-          ))}
+          )}
         </div>
 
         {/* Track record stats */}
-        <div className="grid grid-cols-2 gap-6 rounded-2xl border border-border bg-section-deep/60 p-8 backdrop-blur sm:grid-cols-4">
-          {trackRecord.map((s) => (
-            <div key={s.label} className="text-center">
-              <p className="text-2xl font-bold text-primary sm:text-3xl">{s.value}</p>
-              <p className="text-sm text-muted-foreground">{s.label}</p>
-            </div>
-          ))}
-        </div>
+        
+
+
+
+
+
+
+
       </div>
 
       <PropertyModal property={selected} open={!!selected} onClose={() => setSelected(null)} />
-    </section>
-  );
+    </section>);
+
 };
 
 export default DeliveredProjects;
