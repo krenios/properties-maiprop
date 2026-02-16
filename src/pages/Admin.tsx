@@ -17,6 +17,7 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Plus, Pencil, Trash2, AlertTriangle, ArrowUpDown, Home, ArrowRightCircle, CheckCircle } from "lucide-react";
+import ImageUpload from "@/components/ImageUpload";
 import { Link } from "react-router-dom";
 
 type SortKey = "title" | "price" | "status" | "date_added";
@@ -288,17 +289,21 @@ const Admin = () => {
               <Label>Location</Label>
               <Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
             </div>
-            <div className="grid gap-2">
-              <Label>Image URLs (comma-separated)</Label>
-              <Input value={form.images.join(", ")} onChange={(e) => setForm({ ...form, images: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} placeholder="Paste URLs from OneDrive, Google Drive, or any host" />
-              <p className="text-xs text-muted-foreground">Supports any publicly accessible URL including cloud storage (OneDrive, Google Drive, etc.)</p>
-            </div>
+            <ImageUpload
+              label="Property Images"
+              value={form.images}
+              onChange={(urls) => setForm({ ...form, images: urls })}
+              folder="gallery"
+            />
             {/* Floor Plan — hidden for delivered projects */}
             {!isDeliveredForm && (
-              <div className="grid gap-2">
-                <Label>Floor Plan URL</Label>
-                <Input value={form.floor_plan} onChange={(e) => setForm({ ...form, floor_plan: e.target.value })} placeholder="Paste floor plan image URL" />
-              </div>
+              <ImageUpload
+                label="Floor Plan"
+                value={form.floor_plan ? [form.floor_plan] : []}
+                onChange={(urls) => setForm({ ...form, floor_plan: urls[0] || "" })}
+                max={1}
+                folder="floorplans"
+              />
             )}
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
@@ -311,14 +316,20 @@ const Admin = () => {
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label>Before Image URL</Label>
-                <Input value={form.before_image} onChange={(e) => setForm({ ...form, before_image: e.target.value })} placeholder="For delivered projects" />
-              </div>
-              <div className="grid gap-2">
-                <Label>After Image URL</Label>
-                <Input value={form.after_image} onChange={(e) => setForm({ ...form, after_image: e.target.value })} placeholder="For delivered projects" />
-              </div>
+              <ImageUpload
+                label="Before Image"
+                value={form.before_image ? [form.before_image] : []}
+                onChange={(urls) => setForm({ ...form, before_image: urls[0] || "" })}
+                max={1}
+                folder="before-after"
+              />
+              <ImageUpload
+                label="After Image"
+                value={form.after_image ? [form.after_image] : []}
+                onChange={(urls) => setForm({ ...form, after_image: urls[0] || "" })}
+                max={1}
+                folder="before-after"
+              />
             </div>
             <div className="grid gap-2">
               <Label>POI (comma-separated)</Label>
