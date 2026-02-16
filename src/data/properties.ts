@@ -9,6 +9,7 @@ export interface Property {
   floorPlan: string;
   location: string;
   poi: string[];
+  tags: string[];
   status: "available" | "sold" | "under-construction" | "";
   projectType: "new" | "delivered";
   yield: string;
@@ -30,6 +31,7 @@ export const initialProperties: Property[] = [
     floorPlan: "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?w=800",
     location: "Glyfada, Athens Riviera",
     poi: ["Beach 200m", "Metro 500m", "Marina 1km"],
+    tags: ["Balcony", "Sea View", "Luxury"],
     status: "available",
     projectType: "new",
     yield: "5.2%",
@@ -49,6 +51,7 @@ export const initialProperties: Property[] = [
     floorPlan: "",
     location: "Kolonaki, Athens",
     poi: ["Syntagma Square 800m", "Lycabettus Hill 300m"],
+    tags: ["Studio", "Terrace", "City Center"],
     status: "available",
     projectType: "new",
     yield: "4.8%",
@@ -67,6 +70,7 @@ export const initialProperties: Property[] = [
     floorPlan: "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?w=800",
     location: "Piraeus, Athens",
     poi: ["Port 100m", "Metro 400m", "Restaurants 200m"],
+    tags: ["Loft", "Port View", "Short-Term Rental"],
     status: "available",
     projectType: "new",
     yield: "6.1%",
@@ -85,6 +89,7 @@ export const initialProperties: Property[] = [
     floorPlan: "",
     location: "Psyrri, Athens",
     poi: ["Monastiraki 300m", "Acropolis 1km"],
+    tags: ["Neoclassical", "Renovation", "Rooftop"],
     status: "sold",
     projectType: "delivered",
     yield: "5.5%",
@@ -103,6 +108,7 @@ export const initialProperties: Property[] = [
     floorPlan: "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?w=800",
     location: "Vouliagmeni, Athens",
     poi: ["Beach 100m", "Lake Vouliagmeni 500m"],
+    tags: ["Villa", "Garden", "Coastal"],
     status: "sold",
     projectType: "delivered",
     yield: "4.2%",

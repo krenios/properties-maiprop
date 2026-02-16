@@ -15,8 +15,8 @@ const DeliveredProjects = () => {
   if (delivered.length === 0) return null;
 
   return (
-    <section id="delivered" className="relative bg-card py-24">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/50 to-transparent" />
+    <section id="delivered" className="relative bg-section-elevated py-24">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-secondary/5 to-transparent" />
       <div className="relative container mx-auto px-6">
         <div className="mb-14 text-center">
           <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-widest text-secondary">Proven Track Record</span>
@@ -28,7 +28,7 @@ const DeliveredProjects = () => {
           {delivered.map((p) => (
             <div
               key={p.id}
-              className="group relative overflow-hidden rounded-xl border border-border bg-background/50 backdrop-blur transition-all hover:border-secondary/40"
+              className="group relative overflow-hidden rounded-xl border border-border bg-background/40 backdrop-blur transition-all hover:border-secondary/40"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <img
@@ -55,7 +55,7 @@ const DeliveredProjects = () => {
         </div>
 
         {/* Track record stats */}
-        <div className="grid grid-cols-2 gap-6 rounded-2xl border border-border bg-background/60 p-8 backdrop-blur sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-6 rounded-2xl border border-border bg-section-deep/60 p-8 backdrop-blur sm:grid-cols-4">
           {trackRecord.map((s) => (
             <div key={s.label} className="text-center">
               <p className="text-2xl font-bold text-primary sm:text-3xl">{s.value}</p>

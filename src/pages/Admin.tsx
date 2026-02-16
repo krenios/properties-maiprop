@@ -24,7 +24,7 @@ type SortDir = "asc" | "desc";
 
 const emptyProperty: Omit<Property, "id" | "dateAdded"> = {
   title: "", description: "", images: [], price: null, size: null, bedrooms: null,
-  floorPlan: "", location: "", poi: [], status: "", projectType: "new", yield: "",
+  floorPlan: "", location: "", poi: [], tags: [], status: "", projectType: "new", yield: "",
 };
 
 const Admin = () => {
@@ -65,7 +65,7 @@ const Admin = () => {
   const openNew = () => { setEditingId(null); setForm(emptyProperty); setFormOpen(true); };
   const openEdit = (p: Property) => {
     setEditingId(p.id);
-    setForm({ title: p.title, description: p.description, images: p.images, price: p.price, size: p.size, bedrooms: p.bedrooms, floorPlan: p.floorPlan, location: p.location, poi: p.poi, status: p.status, projectType: p.projectType, yield: p.yield });
+    setForm({ title: p.title, description: p.description, images: p.images, price: p.price, size: p.size, bedrooms: p.bedrooms, floorPlan: p.floorPlan, location: p.location, poi: p.poi, tags: p.tags, status: p.status, projectType: p.projectType, yield: p.yield });
     setFormOpen(true);
   };
 
@@ -225,6 +225,10 @@ const Admin = () => {
             <div className="grid gap-2">
               <Label>POI (comma-separated)</Label>
               <Input value={form.poi.join(", ")} onChange={(e) => setForm({ ...form, poi: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} />
+            </div>
+            <div className="grid gap-2">
+              <Label>Tags (comma-separated, e.g. Balcony, Loft, Terrace)</Label>
+              <Input value={form.tags.join(", ")} onChange={(e) => setForm({ ...form, tags: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">

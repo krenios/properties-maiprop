@@ -6,8 +6,8 @@ const steps = [
 ];
 
 const JourneySection = () => (
-  <section id="journey" className="relative py-24">
-    <div className="pointer-events-none absolute left-0 top-1/2 h-[350px] w-[350px] -translate-y-1/2 rounded-full bg-secondary/10 blur-[120px]" />
+  <section id="journey" className="relative bg-section-mid py-24">
+    <div className="pointer-events-none absolute left-0 top-1/2 h-[350px] w-[350px] -translate-y-1/2 rounded-full bg-secondary/8 blur-[120px]" />
     <div className="relative container mx-auto px-6">
       <div className="mb-14 text-center">
         <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-widest text-secondary">
@@ -18,11 +18,14 @@ const JourneySection = () => (
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {steps.map((s) => (
-          <div key={s.num} className="rounded-xl border border-border bg-card p-6 transition-all hover:border-primary/30">
-            <span className="mb-3 inline-block text-3xl font-bold text-primary/30">{s.num}</span>
+        {steps.map((s, i) => (
+          <div key={s.num} className="relative rounded-xl border border-border bg-background/40 p-6 backdrop-blur transition-all hover:border-primary/30">
+            <span className="mb-3 inline-block text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">{s.num}</span>
             <h3 className="mb-2 font-semibold">{s.title}</h3>
             <p className="text-sm text-muted-foreground">{s.desc}</p>
+            {i < steps.length - 1 && (
+              <div className="pointer-events-none absolute -right-3 top-1/2 hidden -translate-y-1/2 text-2xl text-muted-foreground/30 lg:block">→</div>
+            )}
           </div>
         ))}
       </div>

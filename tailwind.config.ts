@@ -69,6 +69,11 @@ export default {
           DEFAULT: "hsl(263 86% 64%)",
           glow: "hsl(263 86% 72%)",
         },
+        "section-deep": "hsl(var(--section-deep))",
+        "section-mid": "hsl(var(--section-mid))",
+        "section-elevated": "hsl(var(--section-elevated))",
+        "section-purple": "hsl(var(--section-purple))",
+        "section-cyan": "hsl(var(--section-cyan))",
       },
       borderRadius: {
         lg: "var(--radius)",

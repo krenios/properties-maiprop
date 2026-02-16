@@ -2,7 +2,7 @@ import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Bed, Maximize, TrendingUp, MessageCircle, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+import { MapPin, Bed, Maximize, TrendingUp, MessageCircle, ChevronLeft, ChevronRight, ExternalLink, Tag } from "lucide-react";
 import { useState } from "react";
 
 const WHATSAPP_URL = "https://wa.me/306900000000?text=Hi%2C%20I'm%20interested%20in%20";
@@ -44,7 +44,6 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
               </button>
             </>
           )}
-          {/* Image counter */}
           {images.length > 1 && (
             <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-background/70 px-3 py-1 text-xs backdrop-blur">
               {(imgIdx % images.length) + 1} / {images.length}
@@ -63,6 +62,18 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
               <ExternalLink className="h-3 w-3" />
             </button>
           </DialogHeader>
+
+          {/* Classification tags */}
+          {property.tags && property.tags.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2">
+              <Tag className="h-4 w-4 text-secondary" />
+              {property.tags.map((tag) => (
+                <Badge key={tag} className="border-secondary/30 bg-secondary/15 text-secondary">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          )}
 
           <p className="text-sm text-muted-foreground">{property.description}</p>
 
