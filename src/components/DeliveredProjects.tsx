@@ -17,7 +17,7 @@ const trackRecord = [
 
 const DeliveredProjects = () => {
   const { properties } = useProperties();
-  const delivered = properties.filter((p) => p.projectType === "delivered");
+  const delivered = properties.filter((p) => p.project_type === "delivered");
   const [selected, setSelected] = useState<Property | null>(null);
 
   if (delivered.length === 0) return null;
@@ -36,15 +36,6 @@ const DeliveredProjects = () => {
           </p>
         </div>
 
-        
-
-
-
-
-
-
-
-
         {/* Property cards */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {delivered.map((p) =>
@@ -55,7 +46,7 @@ const DeliveredProjects = () => {
 
               <div className="relative aspect-video overflow-hidden">
                 <img
-                src={p.images[0] || p.afterImage || "/placeholder.svg"}
+                src={p.images[0] || p.after_image || "/placeholder.svg"}
                 alt={p.title}
                 className="h-full w-full object-cover transition-transform group-hover:scale-105" />
 
@@ -74,7 +65,7 @@ const DeliveredProjects = () => {
         </div>
       </div>
 
-      {/* Delivered Modal — only before/after + specs */}
+      {/* Delivered Modal */}
       <DeliveredModal property={selected} open={!!selected} onClose={() => setSelected(null)} />
     </section>);
 
@@ -91,11 +82,11 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
 
   if (!property) return null;
 
-  const hasBeforeAfter = property.beforeImage && property.afterImage;
+  const hasBeforeAfter = property.before_image && property.after_image;
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
   const allPhotos = [
     ...property.images,
-    ...(property.afterImage ? [property.afterImage] : []),
+    ...(property.after_image ? [property.after_image] : []),
   ].filter(Boolean);
   const hasPhotos = allPhotos.length > 0;
 
@@ -184,9 +175,9 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
                 <Building className="h-3.5 w-3.5 text-muted-foreground" /> Floor {property.floor}
               </Badge>
             )}
-            {property.constructionYear && (
+            {property.construction_year && (
               <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
-                <Calendar className="h-3.5 w-3.5 text-muted-foreground" /> Built {property.constructionYear}
+                <Calendar className="h-3.5 w-3.5 text-muted-foreground" /> Built {property.construction_year}
               </Badge>
             )}
           </div>
@@ -195,7 +186,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
           {hasBeforeAfter &&
           <div>
               <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Before & After</h4>
-              <BeforeAfterSlider before={property.beforeImage!} after={property.afterImage!} />
+              <BeforeAfterSlider before={property.before_image!} after={property.after_image!} />
             </div>
           }
 

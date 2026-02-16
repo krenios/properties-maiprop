@@ -8,7 +8,7 @@ const InvestmentOpportunities = () => {
   const { properties } = useProperties();
   const [selected, setSelected] = useState<Property | null>(null);
 
-  const current = properties.filter((p) => p.projectType === "new");
+  const current = properties.filter((p) => p.project_type === "new");
 
   return (
     <section id="opportunities" className="relative bg-section-deep py-24 bg-[sidebar-primary-foreground] bg-destructive-foreground">
