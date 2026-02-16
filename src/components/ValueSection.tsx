@@ -20,7 +20,7 @@ const ValueSection = () =>
           Data-Driven Investment Partner
         </span>
         <h2 className="text-3xl font-bold sm:text-4xl">mAI Prop OS</h2>
-        <p className="mx-auto mt-3 max-w-xl text-muted-foreground">Technology meets real estate — data, AI & analytics become your 
+        <p className="mx-auto mt-3 max-w-xl text-muted-foreground">Technology meets real estate — data, AI & analytics become your partner.  
 
       </p>
       </div>
