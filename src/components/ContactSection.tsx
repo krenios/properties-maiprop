@@ -33,7 +33,7 @@ const ContactSection = () =>
 
         <div className="my-10 gap-4 flex-row flex items-center justify-center shadow-sm rounded-xl">
           {bullets.map((b) =>
-        <div key={b} className="flex items-center gap-3 text-sm">
+        <div key={b} className="gap-3 text-sm flex-row flex items-center justify-center">
               <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/20">
                 <Check className="h-3.5 w-3.5 text-primary" />
               </div>
