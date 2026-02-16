@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 import { useProperties } from "@/contexts/PropertyContext";
-import { CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag, MessageCircle, ExternalLink } from "lucide-react";
+import { CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag, MessageCircle, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
@@ -87,21 +87,67 @@ interface ModalProps {
 }
 
 const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
+  const [imgIdx, setImgIdx] = useState(0);
+
   if (!property) return null;
 
   const hasBeforeAfter = property.beforeImage && property.afterImage;
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
+  const allPhotos = [
+    ...property.images,
+    ...(property.afterImage ? [property.afterImage] : []),
+  ].filter(Boolean);
+  const hasPhotos = allPhotos.length > 0;
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={() => { onClose(); setImgIdx(0); }}>
       <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto border-border bg-card p-0">
+        {/* Scrollable Photo Gallery */}
+        {hasPhotos && (
+          <div className="relative aspect-video w-full overflow-hidden">
+            <img src={allPhotos[imgIdx % allPhotos.length]} alt={property.title} className="h-full w-full object-cover" />
+            {allPhotos.length > 1 && (
+              <>
+                <button
+                  onClick={() => setImgIdx((i) => (i - 1 + allPhotos.length) % allPhotos.length)}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur transition-colors hover:bg-background"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => setImgIdx((i) => (i + 1) % allPhotos.length)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur transition-colors hover:bg-background"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-background/70 px-3 py-1 text-xs backdrop-blur">
+                  {(imgIdx % allPhotos.length) + 1} / {allPhotos.length}
+                </div>
+              </>
+            )}
+            {/* Thumbnail strip */}
+            {allPhotos.length > 1 && (
+              <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-1.5">
+                {allPhotos.map((src, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setImgIdx(i)}
+                    className={`h-10 w-14 overflow-hidden rounded border-2 transition-all ${i === imgIdx % allPhotos.length ? "border-primary shadow-lg" : "border-transparent opacity-60 hover:opacity-100"}`}
+                  >
+                    <img src={src} alt="" className="h-full w-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="space-y-6 p-6">
           <DialogHeader>
             <DialogTitle className="text-2xl">{property.title}</DialogTitle>
             <button
               onClick={() => window.open(mapsUrl, "_blank")}
               className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary">
-
               <MapPin className="h-4 w-4" /> {property.location}
               <ExternalLink className="h-3 w-3" />
             </button>
