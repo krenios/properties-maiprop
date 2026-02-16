@@ -19,10 +19,10 @@ const ValueSection = () =>
         <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-widest text-secondary">
           Data-Driven Investment Partner
         </span>
-        <h2 className="text-3xl font-bold sm:text-4xl">Why MaiProp</h2>
-        <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-          Technology meets real estate — we use data, AI & analytics to source, vet and manage your investments.
-        </p>
+        <h2 className="text-3xl font-bold sm:text-4xl">mAI Prop OS</h2>
+        <p className="mx-auto mt-3 max-w-xl text-muted-foreground">Technology meets real estate — data, AI & analytics become your 
+
+      </p>
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
