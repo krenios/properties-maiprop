@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import brandLogo from "@/assets/brand-1.png";
+import brandLight from "@/assets/brand-light.png";
 
 const navLinks = [
   { label: "Portfolio", href: "#opportunities" },
@@ -36,7 +37,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto flex items-center justify-between px-6 py-4">
         <a href="/" className="flex items-center gap-2">
-          <img src={brandLogo} alt="MaiProp" className="h-8 w-auto brightness-0 invert" />
+          <img src={brandLight} alt="MaiProp" className="h-10 w-auto" />
         </a>
 
         {/* Desktop nav */}
