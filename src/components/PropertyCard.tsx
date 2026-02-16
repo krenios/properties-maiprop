@@ -31,6 +31,11 @@ const PropertyCard = ({ property, onClick }: Props) => (
         </Badge>
       )}
       <div className="absolute bottom-2 left-2 flex flex-wrap gap-1.5">
+        {property.size && (
+          <Badge variant="outline" className="border-background/30 bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
+            {property.size} m²
+          </Badge>
+        )}
         {property.bedrooms && (
           <Badge variant="outline" className="border-background/30 bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
             {property.bedrooms} BR
