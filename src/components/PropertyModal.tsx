@@ -25,36 +25,36 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto border-border bg-card p-0">
+      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto border-border bg-card p-0">
         {/* Gallery */}
-        <div className="relative aspect-video w-full overflow-hidden">
+        <div className="relative h-[200px] w-full overflow-hidden">
           <img src={currentImg} alt={property.title} className="h-full w-full object-cover" />
           {images.length > 1 && (
             <>
               <button
                 onClick={() => setImgIdx((i) => (i - 1 + images.length) % images.length)}
-                className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur"
+                className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-1.5 backdrop-blur"
               >
-                <ChevronLeft className="h-5 w-5" />
+                <ChevronLeft className="h-4 w-4" />
               </button>
               <button
                 onClick={() => setImgIdx((i) => (i + 1) % images.length)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur"
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-1.5 backdrop-blur"
               >
-                <ChevronRight className="h-5 w-5" />
+                <ChevronRight className="h-4 w-4" />
               </button>
             </>
           )}
           {images.length > 1 && (
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-background/70 px-3 py-1 text-xs backdrop-blur">
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
               {(imgIdx % images.length) + 1} / {images.length}
             </div>
           )}
         </div>
 
-        <div className="space-y-5 p-6">
+        <div className="space-y-4 p-4">
           <DialogHeader>
-            <DialogTitle className="text-2xl">{property.title}</DialogTitle>
+            <DialogTitle className="text-xl">{property.title}</DialogTitle>
             <button
               onClick={() => window.open(mapsUrl, "_blank")}
               className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
@@ -107,7 +107,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
             <iframe
               title={`Map of ${property.location}`}
               src={`https://www.google.com/maps?q=${encodeURIComponent(property.location + ", Greece")}&output=embed`}
-              className="aspect-video w-full border-0"
+              className="h-[180px] w-full border-0"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               allowFullScreen
@@ -130,14 +130,14 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
           {property.floor_plan && (
             <>
               <Separator className="bg-border" />
-              <div className="rounded-xl border-2 border-primary/20 bg-primary/5 p-5">
-                <div className="mb-3 flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/15">
-                    <LayoutGrid className="h-4 w-4 text-primary" />
+              <div className="rounded-xl border-2 border-primary/20 bg-primary/5 p-4">
+                <div className="mb-2 flex items-center gap-2">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/15">
+                    <LayoutGrid className="h-3.5 w-3.5 text-primary" />
                   </div>
-                  <h4 className="text-sm font-semibold uppercase tracking-wider text-primary">Floor Plan</h4>
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-primary">Floor Plan</h4>
                 </div>
-                <img src={property.floor_plan} alt="Floor plan" className="w-full rounded-lg border border-border bg-background" />
+                <img src={property.floor_plan} alt="Floor plan" className="max-h-[200px] w-full rounded-lg border border-border bg-background object-contain" />
               </div>
             </>
           )}
