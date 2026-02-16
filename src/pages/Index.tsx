@@ -11,8 +11,8 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import brandLogo1 from "@/assets/brand-1.png";
 import brandLogo2 from "@/assets/brand-2.png";
 
-const Index = () => (
-  <main className="min-h-screen bg-background">
+const Index = () =>
+<main className="min-h-screen bg-background">
     <Navbar />
     <HeroSection />
     <GoldenVisaStats />
@@ -25,7 +25,7 @@ const Index = () => (
     <footer className="border-t border-border bg-section-deep py-12 text-center">
       <div className="container mx-auto flex flex-col items-center gap-4 px-6">
         <div className="flex items-center gap-6">
-          <img src={brandLogo1} alt="MaiProp" className="h-8 w-auto brightness-0 invert" />
+          
           <img src={brandLogo2} alt="MaiProp OS" className="h-8 w-auto brightness-0 invert" />
         </div>
         <p className="text-sm text-muted-foreground">
@@ -34,7 +34,7 @@ const Index = () => (
       </div>
     </footer>
     <WhatsAppButton />
-  </main>
-);
+  </main>;
+
 
 export default Index;
