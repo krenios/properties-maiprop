@@ -23,14 +23,14 @@ const DeliveredProjects = () => {
   if (delivered.length === 0) return null;
 
   return (
-    <section id="delivered" className="bg-section-deep py-20 bg-sidebar-accent">
+    <section id="delivered" className="bg-section-deep py-20 bg-destructive-foreground">
       <div className="container mx-auto px-6">
         {/* Track record stats */}
         <div className="mb-16 text-center">
           <Badge className="mb-4 border-primary/30 bg-primary/10 text-primary">
             <CheckCircle className="mr-1 h-3 w-3" /> Track Record
           </Badge>
-          <h2 className="mb-4 text-3xl font-bold md:text-4xl text-secondary-foreground">Successfully Delivered</h2>
+          <h2 className="mb-4 text-3xl font-bold md:text-4xl text-primary">Successfully Delivered</h2>
           <p className="mx-auto max-w-2xl text-muted-foreground">
             A proven portfolio of completed projects — renovated, rented, and generating returns.
           </p>
@@ -48,7 +48,7 @@ const DeliveredProjects = () => {
                 <img
                 src={p.images[0] || p.after_image || "/placeholder.svg"}
                 alt={p.title}
-                className="h-full w-full object-cover transition-transform group-hover:scale-105" />
+                className="h-full w-full object-cover transition-transform group-hover:scale-105 rounded-2xl" />
 
                 <Badge className="absolute right-3 top-3 border-none bg-primary/90 text-primary-foreground">
                   Delivered
