@@ -5,11 +5,11 @@ import brandLogo from "@/assets/brand-1.png";
 import brandLight from "@/assets/brand-light.png";
 
 const navLinks = [
-  { label: "Portfolio", href: "#opportunities" },
-  { label: "Benefits", href: "#overview" },
-  { label: "Process", href: "#journey" },
-  { label: "Platform", href: "#platform" },
-];
+{ label: "Portfolio", href: "#opportunities" },
+{ label: "Benefits", href: "#overview" },
+{ label: "Process", href: "#journey" },
+{ label: "Platform", href: "#platform" }];
+
 
 const WHATSAPP_URL = "https://wa.me/306900000000?text=Hi%2C%20I'm%20interested%20in%20Golden%20Visa%20investment%20opportunities";
 
@@ -32,25 +32,25 @@ const Navbar = () => {
   return (
     <header
       className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
-        scrolled ? "border-b border-border bg-background/80 backdrop-blur-xl" : "bg-transparent"
-      }`}
-    >
-      <div className="container mx-auto flex items-center justify-between px-6 py-4">
+      scrolled ? "border-b border-border bg-background/80 backdrop-blur-xl" : "bg-transparent"}`
+      }>
+
+      <div className="container mx-auto flex items-center justify-between px-6 py-4 bg-transparent">
         <a href="/" className="flex items-center gap-2">
           <img src={brandLight} alt="MaiProp" className="h-10 w-auto" />
         </a>
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-8 md:flex">
-          {navLinks.map((l) => (
-            <button
-              key={l.href}
-              onClick={() => handleClick(l.href)}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-            >
+          {navLinks.map((l) =>
+          <button
+            key={l.href}
+            onClick={() => handleClick(l.href)}
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+
               {l.label}
             </button>
-          ))}
+          )}
           <Button asChild size="sm" className="rounded-full px-6">
             <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">Get Started</a>
           </Button>
@@ -63,26 +63,26 @@ const Navbar = () => {
       </div>
 
       {/* Mobile menu */}
-      {mobileOpen && (
-        <div className="border-t border-border bg-background/95 backdrop-blur-xl md:hidden">
+      {mobileOpen &&
+      <div className="border-t border-border bg-background/95 backdrop-blur-xl md:hidden">
           <nav className="container mx-auto flex flex-col gap-1 px-6 py-4">
-            {navLinks.map((l) => (
-              <button
-                key={l.href}
-                onClick={() => handleClick(l.href)}
-                className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-              >
+            {navLinks.map((l) =>
+          <button
+            key={l.href}
+            onClick={() => handleClick(l.href)}
+            className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+
                 {l.label}
               </button>
-            ))}
+          )}
             <Button asChild size="sm" className="mt-2 rounded-full">
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">Get Started</a>
             </Button>
           </nav>
         </div>
-      )}
-    </header>
-  );
+      }
+    </header>);
+
 };
 
 export default Navbar;
