@@ -20,15 +20,15 @@ const ContactSection = () =>
         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary">
           <Sparkles className="h-4 w-4" /> Start Your Application
         </div>
-        <h2 className="text-4xl font-bold sm:text-5xl lg:text-6xl">
+        <h2 className="text-1xl font-bold sm:text-1xl lg:text-6x4">
           Begin Your{" "}
           <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             Golden Visa
           </span>{" "}
           Journey
         </h2>
-        <p className="mx-auto mt-4 max-w-lg text-lg text-muted-foreground">
-          Connect with our Golden Visa specialists on WhatsApp for instant guidance.
+        <p className="mx-auto mt-4 max-w-lg text-muted-foreground text-center text-sm">
+          Connect with us for your Golden Visa on WhatsApp for instant guidance.
         </p>
 
         <div className="my-10 gap-4 flex-row flex items-center justify-center shadow-sm rounded-xl">
