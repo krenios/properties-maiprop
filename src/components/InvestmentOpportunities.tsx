@@ -15,8 +15,8 @@ const InvestmentOpportunities = () => {
       <div className="pointer-events-none absolute right-0 top-0 h-[500px] w-[500px] rounded-full bg-primary/8 blur-[180px]" />
       <div className="relative container mx-auto px-6">
         <div className="mb-12 text-center">
-          <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-widest text-accent">Golden Visa Eligible Properties</span>
-          <h2 className="text-3xl font-bold sm:text-4xl text-secondary">Visa-Ready Real Estate Portfolio</h2>
+          <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-widest text-primary-foreground">Golden Visa Eligible Properties</span>
+          <h2 className="text-3xl font-bold sm:text-4xl text-primary-foreground">Visa-Ready Real Estate Portfolio</h2>
           <p className="mt-2 text-slate-500">Pre-verified Golden Visa properties with full compliance — analyze and compare independently.</p>
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
