@@ -23,16 +23,6 @@ const PlatformReference = () => (
         <p className="mt-2 text-muted-foreground">Technology-powered independent property evaluation tools.</p>
       </div>
 
-      {/* mAI prop OS logo + CTA */}
-      <div className="mb-14 flex flex-col items-center gap-4">
-        <img src={brandLogo2} alt="mAI prop OS" className="h-12 w-auto brightness-0 invert" />
-        <Button asChild size="lg" className="gap-2 rounded-full bg-primary px-10 text-lg font-semibold text-primary-foreground shadow-[0_0_30px_hsl(179_90%_63%/0.4)] transition-all hover:bg-primary/90 hover:shadow-[0_0_50px_hsl(179_90%_63%/0.6)]">
-          <a href="https://os.maiprop.co" target="_blank" rel="noopener noreferrer">
-            Get Platform Access <ExternalLink className="h-5 w-5" />
-          </a>
-        </Button>
-        <p className="text-sm text-muted-foreground">100K+ property database · Self-service analytics · Instant visa eligibility</p>
-      </div>
 
       <div className="grid gap-6 sm:grid-cols-2">
         {tools.map((t) => (
