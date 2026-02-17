@@ -32,7 +32,7 @@ const DeliveredProjects = () => {
           <Badge className="mb-4 border-primary/30 bg-primary/10 text-primary">
             <CheckCircle className="mr-1 h-3 w-3" /> Track Record
           </Badge>
-          <h2 className="mb-4 text-3xl font-bold md:text-4xl text-primary">Successfully Delivered</h2>
+          <h2 className="mb-4 text-3xl font-bold md:text-4xl text-inherit">Successfully Delivered</h2>
           <p className="mx-auto max-w-2xl text-muted-foreground">
             A proven portfolio of completed projects — renovated, rented, and generating returns.
           </p>
