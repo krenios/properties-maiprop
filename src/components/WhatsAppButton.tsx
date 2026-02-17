@@ -3,7 +3,7 @@ import { MessageCircle, Mail } from "lucide-react";
 const WHATSAPP_URL = "https://wa.me/306971853470?text=Hi%2C%20I'm%20interested%20in%20Golden%20Visa%20investment%20opportunities";
 
 const WhatsAppButton = () => (
-  <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-3">
+  <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-3 max-sm:bottom-3 max-sm:right-3 max-sm:scale-90">
     <a
       href={WHATSAPP_URL}
       target="_blank"
