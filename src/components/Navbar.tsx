@@ -6,6 +6,7 @@ import brandLight from "@/assets/brand-light.png";
 
 const navLinks = [
 { label: "Portfolio", href: "#opportunities" },
+{ label: "Delivered", href: "#delivered" },
 { label: "Benefits", href: "#overview" },
 { label: "Process", href: "#journey" }];
 
@@ -38,7 +39,7 @@ const Navbar = () => {
         <a href="/" className="flex items-center gap-2">
           <img 
             alt="MaiProp" 
-            className="h-12 w-auto object-fill transition-all duration-300" 
+            className={`h-12 w-auto object-fill transition-all duration-300 ${scrolled ? "brightness-150" : ""}`} 
             src={scrolled ? brandLight : "/lovable-uploads/3c02ed5d-5638-402e-b7c8-0daa01b502d0.png"} 
           />
         </a>
