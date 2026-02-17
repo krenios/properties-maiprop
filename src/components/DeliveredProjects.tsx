@@ -5,6 +5,7 @@ import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 
 const WHATSAPP_URL = "https://wa.me/306971853470?text=Hi%2C%20I'm%20interested%20in%20";
 
@@ -26,6 +27,7 @@ const DeliveredProjects = () => {
     <section id="delivered" className="bg-section-deep py-20 bg-destructive-foreground">
       <div className="container mx-auto px-6">
         {/* Track record stats */}
+        <ScrollReveal>
         <div className="mb-16 text-center">
           <Badge className="mb-4 border-primary/30 bg-primary/10 text-primary">
             <CheckCircle className="mr-1 h-3 w-3" /> Track Record
@@ -35,34 +37,36 @@ const DeliveredProjects = () => {
             A proven portfolio of completed projects — renovated, rented, and generating returns.
           </p>
         </div>
+        </ScrollReveal>
 
         {/* Property cards */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {delivered.map((p) =>
-          <button
-            key={p.id}
-            onClick={() => setSelected(p)}
-            className="group overflow-hidden rounded-xl border border-border bg-card text-left transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5">
-
-              <div className="relative aspect-video overflow-hidden">
-                <img
-                src={p.images[0] || p.after_image || "/placeholder.svg"}
-                alt={p.title}
-                className="h-full w-full object-cover transition-transform group-hover:scale-105 rounded-2xl" />
-
-                <Badge className="absolute right-3 top-3 border-none bg-primary/90 text-primary-foreground">
-                  Delivered
-                </Badge>
-              </div>
-              <div className="p-4">
-                <h3 className="font-semibold">{p.title}</h3>
-                <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-                  <MapPin className="h-3 w-3" /> {p.location}
-                </p>
-              </div>
-            </button>
-          )}
-        </div>
+        <ScrollReveal variant="stagger">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {delivered.map((p) =>
+            <RevealItem key={p.id}>
+              <button
+                onClick={() => setSelected(p)}
+                className="group w-full overflow-hidden rounded-xl border border-border bg-card text-left transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5">
+                <div className="relative aspect-video overflow-hidden">
+                  <img
+                    src={p.images[0] || p.after_image || "/placeholder.svg"}
+                    alt={p.title}
+                    className="h-full w-full object-cover transition-transform group-hover:scale-105 rounded-2xl" />
+                  <Badge className="absolute right-3 top-3 border-none bg-primary/90 text-primary-foreground">
+                    Delivered
+                  </Badge>
+                </div>
+                <div className="p-4">
+                  <h3 className="font-semibold">{p.title}</h3>
+                  <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+                    <MapPin className="h-3 w-3" /> {p.location}
+                  </p>
+                </div>
+              </button>
+            </RevealItem>
+            )}
+          </div>
+        </ScrollReveal>
       </div>
 
       {/* Delivered Modal */}
