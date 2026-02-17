@@ -90,6 +90,36 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
             )}
           </div>
 
+          {/* POI pills */}
+          {property.poi.filter(Boolean).length > 0 && (
+            <>
+              <Separator className="bg-border" />
+              <div>
+                <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Points of Interest</h4>
+                <div className="flex flex-wrap gap-1.5">
+                  {property.poi.filter(Boolean).map((p) => (
+                    <Badge key={p} variant="secondary" className="rounded-full px-3 py-1 text-xs">{p}</Badge>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Tags pills */}
+          {property.tags.filter(Boolean).length > 0 && (
+            <>
+              <Separator className="bg-border" />
+              <div>
+                <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Features</h4>
+                <div className="flex flex-wrap gap-1.5">
+                  {property.tags.filter(Boolean).map((t) => (
+                    <Badge key={t} variant="outline" className="rounded-full px-3 py-1 text-xs">{t}</Badge>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
           <Separator className="bg-border" />
 
           {/* Embedded Google Map */}
