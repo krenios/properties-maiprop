@@ -29,8 +29,8 @@ const ImageUpload = ({ value, onChange, max, label, folder = "gallery" }: ImageU
     const newUrls: string[] = [];
 
     for (const file of Array.from(files)) {
-      const ext = file.name.split(".").pop();
-      const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+      const ext = file.name.split(".").pop() || "jpg";
+      const path = `${folder}/${crypto.randomUUID()}.${ext}`;
 
       const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
         cacheControl: "3600",
@@ -38,7 +38,7 @@ const ImageUpload = ({ value, onChange, max, label, folder = "gallery" }: ImageU
       });
 
       if (error) {
-        console.error("Upload failed:", error);
+        if (import.meta.env.DEV) console.error("Upload failed:", error);
         continue;
       }
 
