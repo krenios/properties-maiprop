@@ -32,6 +32,7 @@ export type Database = {
           price: number | null
           project_type: string
           size: number | null
+          sort_order: number
           status: string
           tags: string[]
           title: string
@@ -55,6 +56,7 @@ export type Database = {
           price?: number | null
           project_type?: string
           size?: number | null
+          sort_order?: number
           status?: string
           tags?: string[]
           title: string
@@ -78,6 +80,7 @@ export type Database = {
           price?: number | null
           project_type?: string
           size?: number | null
+          sort_order?: number
           status?: string
           tags?: string[]
           title?: string
