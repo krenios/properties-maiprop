@@ -358,11 +358,11 @@ const Admin = () => {
             </div>
             <div className="grid gap-2">
               <Label>POI (comma-separated)</Label>
-              <Input value={form.poi.join(", ")} onChange={(e) => setForm({ ...form, poi: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} />
+              <Input value={form.poi.join(", ")} onChange={(e) => setForm({ ...form, poi: e.target.value.split(",").map((s) => s.trim()) })} onBlur={(e) => setForm((prev) => ({ ...prev, poi: prev.poi.filter(Boolean) }))} />
             </div>
             <div className="grid gap-2">
               <Label>Tags (comma-separated, e.g. Balcony, Loft, Terrace)</Label>
-              <Input value={form.tags.join(", ")} onChange={(e) => setForm({ ...form, tags: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} />
+              <Input value={form.tags.join(", ")} onChange={(e) => setForm({ ...form, tags: e.target.value.split(",").map((s) => s.trim()) })} onBlur={(e) => setForm((prev) => ({ ...prev, tags: prev.tags.filter(Boolean) }))} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
