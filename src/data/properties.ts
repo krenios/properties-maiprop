@@ -19,4 +19,5 @@ export interface Property {
   date_added: string;
   floor: string;
   construction_year: string;
+  sort_order: number;
 }

@@ -18,10 +18,11 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Plus, Pencil, Trash2, AlertTriangle, ArrowUpDown, Home, ArrowRightCircle, CheckCircle, LogOut } from "lucide-react";
+import { Plus, Pencil, Trash2, AlertTriangle, Home, ArrowRightCircle, CheckCircle, LogOut, GripVertical } from "lucide-react";
 import ImageUpload from "@/components/ImageUpload";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 
 const propertySchema = z.object({
   title: z.string().min(1, "Title is required").max(200, "Title too long"),
@@ -37,54 +38,39 @@ const propertySchema = z.object({
   tags: z.array(z.string().max(50)).max(20, "Max 20 tags"),
 });
 
-type SortKey = "title" | "price" | "status" | "date_added";
-type SortDir = "asc" | "desc";
-
-const emptyProperty: Omit<Property, "id" | "date_added"> = {
+const emptyProperty: Omit<Property, "id" | "date_added" | "sort_order"> = {
   title: "", description: "", images: [], before_image: "", after_image: "", price: null, size: null, bedrooms: null,
   floor_plan: "", location: "", poi: [], tags: [], status: "", project_type: "new", yield: "", floor: "", construction_year: "",
 };
 
 const Admin = () => {
-  const { properties, addProperty, updateProperty, deleteProperty, bulkUpdateStatus } = useProperties();
+  const { properties, addProperty, updateProperty, deleteProperty, bulkUpdateStatus, reorderProperties } = useProperties();
   const { signOut } = useAuth();
   const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingType, setEditingType] = useState<"new" | "delivered">("new");
-  const [form, setForm] = useState(emptyProperty);
+  const [form, setForm] = useState<Omit<Property, "id" | "date_added" | "sort_order">>(emptyProperty);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkStatus, setBulkStatus] = useState<Property["status"]>("available");
-  const [sortKey, setSortKey] = useState<SortKey>("date_added");
-  const [sortDir, setSortDir] = useState<SortDir>("desc");
-  const [deliveredSortKey, setDeliveredSortKey] = useState<SortKey>("date_added");
-  const [deliveredSortDir, setDeliveredSortDir] = useState<SortDir>("desc");
 
-  const portfolioProperties = useMemo(() => properties.filter((p) => p.project_type === "new"), [properties]);
-  const deliveredProperties = useMemo(() => properties.filter((p) => p.project_type === "delivered"), [properties]);
+  const portfolioProperties = useMemo(() => properties.filter((p) => p.project_type === "new").sort((a, b) => a.sort_order - b.sort_order), [properties]);
+  const deliveredProperties = useMemo(() => properties.filter((p) => p.project_type === "delivered").sort((a, b) => a.sort_order - b.sort_order), [properties]);
 
-  const sortList = (list: Property[], key: SortKey, dir: SortDir) => {
-    return [...list].sort((a, b) => {
-      let cmp = 0;
-      if (key === "title") cmp = a.title.localeCompare(b.title);
-      else if (key === "price") cmp = (a.price || 0) - (b.price || 0);
-      else if (key === "status") cmp = (a.status || "").localeCompare(b.status || "");
-      else cmp = a.date_added.localeCompare(b.date_added);
-      return dir === "asc" ? cmp : -cmp;
-    });
+  const onPortfolioDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+    const items = Array.from(portfolioProperties);
+    const [moved] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, moved);
+    reorderProperties(items.map((p) => p.id));
   };
 
-  const sortedPortfolio = useMemo(() => sortList(portfolioProperties, sortKey, sortDir), [portfolioProperties, sortKey, sortDir]);
-  const sortedDelivered = useMemo(() => sortList(deliveredProperties, deliveredSortKey, deliveredSortDir), [deliveredProperties, deliveredSortKey, deliveredSortDir]);
-
-  const toggleSort = (key: SortKey) => {
-    if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
-    else { setSortKey(key); setSortDir("asc"); }
-  };
-
-  const toggleDeliveredSort = (key: SortKey) => {
-    if (deliveredSortKey === key) setDeliveredSortDir((d) => (d === "asc" ? "desc" : "asc"));
-    else { setDeliveredSortKey(key); setDeliveredSortDir("asc"); }
+  const onDeliveredDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+    const items = Array.from(deliveredProperties);
+    const [moved] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, moved);
+    reorderProperties(items.map((p) => p.id));
   };
 
   const missingInfo = (p: Property) => {
@@ -132,12 +118,6 @@ const Admin = () => {
     setSelected(new Set());
   };
 
-  const SortBtn = ({ k, label, onToggle }: { k: SortKey; label: string; onToggle: (k: SortKey) => void }) => (
-    <button onClick={() => onToggle(k)} className="flex items-center gap-1 font-medium">
-      {label} <ArrowUpDown className="h-3 w-3 text-muted-foreground" />
-    </button>
-  );
-
   const isDeliveredForm = editingType === "delivered" || form.project_type === "delivered";
 
   return (
@@ -151,14 +131,13 @@ const Admin = () => {
             <h1 className="text-2xl font-bold">Property Admin</h1>
           </div>
           <Button onClick={openNew} className="gap-2 rounded-full"><Plus className="h-4 w-4" /> Add Property</Button>
-            <Button variant="outline" onClick={signOut} className="gap-2 rounded-full"><LogOut className="h-4 w-4" /> Sign Out</Button>
+          <Button variant="outline" onClick={signOut} className="gap-2 rounded-full"><LogOut className="h-4 w-4" /> Sign Out</Button>
         </div>
 
         {/* ── PORTFOLIO SECTION ── */}
         <div className="mb-12">
-          <h2 className="mb-4 text-lg font-semibold">Portfolio</h2>
+          <h2 className="mb-4 text-lg font-semibold">Portfolio <span className="text-sm font-normal text-muted-foreground">(drag to reorder)</span></h2>
 
-          {/* Bulk actions */}
           {selected.size > 0 && (
             <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-primary/30 bg-primary/5 p-3">
               <span className="text-sm font-medium">{selected.size} selected</span>
@@ -179,56 +158,75 @@ const Admin = () => {
             <Table>
               <TableHeader>
                 <TableRow className="border-border hover:bg-muted/50">
+                  <TableHead className="w-8" />
                   <TableHead className="w-10" />
-                  <TableHead><SortBtn k="title" label="Title" onToggle={toggleSort} /></TableHead>
-                  <TableHead><SortBtn k="price" label="Price" onToggle={toggleSort} /></TableHead>
-                  <TableHead><SortBtn k="status" label="Status" onToggle={toggleSort} /></TableHead>
-                  <TableHead><SortBtn k="date_added" label="Date" onToggle={toggleSort} /></TableHead>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Price</TableHead>
+                  <TableHead>Status</TableHead>
                   <TableHead>Info</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
-                {sortedPortfolio.length === 0 && (
-                  <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">No portfolio properties</TableCell></TableRow>
-                )}
-                {sortedPortfolio.map((p) => {
-                  const missing = missingInfo(p);
-                  const isSold = p.status === "sold";
-                  return (
-                    <TableRow key={p.id} className="border-border hover:bg-muted/30">
-                      <TableCell>
-                        <Checkbox checked={selected.has(p.id)} onCheckedChange={() => toggleSelect(p.id)} />
-                      </TableCell>
-                      <TableCell className="font-medium">{p.title}</TableCell>
-                      <TableCell>{p.price ? `€${p.price.toLocaleString()}` : "—"}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className="text-xs capitalize">{p.status || "none"}</Badge>
-                      </TableCell>
-                      <TableCell className="text-sm text-muted-foreground">{p.date_added}</TableCell>
-                      <TableCell>
-                        {missing.length > 0 && (
-                          <div className="flex items-center gap-1 text-destructive" title={`Missing: ${missing.join(", ")}`}>
-                            <AlertTriangle className="h-4 w-4" />
-                            <span className="text-xs">{missing.join(", ")}</span>
-                          </div>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-1">
-                          {isSold && (
-                            <Button size="icon" variant="ghost" title="Transfer to Delivered" onClick={() => transferToDelivered(p.id)} className="text-secondary">
-                              <ArrowRightCircle className="h-4 w-4" />
-                            </Button>
-                          )}
-                          <Button size="icon" variant="ghost" onClick={() => openEdit(p)}><Pencil className="h-4 w-4" /></Button>
-                          <Button size="icon" variant="ghost" className="text-destructive" onClick={() => setDeleteId(p.id)}><Trash2 className="h-4 w-4" /></Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
+              <DragDropContext onDragEnd={onPortfolioDragEnd}>
+                <Droppable droppableId="portfolio">
+                  {(provided) => (
+                    <TableBody ref={provided.innerRef} {...provided.droppableProps}>
+                      {portfolioProperties.length === 0 && (
+                        <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">No portfolio properties</TableCell></TableRow>
+                      )}
+                      {portfolioProperties.map((p, index) => {
+                        const missing = missingInfo(p);
+                        const isSold = p.status === "sold";
+                        return (
+                          <Draggable key={p.id} draggableId={p.id} index={index}>
+                            {(provided, snapshot) => (
+                              <TableRow
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                className={`border-border hover:bg-muted/30 ${snapshot.isDragging ? "bg-muted/50 shadow-lg" : ""}`}
+                              >
+                                <TableCell>
+                                  <div {...provided.dragHandleProps} className="flex cursor-grab items-center justify-center">
+                                    <GripVertical className="h-4 w-4 text-muted-foreground" />
+                                  </div>
+                                </TableCell>
+                                <TableCell>
+                                  <Checkbox checked={selected.has(p.id)} onCheckedChange={() => toggleSelect(p.id)} />
+                                </TableCell>
+                                <TableCell className="font-medium">{p.title}</TableCell>
+                                <TableCell>{p.price ? `€${p.price.toLocaleString()}` : "—"}</TableCell>
+                                <TableCell>
+                                  <Badge variant="outline" className="text-xs capitalize">{p.status || "none"}</Badge>
+                                </TableCell>
+                                <TableCell>
+                                  {missing.length > 0 && (
+                                    <div className="flex items-center gap-1 text-destructive" title={`Missing: ${missing.join(", ")}`}>
+                                      <AlertTriangle className="h-4 w-4" />
+                                      <span className="text-xs">{missing.join(", ")}</span>
+                                    </div>
+                                  )}
+                                </TableCell>
+                                <TableCell className="text-right">
+                                  <div className="flex justify-end gap-1">
+                                    {isSold && (
+                                      <Button size="icon" variant="ghost" title="Transfer to Delivered" onClick={() => transferToDelivered(p.id)} className="text-secondary">
+                                        <ArrowRightCircle className="h-4 w-4" />
+                                      </Button>
+                                    )}
+                                    <Button size="icon" variant="ghost" onClick={() => openEdit(p)}><Pencil className="h-4 w-4" /></Button>
+                                    <Button size="icon" variant="ghost" className="text-destructive" onClick={() => setDeleteId(p.id)}><Trash2 className="h-4 w-4" /></Button>
+                                  </div>
+                                </TableCell>
+                              </TableRow>
+                            )}
+                          </Draggable>
+                        );
+                      })}
+                      {provided.placeholder}
+                    </TableBody>
+                  )}
+                </Droppable>
+              </DragDropContext>
             </Table>
           </div>
         </div>
@@ -237,39 +235,58 @@ const Admin = () => {
         <div>
           <div className="mb-4 flex items-center gap-2">
             <CheckCircle className="h-5 w-5 text-secondary" />
-            <h2 className="text-lg font-semibold">Successfully Delivered</h2>
+            <h2 className="text-lg font-semibold">Successfully Delivered <span className="text-sm font-normal text-muted-foreground">(drag to reorder)</span></h2>
           </div>
 
           <div className="overflow-x-auto rounded-xl border border-border">
             <Table>
               <TableHeader>
                 <TableRow className="border-border hover:bg-muted/50">
-                  <TableHead><SortBtn k="title" label="Title" onToggle={toggleDeliveredSort} /></TableHead>
-                  <TableHead><SortBtn k="price" label="Price" onToggle={toggleDeliveredSort} /></TableHead>
+                  <TableHead className="w-8" />
+                  <TableHead>Title</TableHead>
+                  <TableHead>Price</TableHead>
                   <TableHead>Yield</TableHead>
-                  <TableHead><SortBtn k="date_added" label="Date" onToggle={toggleDeliveredSort} /></TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
-                {sortedDelivered.length === 0 && (
-                  <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-8">No delivered properties yet</TableCell></TableRow>
-                )}
-                {sortedDelivered.map((p) => (
-                  <TableRow key={p.id} className="border-border hover:bg-muted/30">
-                    <TableCell className="font-medium">{p.title}</TableCell>
-                    <TableCell>{p.price ? `€${p.price.toLocaleString()}` : "—"}</TableCell>
-                    <TableCell className="text-sm">{p.yield || "—"}</TableCell>
-                    <TableCell className="text-sm text-muted-foreground">{p.date_added}</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-1">
-                        <Button size="icon" variant="ghost" onClick={() => openEdit(p)}><Pencil className="h-4 w-4" /></Button>
-                        <Button size="icon" variant="ghost" className="text-destructive" onClick={() => setDeleteId(p.id)}><Trash2 className="h-4 w-4" /></Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+              <DragDropContext onDragEnd={onDeliveredDragEnd}>
+                <Droppable droppableId="delivered">
+                  {(provided) => (
+                    <TableBody ref={provided.innerRef} {...provided.droppableProps}>
+                      {deliveredProperties.length === 0 && (
+                        <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-8">No delivered properties yet</TableCell></TableRow>
+                      )}
+                      {deliveredProperties.map((p, index) => (
+                        <Draggable key={p.id} draggableId={p.id} index={index}>
+                          {(provided, snapshot) => (
+                            <TableRow
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              className={`border-border hover:bg-muted/30 ${snapshot.isDragging ? "bg-muted/50 shadow-lg" : ""}`}
+                            >
+                              <TableCell>
+                                <div {...provided.dragHandleProps} className="flex cursor-grab items-center justify-center">
+                                  <GripVertical className="h-4 w-4 text-muted-foreground" />
+                                </div>
+                              </TableCell>
+                              <TableCell className="font-medium">{p.title}</TableCell>
+                              <TableCell>{p.price ? `€${p.price.toLocaleString()}` : "—"}</TableCell>
+                              <TableCell className="text-sm">{p.yield || "—"}</TableCell>
+                              <TableCell className="text-right">
+                                <div className="flex justify-end gap-1">
+                                  <Button size="icon" variant="ghost" onClick={() => openEdit(p)}><Pencil className="h-4 w-4" /></Button>
+                                  <Button size="icon" variant="ghost" className="text-destructive" onClick={() => setDeleteId(p.id)}><Trash2 className="h-4 w-4" /></Button>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </TableBody>
+                  )}
+                </Droppable>
+              </DragDropContext>
             </Table>
           </div>
         </div>
@@ -315,12 +332,11 @@ const Admin = () => {
               <Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
             </div>
             <ImageUpload
-              label="Property Images"
+              label="Property Images (drag to reorder)"
               value={form.images}
               onChange={(urls) => setForm({ ...form, images: urls })}
               folder="gallery"
             />
-            {/* Floor Plan — hidden for delivered projects */}
             {!isDeliveredForm && (
               <ImageUpload
                 label="Floor Plan"
@@ -358,11 +374,11 @@ const Admin = () => {
             </div>
             <div className="grid gap-2">
               <Label>POI (comma-separated)</Label>
-              <Input value={form.poi.join(", ")} onChange={(e) => setForm({ ...form, poi: e.target.value.split(",").map((s) => s.trim()) })} onBlur={(e) => setForm((prev) => ({ ...prev, poi: prev.poi.filter(Boolean) }))} />
+              <Input value={form.poi.join(", ")} onChange={(e) => setForm({ ...form, poi: e.target.value.split(",").map((s) => s.trim()) })} onBlur={() => setForm((prev) => ({ ...prev, poi: prev.poi.filter(Boolean) }))} />
             </div>
             <div className="grid gap-2">
               <Label>Tags (comma-separated, e.g. Balcony, Loft, Terrace)</Label>
-              <Input value={form.tags.join(", ")} onChange={(e) => setForm({ ...form, tags: e.target.value.split(",").map((s) => s.trim()) })} onBlur={(e) => setForm((prev) => ({ ...prev, tags: prev.tags.filter(Boolean) }))} />
+              <Input value={form.tags.join(", ")} onChange={(e) => setForm({ ...form, tags: e.target.value.split(",").map((s) => s.trim()) })} onBlur={() => setForm((prev) => ({ ...prev, tags: prev.tags.filter(Boolean) }))} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">

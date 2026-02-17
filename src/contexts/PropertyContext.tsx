@@ -6,10 +6,11 @@ import { toast } from "sonner";
 interface PropertyContextType {
   properties: Property[];
   loading: boolean;
-  addProperty: (p: Omit<Property, "id" | "date_added">) => Promise<void>;
+  addProperty: (p: Omit<Property, "id" | "date_added" | "sort_order">) => Promise<void>;
   updateProperty: (id: string, p: Partial<Property>) => Promise<void>;
   deleteProperty: (id: string) => Promise<void>;
   bulkUpdateStatus: (ids: string[], status: Property["status"]) => Promise<void>;
+  reorderProperties: (ids: string[]) => Promise<void>;
   refetch: () => Promise<void>;
 }
 
@@ -23,7 +24,7 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
     const { data, error } = await supabase
       .from("properties")
       .select("*")
-      .order("date_added", { ascending: false });
+      .order("sort_order", { ascending: true });
 
     if (error) {
       if (import.meta.env.DEV) console.error("Failed to fetch properties:", error);
@@ -37,8 +38,10 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
     fetchProperties();
   }, [fetchProperties]);
 
-  const addProperty = async (p: Omit<Property, "id" | "date_added">) => {
-    const { error } = await supabase.from("properties").insert(p);
+  const addProperty = async (p: Omit<Property, "id" | "date_added" | "sort_order">) => {
+    // New properties get the highest sort_order
+    const maxOrder = properties.length > 0 ? Math.max(...properties.map((x) => x.sort_order)) : 0;
+    const { error } = await supabase.from("properties").insert({ ...p, sort_order: maxOrder + 1 });
     if (error) { if (import.meta.env.DEV) console.error("Failed to add property:", error); toast.error("Failed to add property."); return; }
     await fetchProperties();
   };
@@ -61,8 +64,30 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
     await fetchProperties();
   };
 
+  const reorderProperties = async (orderedIds: string[]) => {
+    // Optimistically update local state
+    const reordered = orderedIds.map((id, i) => {
+      const prop = properties.find((p) => p.id === id)!;
+      return { ...prop, sort_order: i };
+    });
+    // Keep properties not in the list unchanged
+    const otherProps = properties.filter((p) => !orderedIds.includes(p.id));
+    setProperties([...reordered, ...otherProps]);
+
+    // Batch update sort_order in DB
+    const updates = orderedIds.map((id, i) =>
+      supabase.from("properties").update({ sort_order: i }).eq("id", id)
+    );
+    const results = await Promise.all(updates);
+    const hasError = results.some((r) => r.error);
+    if (hasError) {
+      toast.error("Failed to save order.");
+      await fetchProperties();
+    }
+  };
+
   return (
-    <PropertyContext.Provider value={{ properties, loading, addProperty, updateProperty, deleteProperty, bulkUpdateStatus, refetch: fetchProperties }}>
+    <PropertyContext.Provider value={{ properties, loading, addProperty, updateProperty, deleteProperty, bulkUpdateStatus, reorderProperties, refetch: fetchProperties }}>
       {children}
     </PropertyContext.Provider>
   );
