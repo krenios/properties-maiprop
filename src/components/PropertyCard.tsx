@@ -16,8 +16,9 @@ const statusColors: Record<string, string> = {
 const PropertyCard = ({ property, onClick }: Props) => (
   <button
     onClick={onClick}
-    className="group relative overflow-hidden rounded-xl border border-border bg-card text-left transition-all hover:border-primary/40 hover:shadow-[0_0_30px_hsl(179_90%_63%/0.1)]"
+    className="group relative overflow-hidden rounded-xl border border-border/60 bg-card text-left transition-all duration-500 hover:border-primary/50 hover:shadow-[0_0_40px_hsl(179_90%_63%/0.15),0_0_80px_hsl(179_90%_63%/0.05)] hover:-translate-y-1"
   >
+    <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
     <div className="relative aspect-[4/3] overflow-hidden">
       <img
         src={property.images[0] || "/placeholder.svg"}
