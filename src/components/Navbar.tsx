@@ -5,10 +5,10 @@ import brandLogo from "@/assets/brand-1.png";
 import brandLight from "@/assets/brand-light.png";
 
 const navLinks = [
+{ label: "Benefits", href: "#overview" },
 { label: "Portfolio", href: "#opportunities" },
 { label: "Delivered", href: "#delivered" },
 { label: "mAI Prop OS", href: "#platform" },
-{ label: "Benefits", href: "#overview" },
 { label: "Process", href: "#journey" }];
 
 
@@ -56,8 +56,8 @@ const Navbar = () => {
               {l.label}
             </button>
           )}
-          <Button asChild size="sm" className="rounded-full px-6">
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">Get Started</a>
+          <Button size="sm" className="rounded-full px-6" onClick={() => { const el = document.querySelector("#contact"); el?.scrollIntoView({ behavior: "smooth" }); }}>
+            Get Started
           </Button>
         </nav>
 
@@ -80,8 +80,8 @@ const Navbar = () => {
                 {l.label}
               </button>
           )}
-            <Button asChild size="sm" className="mt-2 rounded-full">
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">Get Started</a>
+            <Button size="sm" className="mt-2 rounded-full" onClick={() => { setMobileOpen(false); const el = document.querySelector("#contact"); el?.scrollIntoView({ behavior: "smooth" }); }}>
+              Get Started
             </Button>
           </nav>
         </div>
