@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import { Property } from "@/data/properties";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface PropertyContextType {
   properties: Property[];
@@ -25,7 +26,7 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
       .order("date_added", { ascending: false });
 
     if (error) {
-      console.error("Failed to fetch properties:", error);
+      if (import.meta.env.DEV) console.error("Failed to fetch properties:", error);
       return;
     }
     setProperties((data as Property[]) || []);
@@ -38,25 +39,25 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
 
   const addProperty = async (p: Omit<Property, "id" | "date_added">) => {
     const { error } = await supabase.from("properties").insert(p);
-    if (error) { console.error("Failed to add property:", error); return; }
+    if (error) { if (import.meta.env.DEV) console.error("Failed to add property:", error); toast.error("Failed to add property."); return; }
     await fetchProperties();
   };
 
   const updateProperty = async (id: string, updates: Partial<Property>) => {
     const { error } = await supabase.from("properties").update(updates).eq("id", id);
-    if (error) { console.error("Failed to update property:", error); return; }
+    if (error) { if (import.meta.env.DEV) console.error("Failed to update property:", error); toast.error("Failed to update property."); return; }
     await fetchProperties();
   };
 
   const deleteProperty = async (id: string) => {
     const { error } = await supabase.from("properties").delete().eq("id", id);
-    if (error) { console.error("Failed to delete property:", error); return; }
+    if (error) { if (import.meta.env.DEV) console.error("Failed to delete property:", error); toast.error("Failed to delete property."); return; }
     await fetchProperties();
   };
 
   const bulkUpdateStatus = async (ids: string[], status: Property["status"]) => {
     const { error } = await supabase.from("properties").update({ status }).in("id", ids);
-    if (error) { console.error("Failed to bulk update:", error); return; }
+    if (error) { if (import.meta.env.DEV) console.error("Failed to bulk update:", error); toast.error("Failed to update properties."); return; }
     await fetchProperties();
   };
 

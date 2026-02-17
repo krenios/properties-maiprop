@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { z } from "zod";
 import { useProperties } from "@/contexts/PropertyContext";
 import { useAuth } from "@/hooks/useAuth";
 import { Property } from "@/data/properties";
@@ -20,6 +21,21 @@ import {
 import { Plus, Pencil, Trash2, AlertTriangle, ArrowUpDown, Home, ArrowRightCircle, CheckCircle, LogOut } from "lucide-react";
 import ImageUpload from "@/components/ImageUpload";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
+
+const propertySchema = z.object({
+  title: z.string().min(1, "Title is required").max(200, "Title too long"),
+  description: z.string().max(2000, "Description too long"),
+  price: z.number().int().nonnegative("Price must be positive").nullable(),
+  size: z.number().int().nonnegative("Size must be positive").nullable(),
+  bedrooms: z.number().int().nonnegative().max(50, "Max 50 bedrooms").nullable(),
+  location: z.string().max(300, "Location too long"),
+  floor: z.string().max(50, "Floor too long"),
+  construction_year: z.string().max(4).regex(/^\d{4}$/, "Must be a 4-digit year").or(z.literal("")),
+  yield: z.string().max(20, "Yield too long"),
+  poi: z.array(z.string().max(100)).max(20, "Max 20 POIs"),
+  tags: z.array(z.string().max(50)).max(20, "Max 20 tags"),
+});
 
 type SortKey = "title" | "price" | "status" | "date_added";
 type SortDir = "asc" | "desc";
@@ -88,6 +104,12 @@ const Admin = () => {
   };
 
   const handleSave = () => {
+    const result = propertySchema.safeParse(form);
+    if (!result.success) {
+      const firstError = result.error.errors[0];
+      toast.error(firstError?.message || "Validation failed");
+      return;
+    }
     if (editingId) updateProperty(editingId, form);
     else addProperty(form);
     setFormOpen(false);
