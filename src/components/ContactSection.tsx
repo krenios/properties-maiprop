@@ -1,4 +1,4 @@
-import { ArrowRight, Check, Sparkles } from "lucide-react";
+import { ArrowRight, Check, Sparkles, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const WHATSAPP_URL = "https://wa.me/306971853470?text=Hi%2C%20I'm%20interested%20in%20Golden%20Visa%20investment%20opportunities";
@@ -47,9 +47,11 @@ const ContactSection = () =>
             Continue on WhatsApp <ArrowRight className="h-5 w-5" />
           </a>
         </Button>
-        
-
-
+        <Button asChild variant="outline" size="lg" className="gap-2 rounded-full border-border/50 bg-background/20 px-12 text-lg font-semibold backdrop-blur-sm ml-4">
+          <a href="mailto:kr@maiprop.co">
+            <Mail className="h-5 w-5" /> Mail Us
+          </a>
+        </Button>
       </div>
     </div>
   </section>;
