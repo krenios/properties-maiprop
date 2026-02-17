@@ -22,7 +22,7 @@ const Index = () =>
     <ValueSection />
     <JourneySection />
     <ContactSection />
-    <footer className="border-t border-border bg-section-deep text-center py-[12px]">
+    <footer className="border-t border-border bg-background text-center py-[12px]">
       <div className="container mx-auto flex flex-col items-center gap-4 px-6">
         <div className="flex items-center gap-6">
           

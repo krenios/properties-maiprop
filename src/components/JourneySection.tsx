@@ -7,7 +7,7 @@ const steps = [
 { num: "04", title: "Visa Application & Approval", desc: "Complete support through Golden Visa application" }];
 
 const JourneySection = () =>
-<section id="journey" className="relative bg-section-mid py-24 bg-primary-foreground">
+<section id="journey" className="relative bg-background py-24">
     <div className="pointer-events-none absolute left-0 top-1/2 h-[350px] w-[350px] -translate-y-1/2 rounded-full bg-secondary/8 blur-[120px]" />
     <div className="relative container mx-auto px-6">
       <ScrollReveal>

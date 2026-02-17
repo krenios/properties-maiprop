@@ -10,7 +10,7 @@ const benefits = [
 { icon: Sun, title: "Mediterranean Lifestyle", desc: "300+ days of sunshine, world-class cuisine, and rich culture" }];
 
 const GoldenVisaStats = () =>
-<section id="overview" className="relative bg-section-mid py-24 bg-primary-foreground">
+<section id="overview" className="relative bg-background py-24">
     <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
     <div className="relative container mx-auto px-6">
       <ScrollReveal>

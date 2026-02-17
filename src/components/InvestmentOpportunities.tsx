@@ -12,14 +12,14 @@ const InvestmentOpportunities = () => {
   const current = properties.filter((p) => p.project_type === "new");
 
   return (
-    <section id="opportunities" className="relative bg-section-deep py-24 bg-[sidebar-primary-foreground] text-zinc-100 bg-zinc-300">
+    <section id="opportunities" className="relative bg-background py-24">
       <div className="pointer-events-none absolute right-0 top-0 h-[500px] w-[500px] rounded-full bg-primary/8 blur-[180px]" />
       <div className="relative container mx-auto px-6">
         <ScrollReveal>
           <div className="mb-12 text-center">
-            <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-widest text-primary-foreground">Golden Visa Eligible Properties</span>
-            <h2 className="text-3xl font-bold sm:text-4xl text-primary-foreground">Visa-Ready Real Estate Portfolio</h2>
-            <p className="mt-2 text-slate-500">Pre-verified Golden Visa properties with full compliance — analyze and compare independently.</p>
+            <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-widest text-primary">Golden Visa Eligible Properties</span>
+            <h2 className="text-3xl font-bold sm:text-4xl">Visa-Ready Real Estate Portfolio</h2>
+            <p className="mt-2 text-muted-foreground">Pre-verified Golden Visa properties with full compliance — analyze and compare independently.</p>
           </div>
         </ScrollReveal>
         <ScrollReveal variant="stagger">
