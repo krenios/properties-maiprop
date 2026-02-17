@@ -10,7 +10,7 @@ const bullets = [
 "Full visa support from investment to approval"];
 
 const ContactSection = () =>
-<section id="contact" className="relative overflow-hidden bg-section-deep py-16 sm:py-28">
+<section id="contact" className="relative overflow-hidden bg-background py-16 sm:py-28">
     <div className="pointer-events-none absolute left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/15 blur-[150px]" />
     <div className="pointer-events-none absolute bottom-0 left-1/4 h-[300px] w-[300px] rounded-full bg-secondary/10 blur-[100px]" />
 
