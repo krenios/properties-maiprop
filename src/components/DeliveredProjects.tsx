@@ -92,10 +92,10 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={() => {onClose();setImgIdx(0);}}>
-      <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto border-border bg-card p-0">
+      <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto border-border bg-card p-0 w-[95vw] sm:w-auto">
         {/* Scrollable Photo Gallery */}
         {hasPhotos &&
-        <div className="relative h-[420px] w-full overflow-hidden">
+        <div className="relative h-[250px] sm:h-[420px] w-full overflow-hidden">
             <img src={allPhotos[imgIdx % allPhotos.length]} alt={property.title} className="h-full w-full object-cover" />
             {allPhotos.length > 1 &&
           <>
