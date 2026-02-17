@@ -11,7 +11,7 @@ const services = [
 { icon: LineChart, title: "ROI Forecasting", desc: "Rental yield projections, capital appreciation models & IRR calculations." }];
 
 const ValueSection = () =>
-<section id="platform" className="relative bg-section-purple py-24 bg-transparent">
+<section id="platform" className="relative bg-section-purple py-24 bg-muted">
     <div className="pointer-events-none absolute left-1/4 bottom-0 h-[350px] w-[350px] rounded-full bg-secondary/10 blur-[120px]" />
     <div className="relative container mx-auto px-6">
       <ScrollReveal>
