@@ -88,6 +88,11 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                 <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" /> {property.yield}
               </Badge>
             )}
+            {property.size && (
+              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                <Maximize className="h-3.5 w-3.5 text-muted-foreground" /> {property.size} m²
+              </Badge>
+            )}
           </div>
 
           {/* POI pills */}
