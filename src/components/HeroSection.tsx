@@ -30,9 +30,7 @@ const HeroSection = () =>
           Golden Visa in Greece
         </span>
       </h1>
-      <p className="mt-6 max-w-xl text-base sm:text-lg text-muted-foreground text-justify">EU residency through €250K+ Greek real estate investments. <AI-powered platform for independent assessment.
-
-    </p>
+      <p className="mt-6 max-w-xl text-base sm:text-lg text-muted-foreground text-justify">EU residency through €250K+ Greek real estate investments. AI-powered platform for independent assessment.</p>
       <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
         <Button asChild size="lg" className="gap-2 rounded-full px-8 w-full sm:w-auto">
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
