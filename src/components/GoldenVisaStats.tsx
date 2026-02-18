@@ -3,7 +3,7 @@ import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 
 const benefits = [
 { icon: Globe, title: "EU Residency", desc: "Live, work, and travel freely across 27 Schengen countries — Access to mAI Prop OS" },
-{ icon: Users, title: "Family Inclusion", desc: "Spouse, children under 21, and parents in one application" },
+{ icon: Users, title: "Family Inclusion", desc: "Spouse, children under 21, and parents included in one single application" },
 { icon: Zap, title: "Fast Processing", desc: "Permanent residency in 6-9 months with streamlined application" },
 { icon: Home, title: "No Stay Required", desc: "Maintain residency without minimum stay obligations" },
 { icon: TrendingUp, title: "Strong Market Growth", desc: "8%+ annual appreciation with strong rental income potential" },
@@ -26,7 +26,7 @@ const GoldenVisaStats = () =>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {benefits.map((b) =>
         <RevealItem key={b.title}>
-          <div className="rounded-xl border border-border bg-background/40 p-6 backdrop-blur transition-all hover:border-primary/30 hover:shadow-[0_0_30px_hsl(179_90%_63%/0.06)]">
+          <div className="h-full rounded-xl border border-border bg-background/40 p-6 backdrop-blur transition-all hover:border-primary/30 hover:shadow-[0_0_30px_hsl(179_90%_63%/0.06)]">
               <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10">
                 <b.icon className="h-5 w-5 text-primary" />
               </div>
