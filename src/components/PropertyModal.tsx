@@ -3,7 +3,19 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { MapPin, Bed, Maximize, TrendingUp, MessageCircle, ChevronLeft, ChevronRight, ExternalLink, Building, Calendar, LayoutGrid } from "lucide-react";
+import {
+  MapPin,
+  Bed,
+  Maximize,
+  TrendingUp,
+  MessageCircle,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  Building,
+  Calendar,
+  LayoutGrid,
+} from "lucide-react";
 import { useState } from "react";
 
 const WHATSAPP_URL = "https://wa.me/306971853470?text=Hi%2C%20I'm%20interested%20in%20";
@@ -68,9 +80,14 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                 <span className="text-primary font-semibold">€{property.price.toLocaleString()}</span>
               </Badge>
             )}
+            {property.size && (
+              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                <Maximize className="h-3.5 w-3.5 text-muted-foreground" /> {property.size} m²
+              </Badge>
+            )}
             {property.bedrooms && (
               <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
-                <Bed className="h-3.5 w-3.5 text-muted-foreground" /> {property.bedrooms} BR
+                <Bed className="h-3.5 w-3.5 text-muted-foreground" /> {property.bedrooms} Bdr
               </Badge>
             )}
             {property.floor && (
@@ -88,11 +105,6 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                 <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" /> {property.yield}
               </Badge>
             )}
-            {property.size && (
-              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
-                <Maximize className="h-3.5 w-3.5 text-muted-foreground" /> {property.size} m²
-              </Badge>
-            )}
           </div>
 
           {/* POI pills */}
@@ -100,10 +112,14 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
             <>
               <Separator className="bg-border" />
               <div>
-                <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Points of Interest</h4>
+                <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Points of Interest
+                </h4>
                 <div className="flex flex-wrap gap-1.5">
                   {property.poi.filter(Boolean).map((p) => (
-                    <Badge key={p} variant="secondary" className="rounded-full px-3 py-1 text-xs">{p}</Badge>
+                    <Badge key={p} variant="secondary" className="rounded-full px-3 py-1 text-xs">
+                      {p}
+                    </Badge>
                   ))}
                 </div>
               </div>
@@ -118,7 +134,9 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                 <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Features</h4>
                 <div className="flex flex-wrap gap-1.5">
                   {property.tags.filter(Boolean).map((t) => (
-                    <Badge key={t} variant="outline" className="rounded-full px-3 py-1 text-xs">{t}</Badge>
+                    <Badge key={t} variant="outline" className="rounded-full px-3 py-1 text-xs">
+                      {t}
+                    </Badge>
                   ))}
                 </div>
               </div>
@@ -162,7 +180,11 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                   </div>
                   <h4 className="text-xs font-semibold uppercase tracking-wider text-primary">Floor Plan</h4>
                 </div>
-                <img src={property.floor_plan} alt="Floor plan" className="max-h-[200px] w-full rounded-lg border border-border bg-background object-contain" />
+                <img
+                  src={property.floor_plan}
+                  alt="Floor plan"
+                  className="max-h-[200px] w-full rounded-lg border border-border bg-background object-contain"
+                />
               </div>
             </>
           )}
