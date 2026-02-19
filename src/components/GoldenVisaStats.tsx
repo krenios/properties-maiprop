@@ -18,7 +18,7 @@ const GoldenVisaStats = () =>
           <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-widest text-primary">
             Greek Golden Visa Program
           </span>
-          <h2 className="text-3xl font-bold sm:text-4xl">Why Golden Visa Greece?</h2>
+          <h2 className="text-3xl font-bold sm:text-4xl">Why Greek Golden Visa?</h2>
           <p className="mt-2 text-muted-foreground">European residency with investment returns and lifestyle benefits.</p>
         </div>
       </ScrollReveal>
