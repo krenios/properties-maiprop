@@ -8,6 +8,7 @@ import PlatformReference from "@/components/PlatformReference";
 import JourneySection from "@/components/JourneySection";
 import ContactSection from "@/components/ContactSection";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import LeadCaptureBot from "@/components/LeadCaptureBot";
 import brandLogo1 from "@/assets/brand-1.png";
 import brandLogo2 from "@/assets/brand-2.png";
 
@@ -34,6 +35,7 @@ const Index = () =>
       </div>
     </footer>
     <WhatsAppButton />
+    <LeadCaptureBot />
   </main>;
 
 
