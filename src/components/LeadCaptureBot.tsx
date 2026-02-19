@@ -34,6 +34,26 @@ export const useLeadBot = () => useContext(LeadBotContext);
 
 type ChatMessage = { role: "bot" | "user"; text: string };
 
+const TypingIndicator = () => (
+  <motion.div
+    initial={{ opacity: 0, y: 8 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -4 }}
+    className="flex justify-start"
+  >
+    <div className="flex items-center gap-1 rounded-2xl rounded-bl-md bg-muted px-4 py-3">
+      {[0, 1, 2].map((i) => (
+        <motion.span
+          key={i}
+          className="block h-2 w-2 rounded-full bg-muted-foreground/50"
+          animate={{ y: [0, -4, 0] }}
+          transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15, ease: "easeInOut" }}
+        />
+      ))}
+    </div>
+  </motion.div>
+);
+
 const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
@@ -41,6 +61,7 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [typing, setTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -53,12 +74,17 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Initialize first bot message
+  // Initialize first bot message with typing indicator
   useEffect(() => {
     if (open && messages.length === 0 && !submitted) {
-      setMessages([
-        { role: "bot", text: `${STEPS[0].emoji} Hello! I'm your investment assistant. ${STEPS[0].label}` },
-      ]);
+      setTyping(true);
+      const timer = setTimeout(() => {
+        setTyping(false);
+        setMessages([
+          { role: "bot", text: `${STEPS[0].emoji} Hello! I'm your investment assistant. ${STEPS[0].label}` },
+        ]);
+      }, 800);
+      return () => clearTimeout(timer);
     }
   }, [open, messages.length, submitted]);
 
@@ -67,7 +93,16 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, step]);
+  }, [messages, step, typing]);
+
+  const showBotMessage = (text: string, onDone?: () => void) => {
+    setTyping(true);
+    setTimeout(() => {
+      setTyping(false);
+      setMessages(prev => [...prev, { role: "bot", text }]);
+      onDone?.();
+    }, 700 + Math.random() * 400);
+  };
 
   const openWithLocation = useCallback((location: string) => {
     setForm({ ...initial, preferred_location: location });
@@ -102,9 +137,7 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
 
     if (step < STEPS.length - 1) {
       const nextStep = STEPS[step + 1];
-      setTimeout(() => {
-        setMessages(prev => [...prev, { role: "bot", text: `${nextStep.emoji} ${nextStep.label}` }]);
-      }, 400);
+      showBotMessage(`${nextStep.emoji} ${nextStep.label}`);
       setStep(step + 1);
     } else {
       handleSubmit();
@@ -243,6 +276,11 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
                 ))}
               </AnimatePresence>
 
+              {/* Typing indicator */}
+              <AnimatePresence>
+                {typing && <TypingIndicator />}
+              </AnimatePresence>
+
               {/* Success state */}
               {submitted && (
                 <motion.div
@@ -280,9 +318,7 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
                           setMessages(prev => [...prev, { role: "user", text: opt }]);
                           if (step < STEPS.length - 1) {
                             const nextStep = STEPS[step + 1];
-                            setTimeout(() => {
-                              setMessages(prev => [...prev, { role: "bot", text: `${nextStep.emoji} ${nextStep.label}` }]);
-                            }, 400);
+                            showBotMessage(`${nextStep.emoji} ${nextStep.label}`);
                             setStep(step + 1);
                           } else {
                             // Submit with the updated form directly
