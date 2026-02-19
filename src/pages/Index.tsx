@@ -10,6 +10,7 @@ import ContactSection from "@/components/ContactSection";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import LeadCaptureBot from "@/components/LeadCaptureBot";
 import SectionDivider from "@/components/SectionDivider";
+import CookieConsent from "@/components/CookieConsent";
 import brandLogo1 from "@/assets/brand-1.png";
 import brandLogo2 from "@/assets/brand-2.png";
 
@@ -44,6 +45,7 @@ const Index = () =>
         </div>
       </footer>
       <WhatsAppButton />
+      <CookieConsent />
     </LeadCaptureBot>
   </main>;
 
