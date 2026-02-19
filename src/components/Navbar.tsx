@@ -12,7 +12,21 @@ const navLinks = [
 { label: "Process", href: "#journey" }];
 
 
-const WHATSAPP_URL = "https://wa.me/306971853470?text=Hi%2C%20I'm%20interested%20in%20Golden%20Visa%20investment%20opportunities";
+const whatsappMessage = [
+  "Hello! I would like to explore investment opportunities under the Greek Golden Visa program.",
+  "",
+  "Please share the following details:",
+  "",
+  "1. Full Name:",
+  "2. Phone (International format):",
+  "3. Email:",
+  "4. Nationality (Country of citizenship):",
+  "5. Investment Budget (in EUR - minimum 250000):",
+  "6. Preferred Property Location:",
+  "7. Property Type (Apartment or Villa):",
+  "8. When are you planning to invest (0-6 months or 6-12 months):",
+].join("\n");
+const WHATSAPP_URL = `https://wa.me/306971853470?text=${encodeURIComponent(whatsappMessage)}`;
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
