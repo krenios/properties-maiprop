@@ -20,14 +20,14 @@ const WHATSAPP_URL = `https://api.whatsapp.com/send?phone=306971853470&text=${en
 
 const WhatsAppButton = () => (
   <TooltipProvider delayDuration={300}>
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-3 max-sm:bottom-3 max-sm:right-3 max-sm:scale-90">
+  <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-3 max-sm:bottom-3 max-sm:right-3">
       <Tooltip>
         <TooltipTrigger asChild>
           <a
             href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex h-14 w-14 items-center justify-center rounded-full bg-[hsl(142,70%,45%)] text-white shadow-lg transition-transform hover:scale-110 animate-pulse-glow"
+            className="flex h-12 w-12 items-center justify-center rounded-full bg-[hsl(142,70%,45%)] text-white shadow-lg transition-transform hover:scale-110 animate-pulse-glow"
             aria-label="Contact via WhatsApp"
           >
             <MessageCircle className="h-7 w-7" />
