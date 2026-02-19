@@ -16,7 +16,7 @@ const message = [
   "8. When are you planning to invest (0-6 months or 6-12 months):",
 ].join("\n");
 
-const WHATSAPP_URL = `https://api.whatsapp.com/send?phone=306971853470&text=${encodeURIComponent(message)}`;
+const WHATSAPP_URL = `https://wa.me/306971853470?text=${encodeURIComponent(message)}`;
 
 const WhatsAppButton = () => (
   <TooltipProvider delayDuration={300}>
