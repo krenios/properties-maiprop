@@ -16,7 +16,7 @@ const JourneySection = lazy(() => import("@/components/JourneySection"));
 const ContactSection = lazy(() => import("@/components/ContactSection"));
 
 const Index = () =>
-<main className="min-h-screen bg-background" role="main" itemScope itemType="https://schema.org/WebPage">
+<main className="min-h-screen bg-background overflow-x-hidden" role="main" itemScope itemType="https://schema.org/WebPage">
     <LeadCaptureBot>
       <Navbar />
       <HeroSection />
