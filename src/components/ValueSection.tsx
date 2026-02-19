@@ -1,42 +1,45 @@
-import { Database, BarChart3, Brain, PieChart, Target, LineChart, ExternalLink } from "lucide-react";
+import { Database, BarChart3, Brain, PieChart, LineChart, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import brandLogo2 from "@/assets/brand-os.jpg";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 
 const services = [
-{ icon: Database, title: "500K+ Property Datapoints", desc: "Greece's largest structured property dataset for institutional-grade analysis." },
-{ icon: BarChart3, title: "Market Analytics Engine", desc: "Real-time valuations, price trends & neighborhood comparables at your fingertips." },
-{ icon: Brain, title: "AI-Powered Due Diligence", desc: "Automated Valuation Models leveraging latest AI models." },
-{ icon: PieChart, title: "Portfolio Optimization", desc: "Diversification modeling across locations, asset types & risk profiles." },
-{ icon: LineChart, title: "ROI Forecasting", desc: "Rental yield projections, capital appreciation models & IRR calculations." }];
+  { icon: Database, title: "500K+ Greek Property Datapoints", desc: "Greece's largest structured property dataset for institutional-grade Golden Visa investment analysis." },
+  { icon: BarChart3, title: "Greek Market Analytics Engine", desc: "Real-time property valuations, Athens price trends & neighborhood comparables for Golden Visa buyers." },
+  { icon: Brain, title: "AI-Powered Property Due Diligence", desc: "Automated Valuation Models leveraging latest AI models for Greek real estate assessment." },
+  { icon: PieChart, title: "Golden Visa Portfolio Optimization", desc: "Diversification modeling across Greek locations, property types & risk profiles for Golden Visa investors." },
+  { icon: LineChart, title: "Greece ROI Forecasting", desc: "Rental yield projections, Greek property appreciation models & IRR calculations for Golden Visa investments." },
+];
 
-const ValueSection = () =>
-<section id="platform" className="relative bg-background py-24">
+const ValueSection = () => (
+  <section id="platform" className="relative bg-background py-24" aria-label="mAI Prop OS - AI Property Analytics for Greek Golden Visa Investors">
     <div className="pointer-events-none absolute left-1/4 bottom-0 h-[350px] w-[350px] rounded-full bg-secondary/10 blur-[120px]" />
     <div className="relative container mx-auto px-6">
       <ScrollReveal>
-        <div className="mb-14 text-center">
+        <header className="mb-14 text-center">
           <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-widest text-secondary">
-            Data-Driven Investment Partner
+            AI-Powered Greek Real Estate Investment Platform
           </span>
           <h2 className="text-3xl font-bold sm:text-4xl">mAI Prop OS</h2>
-          <p className="mx-auto mt-3 max-w-xl text-muted-foreground">Technology meets real estate — data, AI & analytics become your partner.</p>
-        </div>
+          <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
+            Technology meets Greek real estate — data, AI & analytics become your partner for Golden Visa property investment decisions.
+          </p>
+        </header>
       </ScrollReveal>
 
       <ScrollReveal variant="stagger">
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
-          {services.map((s) =>
-        <RevealItem key={s.title}>
-          <div className="group rounded-xl border border-secondary/20 bg-background/30 p-6 backdrop-blur transition-all hover:border-secondary/40 hover:shadow-[0_0_30px_hsl(263_86%_64%/0.1)]">
-              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-secondary/15 transition-colors group-hover:bg-secondary/25">
-                <s.icon className="h-5 w-5 text-secondary" />
-              </div>
-              <h3 className="mb-1 font-semibold">{s.title}</h3>
-              <p className="text-sm text-muted-foreground">{s.desc}</p>
-            </div>
-        </RevealItem>
-        )}
+          {services.map((s) => (
+            <RevealItem key={s.title}>
+              <article className="group rounded-xl border border-secondary/20 bg-background/30 p-6 backdrop-blur transition-all hover:border-secondary/40 hover:shadow-[0_0_30px_hsl(263_86%_64%/0.1)]">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-secondary/15 transition-colors group-hover:bg-secondary/25">
+                  <s.icon className="h-5 w-5 text-secondary" />
+                </div>
+                <h3 className="mb-1 font-semibold">{s.title}</h3>
+                <p className="text-sm text-muted-foreground">{s.desc}</p>
+              </article>
+            </RevealItem>
+          ))}
         </div>
       </ScrollReveal>
 
@@ -50,6 +53,7 @@ const ValueSection = () =>
         </div>
       </ScrollReveal>
     </div>
-  </section>;
+  </section>
+);
 
 export default ValueSection;
