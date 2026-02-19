@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      leads: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          investment_budget: number
+          investment_timeline: string
+          nationality: string
+          phone: string
+          preferred_location: string
+          property_type: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          investment_budget: number
+          investment_timeline?: string
+          nationality: string
+          phone: string
+          preferred_location?: string
+          property_type?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          investment_budget?: number
+          investment_timeline?: string
+          nationality?: string
+          phone?: string
+          preferred_location?: string
+          property_type?: string
+        }
+        Relationships: []
+      }
       properties: {
         Row: {
           after_image: string

@@ -18,9 +18,11 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Plus, Pencil, Trash2, AlertTriangle, Home, ArrowRightCircle, CheckCircle, LogOut, GripVertical } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Plus, Pencil, Trash2, AlertTriangle, Home, ArrowRightCircle, CheckCircle, LogOut, GripVertical, Users } from "lucide-react";
 import ImageUpload from "@/components/ImageUpload";
 import FileUpload from "@/components/FileUpload";
+import CrmTab from "@/components/CrmTab";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
@@ -135,6 +137,13 @@ const Admin = () => {
           <Button variant="outline" onClick={signOut} className="gap-2 rounded-full"><LogOut className="h-4 w-4" /> Sign Out</Button>
         </div>
 
+        <Tabs defaultValue="properties" className="w-full">
+          <TabsList className="mb-6">
+            <TabsTrigger value="properties" className="gap-2"><Home className="h-4 w-4" /> Properties</TabsTrigger>
+            <TabsTrigger value="crm" className="gap-2"><Users className="h-4 w-4" /> CRM</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="properties">
         {/* ── PORTFOLIO SECTION ── */}
         <div className="mb-12">
           <h2 className="mb-4 text-lg font-semibold">Portfolio <span className="text-sm font-normal text-muted-foreground">(drag to reorder)</span></h2>
@@ -291,6 +300,12 @@ const Admin = () => {
             </Table>
           </div>
         </div>
+          </TabsContent>
+
+          <TabsContent value="crm">
+            <CrmTab />
+          </TabsContent>
+        </Tabs>
       </div>
 
       {/* Form Dialog */}
