@@ -1,4 +1,5 @@
 import { MessageCircle } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const message = [
   "Hello! I would like to explore investment opportunities under the Greek Golden Visa program.",
@@ -18,17 +19,26 @@ const message = [
 const WHATSAPP_URL = `https://api.whatsapp.com/send?phone=306971853470&text=${encodeURIComponent(message)}`;
 
 const WhatsAppButton = () => (
-  <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-3 max-sm:bottom-3 max-sm:right-3 max-sm:scale-90">
-    <a
-      href={WHATSAPP_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex h-14 w-14 items-center justify-center rounded-full bg-[hsl(142,70%,45%)] text-white shadow-lg transition-transform hover:scale-110 animate-pulse-glow"
-      aria-label="Contact via WhatsApp"
-    >
-      <MessageCircle className="h-7 w-7" />
-    </a>
-  </div>
+  <TooltipProvider delayDuration={300}>
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-3 max-sm:bottom-3 max-sm:right-3 max-sm:scale-90">
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex h-14 w-14 items-center justify-center rounded-full bg-[hsl(142,70%,45%)] text-white shadow-lg transition-transform hover:scale-110 animate-pulse-glow"
+            aria-label="Contact via WhatsApp"
+          >
+            <MessageCircle className="h-7 w-7" />
+          </a>
+        </TooltipTrigger>
+        <TooltipContent side="left" className="border-border bg-card text-foreground">
+          Chat on WhatsApp
+        </TooltipContent>
+      </Tooltip>
+    </div>
+  </TooltipProvider>
 );
 
 export default WhatsAppButton;

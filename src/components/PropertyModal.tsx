@@ -1,14 +1,12 @@
 import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
   MapPin,
   Bed,
   Maximize,
   TrendingUp,
-  MessageCircle,
   ChevronLeft,
   ChevronRight,
   ExternalLink,
@@ -19,7 +17,6 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-const WHATSAPP_URL = "https://wa.me/306971853470?text=Hi%2C%20I'm%20interested%20in%20";
 
 interface Props {
   property: Property | null;
@@ -213,12 +210,6 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
           )}
 
           <Separator className="bg-border" />
-
-          <Button asChild size="lg" className="w-full gap-2 rounded-full">
-            <a href={`${WHATSAPP_URL}${encodeURIComponent(property.title)}`} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="h-5 w-5" /> Inquire via WhatsApp
-            </a>
-          </Button>
         </div>
       </DialogContent>
     </Dialog>
