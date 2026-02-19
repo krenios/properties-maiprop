@@ -28,6 +28,8 @@ const PropertyCard = ({ property, onClick }: Props) => {
             alt={`${property.title} — Golden Visa property in ${property.location}`}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
+            decoding="async"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
           {property.status && (
             <Badge className={`absolute right-3 top-3 border ${statusColors[property.status] || ""}`}>
