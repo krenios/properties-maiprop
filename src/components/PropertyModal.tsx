@@ -35,9 +35,9 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto border-border bg-card p-0 [-webkit-overflow-scrolling:touch]">
+      <DialogContent className="max-h-[100dvh] max-w-4xl overflow-y-auto border-border bg-card p-0 [-webkit-overflow-scrolling:touch] max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[90vh]">
         {/* Gallery */}
-        <div className="relative h-[250px] w-full overflow-hidden sm:h-[420px]">
+        <div className="relative h-[200px] w-full shrink-0 overflow-hidden sm:h-[420px]">
           <img src={currentImg} alt={property.title} className="h-full w-full object-cover" />
           {images.length > 1 && (
             <>

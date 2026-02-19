@@ -135,7 +135,7 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
                 animate={{ scale: 1 }}
                 transition={{ delay: 1, type: "spring" }}
                 onClick={() => { setForm(initial); setStep(0); setSubmitted(false); setOpen(true); }}
-                className="fixed bottom-24 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110"
+                className="fixed bottom-24 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110 max-sm:bottom-[4.5rem] max-sm:right-3"
                 aria-label="Open inquiry form"
               >
                 <Bot className="h-6 w-6" />
@@ -149,7 +149,7 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
       )}
 
       <Dialog open={open} onOpenChange={handleClose}>
-        <DialogContent className="max-w-md border-border bg-card p-0 overflow-hidden sm:rounded-2xl">
+        <DialogContent className="max-w-md border-border bg-card p-0 overflow-hidden max-sm:h-auto max-sm:max-h-[85dvh] max-sm:rounded-xl max-sm:border sm:rounded-2xl">
           {/* Header */}
           <div className="bg-primary/10 px-6 py-4">
             <div className="flex items-center justify-between">
