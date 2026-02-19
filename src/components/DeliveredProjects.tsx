@@ -50,7 +50,8 @@ const DeliveredProjects = () => {
                 <div className="relative aspect-video overflow-hidden">
                   <img
                     src={p.images[0] || p.after_image || "/placeholder.svg"}
-                    alt={p.title}
+                    alt={`${p.title} — delivered Golden Visa property in ${p.location}`}
+                    loading="lazy"
                     className="h-full w-full object-cover transition-transform group-hover:scale-105 rounded-2xl" />
                   <Badge className="absolute right-3 top-3 border-none bg-primary/90 text-primary-foreground">
                     Delivered

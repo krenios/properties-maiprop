@@ -14,7 +14,7 @@ import brandLogo1 from "@/assets/brand-1.png";
 import brandLogo2 from "@/assets/brand-2.png";
 
 const Index = () =>
-<main className="min-h-screen bg-background">
+<main className="min-h-screen bg-background" role="main" itemScope itemType="https://schema.org/WebPage">
     <LeadCaptureBot>
       <Navbar />
       <HeroSection />
@@ -32,7 +32,7 @@ const Index = () =>
       <JourneySection />
       <SectionDivider />
       <ContactSection />
-      <footer className="border-t border-border bg-background text-center py-[12px]">
+      <footer className="border-t border-border bg-background text-center py-[12px]" role="contentinfo">
         <div className="container mx-auto flex flex-col items-center gap-4 px-6">
           <div className="flex items-center gap-6">
             
