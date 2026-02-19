@@ -25,7 +25,7 @@ const PropertyCard = ({ property, onClick }: Props) => {
         <div className="relative aspect-[4/3] overflow-hidden">
           <img
             src={property.images[0] || "/placeholder.svg"}
-            alt={property.title}
+            alt={`${property.title} — Golden Visa property in ${property.location}`}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
           />
