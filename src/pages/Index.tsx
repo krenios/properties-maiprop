@@ -11,8 +11,8 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import brandLogo1 from "@/assets/brand-1.png";
 import brandLogo2 from "@/assets/brand-2.png";
 
-const Index = () =>
-<main className="min-h-screen bg-background">
+const Index = () => (
+  <main className="min-h-screen bg-background">
     <Navbar />
     <HeroSection />
     <GoldenVisaStats />
@@ -25,16 +25,14 @@ const Index = () =>
     <footer className="border-t border-border bg-background text-center py-[12px]">
       <div className="container mx-auto flex flex-col items-center gap-4 px-6">
         <div className="flex items-center gap-6">
-          
-          
         </div>
         <p className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} mAI Prop. All rights reserved.
+          © {new Date().getFullYear()} mAI Prop — Greek Golden Visa Property Investment Platform. All rights reserved.
         </p>
       </div>
     </footer>
     <WhatsAppButton />
-  </main>;
-
+  </main>
+);
 
 export default Index;
