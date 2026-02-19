@@ -99,7 +99,7 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    const { error } = await supabase.from("leads").insert({
+    const leadData = {
       full_name: form.full_name.trim(),
       phone: form.phone.trim(),
       email: form.email.trim(),
@@ -108,10 +108,14 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
       preferred_location: form.preferred_location.trim(),
       property_type: form.property_type,
       investment_timeline: form.investment_timeline,
-    });
+    };
+    const { error } = await supabase.from("leads").insert(leadData);
     setLoading(false);
     if (error) { toast.error("Something went wrong. Please try again."); return; }
     setSubmitted(true);
+
+    // Fire-and-forget notification (email + WhatsApp)
+    supabase.functions.invoke("notify-new-lead", { body: leadData }).catch(() => {});
   };
 
   const handleClose = () => {
