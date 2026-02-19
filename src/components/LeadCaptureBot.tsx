@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Bot, Send, ChevronRight, ChevronLeft, Check } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { motion, AnimatePresence } from "framer-motion";
 
 const STEPS = [
@@ -126,16 +127,25 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
 
       {/* Floating trigger button */}
       {!open && (
-        <motion.button
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 1, type: "spring" }}
-          onClick={() => { setForm(initial); setStep(0); setSubmitted(false); setOpen(true); }}
-          className="fixed bottom-24 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110"
-          aria-label="Open inquiry form"
-        >
-          <Bot className="h-6 w-6" />
-        </motion.button>
+        <TooltipProvider delayDuration={300}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <motion.button
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 1, type: "spring" }}
+                onClick={() => { setForm(initial); setStep(0); setSubmitted(false); setOpen(true); }}
+                className="fixed bottom-24 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110"
+                aria-label="Open inquiry form"
+              >
+                <Bot className="h-6 w-6" />
+              </motion.button>
+            </TooltipTrigger>
+            <TooltipContent side="left" className="border-border bg-card text-foreground">
+              Start an inquiry
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       )}
 
       <Dialog open={open} onOpenChange={handleClose}>
