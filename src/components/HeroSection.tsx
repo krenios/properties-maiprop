@@ -16,10 +16,11 @@ const HeroSection = () => {
     {/* Background image */}
     <div className="absolute inset-0">
       <img
-        src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=1920&q=80"
+        src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=1920&q=75&fm=webp"
         alt="Aerial view of Greek coastline — Golden Visa real estate investment destination"
         className="h-full w-full object-cover"
         fetchPriority="high"
+        decoding="async"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
     </div>
