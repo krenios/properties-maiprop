@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Plus, Pencil, Trash2, AlertTriangle, Home, ArrowRightCircle, CheckCircle, LogOut, GripVertical } from "lucide-react";
 import ImageUpload from "@/components/ImageUpload";
+import FileUpload from "@/components/FileUpload";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
@@ -40,7 +41,7 @@ const propertySchema = z.object({
 
 const emptyProperty: Omit<Property, "id" | "date_added" | "sort_order"> = {
   title: "", description: "", images: [], before_image: "", after_image: "", price: null, size: null, bedrooms: null,
-  floor_plan: "", location: "", poi: [], tags: [], status: "", project_type: "new", yield: "", floor: "", construction_year: "",
+  floor_plan: "", location: "", poi: [], tags: [], status: "", project_type: "new", yield: "", floor: "", construction_year: "", market_report: "",
 };
 
 const Admin = () => {
@@ -85,7 +86,7 @@ const Admin = () => {
   const openEdit = (p: Property) => {
     setEditingId(p.id);
     setEditingType(p.project_type);
-    setForm({ title: p.title, description: p.description, images: p.images, before_image: p.before_image, after_image: p.after_image, price: p.price, size: p.size, bedrooms: p.bedrooms, floor_plan: p.floor_plan, location: p.location, poi: p.poi, tags: p.tags, status: p.status, project_type: p.project_type, yield: p.yield, floor: p.floor, construction_year: p.construction_year });
+    setForm({ title: p.title, description: p.description, images: p.images, before_image: p.before_image, after_image: p.after_image, price: p.price, size: p.size, bedrooms: p.bedrooms, floor_plan: p.floor_plan, location: p.location, poi: p.poi, tags: p.tags, status: p.status, project_type: p.project_type, yield: p.yield, floor: p.floor, construction_year: p.construction_year, market_report: p.market_report || "" });
     setFormOpen(true);
   };
 
@@ -346,6 +347,12 @@ const Admin = () => {
                 folder="floorplans"
               />
             )}
+            <FileUpload
+              label="Market Report (PDF)"
+              value={form.market_report}
+              onChange={(url) => setForm({ ...form, market_report: url })}
+              folder="reports"
+            />
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label>Floor</Label>
