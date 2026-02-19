@@ -15,7 +15,7 @@ import {
   LayoutGrid,
   FileText,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 
 
 interface Props {
@@ -24,8 +24,39 @@ interface Props {
   onClose: () => void;
 }
 
+const SWIPE_THRESHOLD = 120;
+
 const PropertyModal = ({ property, open, onClose }: Props) => {
   const [imgIdx, setImgIdx] = useState(0);
+  const [swipeY, setSwipeY] = useState(0);
+  const [isSwiping, setIsSwiping] = useState(false);
+  const touchStartY = useRef(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const el = scrollRef.current;
+    // Only allow swipe-down-to-close when scrolled to top
+    if (el && el.scrollTop <= 0) {
+      touchStartY.current = e.touches[0].clientY;
+      setIsSwiping(true);
+    }
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!isSwiping) return;
+    const delta = e.touches[0].clientY - touchStartY.current;
+    if (delta > 0) {
+      setSwipeY(delta);
+    }
+  }, [isSwiping]);
+
+  const handleTouchEnd = useCallback(() => {
+    if (swipeY > SWIPE_THRESHOLD) {
+      onClose();
+    }
+    setSwipeY(0);
+    setIsSwiping(false);
+  }, [swipeY, onClose]);
 
   if (!property) return null;
 
@@ -35,7 +66,22 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-h-[100dvh] max-w-4xl overflow-y-auto border-border bg-card p-0 [-webkit-overflow-scrolling:touch] max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[90vh]">
+      <DialogContent
+        className="max-h-[100dvh] max-w-4xl overflow-y-auto border-border bg-card p-0 [-webkit-overflow-scrolling:touch] max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[90vh]"
+        style={{
+          transform: swipeY > 0 ? `translateY(${swipeY}px)` : undefined,
+          opacity: swipeY > 0 ? Math.max(1 - swipeY / 300, 0.5) : undefined,
+          transition: isSwiping ? 'none' : 'transform 0.3s ease, opacity 0.3s ease',
+        }}
+        ref={scrollRef}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Swipe indicator for mobile */}
+        <div className="flex justify-center pt-2 sm:hidden">
+          <div className="h-1 w-10 rounded-full bg-muted-foreground/30" />
+        </div>
         {/* Gallery */}
         <div className="relative h-[200px] w-full shrink-0 overflow-hidden sm:h-[420px]">
           <img src={currentImg} alt={property.title} className="h-full w-full object-cover" />
