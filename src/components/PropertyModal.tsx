@@ -15,6 +15,7 @@ import {
   Building,
   Calendar,
   LayoutGrid,
+  FileText,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -186,6 +187,28 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                   className="max-h-[200px] w-full rounded-lg border border-border bg-background object-contain"
                 />
               </div>
+            </>
+          )}
+
+          {/* Market Report */}
+          {property.market_report && (
+            <>
+              <Separator className="bg-border" />
+              <a
+                href={property.market_report}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 rounded-xl border-2 border-primary/20 bg-primary/5 p-4 transition-colors hover:bg-primary/10"
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/15">
+                  <FileText className="h-4.5 w-4.5 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-primary">Market Report</p>
+                  <p className="text-xs text-muted-foreground">View PDF report</p>
+                </div>
+                <ExternalLink className="h-4 w-4 text-muted-foreground" />
+              </a>
             </>
           )}
 

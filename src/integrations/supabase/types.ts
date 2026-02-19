@@ -28,6 +28,7 @@ export type Database = {
           id: string
           images: string[]
           location: string
+          market_report: string
           poi: string[]
           price: number | null
           project_type: string
@@ -52,6 +53,7 @@ export type Database = {
           id?: string
           images?: string[]
           location?: string
+          market_report?: string
           poi?: string[]
           price?: number | null
           project_type?: string
@@ -76,6 +78,7 @@ export type Database = {
           id?: string
           images?: string[]
           location?: string
+          market_report?: string
           poi?: string[]
           price?: number | null
           project_type?: string
