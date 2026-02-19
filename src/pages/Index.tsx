@@ -14,28 +14,29 @@ import brandLogo2 from "@/assets/brand-2.png";
 
 const Index = () =>
 <main className="min-h-screen bg-background">
-    <Navbar />
-    <HeroSection />
-    <GoldenVisaStats />
-    <InvestmentOpportunities />
-    <DeliveredProjects />
-    <PlatformReference />
-    <ValueSection />
-    <JourneySection />
-    <ContactSection />
-    <footer className="border-t border-border bg-background text-center py-[12px]">
-      <div className="container mx-auto flex flex-col items-center gap-4 px-6">
-        <div className="flex items-center gap-6">
-          
-          
+    <LeadCaptureBot>
+      <Navbar />
+      <HeroSection />
+      <GoldenVisaStats />
+      <InvestmentOpportunities />
+      <DeliveredProjects />
+      <PlatformReference />
+      <ValueSection />
+      <JourneySection />
+      <ContactSection />
+      <footer className="border-t border-border bg-background text-center py-[12px]">
+        <div className="container mx-auto flex flex-col items-center gap-4 px-6">
+          <div className="flex items-center gap-6">
+            
+            
+          </div>
+          <p className="text-sm text-muted-foreground">
+            © {new Date().getFullYear()} mAI Prop. All rights reserved.
+          </p>
         </div>
-        <p className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} mAI Prop. All rights reserved.
-        </p>
-      </div>
-    </footer>
-    <WhatsAppButton />
-    <LeadCaptureBot />
+      </footer>
+      <WhatsAppButton />
+    </LeadCaptureBot>
   </main>;
 
 

@@ -5,6 +5,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash2, RefreshCw, Download, Mail, Phone } from "lucide-react";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
@@ -22,8 +23,19 @@ type Lead = {
   preferred_location: string;
   property_type: string;
   investment_timeline: string;
+  status: string;
   created_at: string;
 };
+
+const STATUS_OPTIONS = [
+  { value: "new", label: "New", className: "bg-primary/20 text-primary border-primary/30" },
+  { value: "contacted", label: "Contacted", className: "bg-secondary/20 text-secondary border-secondary/30" },
+  { value: "qualified", label: "Qualified", className: "bg-accent/20 text-accent border-accent/30" },
+  { value: "closed", label: "Closed", className: "bg-muted text-muted-foreground border-border" },
+];
+
+const getStatusStyle = (status: string) =>
+  STATUS_OPTIONS.find((s) => s.value === status)?.className || "";
 
 const CrmTab = () => {
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -51,13 +63,20 @@ const CrmTab = () => {
     setDeleteId(null);
   };
 
+  const updateStatus = async (id: string, status: string) => {
+    const { error } = await supabase.from("leads").update({ status }).eq("id", id);
+    if (error) { toast.error("Failed to update status"); return; }
+    setLeads((prev) => prev.map((l) => l.id === id ? { ...l, status } : l));
+    toast.success("Status updated");
+  };
+
   const exportCsv = () => {
     if (!leads.length) return;
-    const headers = ["Full Name", "Phone", "Email", "Nationality", "Budget (EUR)", "Location", "Type", "Timeline", "Date"];
+    const headers = ["Full Name", "Phone", "Email", "Nationality", "Budget (EUR)", "Location", "Type", "Timeline", "Status", "Date"];
     const rows = leads.map((l) => [
       l.full_name, l.phone, l.email, l.nationality,
       l.investment_budget, l.preferred_location, l.property_type,
-      l.investment_timeline, new Date(l.created_at).toLocaleDateString(),
+      l.investment_timeline, l.status, new Date(l.created_at).toLocaleDateString(),
     ]);
     const csv = [headers.join(","), ...rows.map((r) => r.map((c) => `"${c}"`).join(","))].join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
@@ -96,6 +115,7 @@ const CrmTab = () => {
               <TableHead>Location</TableHead>
               <TableHead>Type</TableHead>
               <TableHead>Timeline</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead>Date</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -103,12 +123,12 @@ const CrmTab = () => {
           <TableBody>
             {loading && (
               <TableRow>
-                <TableCell colSpan={9} className="py-8 text-center text-muted-foreground">Loading…</TableCell>
+                <TableCell colSpan={10} className="py-8 text-center text-muted-foreground">Loading…</TableCell>
               </TableRow>
             )}
             {!loading && leads.length === 0 && (
               <TableRow>
-                <TableCell colSpan={9} className="py-8 text-center text-muted-foreground">No leads yet</TableCell>
+                <TableCell colSpan={10} className="py-8 text-center text-muted-foreground">No leads yet</TableCell>
               </TableRow>
             )}
             {leads.map((lead) => (
@@ -132,6 +152,20 @@ const CrmTab = () => {
                 </TableCell>
                 <TableCell>
                   <Badge variant="secondary" className="text-xs">{lead.investment_timeline || "—"}</Badge>
+                </TableCell>
+                <TableCell>
+                  <Select value={lead.status} onValueChange={(v) => updateStatus(lead.id, v)}>
+                    <SelectTrigger className="h-8 w-[120px]">
+                      <Badge className={`border text-xs ${getStatusStyle(lead.status)}`}>
+                        {STATUS_OPTIONS.find((s) => s.value === lead.status)?.label || lead.status}
+                      </Badge>
+                    </SelectTrigger>
+                    <SelectContent>
+                      {STATUS_OPTIONS.map((s) => (
+                        <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </TableCell>
                 <TableCell className="text-xs text-muted-foreground">
                   {new Date(lead.created_at).toLocaleDateString()}
