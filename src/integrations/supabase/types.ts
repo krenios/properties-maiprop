@@ -26,6 +26,7 @@ export type Database = {
           phone: string
           preferred_location: string
           property_type: string
+          status: string
         }
         Insert: {
           created_at?: string
@@ -38,6 +39,7 @@ export type Database = {
           phone: string
           preferred_location?: string
           property_type?: string
+          status?: string
         }
         Update: {
           created_at?: string
@@ -50,6 +52,7 @@ export type Database = {
           phone?: string
           preferred_location?: string
           property_type?: string
+          status?: string
         }
         Relationships: []
       }

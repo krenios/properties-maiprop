@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, createContext, useContext } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { MessageCircle, X, Send, ChevronRight, ChevronLeft, Check } from "lucide-react";
+import { MessageCircle, Send, ChevronRight, ChevronLeft, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const STEPS = [
@@ -42,24 +42,37 @@ const initial: FormData = {
   investment_timeline: "",
 };
 
-const LeadCaptureBot = () => {
+// Context so property cards can trigger the bot
+type LeadBotContextType = {
+  openWithLocation: (location: string) => void;
+};
+
+const LeadBotContext = createContext<LeadBotContextType>({ openWithLocation: () => {} });
+export const useLeadBot = () => useContext(LeadBotContext);
+
+const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormData>(initial);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [hasShown, setHasShown] = useState(false);
 
   // Auto-open after 8 seconds on first visit
   useEffect(() => {
     const shown = sessionStorage.getItem("lead_bot_shown");
-    if (shown) { setHasShown(true); return; }
+    if (shown) return;
     const timer = setTimeout(() => {
       setOpen(true);
-      setHasShown(true);
       sessionStorage.setItem("lead_bot_shown", "1");
     }, 8000);
     return () => clearTimeout(timer);
+  }, []);
+
+  const openWithLocation = useCallback((location: string) => {
+    setForm({ ...initial, preferred_location: location });
+    setStep(0);
+    setSubmitted(false);
+    setOpen(true);
   }, []);
 
   const currentStep = STEPS[step];
@@ -108,14 +121,16 @@ const LeadCaptureBot = () => {
   const progress = ((step + 1) / STEPS.length) * 100;
 
   return (
-    <>
+    <LeadBotContext.Provider value={{ openWithLocation }}>
+      {children}
+
       {/* Floating trigger button */}
       {!open && (
         <motion.button
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 1, type: "spring" }}
-          onClick={() => setOpen(true)}
+          onClick={() => { setForm(initial); setStep(0); setSubmitted(false); setOpen(true); }}
           className="fixed bottom-24 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110"
           aria-label="Open inquiry form"
         >
@@ -234,7 +249,7 @@ const LeadCaptureBot = () => {
           </div>
         </DialogContent>
       </Dialog>
-    </>
+    </LeadBotContext.Provider>
   );
 };
 
