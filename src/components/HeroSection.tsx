@@ -1,8 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const WHATSAPP_URL =
-  "https://wa.me/306971853470?text=Hi%2C%20I'm%20interested%20in%20Golden%20Visa%20investment%20opportunities";
+import { useLeadBot } from "@/components/LeadCaptureBot";
 
 const stats = [
   { value: "€250K", label: "Minimum Investment" },
@@ -10,7 +8,10 @@ const stats = [
   { value: "27 Countries", label: "Schengen Access" },
 ];
 
-const HeroSection = () => (
+const HeroSection = () => {
+  const { openWithLocation } = useLeadBot();
+
+  return (
   <section className="relative flex min-h-screen flex-col justify-end overflow-hidden">
     {/* Background image */}
     <div className="absolute inset-0">
@@ -38,10 +39,8 @@ const HeroSection = () => (
         <br /> AI-powered platform for independent assessment.
       </p>
       <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-        <Button asChild size="lg" className="gap-2 rounded-full px-8 w-full sm:w-auto">
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+        <Button size="lg" className="gap-2 rounded-full px-8 w-full sm:w-auto" onClick={() => openWithLocation("")}>
             Start Your Golden Visa <ArrowRight className="h-4 w-4" />
-          </a>
         </Button>
         <Button
           asChild
@@ -73,6 +72,7 @@ const HeroSection = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
 export default HeroSection;
