@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { MessageCircle, Send, ChevronRight, ChevronLeft, Check } from "lucide-react";
+import { Bot, Send, ChevronRight, ChevronLeft, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const STEPS = [
@@ -134,7 +134,7 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
           className="fixed bottom-24 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110"
           aria-label="Open inquiry form"
         >
-          <MessageCircle className="h-6 w-6" />
+          <Bot className="h-6 w-6" />
         </motion.button>
       )}
 

@@ -1,4 +1,4 @@
-import { MessageCircle, Mail } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 
 const message = [
   "Hello! I would like to explore investment opportunities under the Greek Golden Visa program.",
@@ -27,13 +27,6 @@ const WhatsAppButton = () => (
       aria-label="Contact via WhatsApp"
     >
       <MessageCircle className="h-7 w-7" />
-    </a>
-    <a
-      href="mailto:kr@maiprop.co"
-      className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110"
-      aria-label="Contact via Email"
-    >
-      <Mail className="h-7 w-7" />
     </a>
   </div>
 );
