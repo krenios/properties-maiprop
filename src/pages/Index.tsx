@@ -1,18 +1,19 @@
+import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import GoldenVisaStats from "@/components/GoldenVisaStats";
-import InvestmentOpportunities from "@/components/InvestmentOpportunities";
-import DeliveredProjects from "@/components/DeliveredProjects";
-import ValueSection from "@/components/ValueSection";
-import PlatformReference from "@/components/PlatformReference";
-import JourneySection from "@/components/JourneySection";
-import ContactSection from "@/components/ContactSection";
+import SectionDivider from "@/components/SectionDivider";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import LeadCaptureBot from "@/components/LeadCaptureBot";
-import SectionDivider from "@/components/SectionDivider";
 import CookieConsent from "@/components/CookieConsent";
-import brandLogo1 from "@/assets/brand-1.png";
-import brandLogo2 from "@/assets/brand-2.png";
+
+// Lazy-load below-the-fold sections
+const InvestmentOpportunities = lazy(() => import("@/components/InvestmentOpportunities"));
+const DeliveredProjects = lazy(() => import("@/components/DeliveredProjects"));
+const ValueSection = lazy(() => import("@/components/ValueSection"));
+const PlatformReference = lazy(() => import("@/components/PlatformReference"));
+const JourneySection = lazy(() => import("@/components/JourneySection"));
+const ContactSection = lazy(() => import("@/components/ContactSection"));
 
 const Index = () =>
 <main className="min-h-screen bg-background" role="main" itemScope itemType="https://schema.org/WebPage">
@@ -22,17 +23,29 @@ const Index = () =>
       <SectionDivider />
       <GoldenVisaStats />
       <SectionDivider />
-      <InvestmentOpportunities />
+      <Suspense fallback={<div className="min-h-[400px]" />}>
+        <InvestmentOpportunities />
+      </Suspense>
       <SectionDivider />
-      <DeliveredProjects />
+      <Suspense fallback={<div className="min-h-[400px]" />}>
+        <DeliveredProjects />
+      </Suspense>
       <SectionDivider />
-      <PlatformReference />
+      <Suspense fallback={<div className="min-h-[400px]" />}>
+        <PlatformReference />
+      </Suspense>
       <SectionDivider />
-      <ValueSection />
+      <Suspense fallback={<div className="min-h-[400px]" />}>
+        <ValueSection />
+      </Suspense>
       <SectionDivider />
-      <JourneySection />
+      <Suspense fallback={<div className="min-h-[400px]" />}>
+        <JourneySection />
+      </Suspense>
       <SectionDivider />
-      <ContactSection />
+      <Suspense fallback={<div className="min-h-[400px]" />}>
+        <ContactSection />
+      </Suspense>
       <footer className="border-t border-border bg-background text-center py-[12px]" role="contentinfo">
         <div className="container mx-auto flex flex-col items-center gap-4 px-6">
           <div className="flex items-center gap-6">
