@@ -10,7 +10,21 @@ const tools = [
 { icon: ShieldCheck, title: "Visa Eligibility Checker", desc: "Instantly verify property Golden Visa qualification" }];
 
 
-const PLATFORM_URL = "https://wa.me/306971853470?text=Hi%2C%20I'm%20interested%20in%20accessing%20mAI%20Prop%20OS";
+const platformMessage = [
+  "Hello! I would like to explore investment opportunities under the Greek Golden Visa program.",
+  "",
+  "Please share the following details:",
+  "",
+  "1. Full Name:",
+  "2. Phone (International format):",
+  "3. Email:",
+  "4. Nationality (Country of citizenship):",
+  "5. Investment Budget (in EUR - minimum 250000):",
+  "6. Preferred Property Location:",
+  "7. Property Type (Apartment or Villa):",
+  "8. When are you planning to invest (0-6 months or 6-12 months):",
+].join("\n");
+const PLATFORM_URL = `https://wa.me/306971853470?text=${encodeURIComponent(platformMessage)}`;
 
 const PlatformReference = () => {
   return null;
