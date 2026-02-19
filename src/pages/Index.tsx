@@ -9,6 +9,7 @@ import JourneySection from "@/components/JourneySection";
 import ContactSection from "@/components/ContactSection";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import LeadCaptureBot from "@/components/LeadCaptureBot";
+import SectionDivider from "@/components/SectionDivider";
 import brandLogo1 from "@/assets/brand-1.png";
 import brandLogo2 from "@/assets/brand-2.png";
 
@@ -17,12 +18,19 @@ const Index = () =>
     <LeadCaptureBot>
       <Navbar />
       <HeroSection />
+      <SectionDivider />
       <GoldenVisaStats />
+      <SectionDivider />
       <InvestmentOpportunities />
+      <SectionDivider />
       <DeliveredProjects />
+      <SectionDivider />
       <PlatformReference />
+      <SectionDivider />
       <ValueSection />
+      <SectionDivider />
       <JourneySection />
+      <SectionDivider />
       <ContactSection />
       <footer className="border-t border-border bg-background text-center py-[12px]">
         <div className="container mx-auto flex flex-col items-center gap-4 px-6">
@@ -38,6 +46,5 @@ const Index = () =>
       <WhatsAppButton />
     </LeadCaptureBot>
   </main>;
-
 
 export default Index;
