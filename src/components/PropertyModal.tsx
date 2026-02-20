@@ -1,5 +1,6 @@
 import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { optimizeImage } from "@/lib/optimizeImage";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -85,7 +86,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
         </div>
         {/* Gallery */}
         <div className="relative h-[200px] w-full shrink-0 overflow-hidden sm:h-[420px]">
-          <img src={currentImg} alt={property.title} className="h-full w-full object-cover" loading="lazy" decoding="async" />
+          <img src={optimizeImage(currentImg, { width: 800, height: 600 })} alt={property.title} className="h-full w-full object-cover" loading="lazy" decoding="async" />
           {images.length > 1 && (
             <>
               <button
