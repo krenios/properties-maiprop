@@ -6,9 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { PropertyProvider } from "@/contexts/PropertyContext";
 import { AuthProvider } from "@/hooks/useAuth";
-import Index from "./pages/Index";
-
-// Lazy-load non-critical routes
+// Lazy-load all routes
+const Index = lazy(() => import("./pages/Index"));
 const Admin = lazy(() => import("./pages/Admin"));
 const Login = lazy(() => import("./pages/Login"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -25,7 +24,7 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Index />} />
+              <Route path="/" element={<Suspense fallback={null}><Index /></Suspense>} />
               <Route path="/login" element={<Suspense fallback={null}><Login /></Suspense>} />
               <Route path="/admin" element={<Suspense fallback={null}><ProtectedRoute><Admin /></ProtectedRoute></Suspense>} />
               <Route path="*" element={<Suspense fallback={null}><NotFound /></Suspense>} />
