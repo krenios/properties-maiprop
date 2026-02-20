@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -5,11 +6,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { PropertyProvider } from "@/contexts/PropertyContext";
 import { AuthProvider } from "@/hooks/useAuth";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
-import Admin from "./pages/Admin";
-import Login from "./pages/Login";
-import NotFound from "./pages/NotFound";
+
+// Lazy-load non-critical routes
+const Admin = lazy(() => import("./pages/Admin"));
+const Login = lazy(() => import("./pages/Login"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const ProtectedRoute = lazy(() => import("@/components/ProtectedRoute"));
 
 const queryClient = new QueryClient();
 
@@ -23,9 +26,9 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
-              <Route path="*" element={<NotFound />} />
+              <Route path="/login" element={<Suspense fallback={null}><Login /></Suspense>} />
+              <Route path="/admin" element={<Suspense fallback={null}><ProtectedRoute><Admin /></ProtectedRoute></Suspense>} />
+              <Route path="*" element={<Suspense fallback={null}><NotFound /></Suspense>} />
             </Routes>
           </BrowserRouter>
         </PropertyProvider>
