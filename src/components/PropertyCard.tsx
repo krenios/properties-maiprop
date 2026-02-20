@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, MessageCircle } from "lucide-react";
 import { useLeadBot } from "@/components/LeadCaptureBot";
+import { optimizeImage } from "@/lib/optimizeImage";
 
 interface Props {
   property: Property;
@@ -24,7 +25,7 @@ const PropertyCard = ({ property, onClick }: Props) => {
       <button onClick={onClick} className="w-full text-left">
         <div className="relative aspect-[4/3] overflow-hidden">
           <img
-            src={property.images[0] || "/placeholder.svg"}
+            src={optimizeImage(property.images[0] || "/placeholder.svg", { width: 600, height: 450 })}
             alt={`${property.title} — Golden Visa property in ${property.location}`}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"

@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import { useProperties } from "@/contexts/PropertyContext";
 import { CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag, MessageCircle, ExternalLink, ChevronLeft, ChevronRight, Building, Calendar } from "lucide-react";
+import { optimizeImage } from "@/lib/optimizeImage";
 import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
@@ -63,7 +64,7 @@ const DeliveredProjects = () => {
                 className="group w-full overflow-hidden rounded-xl border border-border bg-card text-left transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5">
                 <div className="relative aspect-video overflow-hidden">
                   <img
-                    src={p.images[0] || p.after_image || "/placeholder.svg"}
+                    src={optimizeImage(p.images[0] || p.after_image || "/placeholder.svg", { width: 600, height: 400 })}
                     alt={`${p.title} — delivered Golden Visa property in ${p.location}`}
                     loading="lazy"
                     className="h-full w-full object-cover transition-transform group-hover:scale-105 rounded-2xl" />

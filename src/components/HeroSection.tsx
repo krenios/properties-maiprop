@@ -16,7 +16,7 @@ const HeroSection = () => {
     {/* Background image */}
     <div className="absolute inset-0">
       <img
-        src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=1920&q=75&fm=webp"
+        src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=1440&q=70&fm=webp"
         alt="Aerial view of Greek coastline — Golden Visa real estate investment destination"
         className="h-full w-full object-cover"
         fetchPriority="high"
