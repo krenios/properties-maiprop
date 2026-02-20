@@ -2,7 +2,7 @@ import { Property } from "@/data/properties";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, MessageCircle } from "lucide-react";
-import { useLeadBot } from "@/components/LeadCaptureBot";
+import { useLeadBot } from "@/components/LeadBotProvider";
 import { optimizeImage } from "@/lib/optimizeImage";
 
 interface Props {

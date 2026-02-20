@@ -1,27 +1,30 @@
 import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import GoldenVisaStats from "@/components/GoldenVisaStats";
 import SectionDivider from "@/components/SectionDivider";
 import WhatsAppButton from "@/components/WhatsAppButton";
-import LeadCaptureBot from "@/components/LeadCaptureBot";
+import { LeadBotProvider } from "@/components/LeadBotProvider";
 import CookieConsent from "@/components/CookieConsent";
 
 // Lazy-load below-the-fold sections
+const GoldenVisaStats = lazy(() => import("@/components/GoldenVisaStats"));
 const InvestmentOpportunities = lazy(() => import("@/components/InvestmentOpportunities"));
 const DeliveredProjects = lazy(() => import("@/components/DeliveredProjects"));
 const ValueSection = lazy(() => import("@/components/ValueSection"));
 const PlatformReference = lazy(() => import("@/components/PlatformReference"));
 const JourneySection = lazy(() => import("@/components/JourneySection"));
 const ContactSection = lazy(() => import("@/components/ContactSection"));
+const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const Index = () =>
 <main className="min-h-screen bg-background overflow-x-hidden" role="main" itemScope itemType="https://schema.org/WebPage">
-    <LeadCaptureBot>
+    <LeadBotProvider>
       <Navbar />
       <HeroSection />
       <SectionDivider />
-      <GoldenVisaStats />
+      <Suspense fallback={<div className="min-h-[400px]" />}>
+        <GoldenVisaStats />
+      </Suspense>
       <SectionDivider />
       <Suspense fallback={<div className="min-h-[400px]" />}>
         <InvestmentOpportunities />
@@ -58,8 +61,11 @@ const Index = () =>
         </div>
       </footer>
       <WhatsAppButton />
+      <Suspense fallback={null}>
+        <LeadCaptureBot />
+      </Suspense>
       <CookieConsent />
-    </LeadCaptureBot>
+    </LeadBotProvider>
   </main>;
 
 export default Index;
