@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useLeadBot } from "@/components/LeadCaptureBot";
+import { useLeadBot } from "@/components/LeadBotProvider";
 
 const stats = [
   { value: "€250K", label: "Minimum Investment" },

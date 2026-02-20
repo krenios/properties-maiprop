@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, createContext, useContext, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Bot, Send, ChevronLeft, Check, X, Sparkles } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLeadBot } from "@/components/LeadBotProvider";
 
 const STEPS = [
   { key: "full_name", label: "What's your full name?", type: "text", placeholder: "John Doe", emoji: "👋" },
@@ -28,9 +29,8 @@ const initial: FormData = {
   investment_budget: "", preferred_location: "", property_type: "", investment_timeline: "",
 };
 
-type LeadBotContextType = { openWithLocation: (location: string) => void };
-const LeadBotContext = createContext<LeadBotContextType>({ openWithLocation: () => {} });
-export const useLeadBot = () => useContext(LeadBotContext);
+// Re-export useLeadBot for backward compatibility
+export { useLeadBot } from "@/components/LeadBotProvider";
 
 type ChatMessage = { role: "bot" | "user"; text: string };
 
@@ -54,8 +54,8 @@ const TypingIndicator = () => (
   </motion.div>
 );
 
-const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
-  const [open, setOpen] = useState(false);
+const LeadCaptureBot = () => {
+  const { isOpen: open, setIsOpen, pendingLocation } = useLeadBot();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormData>(initial);
   const [submitted, setSubmitted] = useState(false);
@@ -68,11 +68,21 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
     const shown = sessionStorage.getItem("lead_bot_shown");
     if (shown) return;
     const timer = setTimeout(() => {
-      setOpen(true);
+      setIsOpen(true);
       sessionStorage.setItem("lead_bot_shown", "1");
     }, 8000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [setIsOpen]);
+
+  // Reset form when opened with a location
+  useEffect(() => {
+    if (open && pendingLocation !== undefined) {
+      setForm({ ...initial, preferred_location: pendingLocation });
+      setStep(0);
+      setSubmitted(false);
+      setMessages([]);
+    }
+  }, [open, pendingLocation]);
 
   // Initialize first bot message with typing indicator
   useEffect(() => {
@@ -104,14 +114,6 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
     }, 700 + Math.random() * 400);
   };
 
-  const openWithLocation = useCallback((location: string) => {
-    setForm({ ...initial, preferred_location: location });
-    setStep(0);
-    setSubmitted(false);
-    setMessages([]);
-    setOpen(true);
-  }, []);
-
   const currentStep = STEPS[step];
   const currentValue = form[currentStep?.key as keyof FormData] || "";
 
@@ -128,7 +130,6 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
     const error = validate();
     if (error) { toast.error(error); return; }
 
-    // Add user's answer as a message
     const displayValue = currentStep.key === "investment_budget" 
       ? `€${Number(currentValue).toLocaleString()}`
       : currentValue;
@@ -146,7 +147,6 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
 
   const goBack = () => {
     if (step > 0) {
-      // Remove the last bot + user message pair
       setMessages(prev => prev.slice(0, -2));
       setStep(step - 1);
     }
@@ -168,20 +168,18 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setIsOpen(false);
     if (submitted) { setStep(0); setForm(initial); setSubmitted(false); setMessages([]); }
   };
 
   const handleReset = () => {
-    setForm(initial); setStep(0); setSubmitted(false); setMessages([]); setOpen(true);
+    setForm(initial); setStep(0); setSubmitted(false); setMessages([]); setIsOpen(true);
   };
 
   const progress = ((step + 1) / STEPS.length) * 100;
 
   return (
-    <LeadBotContext.Provider value={{ openWithLocation }}>
-      {children}
-
+    <>
       {/* Floating trigger */}
       <AnimatePresence>
         {!open && (
@@ -198,7 +196,6 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
                   aria-label="Open inquiry form"
                 >
                   <Bot className="h-6 w-6" />
-                  {/* Ping indicator */}
                   <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-secondary opacity-75" />
                     <span className="relative inline-flex h-4 w-4 rounded-full bg-secondary" />
@@ -240,7 +237,6 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
                   <p className="text-[11px] text-muted-foreground">Typically replies instantly</p>
                 </div>
               </div>
-              {/* Progress bar */}
               {!submitted && (
                 <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-muted/50">
                   <motion.div
@@ -276,12 +272,10 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
                 ))}
               </AnimatePresence>
 
-              {/* Typing indicator */}
               <AnimatePresence>
                 {typing && <TypingIndicator />}
               </AnimatePresence>
 
-              {/* Success state */}
               {submitted && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -321,7 +315,6 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
                             showBotMessage(`${nextStep.emoji} ${nextStep.label}`);
                             setStep(step + 1);
                           } else {
-                            // Submit with the updated form directly
                             setLoading(true);
                             const leadData = {
                               full_name: updatedForm.full_name.trim(), phone: updatedForm.phone.trim(),
@@ -385,7 +378,7 @@ const LeadCaptureBot = ({ children }: { children?: React.ReactNode }) => {
           </motion.div>
         )}
       </AnimatePresence>
-    </LeadBotContext.Provider>
+    </>
   );
 };
 
