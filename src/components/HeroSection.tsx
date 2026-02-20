@@ -16,8 +16,8 @@ const HeroSection = () => {
     {/* Background image */}
     <div className="absolute inset-0">
       <img
-        src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&q=70&fm=webp"
-        srcSet="https://images.unsplash.com/photo-1555993539-1732b0258235?w=480&q=65&fm=webp 480w, https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&q=70&fm=webp 800w, https://images.unsplash.com/photo-1555993539-1732b0258235?w=1440&q=70&fm=webp 1440w"
+        src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&q=60&fm=webp"
+        srcSet="https://images.unsplash.com/photo-1555993539-1732b0258235?w=480&q=55&fm=webp 480w, https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&q=60&fm=webp 800w, https://images.unsplash.com/photo-1555993539-1732b0258235?w=1440&q=60&fm=webp 1440w"
         sizes="100vw"
         alt="Aerial view of Greek coastline — Golden Visa real estate investment destination"
         className="h-full w-full object-cover"
