@@ -54,6 +54,8 @@ const Navbar = () => {
         <a href="/" className="flex items-center gap-2">
           <img 
             alt="MaiProp" 
+            width={102}
+            height={48}
             className={`h-12 w-auto object-fill transition-all duration-300 ${scrolled ? "brightness-150" : ""}`} 
             src={scrolled ? brandLight : "/lovable-uploads/3c02ed5d-5638-402e-b7c8-0daa01b502d0.png"} 
           />
