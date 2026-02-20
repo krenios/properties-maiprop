@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://investmentsmai.lovable.app/sitemap.xml
+Sitemap: https://properties.maiprop.co/sitemap.xml
