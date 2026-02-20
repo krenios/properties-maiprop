@@ -2,9 +2,10 @@ import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import SectionDivider from "@/components/SectionDivider";
-import WhatsAppButton from "@/components/WhatsAppButton";
 import { LeadBotProvider } from "@/components/LeadBotProvider";
-import CookieConsent from "@/components/CookieConsent";
+
+const WhatsAppButton = lazy(() => import("@/components/WhatsAppButton"));
+const CookieConsent = lazy(() => import("@/components/CookieConsent"));
 
 // Lazy-load below-the-fold sections
 const GoldenVisaStats = lazy(() => import("@/components/GoldenVisaStats"));
@@ -60,11 +61,15 @@ const Index = () =>
           </p>
         </div>
       </footer>
-      <WhatsAppButton />
+      <Suspense fallback={null}>
+        <WhatsAppButton />
+      </Suspense>
       <Suspense fallback={null}>
         <LeadCaptureBot />
       </Suspense>
-      <CookieConsent />
+      <Suspense fallback={null}>
+        <CookieConsent />
+      </Suspense>
     </LeadBotProvider>
   </main>;
 
