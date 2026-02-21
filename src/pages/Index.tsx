@@ -4,7 +4,6 @@ import HeroSection from "@/components/HeroSection";
 import SectionDivider from "@/components/SectionDivider";
 import { LeadBotProvider } from "@/components/LeadBotProvider";
 
-const WhatsAppButton = lazy(() => import("@/components/WhatsAppButton"));
 const CookieConsent = lazy(() => import("@/components/CookieConsent"));
 
 // Lazy-load below-the-fold sections
@@ -61,9 +60,6 @@ const Index = () =>
           </p>
         </div>
       </footer>
-      <Suspense fallback={null}>
-        <WhatsAppButton />
-      </Suspense>
       <Suspense fallback={null}>
         <LeadCaptureBot />
       </Suspense>
