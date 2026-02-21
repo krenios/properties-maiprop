@@ -1,22 +1,6 @@
-import { ArrowRight, Check, Sparkles, Mail } from "lucide-react";
+import { Check, Sparkles, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/ScrollReveal";
-
-const whatsappMessage = [
-  "Hello! I would like to explore investment opportunities under the Greek Golden Visa program.",
-  "",
-  "Please share the following details:",
-  "",
-  "1. Full Name:",
-  "2. Phone (International format):",
-  "3. Email:",
-  "4. Nationality (Country of citizenship):",
-  "5. Investment Budget (in EUR - minimum 250000):",
-  "6. Preferred Property Location:",
-  "7. Property Type (Apartment or Villa):",
-  "8. When are you planning to invest (0-6 months or 6-12 months):",
-].join("\n");
-const WHATSAPP_URL = `https://wa.me/306971853470?text=${encodeURIComponent(whatsappMessage)}`;
 
 const bullets = [
 "Pre-verified properties with full compliance",
@@ -42,7 +26,7 @@ const ContactSection = () =>
             Journey
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-muted-foreground text-center text-sm">
-            Connect with us for your Golden Visa on WhatsApp for instant guidance.
+            Connect with us to begin your Golden Visa journey.
           </p>
 
           <div className="my-8 sm:my-10 gap-3 flex flex-col items-start sm:flex-row sm:items-center sm:justify-center sm:gap-4 rounded-xl">
@@ -58,11 +42,6 @@ const ContactSection = () =>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
             <Button asChild size="lg" className="gap-2 rounded-full bg-primary px-8 sm:px-12 text-base sm:text-lg font-semibold text-primary-foreground shadow-[0_0_40px_hsl(179_90%_63%/0.4)] transition-all hover:bg-primary/90 hover:shadow-[0_0_60px_hsl(179_90%_63%/0.6)] w-full sm:w-auto">
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                Continue on WhatsApp <ArrowRight className="h-5 w-5" />
-              </a>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="gap-2 rounded-full border-border/50 bg-background/20 px-8 sm:px-12 text-base sm:text-lg font-semibold backdrop-blur-sm w-full sm:w-auto">
               <a href="mailto:kr@maiprop.co">
                 <Mail className="h-5 w-5" /> Mail Us
               </a>
