@@ -132,7 +132,7 @@ serve(async (req) => {
 
           const { data: matchingProps } = await supabase
             .from("properties")
-            .select("title, location, price, size, bedrooms, yield, project_type")
+            .select("id, title, location, price, size, bedrooms, yield, project_type, images")
             .eq("status", "available")
             .lte("price", budget * 1.2)
             .order("price", { ascending: false })
@@ -141,7 +141,7 @@ serve(async (req) => {
           const { data: locationProps } = location
             ? await supabase
                 .from("properties")
-                .select("title, location, price, size, bedrooms, yield, project_type")
+                .select("id, title, location, price, size, bedrooms, yield, project_type, images")
                 .eq("status", "available")
                 .ilike("location", `%${location}%`)
                 .limit(4)
@@ -157,11 +157,34 @@ serve(async (req) => {
           // Pick top 3-4 properties
           const topProps = allProps.slice(0, 4);
 
+          // Build property link & image helpers
+          const propertyLink = (id: string) => `${SITE_URL}/#property-${id}`;
+          const propertyImage = (p: any) => (p.images && p.images.length > 0 ? p.images[0] : "");
+
           const propertySummary = topProps.length > 0
             ? topProps.map((p: any) =>
                 `- ${p.title} in ${p.location}: €${Number(p.price).toLocaleString()}, ${p.size}m², ${p.bedrooms} bed${p.bedrooms > 1 ? "s" : ""}${p.yield ? `, ${p.yield} yield` : ""}`
               ).join("\n")
             : "- Visa-eligible apartments & villas from €250K in Athens & islands";
+
+          // Build property cards HTML
+          const propertyCardsHtml = topProps.length > 0
+            ? topProps.map((p: any) => {
+                const img = propertyImage(p);
+                const link = propertyLink(p.id);
+                const priceStr = p.price ? `€${Number(p.price).toLocaleString()}` : "";
+                const details = [p.size ? `${p.size}m²` : "", p.bedrooms ? `${p.bedrooms} bed${p.bedrooms > 1 ? "s" : ""}` : "", p.yield || ""].filter(Boolean).join(" · ");
+                return `
+                  <a href="${link}" style="display:block;text-decoration:none;margin:12px 0;border-radius:8px;overflow:hidden;border:1px solid #1a1e3a;">
+                    ${img ? `<img src="${img}" alt="${escapeHtml(p.title)}" width="100%" style="display:block;max-height:180px;object-fit:cover;" />` : ""}
+                    <div style="padding:14px 16px;background:#0f1340;">
+                      <p style="margin:0 0 4px;color:#4ef5f1;font-size:15px;font-weight:600;">${escapeHtml(p.title)}</p>
+                      <p style="margin:0 0 4px;color:#e0fafa;font-size:13px;">${escapeHtml(p.location)} ${priceStr ? `— ${priceStr}` : ""}</p>
+                      ${details ? `<p style="margin:0;color:#a0b0c0;font-size:12px;">${details}</p>` : ""}
+                    </div>
+                  </a>`;
+              }).join("")
+            : "";
 
           const prompt = `You are mAI Prop's investment advisor. Write a warm, concise follow-up email (max 10 lines) for a Golden Visa lead.
 
@@ -210,8 +233,10 @@ Do NOT use markdown or bullet lists. Plain text only. Keep it professional and w
                   return `<p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">${trimmed}</p>`;
                 })
                 .join("");
+              // Append property cards below the AI text
+              const fullContent = htmlContent + (propertyCardsHtml ? `<div style="margin-top:20px;border-top:1px solid #1a1e3a;padding-top:16px;"><p style="margin:0 0 10px;color:#4ef5f1;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Properties Selected For You</p>${propertyCardsHtml}</div>` : "");
               subject = `${firstName}, we have properties matching your criteria — mAI Prop`;
-              htmlBody = brandWrap(htmlContent);
+              htmlBody = brandWrap(fullContent);
             }
           }
         } catch (e) {
