@@ -6,11 +6,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Trash2, RefreshCw, Download, Mail, Phone } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Trash2, RefreshCw, Download, Mail, Phone, Send } from "lucide-react";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
+} from "@/components/ui/dialog";
 import { toast } from "sonner";
 
 type Lead = {
@@ -41,6 +45,9 @@ const CrmTab = () => {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [emailLead, setEmailLead] = useState<Lead | null>(null);
+  const [customMessage, setCustomMessage] = useState("");
+  const [sending, setSending] = useState(false);
 
   const fetchLeads = async () => {
     setLoading(true);
@@ -68,6 +75,35 @@ const CrmTab = () => {
     if (error) { toast.error("Failed to update status"); return; }
     setLeads((prev) => prev.map((l) => l.id === id ? { ...l, status } : l));
     toast.success("Status updated");
+  };
+
+  const handleSendEmail = async (useAI: boolean) => {
+    if (!emailLead) return;
+    setSending(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("contact-lead", {
+        body: {
+          lead: emailLead,
+          customMessage: useAI ? undefined : customMessage || undefined,
+        },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      toast.success(`Email sent to ${emailLead.full_name}`);
+
+      // Auto-update status to "contacted" if currently "new"
+      if (emailLead.status === "new") {
+        await updateStatus(emailLead.id, "contacted");
+      }
+
+      setEmailLead(null);
+      setCustomMessage("");
+    } catch (e: any) {
+      toast.error(e.message || "Failed to send email");
+    } finally {
+      setSending(false);
+    }
   };
 
   const exportCsv = () => {
@@ -171,9 +207,20 @@ const CrmTab = () => {
                   {new Date(lead.created_at).toLocaleDateString()}
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button size="icon" variant="ghost" className="text-destructive" onClick={() => setDeleteId(lead.id)}>
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <div className="flex items-center justify-end gap-1">
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="text-primary hover:text-primary/80"
+                      onClick={() => { setEmailLead(lead); setCustomMessage(""); }}
+                      title="Send email"
+                    >
+                      <Send className="h-4 w-4" />
+                    </Button>
+                    <Button size="icon" variant="ghost" className="text-destructive" onClick={() => setDeleteId(lead.id)}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
@@ -181,6 +228,7 @@ const CrmTab = () => {
         </Table>
       </div>
 
+      {/* Delete Dialog */}
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent className="border-border bg-card">
           <AlertDialogHeader>
@@ -193,6 +241,63 @@ const CrmTab = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Send Email Dialog */}
+      <Dialog open={!!emailLead} onOpenChange={(open) => { if (!open) { setEmailLead(null); setCustomMessage(""); } }}>
+        <DialogContent className="border-border bg-card sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Send className="h-5 w-5 text-primary" />
+              Contact {emailLead?.full_name}
+            </DialogTitle>
+            <DialogDescription>
+              Send a branded email to <span className="text-primary">{emailLead?.email}</span> using the mAI Prop template.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-2">
+            <div className="rounded-lg border border-border bg-muted/30 p-3 text-sm">
+              <p className="mb-1 font-medium text-foreground">Lead details:</p>
+              <p className="text-muted-foreground">
+                {emailLead?.nationality} · €{emailLead?.investment_budget.toLocaleString()} · {emailLead?.preferred_location || "Greece"} · {emailLead?.property_type || "Any"}
+              </p>
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-medium text-foreground">
+                Custom message <span className="text-muted-foreground">(optional)</span>
+              </label>
+              <Textarea
+                placeholder="Leave empty to auto-generate an AI-powered follow-up email based on the lead's profile..."
+                value={customMessage}
+                onChange={(e) => setCustomMessage(e.target.value)}
+                rows={5}
+                className="resize-none"
+              />
+              <p className="mt-1 text-xs text-muted-foreground">
+                If empty, AI will generate a personalized follow-up highlighting matching properties.
+              </p>
+            </div>
+          </div>
+
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="outline" onClick={() => { setEmailLead(null); setCustomMessage(""); }} disabled={sending}>
+              Cancel
+            </Button>
+            {customMessage.trim() ? (
+              <Button onClick={() => handleSendEmail(false)} disabled={sending} className="gap-2">
+                <Send className="h-4 w-4" />
+                {sending ? "Sending…" : "Send Custom Email"}
+              </Button>
+            ) : (
+              <Button onClick={() => handleSendEmail(true)} disabled={sending} className="gap-2">
+                <Send className="h-4 w-4" />
+                {sending ? "Generating & Sending…" : "Send AI Email"}
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
