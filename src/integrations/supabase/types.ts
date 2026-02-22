@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           created_at: string
           email: string
+          followup_step: number
           full_name: string
           id: string
           investment_budget: number
@@ -31,6 +32,7 @@ export type Database = {
         Insert: {
           created_at?: string
           email: string
+          followup_step?: number
           full_name: string
           id?: string
           investment_budget: number
@@ -44,6 +46,7 @@ export type Database = {
         Update: {
           created_at?: string
           email?: string
+          followup_step?: number
           full_name?: string
           id?: string
           investment_budget?: number
