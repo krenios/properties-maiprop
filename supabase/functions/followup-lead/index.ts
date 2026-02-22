@@ -19,7 +19,7 @@ function brandWrap(innerHtml: string, ctaText: string, ctaHref: string): string 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background:#ffffff;font-family:'Inter','Helvetica Neue',Arial,sans-serif;">
+<body style="margin:0;padding:0;background:#f5f0e8;font-family:'Inter','Helvetica Neue',Arial,sans-serif;">
   <div style="max-width:520px;margin:0 auto;padding:0;">
     <!-- Header -->
     <div style="background:#000014;padding:28px 0;text-align:center;border-radius:8px 8px 0 0;">
@@ -220,7 +220,7 @@ Theme: DETAILED PORTFOLIO REVIEW
 - Invite them for a video call walkthrough of the properties
 
 Do NOT list specific property details. Detailed property cards appear below.
-Do NOT use markdown. Plain text only. Sign off: "Kostis Renios, Investment Director\nmAI Prop"`;
+Do NOT use markdown. Plain text only. Sign off: "The mAI Prop Team"`;
 
   const aiText = await callAI(LOVABLE_API_KEY, prompt);
   const htmlContent = textToHtml(aiText);
@@ -257,7 +257,7 @@ After the bullets, add 2-3 lines about:
 - Limited availability at current investment levels
 - Final invitation to schedule a consultation before prices increase
 
-Do NOT use markdown formatting. Use • for bullets. Plain text only. Sign off: "Kostis Renios, Investment Director\nmAI Prop"`;
+Do NOT use markdown formatting. Use • for bullets. Plain text only. Sign off: "The mAI Prop Team"`;
 
   const aiText = await callAI(LOVABLE_API_KEY, prompt);
   const htmlContent = textToHtml(aiText);
