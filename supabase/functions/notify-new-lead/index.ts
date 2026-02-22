@@ -163,14 +163,11 @@ serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     if (body.lead_id && typeof body.lead_id === "string") {
-      const { data: dbLead, error } = await supabase
-        .from("leads")
-        .select("*")
-        .eq("id", body.lead_id)
-        .single();
+      const { data: dbLead, error } = await supabase.from("leads").select("*").eq("id", body.lead_id).single();
       if (error || !dbLead) {
         return new Response(JSON.stringify({ error: "Lead not found" }), {
-          status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 404,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       lead = dbLead;
@@ -184,7 +181,8 @@ serve(async (req) => {
         .maybeSingle();
       if (error || !dbLead) {
         return new Response(JSON.stringify({ error: "Lead not found" }), {
-          status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 404,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       lead = dbLead;
@@ -192,22 +190,26 @@ serve(async (req) => {
       lead = body;
       if (typeof lead.full_name !== "string" || lead.full_name.length > 100) {
         return new Response(JSON.stringify({ error: "Invalid name" }), {
-          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       if (typeof lead.email !== "string" || lead.email.length > 255) {
         return new Response(JSON.stringify({ error: "Invalid email" }), {
-          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       if (typeof lead.phone !== "string" || lead.phone.length > 20) {
         return new Response(JSON.stringify({ error: "Invalid phone" }), {
-          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
     } else {
       return new Response(JSON.stringify({ error: "Missing lead_id, email, or lead data" }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
@@ -225,10 +227,10 @@ serve(async (req) => {
           headers: {
             "api-key": BREVO_API_KEY,
             "Content-Type": "application/json",
-            "accept": "application/json",
+            accept: "application/json",
           },
           body: JSON.stringify({
-            sender: { name: "mAI Prop", email: "hello@maiprop.co" },
+            sender: { name: "mAI Prop", email: "kr@maiprop.co" },
             to: [{ email: lead.email, name: lead.full_name }],
             subject,
             htmlContent: emailBody,
@@ -264,10 +266,10 @@ serve(async (req) => {
           headers: {
             "api-key": BREVO_API_KEY,
             "Content-Type": "application/json",
-            "accept": "application/json",
+            accept: "application/json",
           },
           body: JSON.stringify({
-            sender: { name: "mAI Prop", email: "hello@maiprop.co" },
+            sender: { name: "mAI Prop", email: "kr@maiprop.co" },
             to: [{ email: NOTIFY_EMAIL }],
             subject: `🏠 New Lead: ${escapeHtml(lead.full_name)} — €${Number(lead.investment_budget).toLocaleString()}`,
             htmlContent: emailHtml,
