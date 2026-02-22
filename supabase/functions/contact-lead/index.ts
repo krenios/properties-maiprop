@@ -209,7 +209,7 @@ Use bullet character • for list items. Do NOT use markdown. Plain text only. K
         "accept": "application/json",
       },
       body: JSON.stringify({
-        sender: { name: "mAI Prop", email: "noreply@maiprop.co" },
+        sender: { name: "mAI Prop", email: "hello@maiprop.co" },
         to: [{ email: dbLead.email, name: dbLead.full_name }],
         subject: subject!,
         htmlContent: htmlBody!,
