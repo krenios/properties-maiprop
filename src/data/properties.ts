@@ -13,7 +13,7 @@ export interface Property {
   location: string;
   poi: string[];
   tags: string[];
-  status: "available" | "sold" | "under-construction" | "";
+  status: "available" | "booked" | "sold" | "under-construction" | "";
   project_type: "new" | "delivered";
   yield: string;
   date_added: string;
