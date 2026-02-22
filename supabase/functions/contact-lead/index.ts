@@ -12,35 +12,34 @@ const SITE_URL = "https://properties.maiprop.co";
 function brandWrap(innerHtml: string): string {
   return `
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-  <div style="max-width:600px;margin:0 auto;padding:0;">
+<body style="margin:0;padding:0;background:#ffffff;font-family:'Inter','Helvetica Neue',Arial,sans-serif;">
+  <div style="max-width:520px;margin:0 auto;padding:0;">
     <!-- Header -->
-    <div style="background:linear-gradient(135deg,#080b1f 0%,#12153a 100%);padding:32px 24px;text-align:center;border-radius:0 0 8px 8px;">
-      <img src="https://os.maiprop.co/wp-content/uploads/2024/10/logo.webp" alt="mAI Prop" width="140" style="display:block;margin:0 auto;" />
-      <p style="margin:6px 0 0;font-size:11px;color:#9b87f5;letter-spacing:3px;text-transform:uppercase;">Golden Visa Real Estate</p>
+    <div style="background:#000014;padding:28px 0;text-align:center;border-radius:8px 8px 0 0;">
+      <img src="https://cqxcztafhnwkhxgaylne.supabase.co/storage/v1/object/public/email-assets/logo.webp?v=1" alt="mAI Prop" width="140" style="display:block;margin:0 auto;" />
     </div>
 
     <!-- Body -->
-    <div style="padding:28px 24px;color:#1a1a2e;font-size:15px;line-height:1.7;">
+    <div style="background:#0a0e2a;padding:32px 30px;border-radius:0 0 8px 8px;">
       ${innerHtml}
     </div>
 
     <!-- CTA -->
-    <div style="text-align:center;padding:0 24px 28px;">
-      <a href="${SITE_URL}/#opportunities" style="display:inline-block;background:linear-gradient(135deg,#4dd0c8,#9b87f5);color:#ffffff;font-weight:600;font-size:14px;padding:14px 32px;border-radius:50px;text-decoration:none;letter-spacing:0.5px;">
+    <div style="text-align:center;padding:30px 0;">
+      <a href="${SITE_URL}/#opportunities" style="display:inline-block;background:#4ef5f1;color:#000014;font-weight:600;font-size:15px;padding:14px 28px;border-radius:8px;text-decoration:none;">
         Browse Our Portfolio →
       </a>
     </div>
 
     <!-- Footer -->
-    <div style="background:#f8f9fa;padding:20px 24px;text-align:center;border-radius:8px 8px 0 0;">
+    <div style="text-align:center;padding:0 0 20px;">
       <p style="margin:0 0 8px;font-size:12px;color:#888;">
-        <a href="${SITE_URL}" style="color:#4dd0c8;text-decoration:none;font-weight:600;">properties.maiprop.co</a>
+        You received this because you submitted an inquiry on our platform.
       </p>
-      <p style="margin:0;font-size:11px;color:#aaa;">
-        © ${new Date().getFullYear()} mAI Prop. All rights reserved.
+      <p style="margin:0;font-size:12px;color:#666;">
+        © ${new Date().getFullYear()} mAI Prop · <a href="${SITE_URL}" style="color:#8755f2;text-decoration:none;">properties.maiprop.co</a>
       </p>
     </div>
   </div>
@@ -115,10 +114,10 @@ serve(async (req) => {
         .map((line: string) => {
           const trimmed = line.trim();
           if (trimmed.startsWith("•")) {
-            return `<div style="padding:4px 0 4px 16px;position:relative;"><span style="color:#4dd0c8;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
+            return `<div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
           }
           if (!trimmed) return "<br/>";
-          return `<p style="margin:0 0 8px;">${trimmed}</p>`;
+          return `<p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">${trimmed}</p>`;
         })
         .join("");
       subject = `${firstName}, a message from mAI Prop`;
@@ -168,10 +167,10 @@ Use bullet character • for list items. Do NOT use markdown. Plain text only. K
                 .map((line: string) => {
                   const trimmed = line.trim();
                   if (trimmed.startsWith("•")) {
-                    return `<div style="padding:4px 0 4px 16px;position:relative;"><span style="color:#4dd0c8;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
+                    return `<div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
                   }
                   if (!trimmed) return "<br/>";
-                  return `<p style="margin:0 0 8px;">${trimmed}</p>`;
+                  return `<p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">${trimmed}</p>`;
                 })
                 .join("");
               subject = `${firstName}, we have properties matching your criteria — mAI Prop`;
@@ -186,14 +185,14 @@ Use bullet character • for list items. Do NOT use markdown. Plain text only. K
       // Fallback if AI failed
       if (!htmlBody!) {
         const fallback = `
-          <p style="margin:0 0 8px;">Hi ${firstName},</p>
-          <p style="margin:0 0 12px;">We've reviewed your profile and have curated investment opportunities that match your criteria:</p>
-          <div style="padding:4px 0 4px 16px;position:relative;"><span style="color:#4dd0c8;font-weight:bold;position:absolute;left:0;">•</span>Visa-eligible apartments & villas from €250K</div>
-          <div style="padding:4px 0 4px 16px;position:relative;"><span style="color:#4dd0c8;font-weight:bold;position:absolute;left:0;">•</span>Pre-verified properties in Athens, Thessaloniki & the islands</div>
-          <div style="padding:4px 0 4px 16px;position:relative;"><span style="color:#4dd0c8;font-weight:bold;position:absolute;left:0;">•</span>Full legal, renovation & rental management</div>
-          <div style="padding:4px 0 4px 16px;position:relative;"><span style="color:#4dd0c8;font-weight:bold;position:absolute;left:0;">•</span>3%+ annual returns with a proven track record</div>
-          <p style="margin:12px 0 8px;">We'd love to schedule a quick call to walk you through the options. Let us know a time that works for you.</p>
-          <p style="margin:0;">Warm regards,<br/>The mAI Prop Team</p>
+          <p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">Hi ${firstName},</p>
+          <p style="margin:0 0 12px;color:#e0fafa;font-size:15px;line-height:1.6;">We've reviewed your profile and have curated investment opportunities that match your criteria:</p>
+          <div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>Visa-eligible apartments & villas from €250K</div>
+          <div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>Pre-verified properties in Athens, Thessaloniki & the islands</div>
+          <div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>Full legal, renovation & rental management</div>
+          <div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>3%+ annual returns with a proven track record</div>
+          <p style="margin:12px 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">We'd love to schedule a quick call to walk you through the options. Let us know a time that works for you.</p>
+          <p style="margin:0;color:#e0fafa;font-size:15px;line-height:1.6;">Warm regards,<br/>The mAI Prop Team</p>
         `;
         subject = `${firstName}, we have properties matching your criteria — mAI Prop`;
         htmlBody = brandWrap(fallback);
