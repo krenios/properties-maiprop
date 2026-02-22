@@ -7,6 +7,48 @@ const corsHeaders = {
 };
 
 const NOTIFY_EMAIL = "kostisrenios@gmail.com"; // Switch to kr@maiprop.co after domain verification
+const SITE_URL = "https://investmentsmai.lovable.app";
+
+function brandWrap(innerHtml: string): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <div style="max-width:600px;margin:0 auto;padding:0;">
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#080b1f 0%,#12153a 100%);padding:32px 24px;text-align:center;border-radius:0 0 8px 8px;">
+      <h1 style="margin:0;font-size:28px;font-weight:800;letter-spacing:-0.5px;">
+        <span style="color:#4dd0c8;">mAI</span> <span style="color:#ffffff;">Prop</span>
+      </h1>
+      <p style="margin:6px 0 0;font-size:11px;color:#9b87f5;letter-spacing:3px;text-transform:uppercase;">Golden Visa Real Estate</p>
+    </div>
+
+    <!-- Body -->
+    <div style="padding:28px 24px;color:#1a1a2e;font-size:15px;line-height:1.7;">
+      ${innerHtml}
+    </div>
+
+    <!-- CTA -->
+    <div style="text-align:center;padding:0 24px 28px;">
+      <a href="${SITE_URL}/#opportunities" style="display:inline-block;background:linear-gradient(135deg,#4dd0c8,#9b87f5);color:#ffffff;font-weight:600;font-size:14px;padding:14px 32px;border-radius:50px;text-decoration:none;letter-spacing:0.5px;">
+        Browse Our Portfolio →
+      </a>
+    </div>
+
+    <!-- Footer -->
+    <div style="background:#f8f9fa;padding:20px 24px;text-align:center;border-radius:8px 8px 0 0;">
+      <p style="margin:0 0 8px;font-size:12px;color:#888;">
+        <a href="${SITE_URL}" style="color:#4dd0c8;text-decoration:none;font-weight:600;">investmentsmai.lovable.app</a>
+      </p>
+      <p style="margin:0;font-size:11px;color:#aaa;">
+        © ${new Date().getFullYear()} mAI Prop. You received this because you submitted an inquiry on our platform.
+      </p>
+    </div>
+  </div>
+</body>
+</html>`;
+}
 
 async function generateLeadEmail(lead: any): Promise<{ subject: string; body: string }> {
   const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
@@ -14,31 +56,27 @@ async function generateLeadEmail(lead: any): Promise<{ subject: string; body: st
     console.error("LOVABLE_API_KEY not configured, using fallback email");
     return {
       subject: `Welcome to mAI Prop — Your Golden Visa Journey Starts Here`,
-      body: getFallbackEmailHtml(lead),
+      body: brandWrap(getFallbackInnerHtml(lead)),
     };
   }
 
   try {
-    const prompt = `You are a professional investment consultant at mAI Prop, a Greek Golden Visa real estate company.
+    const prompt = `You are mAI Prop's investment assistant. Write a SHORT welcome email (max 8 lines total) for a new Golden Visa lead.
 
-Write a warm, personalized welcome email for a new lead. Keep it professional but friendly, 3-4 short paragraphs max.
+Lead: ${lead.full_name}, ${lead.nationality}, budget €${Number(lead.investment_budget).toLocaleString()}, prefers ${lead.preferred_location || "Greece"}, interested in ${lead.property_type || "properties"}, timeline: ${lead.investment_timeline || "flexible"}.
 
-Lead details:
-- Name: ${lead.full_name}
-- Nationality: ${lead.nationality}
-- Budget: €${Number(lead.investment_budget).toLocaleString()}
-- Preferred location: ${lead.preferred_location || "not specified"}
-- Property type: ${lead.property_type || "not specified"}
-- Timeline: ${lead.investment_timeline || "not specified"}
+Format rules — follow EXACTLY:
+1. One greeting line addressing them by first name (e.g. "Hi Kostis,")
+2. One sentence acknowledging their interest
+3. A bullet list (3-4 bullets) of what we offer, focusing on our property inventory:
+   • Visa-eligible apartments & villas from €250K
+   • Pre-verified properties in Athens, Thessaloniki & islands  
+   • Full legal, renovation & rental management
+   • 8%+ annual returns with proven track record
+4. One closing sentence: advisor will reach out within 24 hours
+5. Sign off: "The mAI Prop Team"
 
-Guidelines:
-- Address them by first name
-- Acknowledge their interest in the Greek Golden Visa program
-- Reference their budget range and location preference naturally
-- Mention that a dedicated advisor will reach out within 24 hours
-- Keep the tone confident and welcoming, not salesy
-- Do NOT use markdown — write plain text only
-- Sign off as "The mAI Prop Team"`;
+Use bullet character • for list items. Do NOT use markdown. Plain text only. Keep it punchy.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -49,7 +87,7 @@ Guidelines:
       body: JSON.stringify({
         model: "google/gemini-2.5-flash-lite",
         messages: [
-          { role: "system", content: "You write professional, concise emails for a real estate investment company. Output only the email body text, no subject line." },
+          { role: "system", content: "You write ultra-concise, professional emails for a luxury real estate firm. Output only the email body. No subject line. No markdown." },
           { role: "user", content: prompt },
         ],
       }),
@@ -57,37 +95,36 @@ Guidelines:
 
     if (!response.ok) {
       console.error("AI gateway error:", response.status);
-      return { subject: `Welcome to mAI Prop — Your Golden Visa Journey Starts Here`, body: getFallbackEmailHtml(lead) };
+      return { subject: `Welcome to mAI Prop — Your Golden Visa Journey`, body: brandWrap(getFallbackInnerHtml(lead)) };
     }
 
     const data = await response.json();
     const aiText = data.choices?.[0]?.message?.content?.trim() || "";
 
     if (!aiText) {
-      return { subject: `Welcome to mAI Prop — Your Golden Visa Journey Starts Here`, body: getFallbackEmailHtml(lead) };
+      return { subject: `Welcome to mAI Prop — Your Golden Visa Journey`, body: brandWrap(getFallbackInnerHtml(lead)) };
     }
 
-    const firstName = lead.full_name.split(" ")[0];
-    const subject = `Welcome ${firstName} — Your Greek Golden Visa Journey with mAI Prop`;
-    const bodyHtml = `
-      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px 24px; color: #1a1a2e;">
-        <div style="text-align: center; margin-bottom: 32px;">
-          <h1 style="font-size: 24px; color: #4dd0c8; margin: 0;">mAI Prop</h1>
-          <p style="font-size: 12px; color: #888; margin-top: 4px; letter-spacing: 2px; text-transform: uppercase;">Golden Visa Real Estate</p>
-        </div>
-        <div style="line-height: 1.7; font-size: 15px; white-space: pre-line;">${escapeHtml(aiText)}</div>
-        <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0;" />
-        <p style="font-size: 12px; color: #999; text-align: center;">
-          mAI Prop — Greek Golden Visa Real Estate<br/>
-          This email was sent because you submitted an inquiry on our platform.
-        </p>
-      </div>
-    `;
+    // Convert bullet lines to styled HTML
+    const htmlContent = escapeHtml(aiText)
+      .split("\n")
+      .map((line) => {
+        const trimmed = line.trim();
+        if (trimmed.startsWith("•")) {
+          return `<div style="padding:4px 0 4px 16px;position:relative;"><span style="color:#4dd0c8;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
+        }
+        if (!trimmed) return "<br/>";
+        return `<p style="margin:0 0 8px;">${trimmed}</p>`;
+      })
+      .join("");
 
-    return { subject, body: bodyHtml };
+    const firstName = lead.full_name.split(" ")[0];
+    const subject = `${firstName}, your Golden Visa portfolio is ready — mAI Prop`;
+
+    return { subject, body: brandWrap(htmlContent) };
   } catch (e) {
     console.error("AI email generation failed:", e);
-    return { subject: `Welcome to mAI Prop — Your Golden Visa Journey Starts Here`, body: getFallbackEmailHtml(lead) };
+    return { subject: `Welcome to mAI Prop — Your Golden Visa Journey`, body: brandWrap(getFallbackInnerHtml(lead)) };
   }
 }
 
@@ -95,27 +132,19 @@ function escapeHtml(text: string): string {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
-function getFallbackEmailHtml(lead: any): string {
-  const firstName = lead.full_name.split(" ")[0];
+function getFallbackInnerHtml(lead: any): string {
+  const firstName = escapeHtml(lead.full_name.split(" ")[0]);
   return `
-    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px 24px; color: #1a1a2e;">
-      <div style="text-align: center; margin-bottom: 32px;">
-        <h1 style="font-size: 24px; color: #4dd0c8; margin: 0;">mAI Prop</h1>
-        <p style="font-size: 12px; color: #888; margin-top: 4px; letter-spacing: 2px; text-transform: uppercase;">Golden Visa Real Estate</p>
-      </div>
-      <p style="line-height: 1.7; font-size: 15px;">Dear ${escapeHtml(firstName)},</p>
-      <p style="line-height: 1.7; font-size: 15px;">Thank you for your interest in the Greek Golden Visa program. We've received your inquiry and a dedicated investment advisor will be in touch within 24 hours to discuss your goals.</p>
-      <p style="line-height: 1.7; font-size: 15px;">In the meantime, feel free to explore our portfolio of visa-eligible properties on our platform.</p>
-      <p style="line-height: 1.7; font-size: 15px;">Warm regards,<br/>The mAI Prop Team</p>
-      <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0;" />
-      <p style="font-size: 12px; color: #999; text-align: center;">
-        mAI Prop — Greek Golden Visa Real Estate<br/>
-        This email was sent because you submitted an inquiry on our platform.
-      </p>
-    </div>
+    <p style="margin:0 0 8px;">Hi ${firstName},</p>
+    <p style="margin:0 0 12px;">Thank you for your interest in the Greek Golden Visa. Here's what we have ready for you:</p>
+    <div style="padding:4px 0 4px 16px;position:relative;"><span style="color:#4dd0c8;font-weight:bold;position:absolute;left:0;">•</span>Visa-eligible apartments & villas from €250K</div>
+    <div style="padding:4px 0 4px 16px;position:relative;"><span style="color:#4dd0c8;font-weight:bold;position:absolute;left:0;">•</span>Pre-verified properties in Athens, Thessaloniki & the islands</div>
+    <div style="padding:4px 0 4px 16px;position:relative;"><span style="color:#4dd0c8;font-weight:bold;position:absolute;left:0;">•</span>Full legal, renovation & rental management</div>
+    <div style="padding:4px 0 4px 16px;position:relative;"><span style="color:#4dd0c8;font-weight:bold;position:absolute;left:0;">•</span>8%+ annual returns with a proven track record</div>
+    <p style="margin:12px 0 8px;">A dedicated advisor will reach out within 24 hours.</p>
+    <p style="margin:0;">Warm regards,<br/>The mAI Prop Team</p>
   `;
 }
-
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
