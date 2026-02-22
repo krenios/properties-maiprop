@@ -62,6 +62,11 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const setLanguage = useCallback(
     (lang: string) => {
       setLanguageState(lang);
+
+      // Set RTL direction for Arabic
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      document.documentElement.lang = lang;
+
       if (lang === "en") return;
 
       // Collect all registered texts that aren't cached yet
