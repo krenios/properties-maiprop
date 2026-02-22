@@ -80,11 +80,7 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { data: dbLead, error: dbError } = await supabase
-      .from("leads")
-      .select("*")
-      .eq("id", lead.id)
-      .single();
+    const { data: dbLead, error: dbError } = await supabase.from("leads").select("*").eq("id", lead.id).single();
 
     if (dbError || !dbLead) {
       return new Response(JSON.stringify({ error: "Lead not found" }), {
@@ -167,20 +163,32 @@ serve(async (req) => {
             return imgs[0];
           };
 
-          const propertySummary = topProps.length > 0
-            ? topProps.map((p: any) =>
-                `- ${p.title} in ${p.location}: €${Number(p.price).toLocaleString()}, ${p.size}m², ${p.bedrooms} bed${p.bedrooms > 1 ? "s" : ""}${p.yield ? `, ${p.yield} yield` : ""}`
-              ).join("\n")
-            : "- Visa-eligible apartments & villas from €250K in Athens & islands";
+          const propertySummary =
+            topProps.length > 0
+              ? topProps
+                  .map(
+                    (p: any) =>
+                      `- ${p.title} in ${p.location}: €${Number(p.price).toLocaleString()}, ${p.size}m², ${p.bedrooms} bed${p.bedrooms > 1 ? "s" : ""}${p.yield ? `, ${p.yield} yield` : ""}`,
+                  )
+                  .join("\n")
+              : "- Visa-eligible apartments & villas from €250K in Athens & islands";
 
           // Build property cards HTML
-          const propertyCardsHtml = topProps.length > 0
-            ? topProps.map((p: any) => {
-                const img = propertyImage(p);
-                const link = propertyLink(p.id);
-                const priceStr = p.price ? `€${Number(p.price).toLocaleString()}` : "";
-                const details = [p.size ? `${p.size}m²` : "", p.bedrooms ? `${p.bedrooms} bed${p.bedrooms > 1 ? "s" : ""}` : "", p.yield || ""].filter(Boolean).join(" · ");
-                return `
+          const propertyCardsHtml =
+            topProps.length > 0
+              ? topProps
+                  .map((p: any) => {
+                    const img = propertyImage(p);
+                    const link = propertyLink(p.id);
+                    const priceStr = p.price ? `€${Number(p.price).toLocaleString()}` : "";
+                    const details = [
+                      p.size ? `${p.size}m²` : "",
+                      p.bedrooms ? `${p.bedrooms} bed${p.bedrooms > 1 ? "s" : ""}` : "",
+                      p.yield || "",
+                    ]
+                      .filter(Boolean)
+                      .join(" · ");
+                    return `
                   <a href="${link}" style="display:block;text-decoration:none;margin:12px 0;border-radius:8px;overflow:hidden;border:1px solid #1a1e3a;">
                     ${img ? `<img src="${img}" alt="${escapeHtml(p.title)}" width="460" style="display:block;width:100%;max-height:180px;object-fit:cover;" />` : ""}
                     <div style="padding:14px 16px;background:#0f1340;">
@@ -189,8 +197,9 @@ serve(async (req) => {
                       ${details ? `<p style="margin:0;color:#a0b0c0;font-size:12px;">${details}</p>` : ""}
                     </div>
                   </a>`;
-              }).join("")
-            : "";
+                  })
+                  .join("")
+              : "";
 
           const prompt = `You are mAI Prop's investment advisor. Write a warm, concise follow-up email (max 8 lines) for a Golden Visa lead.
 
@@ -216,7 +225,11 @@ Do NOT use markdown or bullet lists. Plain text only. Keep it professional and w
             body: JSON.stringify({
               model: "google/gemini-2.5-flash-lite",
               messages: [
-                { role: "system", content: "You write ultra-concise, professional emails for a luxury real estate firm. Output only the email body. No subject line. No markdown." },
+                {
+                  role: "system",
+                  content:
+                    "You write ultra-concise, professional emails for a luxury real estate firm. Output only the email body. No subject line. No markdown.",
+                },
                 { role: "user", content: prompt },
               ],
             }),
@@ -235,7 +248,11 @@ Do NOT use markdown or bullet lists. Plain text only. Keep it professional and w
                 })
                 .join("");
               // Insert property cards IN THE MIDDLE — after the AI intro text, before the CTA
-              const fullContent = htmlContent + (propertyCardsHtml ? `<div style="margin-top:20px;border-top:1px solid #1a1e3a;padding-top:16px;"><p style="margin:0 0 10px;color:#4ef5f1;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Properties Selected For You</p>${propertyCardsHtml}</div>` : "");
+              const fullContent =
+                htmlContent +
+                (propertyCardsHtml
+                  ? `<div style="margin-top:20px;border-top:1px solid #1a1e3a;padding-top:16px;"><p style="margin:0 0 10px;color:#4ef5f1;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Properties Selected For You</p>${propertyCardsHtml}</div>`
+                  : "");
               subject = `${firstName}, we have properties matching your criteria — mAI Prop`;
               htmlBody = brandWrap(fullContent);
             }
@@ -265,10 +282,10 @@ Do NOT use markdown or bullet lists. Plain text only. Keep it professional and w
       headers: {
         "api-key": BREVO_API_KEY,
         "Content-Type": "application/json",
-        "accept": "application/json",
+        accept: "application/json",
       },
       body: JSON.stringify({
-        sender: { name: "mAI Prop", email: "hello@maiprop.co" },
+        sender: { name: "mAI Prop", email: "kr@maiprop.co" },
         to: [{ email: dbLead.email, name: dbLead.full_name }],
         subject: subject!,
         htmlContent: htmlBody!,
