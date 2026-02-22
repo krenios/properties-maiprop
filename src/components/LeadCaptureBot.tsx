@@ -165,11 +165,11 @@ const LeadCaptureBot = () => {
       preferred_location: form.preferred_location.trim(), property_type: form.property_type,
       investment_timeline: form.investment_timeline,
     };
-    const { error } = await supabase.from("leads").insert(leadData);
+    const { data: inserted, error } = await supabase.from("leads").insert(leadData).select("id").single();
     setLoading(false);
     if (error) { toast.error("Something went wrong. Please try again."); return; }
     setSubmitted(true);
-    supabase.functions.invoke("notify-new-lead", { body: leadData }).catch(() => {});
+    if (inserted?.id) supabase.functions.invoke("notify-new-lead", { body: { lead_id: inserted.id } }).catch(() => {});
   };
 
   const handleClose = () => {
@@ -328,11 +328,11 @@ const LeadCaptureBot = () => {
                               preferred_location: updatedForm.preferred_location.trim(),
                               property_type: updatedForm.property_type, investment_timeline: updatedForm.investment_timeline,
                             };
-                            supabase.from("leads").insert(leadData).then(({ error }) => {
+                            supabase.from("leads").insert(leadData).select("id").single().then(({ data: inserted, error }) => {
                               setLoading(false);
                               if (error) { toast.error("Something went wrong."); return; }
                               setSubmitted(true);
-                              supabase.functions.invoke("notify-new-lead", { body: leadData }).catch(() => {});
+                              if (inserted?.id) supabase.functions.invoke("notify-new-lead", { body: { lead_id: inserted.id } }).catch(() => {});
                             });
                           }
                         }}

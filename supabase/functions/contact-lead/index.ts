@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -59,9 +60,36 @@ serve(async (req) => {
   try {
     const { lead, customMessage } = await req.json();
 
-    if (!lead?.email || !lead?.full_name) {
-      return new Response(JSON.stringify({ error: "Missing lead email or name" }), {
+    // Validate lead has an id
+    if (!lead?.id || typeof lead.id !== "string") {
+      return new Response(JSON.stringify({ error: "Missing lead id" }), {
         status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Validate customMessage length
+    if (customMessage && (typeof customMessage !== "string" || customMessage.length > 5000)) {
+      return new Response(JSON.stringify({ error: "Message too long (max 5000 chars)" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Fetch lead from database instead of trusting client data
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const { data: dbLead, error: dbError } = await supabase
+      .from("leads")
+      .select("*")
+      .eq("id", lead.id)
+      .single();
+
+    if (dbError || !dbLead) {
+      return new Response(JSON.stringify({ error: "Lead not found" }), {
+        status: 404,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -75,7 +103,7 @@ serve(async (req) => {
     }
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    const firstName = escapeHtml(lead.full_name.split(" ")[0]);
+    const firstName = escapeHtml(dbLead.full_name.split(" ")[0]);
 
     let subject: string;
     let htmlBody: string;
@@ -101,7 +129,7 @@ serve(async (req) => {
         try {
           const prompt = `You are mAI Prop's investment advisor. Write a SHORT follow-up email (max 8 lines) for a Golden Visa lead we're contacting from our CRM.
 
-Lead: ${lead.full_name}, ${lead.nationality}, budget €${Number(lead.investment_budget).toLocaleString()}, prefers ${lead.preferred_location || "Greece"}, interested in ${lead.property_type || "properties"}, timeline: ${lead.investment_timeline || "flexible"}.
+Lead: ${escapeHtml(dbLead.full_name)}, ${escapeHtml(dbLead.nationality)}, budget €${Number(dbLead.investment_budget).toLocaleString()}, prefers ${escapeHtml(dbLead.preferred_location || "Greece")}, interested in ${escapeHtml(dbLead.property_type || "properties")}, timeline: ${escapeHtml(dbLead.investment_timeline || "flexible")}.
 
 Format rules — follow EXACTLY:
 1. One greeting line addressing them by first name
@@ -181,7 +209,7 @@ Use bullet character • for list items. Do NOT use markdown. Plain text only. K
       },
       body: JSON.stringify({
         from: "mAI Prop <onboarding@resend.dev>",
-        to: [lead.email],
+        to: [dbLead.email],
         subject: subject!,
         html: htmlBody!,
       }),
@@ -191,7 +219,7 @@ Use bullet character • for list items. Do NOT use markdown. Plain text only. K
 
     if (!emailRes.ok) {
       console.error("Resend error:", JSON.stringify(emailData));
-      return new Response(JSON.stringify({ error: "Failed to send email", details: emailData }), {
+      return new Response(JSON.stringify({ error: "Failed to send email" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -203,8 +231,7 @@ Use bullet character • for list items. Do NOT use markdown. Plain text only. K
     });
   } catch (error: unknown) {
     console.error("Contact lead error:", error);
-    const msg = error instanceof Error ? error.message : "Unknown error";
-    return new Response(JSON.stringify({ error: msg }), {
+    return new Response(JSON.stringify({ error: "Internal error" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
