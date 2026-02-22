@@ -13,8 +13,8 @@ const STEPS = [
   { key: "phone", label: "Your phone number (international format)", type: "tel", placeholder: "+351 912 345 678", emoji: "📱" },
   { key: "email", label: "What's your email address?", type: "email", placeholder: "john@example.com", emoji: "✉️" },
   { key: "nationality", label: "What's your nationality?", type: "text", placeholder: "e.g. United States", emoji: "🌍" },
-  { key: "investment_budget", label: "What's your investment budget in EUR?", type: "number", placeholder: "250000", emoji: "💰" },
-  { key: "preferred_location", label: "Where would you like to invest?", type: "text", placeholder: "e.g. Athens, Thessaloniki", emoji: "📍" },
+  { key: "investment_budget", label: "What's your investment budget in EUR?", type: "select", options: ["€250,000", "€500,000", "€800,000", "€1M+"], emoji: "💰" },
+  { key: "preferred_location", label: "Where would you like to invest?", type: "select", options: ["Greek City Centers", "Greek Islands", "Greek Countryside"], emoji: "📍" },
   { key: "property_type", label: "What type of property interests you?", type: "select", options: ["Apartment", "Villa"], emoji: "🏠" },
   { key: "investment_timeline", label: "When are you planning to invest?", type: "select", options: ["0-6 months", "6-12 months"], emoji: "📅" },
 ] as const;
@@ -125,7 +125,6 @@ const LeadCaptureBot = () => {
     if (!v) return "This field is required";
     if (currentStep.key === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return "Please enter a valid email";
     if (currentStep.key === "phone" && !/^\+?[\d\s\-()]{7,20}$/.test(v)) return "Please enter a valid phone number";
-    if (currentStep.key === "investment_budget" && (isNaN(Number(v)) || Number(v) < 250000)) return "Minimum budget is €250,000";
     return null;
   };
 
@@ -133,9 +132,7 @@ const LeadCaptureBot = () => {
     const error = validate();
     if (error) { toast.error(error); return; }
 
-    const displayValue = currentStep.key === "investment_budget" 
-      ? `€${Number(currentValue).toLocaleString()}`
-      : currentValue;
+    const displayValue = currentValue;
     
     setMessages(prev => [...prev, { role: "user", text: displayValue }]);
 
@@ -155,11 +152,16 @@ const LeadCaptureBot = () => {
     }
   };
 
+  const budgetToNumber = (val: string): number => {
+    const map: Record<string, number> = { "€250,000": 250000, "€500,000": 500000, "€800,000": 800000, "€1M+": 1000000 };
+    return map[val] || Number(val.replace(/[^0-9]/g, "")) || 250000;
+  };
+
   const handleSubmit = async () => {
     setLoading(true);
     const leadData = {
       full_name: form.full_name.trim(), phone: form.phone.trim(), email: form.email.trim(),
-      nationality: form.nationality.trim(), investment_budget: Number(form.investment_budget),
+      nationality: form.nationality.trim(), investment_budget: budgetToNumber(form.investment_budget),
       preferred_location: form.preferred_location.trim(), property_type: form.property_type,
       investment_timeline: form.investment_timeline,
     };
@@ -322,7 +324,7 @@ const LeadCaptureBot = () => {
                             const leadData = {
                               full_name: updatedForm.full_name.trim(), phone: updatedForm.phone.trim(),
                               email: updatedForm.email.trim(), nationality: updatedForm.nationality.trim(),
-                              investment_budget: Number(updatedForm.investment_budget),
+                              investment_budget: budgetToNumber(updatedForm.investment_budget),
                               preferred_location: updatedForm.preferred_location.trim(),
                               property_type: updatedForm.property_type, investment_timeline: updatedForm.investment_timeline,
                             };
