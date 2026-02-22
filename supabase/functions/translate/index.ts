@@ -13,11 +13,37 @@ serve(async (req) => {
   try {
     const { texts, targetLang } = await req.json();
 
+    const VALID_LANGS = ["English", "Ελληνικά", "العربية", "中文", "Русский", "Français"];
+
     if (!texts || !Array.isArray(texts) || !targetLang) {
       return new Response(
         JSON.stringify({ error: "texts (array) and targetLang are required" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
+    }
+
+    if (texts.length > 50) {
+      return new Response(
+        JSON.stringify({ error: "Maximum 50 texts per request" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!VALID_LANGS.includes(targetLang)) {
+      return new Response(
+        JSON.stringify({ error: "Unsupported target language" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Validate all texts are strings with reasonable length
+    for (const t of texts) {
+      if (typeof t !== "string" || t.length > 5000) {
+        return new Response(
+          JSON.stringify({ error: "Each text must be a string under 5000 characters" }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
     }
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
