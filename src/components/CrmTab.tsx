@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Trash2, RefreshCw, Download, Mail, Phone, Send, ChevronDown, Zap } from "lucide-react";
+import { Trash2, RefreshCw, Download, Mail, Phone, Send, Zap, Eye, X } from "lucide-react";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -60,6 +60,18 @@ const CrmTab = () => {
   const [sending, setSending] = useState(false);
   const [followupSending, setFollowupSending] = useState<string | null>(null);
 
+  // Preview state
+  const [previewHtml, setPreviewHtml] = useState<string | null>(null);
+  const [previewSubject, setPreviewSubject] = useState("");
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [previewContext, setPreviewContext] = useState<{
+    type: "contact" | "followup";
+    leadId: string;
+    leadName: string;
+    step?: number;
+    useAI?: boolean;
+  } | null>(null);
+
   const fetchLeads = async () => {
     setLoading(true);
     const { data, error } = await supabase
@@ -86,6 +98,96 @@ const CrmTab = () => {
     if (error) { toast.error("Failed to update status"); return; }
     setLeads((prev) => prev.map((l) => l.id === id ? { ...l, status } : l));
     toast.success("Status updated");
+  };
+
+  // Preview email before sending
+  const handlePreviewContact = async (useAI: boolean) => {
+    if (!emailLead) return;
+    setPreviewLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("contact-lead", {
+        body: {
+          lead: { id: emailLead.id },
+          customMessage: useAI ? undefined : customMessage || undefined,
+          preview_only: true,
+        },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      setPreviewHtml(data.html);
+      setPreviewSubject(data.subject);
+      setPreviewContext({
+        type: "contact",
+        leadId: emailLead.id,
+        leadName: emailLead.full_name,
+        useAI,
+      });
+    } catch (e: any) {
+      toast.error(e.message || "Failed to generate preview");
+    } finally {
+      setPreviewLoading(false);
+    }
+  };
+
+  const handlePreviewFollowup = async (leadId: string, step: number, leadName: string) => {
+    setFollowupSending(leadId + "-preview-" + step);
+    try {
+      const { data, error } = await supabase.functions.invoke("followup-lead", {
+        body: { lead_id: leadId, step, preview_only: true },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      setPreviewHtml(data.html);
+      setPreviewSubject(data.subject);
+      setPreviewContext({ type: "followup", leadId, leadName, step });
+    } catch (e: any) {
+      toast.error(e.message || "Failed to generate preview");
+    } finally {
+      setFollowupSending(null);
+    }
+  };
+
+  // Confirm send from preview
+  const handleConfirmSend = async () => {
+    if (!previewContext) return;
+    setSending(true);
+    try {
+      if (previewContext.type === "contact") {
+        const lead = leads.find((l) => l.id === previewContext.leadId);
+        const { data, error } = await supabase.functions.invoke("contact-lead", {
+          body: {
+            lead: { id: previewContext.leadId },
+            customMessage: previewContext.useAI ? undefined : customMessage || undefined,
+          },
+        });
+        if (error) throw error;
+        if (data?.error) throw new Error(data.error);
+        toast.success(`Email sent to ${previewContext.leadName}`);
+        if (lead?.status === "new") await updateStatus(previewContext.leadId, "contacted");
+        setEmailLead(null);
+        setCustomMessage("");
+      } else {
+        const { data, error } = await supabase.functions.invoke("followup-lead", {
+          body: { lead_id: previewContext.leadId, step: previewContext.step },
+        });
+        if (error) throw error;
+        if (data?.error) throw new Error(data.error);
+        toast.success(`Followup ${previewContext.step} sent to ${previewContext.leadName}`);
+        setLeads((prev) => prev.map((l) => l.id === previewContext.leadId ? { ...l, followup_step: previewContext.step! } : l));
+        const lead = leads.find((l) => l.id === previewContext.leadId);
+        if (previewContext.step === 1 && lead?.status === "new") {
+          await updateStatus(previewContext.leadId, "contacted");
+        }
+      }
+      setPreviewHtml(null);
+      setPreviewContext(null);
+    } catch (e: any) {
+      toast.error(e.message || "Failed to send email");
+    } finally {
+      setSending(false);
+    }
   };
 
   const handleSendEmail = async (useAI: boolean) => {
@@ -246,7 +348,6 @@ const CrmTab = () => {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-1">
-                      {/* Step indicators */}
                       {FOLLOWUP_STEPS.map((fs) => (
                         <div
                           key={fs.step}
@@ -260,7 +361,6 @@ const CrmTab = () => {
                           {fs.step}
                         </div>
                       ))}
-                      {/* Next followup action */}
                       {!allDone ? (
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -268,22 +368,44 @@ const CrmTab = () => {
                               size="icon"
                               variant="ghost"
                               className="ml-1 h-7 w-7 text-primary hover:text-primary/80"
-                              disabled={followupSending === lead.id + "-" + nextStep}
+                              disabled={!!followupSending}
                               title={`Send followup ${nextStep}`}
                             >
                               <Zap className="h-3.5 w-3.5" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="w-64">
+                          <DropdownMenuContent align="end" className="w-72">
                             {FOLLOWUP_STEPS.filter((fs) => fs.step > (lead.followup_step || 0)).map((fs) => (
                               <DropdownMenuItem
                                 key={fs.step}
-                                onClick={() => handleFollowup(lead.id, fs.step, lead.full_name)}
                                 disabled={!!followupSending}
-                                className="flex flex-col items-start gap-0.5 py-2"
+                                className="flex items-center justify-between gap-2 py-2"
+                                onSelect={(e) => e.preventDefault()}
                               >
-                                <span className="font-medium">{fs.icon} Step {fs.step}: {fs.label}</span>
-                                <span className="text-xs text-muted-foreground">{fs.desc}</span>
+                                <div className="flex flex-col gap-0.5">
+                                  <span className="font-medium">{fs.icon} Step {fs.step}: {fs.label}</span>
+                                  <span className="text-xs text-muted-foreground">{fs.desc}</span>
+                                </div>
+                                <div className="flex gap-1">
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="h-7 px-2 text-xs"
+                                    disabled={!!followupSending}
+                                    onClick={() => handlePreviewFollowup(lead.id, fs.step, lead.full_name)}
+                                  >
+                                    <Eye className="mr-1 h-3 w-3" /> Preview
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="default"
+                                    className="h-7 px-2 text-xs"
+                                    disabled={!!followupSending}
+                                    onClick={() => handleFollowup(lead.id, fs.step, lead.full_name)}
+                                  >
+                                    <Send className="mr-1 h-3 w-3" /> Send
+                                  </Button>
+                                </div>
                               </DropdownMenuItem>
                             ))}
                           </DropdownMenuContent>
@@ -372,20 +494,71 @@ const CrmTab = () => {
           </div>
 
           <DialogFooter className="gap-2 sm:gap-0">
-            <Button variant="outline" onClick={() => { setEmailLead(null); setCustomMessage(""); }} disabled={sending}>
+            <Button variant="outline" onClick={() => { setEmailLead(null); setCustomMessage(""); }} disabled={sending || previewLoading}>
               Cancel
             </Button>
             {customMessage.trim() ? (
-              <Button onClick={() => handleSendEmail(false)} disabled={sending} className="gap-2">
-                <Send className="h-4 w-4" />
-                {sending ? "Sending…" : "Send Custom Email"}
-              </Button>
+              <>
+                <Button variant="secondary" onClick={() => handlePreviewContact(false)} disabled={sending || previewLoading} className="gap-2">
+                  <Eye className="h-4 w-4" />
+                  {previewLoading ? "Loading…" : "Preview"}
+                </Button>
+                <Button onClick={() => handleSendEmail(false)} disabled={sending || previewLoading} className="gap-2">
+                  <Send className="h-4 w-4" />
+                  {sending ? "Sending…" : "Send"}
+                </Button>
+              </>
             ) : (
-              <Button onClick={() => handleSendEmail(true)} disabled={sending} className="gap-2">
-                <Send className="h-4 w-4" />
-                {sending ? "Generating & Sending…" : "Send AI Email"}
-              </Button>
+              <>
+                <Button variant="secondary" onClick={() => handlePreviewContact(true)} disabled={sending || previewLoading} className="gap-2">
+                  <Eye className="h-4 w-4" />
+                  {previewLoading ? "Generating…" : "Preview AI Email"}
+                </Button>
+                <Button onClick={() => handleSendEmail(true)} disabled={sending || previewLoading} className="gap-2">
+                  <Send className="h-4 w-4" />
+                  {sending ? "Sending…" : "Send AI Email"}
+                </Button>
+              </>
             )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Email Preview Dialog */}
+      <Dialog open={!!previewHtml} onOpenChange={(open) => { if (!open) { setPreviewHtml(null); setPreviewContext(null); } }}>
+        <DialogContent className="border-border bg-card sm:max-w-2xl max-h-[90vh] flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Eye className="h-5 w-5 text-primary" />
+              Email Preview
+            </DialogTitle>
+            <DialogDescription>
+              <span className="font-medium text-foreground">Subject:</span> {previewSubject}
+              <br />
+              <span className="font-medium text-foreground">To:</span> {previewContext?.leadName}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex-1 overflow-hidden rounded-lg border border-border bg-white min-h-[400px]">
+            {previewHtml && (
+              <iframe
+                srcDoc={previewHtml}
+                className="h-full w-full min-h-[400px]"
+                sandbox="allow-same-origin"
+                title="Email Preview"
+                style={{ border: "none" }}
+              />
+            )}
+          </div>
+
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="outline" onClick={() => { setPreviewHtml(null); setPreviewContext(null); }} disabled={sending}>
+              Close
+            </Button>
+            <Button onClick={handleConfirmSend} disabled={sending} className="gap-2">
+              <Send className="h-4 w-4" />
+              {sending ? "Sending…" : "Confirm & Send"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
