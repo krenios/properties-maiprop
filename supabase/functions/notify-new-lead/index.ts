@@ -17,11 +17,8 @@ function brandWrap(innerHtml: string): string {
 <body style="margin:0;padding:0;background:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
   <div style="max-width:600px;margin:0 auto;padding:0;">
     <!-- Header -->
-    <div style="background:linear-gradient(135deg,#080b1f 0%,#12153a 100%);padding:32px 24px;text-align:center;border-radius:0 0 8px 8px;">
-      <h1 style="margin:0;font-size:28px;font-weight:800;letter-spacing:-0.5px;">
-        <span style="color:#4dd0c8;">mAI</span> <span style="color:#ffffff;">Prop</span>
-      </h1>
-      <p style="margin:6px 0 0;font-size:11px;color:#9b87f5;letter-spacing:3px;text-transform:uppercase;">Golden Visa Real Estate</p>
+    <div style="background:linear-gradient(135deg,#080b1f 0%,#12153a 100%);padding:28px 24px;text-align:center;border-radius:0 0 8px 8px;">
+      <img src="https://os.maiprop.co/wp-content/uploads/2024/10/logo.webp" alt="mAI Prop" style="height:48px;width:auto;display:inline-block;" />
     </div>
 
     <!-- Body -->
