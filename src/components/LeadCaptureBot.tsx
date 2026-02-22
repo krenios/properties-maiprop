@@ -10,23 +10,71 @@ import { useLeadBot } from "@/components/LeadBotProvider";
 
 const STEPS = [
   { key: "full_name", label: "What's your full name?", type: "text", placeholder: "John Doe", emoji: "👋" },
-  { key: "phone", label: "Your phone number (international format)", type: "tel", placeholder: "+351 912 345 678", emoji: "📱" },
+  {
+    key: "phone",
+    label: "Your phone number (international format)",
+    type: "tel",
+    placeholder: "+351 912 345 678",
+    emoji: "📱",
+  },
   { key: "email", label: "What's your email address?", type: "email", placeholder: "john@example.com", emoji: "✉️" },
-  { key: "nationality", label: "What's your nationality?", type: "text", placeholder: "e.g. United States", emoji: "🌍" },
-  { key: "investment_budget", label: "What's your investment budget in EUR?", type: "select", options: ["€250,000", "€500,000", "€800,000", "€1M+"], emoji: "💰" },
-  { key: "preferred_location", label: "Where would you like to invest?", type: "select", options: ["Greek City Centers", "Greek Islands", "Greek Countryside"], emoji: "📍" },
-  { key: "property_type", label: "What type of property interests you?", type: "select", options: ["Apartment", "Villa"], emoji: "🏠" },
-  { key: "investment_timeline", label: "When are you planning to invest?", type: "select", options: ["0-6 months", "6-12 months"], emoji: "📅" },
+  {
+    key: "nationality",
+    label: "What's your nationality?",
+    type: "text",
+    placeholder: "e.g. United States",
+    emoji: "🌍",
+  },
+  {
+    key: "investment_budget",
+    label: "What's your investment budget in EUR?",
+    type: "select",
+    options: ["€250,000", "€500,000", "€800,000", "€1M+"],
+    emoji: "💰",
+  },
+  {
+    key: "preferred_location",
+    label: "Where would you like to invest?",
+    type: "select",
+    options: ["Greek City Center", "Greek Islands", "Greek Countryside"],
+    emoji: "📍",
+  },
+  {
+    key: "property_type",
+    label: "What type of property interests you?",
+    type: "select",
+    options: ["Apartment", "Villa"],
+    emoji: "🏠",
+  },
+  {
+    key: "investment_timeline",
+    label: "When are you planning to invest?",
+    type: "select",
+    options: ["0-6 months", "6-12 months"],
+    emoji: "📅",
+  },
 ] as const;
 
 type FormData = {
-  full_name: string; phone: string; email: string; nationality: string;
-  investment_budget: string; preferred_location: string; property_type: string; investment_timeline: string;
+  full_name: string;
+  phone: string;
+  email: string;
+  nationality: string;
+  investment_budget: string;
+  preferred_location: string;
+  property_type: string;
+  investment_timeline: string;
 };
 
 const initial: FormData = {
-  full_name: "", phone: "", email: "", nationality: "",
-  investment_budget: "", preferred_location: "", property_type: "", investment_timeline: "",
+  full_name: "",
+  phone: "",
+  email: "",
+  nationality: "",
+  investment_budget: "",
+  preferred_location: "",
+  property_type: "",
+  investment_timeline: "",
 };
 
 // Re-export useLeadBot for backward compatibility
@@ -110,11 +158,14 @@ const LeadCaptureBot = () => {
 
   const showBotMessage = (text: string, onDone?: () => void) => {
     setTyping(true);
-    setTimeout(() => {
-      setTyping(false);
-      setMessages(prev => [...prev, { role: "bot", text }]);
-      onDone?.();
-    }, 700 + Math.random() * 400);
+    setTimeout(
+      () => {
+        setTyping(false);
+        setMessages((prev) => [...prev, { role: "bot", text }]);
+        onDone?.();
+      },
+      700 + Math.random() * 400,
+    );
   };
 
   const currentStep = STEPS[step];
@@ -130,11 +181,14 @@ const LeadCaptureBot = () => {
 
   const advanceStep = () => {
     const error = validate();
-    if (error) { toast.error(error); return; }
+    if (error) {
+      toast.error(error);
+      return;
+    }
 
     const displayValue = currentValue;
-    
-    setMessages(prev => [...prev, { role: "user", text: displayValue }]);
+
+    setMessages((prev) => [...prev, { role: "user", text: displayValue }]);
 
     if (step < STEPS.length - 1) {
       const nextStep = STEPS[step + 1];
@@ -147,7 +201,7 @@ const LeadCaptureBot = () => {
 
   const goBack = () => {
     if (step > 0) {
-      setMessages(prev => prev.slice(0, -2));
+      setMessages((prev) => prev.slice(0, -2));
       setStep(step - 1);
     }
   };
@@ -160,25 +214,41 @@ const LeadCaptureBot = () => {
   const handleSubmit = async () => {
     setLoading(true);
     const leadData = {
-      full_name: form.full_name.trim(), phone: form.phone.trim(), email: form.email.trim(),
-      nationality: form.nationality.trim(), investment_budget: budgetToNumber(form.investment_budget),
-      preferred_location: form.preferred_location.trim(), property_type: form.property_type,
+      full_name: form.full_name.trim(),
+      phone: form.phone.trim(),
+      email: form.email.trim(),
+      nationality: form.nationality.trim(),
+      investment_budget: budgetToNumber(form.investment_budget),
+      preferred_location: form.preferred_location.trim(),
+      property_type: form.property_type,
       investment_timeline: form.investment_timeline,
     };
     const { error } = await supabase.from("leads").insert(leadData);
     setLoading(false);
-    if (error) { toast.error("Something went wrong. Please try again."); return; }
+    if (error) {
+      toast.error("Something went wrong. Please try again.");
+      return;
+    }
     setSubmitted(true);
     supabase.functions.invoke("notify-new-lead", { body: { email: form.email.trim() } }).catch(() => {});
   };
 
   const handleClose = () => {
     setIsOpen(false);
-    if (submitted) { setStep(0); setForm(initial); setSubmitted(false); setMessages([]); }
+    if (submitted) {
+      setStep(0);
+      setForm(initial);
+      setSubmitted(false);
+      setMessages([]);
+    }
   };
 
   const handleReset = () => {
-    setForm(initial); setStep(0); setSubmitted(false); setMessages([]); setIsOpen(true);
+    setForm(initial);
+    setStep(0);
+    setSubmitted(false);
+    setMessages([]);
+    setIsOpen(true);
   };
 
   const progress = ((step + 1) / STEPS.length) * 100;
@@ -254,7 +324,11 @@ const LeadCaptureBot = () => {
             </div>
 
             {/* Chat area */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-3" style={{ maxHeight: "360px", minHeight: "240px" }}>
+            <div
+              ref={scrollRef}
+              className="flex-1 overflow-y-auto px-4 py-4 space-y-3"
+              style={{ maxHeight: "360px", minHeight: "240px" }}
+            >
               <AnimatePresence mode="popLayout">
                 {messages.map((msg, i) => (
                   <motion.div
@@ -277,9 +351,7 @@ const LeadCaptureBot = () => {
                 ))}
               </AnimatePresence>
 
-              <AnimatePresence>
-                {typing && <TypingIndicator />}
-              </AnimatePresence>
+              <AnimatePresence>{typing && <TypingIndicator />}</AnimatePresence>
 
               {submitted && (
                 <motion.div
@@ -291,7 +363,9 @@ const LeadCaptureBot = () => {
                     <Check className="h-7 w-7 text-primary" />
                   </div>
                   <div>
-                    <h4 className="text-base font-semibold text-foreground">Thank you, {form.full_name.split(" ")[0]}!</h4>
+                    <h4 className="text-base font-semibold text-foreground">
+                      Thank you, {form.full_name.split(" ")[0]}!
+                    </h4>
                     <p className="mt-1 text-sm text-muted-foreground">
                       We'll reach out within 24 hours with tailored options.
                     </p>
@@ -314,7 +388,7 @@ const LeadCaptureBot = () => {
                         onClick={() => {
                           const updatedForm = { ...form, [currentStep.key]: opt };
                           setForm(updatedForm);
-                          setMessages(prev => [...prev, { role: "user", text: opt }]);
+                          setMessages((prev) => [...prev, { role: "user", text: opt }]);
                           if (step < STEPS.length - 1) {
                             const nextStep = STEPS[step + 1];
                             showBotMessage(`${nextStep.emoji} ${nextStep.label}`);
@@ -322,18 +396,29 @@ const LeadCaptureBot = () => {
                           } else {
                             setLoading(true);
                             const leadData = {
-                              full_name: updatedForm.full_name.trim(), phone: updatedForm.phone.trim(),
-                              email: updatedForm.email.trim(), nationality: updatedForm.nationality.trim(),
+                              full_name: updatedForm.full_name.trim(),
+                              phone: updatedForm.phone.trim(),
+                              email: updatedForm.email.trim(),
+                              nationality: updatedForm.nationality.trim(),
                               investment_budget: budgetToNumber(updatedForm.investment_budget),
                               preferred_location: updatedForm.preferred_location.trim(),
-                              property_type: updatedForm.property_type, investment_timeline: updatedForm.investment_timeline,
+                              property_type: updatedForm.property_type,
+                              investment_timeline: updatedForm.investment_timeline,
                             };
-                            supabase.from("leads").insert(leadData).then(({ error }) => {
-                              setLoading(false);
-                              if (error) { toast.error("Something went wrong."); return; }
-                              setSubmitted(true);
-                              supabase.functions.invoke("notify-new-lead", { body: { email: updatedForm.email.trim() } }).catch(() => {});
-                            });
+                            supabase
+                              .from("leads")
+                              .insert(leadData)
+                              .then(({ error }) => {
+                                setLoading(false);
+                                if (error) {
+                                  toast.error("Something went wrong.");
+                                  return;
+                                }
+                                setSubmitted(true);
+                                supabase.functions
+                                  .invoke("notify-new-lead", { body: { email: updatedForm.email.trim() } })
+                                  .catch(() => {});
+                              });
                           }
                         }}
                         className={`rounded-full border px-4 py-2 text-sm font-medium transition-all ${
