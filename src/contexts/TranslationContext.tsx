@@ -41,15 +41,21 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
     if (texts.length === 0) return;
     setIsTranslating(true);
     try {
-      const { data, error } = await supabase.functions.invoke("translate", {
-        body: { texts, targetLang: LANGUAGES.find((l) => l.code === lang)?.label || lang },
-      });
-      if (error) throw error;
-      const translated: string[] = data?.translated || texts;
+      const BATCH_SIZE = 50;
+      const targetLang = LANGUAGES.find((l) => l.code === lang)?.label || lang;
       if (!cache.current[lang]) cache.current[lang] = {};
-      texts.forEach((original, i) => {
-        cache.current[lang][original] = translated[i] || original;
-      });
+
+      for (let i = 0; i < texts.length; i += BATCH_SIZE) {
+        const chunk = texts.slice(i, i + BATCH_SIZE);
+        const { data, error } = await supabase.functions.invoke("translate", {
+          body: { texts: chunk, targetLang },
+        });
+        if (error) throw error;
+        const translated: string[] = data?.translated || chunk;
+        chunk.forEach((original, j) => {
+          cache.current[lang][original] = translated[j] || original;
+        });
+      }
       forceRender((n) => n + 1);
     } catch (err) {
       console.error("Translation error:", err);
