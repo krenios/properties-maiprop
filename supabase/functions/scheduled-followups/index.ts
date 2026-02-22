@@ -7,11 +7,11 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-// Schedule: step 1 at 3 days, step 2 at 7 days, step 3 at 14 days
+// Schedule: step 1 at 1 day after welcome, step 2 at 7 days after step 1 (8 days total), step 3 at 21 days after step 2 (29 days total)
 const SCHEDULE = [
-  { step: 1, daysAfter: 3 },
-  { step: 2, daysAfter: 7 },
-  { step: 3, daysAfter: 14 },
+  { step: 1, daysAfter: 1 },
+  { step: 2, daysAfter: 8 },
+  { step: 3, daysAfter: 29 },
 ];
 
 serve(async (req) => {
