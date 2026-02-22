@@ -22,7 +22,7 @@ function brandWrap(innerHtml: string): string {
     </div>
 
     <!-- Body -->
-    <div style="background:#0a0e2a;padding:32px 30px;border-radius:0 0 8px 8px;">
+    <div style="background:#faf6f0;padding:32px 30px;border-radius:0 0 8px 8px;">
       ${innerHtml}
     </div>
 
@@ -110,10 +110,10 @@ serve(async (req) => {
         .map((line: string) => {
           const trimmed = line.trim();
           if (trimmed.startsWith("•")) {
-            return `<div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
+            return `<div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
           }
           if (!trimmed) return "<br/>";
-          return `<p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">${trimmed}</p>`;
+          return `<p style="margin:0 0 10px;color:#3d3529;font-size:15px;line-height:1.7;">${trimmed}</p>`;
         })
         .join("");
       subject = `${firstName}, a message from mAI Prop`;
