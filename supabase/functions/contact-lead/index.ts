@@ -159,7 +159,13 @@ serve(async (req) => {
 
           // Build property link & image helpers
           const propertyLink = (id: string) => `${SITE_URL}/#property-${id}`;
-          const propertyImage = (p: any) => (p.images && p.images.length > 0 ? p.images[0] : "");
+          // Use full public URL for images (not render/image which may not work in email clients)
+          const propertyImage = (p: any) => {
+            const imgs = p.images || [];
+            if (imgs.length === 0) return "";
+            // Ensure we use the direct public URL
+            return imgs[0];
+          };
 
           const propertySummary = topProps.length > 0
             ? topProps.map((p: any) =>
@@ -176,7 +182,7 @@ serve(async (req) => {
                 const details = [p.size ? `${p.size}m²` : "", p.bedrooms ? `${p.bedrooms} bed${p.bedrooms > 1 ? "s" : ""}` : "", p.yield || ""].filter(Boolean).join(" · ");
                 return `
                   <a href="${link}" style="display:block;text-decoration:none;margin:12px 0;border-radius:8px;overflow:hidden;border:1px solid #1a1e3a;">
-                    ${img ? `<img src="${img}" alt="${escapeHtml(p.title)}" width="100%" style="display:block;max-height:180px;object-fit:cover;" />` : ""}
+                    ${img ? `<img src="${img}" alt="${escapeHtml(p.title)}" width="460" style="display:block;width:100%;max-height:180px;object-fit:cover;" />` : ""}
                     <div style="padding:14px 16px;background:#0f1340;">
                       <p style="margin:0 0 4px;color:#4ef5f1;font-size:15px;font-weight:600;">${escapeHtml(p.title)}</p>
                       <p style="margin:0 0 4px;color:#e0fafa;font-size:13px;">${escapeHtml(p.location)} ${priceStr ? `— ${priceStr}` : ""}</p>
@@ -186,21 +192,19 @@ serve(async (req) => {
               }).join("")
             : "";
 
-          const prompt = `You are mAI Prop's investment advisor. Write a warm, concise follow-up email (max 10 lines) for a Golden Visa lead.
+          const prompt = `You are mAI Prop's investment advisor. Write a warm, concise follow-up email (max 8 lines) for a Golden Visa lead.
 
 Lead: ${escapeHtml(dbLead.full_name)}, ${escapeHtml(dbLead.nationality)}, budget €${Number(dbLead.investment_budget).toLocaleString()}, prefers ${escapeHtml(dbLead.preferred_location || "Greece")}, interested in ${escapeHtml(dbLead.property_type || "properties")}, timeline: ${escapeHtml(dbLead.investment_timeline || "flexible")}.
 
-Available properties that match their profile:
-${propertySummary}
-
 Format rules — follow EXACTLY:
 1. One greeting line addressing them by first name
-2. One short sentence: we reviewed their profile and found properties that fit
-3. Naturally weave in 2-3 of the above matching properties — mention each by name, price, size, and yield if available. Don't use a bullet list; instead, describe them in a flowing, conversational way (e.g. "We have a beautiful 55m² apartment in West Athens at €250,000 with a 4.8% yield, as well as…")
+2. One short sentence: we reviewed their profile and found matching opportunities
+3. A brief sentence teasing that we've hand-picked properties for them below (do NOT mention specific property names, prices, or sizes — the property cards will appear below this text)
 4. One sentence about our end-to-end services (legal support, renovation, rental management)
 5. One closing sentence inviting them to schedule a call
 6. Sign off: "The mAI Prop Team"
 
+Do NOT mention specific property details (names, prices, sizes, yields). The properties will be shown visually below your text with images and links.
 Do NOT use markdown or bullet lists. Plain text only. Keep it professional and warm.`;
 
           const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -226,14 +230,11 @@ Do NOT use markdown or bullet lists. Plain text only. Keep it professional and w
                 .split("\n")
                 .map((line: string) => {
                   const trimmed = line.trim();
-                  if (trimmed.startsWith("•")) {
-                    return `<div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
-                  }
                   if (!trimmed) return "<br/>";
                   return `<p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">${trimmed}</p>`;
                 })
                 .join("");
-              // Append property cards below the AI text
+              // Insert property cards IN THE MIDDLE — after the AI intro text, before the CTA
               const fullContent = htmlContent + (propertyCardsHtml ? `<div style="margin-top:20px;border-top:1px solid #1a1e3a;padding-top:16px;"><p style="margin:0 0 10px;color:#4ef5f1;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Properties Selected For You</p>${propertyCardsHtml}</div>` : "");
               subject = `${firstName}, we have properties matching your criteria — mAI Prop`;
               htmlBody = brandWrap(fullContent);

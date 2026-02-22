@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useProperties } from "@/contexts/PropertyContext";
 import PropertyCard from "@/components/PropertyCard";
 import PropertyModal from "@/components/PropertyModal";
@@ -10,6 +10,24 @@ const InvestmentOpportunities = () => {
   const { properties } = useProperties();
   const [selected, setSelected] = useState<Property | null>(null);
   const { t } = useTranslation();
+
+  // Open property modal from hash link (e.g. #property-uuid)
+  useEffect(() => {
+    const openFromHash = () => {
+      const hash = window.location.hash;
+      if (!hash.startsWith("#property-")) return;
+      const id = hash.replace("#property-", "");
+      const found = properties.find((p) => p.id === id);
+      if (found) {
+        setSelected(found);
+        // Scroll to opportunities section
+        document.getElementById("opportunities")?.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+    openFromHash();
+    window.addEventListener("hashchange", openFromHash);
+    return () => window.removeEventListener("hashchange", openFromHash);
+  }, [properties]);
 
   const current = properties.filter((p) => p.project_type === "new");
 
