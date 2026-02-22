@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useTranslation } from "@/contexts/TranslationContext";
 import brandLogo from "@/assets/brand-1.png";
 import brandLight from "@/assets/brand-light.png";
 
@@ -29,6 +31,7 @@ const whatsappMessage = [
 const WHATSAPP_URL = `https://wa.me/306971853470?text=${encodeURIComponent(whatsappMessage)}`;
 
 const Navbar = () => {
+  const { t } = useTranslation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -70,11 +73,12 @@ const Navbar = () => {
             onClick={() => handleClick(l.href)}
             className="text-sm font-medium transition-colors text-secondary-foreground">
 
-              {l.label}
+              {t(l.label)}
             </button>
           )}
+          <LanguageSwitcher />
           <Button size="sm" className="rounded-full px-6" onClick={() => { const el = document.querySelector("#contact"); el?.scrollIntoView({ behavior: "smooth" }); }}>
-            Get Started
+            {t("Get Started")}
           </Button>
         </nav>
 
@@ -94,11 +98,12 @@ const Navbar = () => {
             onClick={() => handleClick(l.href)}
             className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
 
-                {l.label}
+                {t(l.label)}
               </button>
           )}
+            <LanguageSwitcher />
             <Button size="sm" className="mt-2 rounded-full" onClick={() => { setMobileOpen(false); const el = document.querySelector("#contact"); el?.scrollIntoView({ behavior: "smooth" }); }}>
-              Get Started
+              {t("Get Started")}
             </Button>
           </nav>
         </div>
