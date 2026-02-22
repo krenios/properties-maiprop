@@ -9,6 +9,8 @@ export const LANGUAGES = [
   { code: "zh", label: "中文", flag: "🇨🇳" },
   { code: "ru", label: "Русский", flag: "🇷🇺" },
   { code: "fr", label: "Français", flag: "🇫🇷" },
+  { code: "hi", label: "हिन्दी", flag: "🇮🇳" },
+  { code: "he", label: "עברית", flag: "🇮🇱" },
 ];
 
 interface TranslationContextType {
@@ -70,7 +72,7 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
       setLanguageState(lang);
 
       // Set RTL direction for Arabic
-      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      document.documentElement.dir = (lang === "ar" || lang === "he") ? "rtl" : "ltr";
       document.documentElement.lang = lang;
 
       if (lang === "en") return;

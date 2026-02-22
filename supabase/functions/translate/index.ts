@@ -13,7 +13,7 @@ serve(async (req) => {
   try {
     const { texts, targetLang } = await req.json();
 
-    const VALID_LANGS = ["English", "Ελληνικά", "العربية", "中文", "Русский", "Français"];
+    const VALID_LANGS = ["English", "Ελληνικά", "العربية", "中文", "Русский", "Français", "हिन्दी", "עברית"];
 
     if (!texts || !Array.isArray(texts) || !targetLang) {
       return new Response(
