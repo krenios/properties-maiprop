@@ -126,22 +126,59 @@ serve(async (req) => {
       // Auto-generate a follow-up email using AI
       if (LOVABLE_API_KEY) {
         try {
-          const prompt = `You are mAI Prop's investment advisor. Write a SHORT follow-up email (max 8 lines) for a Golden Visa lead we're contacting from our CRM.
+          // Fetch available properties matching budget or location
+          const budget = Number(dbLead.investment_budget) || 250000;
+          const location = (dbLead.preferred_location || "").toLowerCase();
+
+          const { data: matchingProps } = await supabase
+            .from("properties")
+            .select("title, location, price, size, bedrooms, yield, project_type")
+            .eq("status", "available")
+            .lte("price", budget * 1.2)
+            .order("price", { ascending: false })
+            .limit(6);
+
+          const { data: locationProps } = location
+            ? await supabase
+                .from("properties")
+                .select("title, location, price, size, bedrooms, yield, project_type")
+                .eq("status", "available")
+                .ilike("location", `%${location}%`)
+                .limit(4)
+            : { data: [] };
+
+          // Merge and deduplicate
+          const allProps = matchingProps || [];
+          const locIds = new Set(allProps.map((p: any) => p.title + p.price));
+          for (const p of locationProps || []) {
+            if (!locIds.has(p.title + p.price)) allProps.push(p);
+          }
+
+          // Pick top 3-4 properties
+          const topProps = allProps.slice(0, 4);
+
+          const propertySummary = topProps.length > 0
+            ? topProps.map((p: any) =>
+                `- ${p.title} in ${p.location}: €${Number(p.price).toLocaleString()}, ${p.size}m², ${p.bedrooms} bed${p.bedrooms > 1 ? "s" : ""}${p.yield ? `, ${p.yield} yield` : ""}`
+              ).join("\n")
+            : "- Visa-eligible apartments & villas from €250K in Athens & islands";
+
+          const prompt = `You are mAI Prop's investment advisor. Write a warm, concise follow-up email (max 10 lines) for a Golden Visa lead.
 
 Lead: ${escapeHtml(dbLead.full_name)}, ${escapeHtml(dbLead.nationality)}, budget €${Number(dbLead.investment_budget).toLocaleString()}, prefers ${escapeHtml(dbLead.preferred_location || "Greece")}, interested in ${escapeHtml(dbLead.property_type || "properties")}, timeline: ${escapeHtml(dbLead.investment_timeline || "flexible")}.
 
+Available properties that match their profile:
+${propertySummary}
+
 Format rules — follow EXACTLY:
 1. One greeting line addressing them by first name
-2. One sentence: we reviewed their profile and have matching opportunities
-3. A bullet list (3-4 bullets) highlighting relevant properties from our inventory:
-   • Visa-eligible apartments & villas from €250K
-   • Pre-verified properties in Athens, Thessaloniki & islands
-   • Full legal, renovation & rental management
-   • 3%+ annual returns with proven track record
-4. One closing sentence inviting them to schedule a call
-5. Sign off: "The mAI Prop Team"
+2. One short sentence: we reviewed their profile and found properties that fit
+3. Naturally weave in 2-3 of the above matching properties — mention each by name, price, size, and yield if available. Don't use a bullet list; instead, describe them in a flowing, conversational way (e.g. "We have a beautiful 55m² apartment in West Athens at €250,000 with a 4.8% yield, as well as…")
+4. One sentence about our end-to-end services (legal support, renovation, rental management)
+5. One closing sentence inviting them to schedule a call
+6. Sign off: "The mAI Prop Team"
 
-Use bullet character • for list items. Do NOT use markdown. Plain text only. Keep it punchy and professional.`;
+Do NOT use markdown or bullet lists. Plain text only. Keep it professional and warm.`;
 
           const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
             method: "POST",
@@ -186,12 +223,9 @@ Use bullet character • for list items. Do NOT use markdown. Plain text only. K
       if (!htmlBody!) {
         const fallback = `
           <p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">Hi ${firstName},</p>
-          <p style="margin:0 0 12px;color:#e0fafa;font-size:15px;line-height:1.6;">We've reviewed your profile and have curated investment opportunities that match your criteria:</p>
-          <div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>Visa-eligible apartments & villas from €250K</div>
-          <div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>Pre-verified properties in Athens, Thessaloniki & the islands</div>
-          <div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>Full legal, renovation & rental management</div>
-          <div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>3%+ annual returns with a proven track record</div>
-          <p style="margin:12px 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">We'd love to schedule a quick call to walk you through the options. Let us know a time that works for you.</p>
+          <p style="margin:0 0 12px;color:#e0fafa;font-size:15px;line-height:1.6;">We've reviewed your profile and found some exciting opportunities that align with your investment goals. We currently have visa-eligible apartments and villas starting from €250,000 in prime Athens locations, offering strong rental yields and full renovation potential.</p>
+          <p style="margin:0 0 12px;color:#e0fafa;font-size:15px;line-height:1.6;">Our team provides end-to-end support — from legal assistance and property verification to renovation and rental management — so you can invest with complete confidence.</p>
+          <p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">We'd love to schedule a quick call to walk you through the options. Let us know a time that works for you.</p>
           <p style="margin:0;color:#e0fafa;font-size:15px;line-height:1.6;">Warm regards,<br/>The mAI Prop Team</p>
         `;
         subject = `${firstName}, we have properties matching your criteria — mAI Prop`;
