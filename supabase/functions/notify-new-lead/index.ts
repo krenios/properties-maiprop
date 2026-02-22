@@ -26,7 +26,7 @@ function brandWrap(innerHtml: string): string {
     </div>
 
     <!-- Body -->
-    <div style="background:#0a0e2a;padding:32px 30px;border-radius:0 0 8px 8px;">
+    <div style="background:#faf6f0;padding:32px 30px;border-radius:0 0 8px 8px;">
       ${innerHtml}
     </div>
 
@@ -116,10 +116,10 @@ Use bullet character • for list items. Do NOT use markdown. Plain text only. K
       .map((line) => {
         const trimmed = line.trim();
         if (trimmed.startsWith("•")) {
-          return `<div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
+          return `<div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
         }
         if (!trimmed) return "<br/>";
-        return `<p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">${trimmed}</p>`;
+        return `<p style="margin:0 0 10px;color:#3d3529;font-size:15px;line-height:1.7;">${trimmed}</p>`;
       })
       .join("");
 
@@ -136,14 +136,14 @@ Use bullet character • for list items. Do NOT use markdown. Plain text only. K
 function getFallbackInnerHtml(lead: any): string {
   const firstName = escapeHtml(lead.full_name.split(" ")[0]);
   return `
-    <p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">Hi ${firstName},</p>
-    <p style="margin:0 0 12px;color:#e0fafa;font-size:15px;line-height:1.6;">Thank you for your interest in the Greek Golden Visa. Here's what we have ready for you:</p>
-    <div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>Visa-eligible apartments & villas from €250K</div>
-    <div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>Pre-verified properties in Athens, Thessaloniki & the islands</div>
-    <div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>Full legal, renovation & rental management</div>
-    <div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>8%+ annual returns with a proven track record</div>
-    <p style="margin:12px 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">A dedicated advisor will reach out within 24 hours.</p>
-    <p style="margin:0;color:#e0fafa;font-size:15px;line-height:1.6;">Warm regards,<br/>The mAI Prop Team</p>
+    <p style="margin:0 0 10px;color:#3d3529;font-size:15px;line-height:1.7;">Hi ${firstName},</p>
+    <p style="margin:0 0 12px;color:#3d3529;font-size:15px;line-height:1.7;">Thank you for your interest in the Greek Golden Visa. Here's what we have ready for you:</p>
+    <div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>Visa-eligible apartments & villas from €250K</div>
+    <div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>Pre-verified properties in Athens, Thessaloniki & the islands</div>
+    <div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>Full legal, renovation & rental management</div>
+    <div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>8%+ annual returns with a proven track record</div>
+    <p style="margin:12px 0 10px;color:#3d3529;font-size:15px;line-height:1.7;">A dedicated advisor will reach out within 24 hours.</p>
+    <p style="margin:0;color:#3d3529;font-size:15px;line-height:1.7;">Warm regards,<br/>The mAI Prop Team</p>
   `;
 }
 

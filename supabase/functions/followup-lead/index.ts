@@ -27,7 +27,7 @@ function brandWrap(innerHtml: string, ctaText: string, ctaHref: string): string 
     </div>
 
     <!-- Body -->
-    <div style="background:#0a0e2a;padding:32px 30px;border-radius:0 0 8px 8px;">
+    <div style="background:#faf6f0;padding:32px 30px;border-radius:0 0 8px 8px;">
       ${innerHtml}
     </div>
 
@@ -85,10 +85,10 @@ function textToHtml(text: string): string {
     .map((line) => {
       const trimmed = line.trim();
       if (trimmed.startsWith("•")) {
-        return `<div style="padding:4px 0 4px 16px;position:relative;color:#e0fafa;font-size:15px;line-height:1.6;"><span style="color:#4ef5f1;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
+        return `<div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
       }
       if (!trimmed) return "<br/>";
-      return `<p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">${trimmed}</p>`;
+      return `<p style="margin:0 0 10px;color:#3d3529;font-size:15px;line-height:1.7;">${trimmed}</p>`;
     })
     .join("");
 }
@@ -128,8 +128,8 @@ Do NOT use markdown. Plain text only. Sign off: "The mAI Prop Team"`;
 
   // Process overview section for Step 1
   const processHtml = `
-    <div style="margin-top:20px;border-top:1px solid #1a1e3a;padding-top:16px;">
-      <p style="margin:0 0 14px;color:#4ef5f1;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">📌 How It Works</p>
+    <div style="margin-top:20px;border-top:1px solid #e0d8cc;padding-top:16px;">
+      <p style="margin:0 0 14px;color:#0a0e2a;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">📌 How It Works</p>
       <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
         <tr>
           <td style="padding:12px 14px;background:#0f1340;border-radius:6px 6px 0 0;border-bottom:1px solid #1a1e3a;">
@@ -159,7 +159,7 @@ Do NOT use markdown. Plain text only. Sign off: "The mAI Prop Team"`;
     </div>`;
 
   const fullContent = htmlContent +
-    (cardsHtml ? `<div style="margin-top:20px;border-top:1px solid #1a1e3a;padding-top:16px;"><p style="margin:0 0 10px;color:#4ef5f1;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">🏠 New Listings For You</p>${cardsHtml}</div>` : "") +
+    (cardsHtml ? `<div style="margin-top:20px;border-top:1px solid #e0d8cc;padding-top:16px;"><p style="margin:0 0 10px;color:#0a0e2a;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">🏠 New Listings For You</p>${cardsHtml}</div>` : "") +
     processHtml;
 
   return {
@@ -227,7 +227,7 @@ Do NOT use markdown. Plain text only. Sign off: "The mAI Prop Team"`;
   const firstName = escapeHtml(lead.full_name.split(" ")[0]);
 
   const fullContent = htmlContent +
-    (detailedCardsHtml ? `<div style="margin-top:20px;border-top:1px solid #1a1e3a;padding-top:16px;"><p style="margin:0 0 10px;color:#4ef5f1;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">📋 Your Detailed Property Portfolio</p>${detailedCardsHtml}</div>` : "");
+    (detailedCardsHtml ? `<div style="margin-top:20px;border-top:1px solid #e0d8cc;padding-top:16px;"><p style="margin:0 0 10px;color:#0a0e2a;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">📋 Your Detailed Property Portfolio</p>${detailedCardsHtml}</div>` : "");
 
   return {
     subject: `${firstName}, your personalized investment portfolio — mAI Prop`,
@@ -264,8 +264,8 @@ Do NOT use markdown formatting. Use • for bullets. Plain text only. Sign off: 
 
   // Add a visual benefits summary section
   const benefitsHtml = `
-    <div style="margin-top:20px;border-top:1px solid #1a1e3a;padding-top:16px;">
-      <p style="margin:0 0 14px;color:#4ef5f1;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">🇬🇷 Golden Visa At A Glance</p>
+    <div style="margin-top:20px;border-top:1px solid #e0d8cc;padding-top:16px;">
+      <p style="margin:0 0 14px;color:#0a0e2a;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">🇬🇷 Golden Visa At A Glance</p>
       <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
         <tr>
           <td style="padding:12px 14px;background:#0f1340;border-radius:6px 6px 0 0;border-bottom:1px solid #1a1e3a;">
