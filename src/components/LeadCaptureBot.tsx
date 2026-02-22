@@ -230,6 +230,14 @@ const LeadCaptureBot = () => {
       return;
     }
     setSubmitted(true);
+    // Google Ads conversion tracking
+    if (typeof (window as any).gtag === "function") {
+      (window as any).gtag("event", "conversion", {
+        send_to: "AW-17031338731/LEAD_SUBMIT",
+        value: budgetToNumber(form.investment_budget),
+        currency: "EUR",
+      });
+    }
     supabase.functions.invoke("notify-new-lead", { body: { email: form.email.trim() } }).catch(() => {});
   };
 
