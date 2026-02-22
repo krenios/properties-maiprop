@@ -1,5 +1,6 @@
 import { Globe, Users, Zap, Home, TrendingUp, Sun } from "lucide-react";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 const benefits = [
 { icon: Globe, title: "EU Residency", desc: "Live, work, and travel freely across 27 Schengen countries — Access to mAI Prop OS" },
@@ -9,17 +10,19 @@ const benefits = [
 { icon: TrendingUp, title: "Strong Market Growth", desc: "8%+ annual appreciation with strong rental income potential" },
 { icon: Sun, title: "Mediterranean Lifestyle", desc: "300+ days of sunshine, world-class cuisine, and rich culture" }];
 
-const GoldenVisaStats = () =>
-<section id="overview" className="relative bg-background py-24">
+const GoldenVisaStats = () => {
+  const { t } = useTranslation();
+  return (
+  <section id="overview" className="relative bg-background py-24">
     <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
     <div className="relative container mx-auto px-6">
       <ScrollReveal>
         <div className="mb-14 text-center">
           <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-widest text-primary">
-            Greek Golden Visa Program
+            {t("Greek Golden Visa Program")}
           </span>
-          <h2 className="text-3xl font-bold sm:text-4xl">Why Greek Golden Visa?</h2>
-          <p className="mt-2 text-muted-foreground">European residency with investment returns and lifestyle benefits.</p>
+          <h2 className="text-3xl font-bold sm:text-4xl">{t("Why Greek Golden Visa?")}</h2>
+          <p className="mt-2 text-muted-foreground">{t("European residency with investment returns and lifestyle benefits.")}</p>
         </div>
       </ScrollReveal>
       <ScrollReveal variant="stagger">
@@ -30,14 +33,16 @@ const GoldenVisaStats = () =>
               <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10">
                 <b.icon className="h-5 w-5 text-primary" />
               </div>
-              <h3 className="mb-1 font-semibold">{b.title}</h3>
-              <p className="text-sm text-muted-foreground">{b.desc}</p>
+              <h3 className="mb-1 font-semibold">{t(b.title)}</h3>
+              <p className="text-sm text-muted-foreground">{t(b.desc)}</p>
             </div>
         </RevealItem>
         )}
         </div>
       </ScrollReveal>
     </div>
-  </section>;
+  </section>
+  );
+};
 
 export default GoldenVisaStats;

@@ -154,9 +154,10 @@ const Admin = () => {
               <Select value={bulkStatus} onValueChange={(v) => setBulkStatus(v as Property["status"])}>
                 <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="available">Available</SelectItem>
-                  <SelectItem value="sold">Sold</SelectItem>
-                  <SelectItem value="under-construction">Under Construction</SelectItem>
+                   <SelectItem value="available">Available</SelectItem>
+                   <SelectItem value="booked">Booked</SelectItem>
+                   <SelectItem value="sold">Sold</SelectItem>
+                   <SelectItem value="under-construction">Under Construction</SelectItem>
                 </SelectContent>
               </Select>
               <Button size="sm" onClick={handleBulk}>Update Status</Button>
@@ -206,7 +207,15 @@ const Admin = () => {
                                 <TableCell className="font-medium">{p.title}</TableCell>
                                 <TableCell>{p.price ? `€${p.price.toLocaleString()}` : "—"}</TableCell>
                                 <TableCell>
-                                  <Badge variant="outline" className="text-xs capitalize">{p.status || "none"}</Badge>
+                                  {(() => {
+                                    const sc: Record<string, string> = {
+                                      available: "bg-primary/20 text-primary border-primary/30",
+                                      booked: "bg-secondary/20 text-secondary border-secondary/30",
+                                      sold: "bg-destructive/20 text-destructive border-destructive/30",
+                                      "under-construction": "bg-muted/30 text-muted-foreground border-muted-foreground/30",
+                                    };
+                                    return <Badge className={`border text-xs capitalize ${sc[p.status] || ""}`}>{p.status || "none"}</Badge>;
+                                  })()}
                                 </TableCell>
                                 <TableCell>
                                   {missing.length > 0 && (
@@ -409,6 +418,7 @@ const Admin = () => {
                   <SelectTrigger><SelectValue placeholder="Select status" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="available">Available</SelectItem>
+                    <SelectItem value="booked">Booked</SelectItem>
                     <SelectItem value="sold">Sold</SelectItem>
                     <SelectItem value="under-construction">Under Construction</SelectItem>
                   </SelectContent>

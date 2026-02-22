@@ -18,6 +18,13 @@ import {
 } from "lucide-react";
 import { useState, useRef, useCallback } from "react";
 
+const statusColors: Record<string, string> = {
+  available: "bg-primary/20 text-primary border-primary/30",
+  booked: "bg-secondary/20 text-secondary border-secondary/30",
+  sold: "bg-destructive/20 text-destructive border-destructive/30",
+  "under-construction": "bg-muted/30 text-muted-foreground border-muted-foreground/30",
+};
+
 
 interface Props {
   property: Property | null;
@@ -87,6 +94,11 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
         {/* Gallery */}
         <div className="relative h-[200px] w-full shrink-0 overflow-hidden sm:h-[420px]">
           <img src={optimizeImage(currentImg, { width: 800, height: 600 })} alt={property.title} className="h-full w-full object-cover" loading="lazy" decoding="async" />
+          {property.status && (
+            <Badge className={`absolute left-3 top-3 border ${statusColors[property.status] || ""}`}>
+              {property.status.replace("-", " ")}
+            </Badge>
+          )}
           {images.length > 1 && (
             <>
               <button

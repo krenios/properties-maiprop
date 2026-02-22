@@ -67,6 +67,9 @@ const LeadCaptureBot = () => {
   useEffect(() => {
     const shown = sessionStorage.getItem("lead_bot_shown");
     if (shown) return;
+    // Don't auto-open on mobile
+    const isMobile = window.innerWidth < 640;
+    if (isMobile) return;
     const timer = setTimeout(() => {
       setIsOpen(true);
       sessionStorage.setItem("lead_bot_shown", "1");

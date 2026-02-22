@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 const whatsappMessage = [
   "Hello! I would like to explore investment opportunities under the Greek Golden Visa program.",
@@ -35,6 +36,7 @@ const DeliveredProjects = () => {
   const { properties } = useProperties();
   const delivered = properties.filter((p) => p.project_type === "delivered");
   const [selected, setSelected] = useState<Property | null>(null);
+  const { t } = useTranslation();
 
   if (delivered.length === 0) return null;
 
@@ -45,11 +47,11 @@ const DeliveredProjects = () => {
         <ScrollReveal>
         <div className="mb-16 text-center">
           <Badge className="mb-4 border-primary/30 bg-primary/10 text-primary">
-            <CheckCircle className="mr-1 h-3 w-3" /> Track Record
+            <CheckCircle className="mr-1 h-3 w-3" /> {t("Track Record")}
           </Badge>
-          <h2 className="mb-4 text-3xl font-bold md:text-4xl text-inherit">Successfully Delivered</h2>
+          <h2 className="mb-4 text-3xl font-bold md:text-4xl text-inherit">{t("Successfully Delivered")}</h2>
           <p className="mx-auto max-w-2xl text-muted-foreground">
-            A proven portfolio of completed projects — renovated, rented, and generating returns.
+            {t("A proven portfolio of completed projects — renovated, rented, and generating returns.")}
           </p>
         </div>
         </ScrollReveal>
