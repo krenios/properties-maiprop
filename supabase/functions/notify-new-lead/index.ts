@@ -155,30 +155,40 @@ serve(async (req) => {
   try {
     const body = await req.json();
 
-    // Accept either a lead_id (preferred) or full lead object (legacy)
+    // Accept lead_id, email lookup, or full lead object
     let lead: any;
 
-    if (body.lead_id && typeof body.lead_id === "string") {
-      // Validate lead against database
-      const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-      const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-      const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
+    if (body.lead_id && typeof body.lead_id === "string") {
       const { data: dbLead, error } = await supabase
         .from("leads")
         .select("*")
         .eq("id", body.lead_id)
         .single();
-
       if (error || !dbLead) {
         return new Response(JSON.stringify({ error: "Lead not found" }), {
-          status: 404,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      lead = dbLead;
+    } else if (body.email && typeof body.email === "string") {
+      const { data: dbLead, error } = await supabase
+        .from("leads")
+        .select("*")
+        .eq("email", body.email)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error || !dbLead) {
+        return new Response(JSON.stringify({ error: "Lead not found" }), {
+          status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       lead = dbLead;
     } else if (body.full_name && body.email) {
-      // Legacy: validate required fields and sanitize
       lead = body;
       if (typeof lead.full_name !== "string" || lead.full_name.length > 100) {
         return new Response(JSON.stringify({ error: "Invalid name" }), {
@@ -196,7 +206,7 @@ serve(async (req) => {
         });
       }
     } else {
-      return new Response(JSON.stringify({ error: "Missing lead_id or lead data" }), {
+      return new Response(JSON.stringify({ error: "Missing lead_id, email, or lead data" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
