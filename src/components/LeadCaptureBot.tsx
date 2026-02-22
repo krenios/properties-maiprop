@@ -233,7 +233,7 @@ const LeadCaptureBot = () => {
     // Google Ads conversion tracking
     if (typeof (window as any).gtag === "function") {
       (window as any).gtag("event", "conversion", {
-        send_to: "AW-17031338731/LEAD_SUBMIT",
+        send_to: "AW-17031338731/OAyuCMKFiP0bEOu1lrk_",
         value: budgetToNumber(form.investment_budget),
         currency: "EUR",
       });
