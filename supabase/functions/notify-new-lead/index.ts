@@ -7,7 +7,7 @@ const corsHeaders = {
 };
 
 const NOTIFY_EMAIL = "kostisrenios@gmail.com"; // Switch to kr@maiprop.co after domain verification
-const SITE_URL = "https://investmentsmai.lovable.app";
+const SITE_URL = "https://properties.maiprop.co";
 
 function brandWrap(innerHtml: string): string {
   return `
@@ -69,10 +69,10 @@ Format rules — follow EXACTLY:
 1. One greeting line addressing them by first name (e.g. "Hi Kostis,")
 2. One sentence acknowledging their interest
 3. A bullet list (3-4 bullets) of what we offer, focusing on our property inventory:
-   • Visa-eligible apartments & villas from €250K
-   • Pre-verified properties in Athens, Thessaloniki & islands  
+   • Visa-eligible apartments from €250K
+   • Pre-verified properties in Athens & Thessaloniki  
    • Full legal, renovation & rental management
-   • 8%+ annual returns with proven track record
+   • 3%+ annual returns with proven track record
 4. One closing sentence: advisor will reach out within 24 hours
 5. Sign off: "The mAI Prop Team"
 
@@ -87,7 +87,11 @@ Use bullet character • for list items. Do NOT use markdown. Plain text only. K
       body: JSON.stringify({
         model: "google/gemini-2.5-flash-lite",
         messages: [
-          { role: "system", content: "You write ultra-concise, professional emails for a luxury real estate firm. Output only the email body. No subject line. No markdown." },
+          {
+            role: "system",
+            content:
+              "You write ultra-concise, professional emails for a luxury real estate firm. Output only the email body. No subject line. No markdown.",
+          },
           { role: "user", content: prompt },
         ],
       }),
@@ -238,18 +242,15 @@ serve(async (req) => {
       ].join("\n");
 
       try {
-        const tgRes = await fetch(
-          `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              chat_id: TELEGRAM_CHAT_ID,
-              text: telegramText,
-              parse_mode: "Markdown",
-            }),
-          }
-        );
+        const tgRes = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: telegramText,
+            parse_mode: "Markdown",
+          }),
+        });
         const tgData = await tgRes.json();
         results.telegram_sent = tgData.ok === true;
         if (!tgData.ok) console.error("Telegram error:", JSON.stringify(tgData));
@@ -258,10 +259,10 @@ serve(async (req) => {
       }
     }
 
-    return new Response(
-      JSON.stringify({ success: true, ...results }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return new Response(JSON.stringify({ success: true, ...results }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   } catch (error: unknown) {
     console.error("Notification error:", error);
     const msg = error instanceof Error ? error.message : "Unknown error";
