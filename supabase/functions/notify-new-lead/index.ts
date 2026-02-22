@@ -221,7 +221,7 @@ serve(async (req) => {
             "accept": "application/json",
           },
           body: JSON.stringify({
-            sender: { name: "mAI Prop", email: "noreply@maiprop.co" },
+            sender: { name: "mAI Prop", email: "hello@maiprop.co" },
             to: [{ email: lead.email, name: lead.full_name }],
             subject,
             htmlContent: emailBody,
@@ -260,7 +260,7 @@ serve(async (req) => {
             "accept": "application/json",
           },
           body: JSON.stringify({
-            sender: { name: "mAI Prop", email: "noreply@maiprop.co" },
+            sender: { name: "mAI Prop", email: "hello@maiprop.co" },
             to: [{ email: NOTIFY_EMAIL }],
             subject: `🏠 New Lead: ${escapeHtml(lead.full_name)} — €${Number(lead.investment_budget).toLocaleString()}`,
             htmlContent: emailHtml,
