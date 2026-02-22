@@ -94,8 +94,8 @@ serve(async (req) => {
       });
     }
 
-    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-    if (!RESEND_API_KEY) {
+    const BREVO_API_KEY = Deno.env.get("brevo");
+    if (!BREVO_API_KEY) {
       return new Response(JSON.stringify({ error: "Email service not configured" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -200,25 +200,26 @@ Use bullet character • for list items. Do NOT use markdown. Plain text only. K
       }
     }
 
-    // Send via Resend
-    const emailRes = await fetch("https://api.resend.com/emails", {
+    // Send via Brevo
+    const emailRes = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${RESEND_API_KEY}`,
+        "api-key": BREVO_API_KEY,
         "Content-Type": "application/json",
+        "accept": "application/json",
       },
       body: JSON.stringify({
-        from: "mAI Prop <onboarding@resend.dev>",
-        to: [dbLead.email],
+        sender: { name: "mAI Prop", email: "noreply@maiprop.co" },
+        to: [{ email: dbLead.email, name: dbLead.full_name }],
         subject: subject!,
-        html: htmlBody!,
+        htmlContent: htmlBody!,
       }),
     });
 
     const emailData = await emailRes.json();
 
     if (!emailRes.ok) {
-      console.error("Resend error:", JSON.stringify(emailData));
+      console.error("Brevo error:", JSON.stringify(emailData));
       return new Response(JSON.stringify({ error: "Failed to send email" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

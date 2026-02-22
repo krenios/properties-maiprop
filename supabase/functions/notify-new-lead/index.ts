@@ -207,23 +207,24 @@ serve(async (req) => {
     const NOTIFY_EMAIL = Deno.env.get("ADMIN_NOTIFICATION_EMAIL");
     const results = { email_sent: false, telegram_sent: false, lead_email_sent: false };
 
-    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    const BREVO_API_KEY = Deno.env.get("brevo");
 
     // ---- AI-Powered Welcome Email to Lead ----
-    if (RESEND_API_KEY && lead.email) {
+    if (BREVO_API_KEY && lead.email) {
       try {
         const { subject, body: emailBody } = await generateLeadEmail(lead);
-        const leadEmailRes = await fetch("https://api.resend.com/emails", {
+        const leadEmailRes = await fetch("https://api.brevo.com/v3/smtp/email", {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${RESEND_API_KEY}`,
+            "api-key": BREVO_API_KEY,
             "Content-Type": "application/json",
+            "accept": "application/json",
           },
           body: JSON.stringify({
-            from: "MAI Prop <onboarding@resend.dev>",
-            to: [lead.email],
+            sender: { name: "mAI Prop", email: "noreply@maiprop.co" },
+            to: [{ email: lead.email, name: lead.full_name }],
             subject,
-            html: emailBody,
+            htmlContent: emailBody,
           }),
         });
         const leadEmailData = await leadEmailRes.json();
@@ -234,8 +235,8 @@ serve(async (req) => {
       }
     }
 
-    // ---- Admin Notification Email via Resend ----
-    if (RESEND_API_KEY && NOTIFY_EMAIL) {
+    // ---- Admin Notification Email via Brevo ----
+    if (BREVO_API_KEY && NOTIFY_EMAIL) {
       const emailHtml = `
         <h2>🔔 New Lead Received</h2>
         <table style="border-collapse:collapse;font-family:sans-serif;">
@@ -251,22 +252,23 @@ serve(async (req) => {
       `;
 
       try {
-        const emailRes = await fetch("https://api.resend.com/emails", {
+        const emailRes = await fetch("https://api.brevo.com/v3/smtp/email", {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${RESEND_API_KEY}`,
+            "api-key": BREVO_API_KEY,
             "Content-Type": "application/json",
+            "accept": "application/json",
           },
           body: JSON.stringify({
-            from: "MAI Prop <onboarding@resend.dev>",
-            to: [NOTIFY_EMAIL],
+            sender: { name: "mAI Prop", email: "noreply@maiprop.co" },
+            to: [{ email: NOTIFY_EMAIL }],
             subject: `🏠 New Lead: ${escapeHtml(lead.full_name)} — €${Number(lead.investment_budget).toLocaleString()}`,
-            html: emailHtml,
+            htmlContent: emailHtml,
           }),
         });
         const emailData = await emailRes.json();
         results.email_sent = emailRes.ok;
-        if (!emailRes.ok) console.error("Resend error:", JSON.stringify(emailData));
+        if (!emailRes.ok) console.error("Brevo error:", JSON.stringify(emailData));
       } catch (e) {
         console.error("Email send failed:", e);
       }
