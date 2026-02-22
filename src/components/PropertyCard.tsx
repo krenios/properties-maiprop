@@ -12,8 +12,9 @@ interface Props {
 
 const statusColors: Record<string, string> = {
   available: "bg-primary/20 text-primary border-primary/30",
+  booked: "bg-secondary/20 text-secondary border-secondary/30",
   sold: "bg-destructive/20 text-destructive border-destructive/30",
-  "under-construction": "bg-secondary/20 text-secondary border-secondary/30",
+  "under-construction": "bg-muted/30 text-muted-foreground border-muted-foreground/30",
 };
 
 const PropertyCard = ({ property, onClick }: Props) => {
