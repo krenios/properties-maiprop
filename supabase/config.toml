@@ -9,3 +9,5 @@ project_id = "cqxcztafhnwkhxgaylne"
     verify_jwt = false
   [functions.followup-lead]
     verify_jwt = false
+  [functions.scheduled-followups]
+    verify_jwt = false

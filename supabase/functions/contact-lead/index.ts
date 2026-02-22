@@ -57,7 +57,7 @@ serve(async (req) => {
   }
 
   try {
-    const { lead, customMessage } = await req.json();
+    const { lead, customMessage, preview_only } = await req.json();
 
     // Validate lead has an id
     if (!lead?.id || typeof lead.id !== "string") {
@@ -90,7 +90,7 @@ serve(async (req) => {
     }
 
     const BREVO_API_KEY = Deno.env.get("brevo");
-    if (!BREVO_API_KEY) {
+    if (!BREVO_API_KEY && !preview_only) {
       return new Response(JSON.stringify({ error: "Email service not configured" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -276,11 +276,19 @@ Do NOT use markdown or bullet lists. Plain text only. Keep it professional and w
       }
     }
 
+    // Preview mode — return HTML without sending
+    if (preview_only) {
+      return new Response(JSON.stringify({ success: true, preview: true, subject: subject!, html: htmlBody! }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // Send via Brevo
     const emailRes = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers: {
-        "api-key": BREVO_API_KEY,
+        "api-key": BREVO_API_KEY!,
         "Content-Type": "application/json",
         accept: "application/json",
       },
