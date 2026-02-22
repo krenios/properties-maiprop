@@ -126,12 +126,45 @@ Do NOT use markdown. Plain text only. Sign off: "The mAI Prop Team"`;
   const cardsHtml = buildPropertyCardsHtml(topProps);
   const firstName = escapeHtml(lead.full_name.split(" ")[0]);
 
+  // Process overview section for Step 1
+  const processHtml = `
+    <div style="margin-top:20px;border-top:1px solid #1a1e3a;padding-top:16px;">
+      <p style="margin:0 0 14px;color:#4ef5f1;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">📌 How It Works</p>
+      <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+        <tr>
+          <td style="padding:12px 14px;background:#0f1340;border-radius:6px 6px 0 0;border-bottom:1px solid #1a1e3a;">
+            <p style="margin:0 0 2px;color:#4ef5f1;font-size:22px;font-weight:700;">1</p>
+            <p style="margin:0 0 2px;color:#e0fafa;font-size:14px;font-weight:600;">Free Consultation</p>
+            <p style="margin:0;color:#a0b0c0;font-size:12px;">We discuss your goals, budget & timeline in a 30-min call.</p>
+          </td>
+          <td style="padding:12px 14px;background:#0f1340;border-radius:6px 6px 0 0;border-bottom:1px solid #1a1e3a;">
+            <p style="margin:0 0 2px;color:#4ef5f1;font-size:22px;font-weight:700;">2</p>
+            <p style="margin:0 0 2px;color:#e0fafa;font-size:14px;font-weight:600;">Property Selection</p>
+            <p style="margin:0;color:#a0b0c0;font-size:12px;">We curate Golden Visa-eligible properties matching your criteria.</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:12px 14px;background:#0f1340;border-bottom:1px solid #1a1e3a;">
+            <p style="margin:0 0 2px;color:#4ef5f1;font-size:22px;font-weight:700;">3</p>
+            <p style="margin:0 0 2px;color:#e0fafa;font-size:14px;font-weight:600;">Legal & Renovation</p>
+            <p style="margin:0;color:#a0b0c0;font-size:12px;">Our legal team handles the visa paperwork while we renovate your property.</p>
+          </td>
+          <td style="padding:12px 14px;background:#0f1340;border-radius:0 0 6px 6px;">
+            <p style="margin:0 0 2px;color:#4ef5f1;font-size:22px;font-weight:700;">4</p>
+            <p style="margin:0 0 2px;color:#e0fafa;font-size:14px;font-weight:600;">Residency & Returns</p>
+            <p style="margin:0;color:#a0b0c0;font-size:12px;">Receive your Golden Visa and start earning rental income.</p>
+          </td>
+        </tr>
+      </table>
+    </div>`;
+
   const fullContent = htmlContent +
-    (cardsHtml ? `<div style="margin-top:20px;border-top:1px solid #1a1e3a;padding-top:16px;"><p style="margin:0 0 10px;color:#4ef5f1;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">🏠 New Listings For You</p>${cardsHtml}</div>` : "");
+    (cardsHtml ? `<div style="margin-top:20px;border-top:1px solid #1a1e3a;padding-top:16px;"><p style="margin:0 0 10px;color:#4ef5f1;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">🏠 New Listings For You</p>${cardsHtml}</div>` : "") +
+    processHtml;
 
   return {
     subject: `${firstName}, new properties just listed — don't miss out`,
-    body: brandWrap(fullContent, "View New Listings →", `${SITE_URL}/#opportunities`),
+    body: brandWrap(fullContent, "Book a Free Consultation →", "https://calendly.com/maipropos/30min"),
   };
 }
 
@@ -198,7 +231,7 @@ Do NOT use markdown. Plain text only. Sign off: "Kostis Renios, Investment Direc
 
   return {
     subject: `${firstName}, your personalized investment portfolio — mAI Prop`,
-    body: brandWrap(fullContent, "Schedule a Video Call →", `${SITE_URL}/#contact`),
+    body: brandWrap(fullContent, "Schedule a Video Call →", "https://calendly.com/maipropos/30min"),
   };
 }
 
@@ -271,7 +304,7 @@ Do NOT use markdown formatting. Use • for bullets. Plain text only. Sign off: 
 
   return {
     subject: `${firstName}, your Golden Visa guide — act before thresholds increase`,
-    body: brandWrap(fullContent, "Book Your Free Consultation →", `${SITE_URL}/#contact`),
+    body: brandWrap(fullContent, "Book Your Free Consultation →", "https://calendly.com/maipropos/30min"),
   };
 }
 
