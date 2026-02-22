@@ -83,7 +83,7 @@ const CrmTab = () => {
     try {
       const { data, error } = await supabase.functions.invoke("contact-lead", {
         body: {
-          lead: emailLead,
+          lead: { id: emailLead.id },
           customMessage: useAI ? undefined : customMessage || undefined,
         },
       });

@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -6,8 +7,11 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const NOTIFY_EMAIL = "kostisrenios@gmail.com"; // Switch to kr@maiprop.co after domain verification
 const SITE_URL = "https://properties.maiprop.co";
+
+function escapeHtml(text: string): string {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
 
 function brandWrap(innerHtml: string): string {
   return `
@@ -63,7 +67,7 @@ async function generateLeadEmail(lead: any): Promise<{ subject: string; body: st
   try {
     const prompt = `You are mAI Prop's investment assistant. Write a SHORT welcome email (max 8 lines total) for a new Golden Visa lead.
 
-Lead: ${lead.full_name}, ${lead.nationality}, budget €${Number(lead.investment_budget).toLocaleString()}, prefers ${lead.preferred_location || "Greece"}, interested in ${lead.property_type || "properties"}, timeline: ${lead.investment_timeline || "flexible"}.
+Lead: ${escapeHtml(lead.full_name)}, ${escapeHtml(lead.nationality)}, budget €${Number(lead.investment_budget).toLocaleString()}, prefers ${escapeHtml(lead.preferred_location || "Greece")}, interested in ${escapeHtml(lead.property_type || "properties")}, timeline: ${escapeHtml(lead.investment_timeline || "flexible")}.
 
 Format rules — follow EXACTLY:
 1. One greeting line addressing them by first name (e.g. "Hi Kostis,")
@@ -122,7 +126,7 @@ Use bullet character • for list items. Do NOT use markdown. Plain text only. K
       })
       .join("");
 
-    const firstName = lead.full_name.split(" ")[0];
+    const firstName = escapeHtml(lead.full_name.split(" ")[0]);
     const subject = `${firstName}, your Golden Visa portfolio is ready — mAI Prop`;
 
     return { subject, body: brandWrap(htmlContent) };
@@ -130,10 +134,6 @@ Use bullet character • for list items. Do NOT use markdown. Plain text only. K
     console.error("AI email generation failed:", e);
     return { subject: `Welcome to mAI Prop — Your Golden Visa Journey`, body: brandWrap(getFallbackInnerHtml(lead)) };
   }
-}
-
-function escapeHtml(text: string): string {
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
 function getFallbackInnerHtml(lead: any): string {
@@ -149,14 +149,62 @@ function getFallbackInnerHtml(lead: any): string {
     <p style="margin:0;">Warm regards,<br/>The mAI Prop Team</p>
   `;
 }
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const lead = await req.json();
+    const body = await req.json();
 
+    // Accept either a lead_id (preferred) or full lead object (legacy)
+    let lead: any;
+
+    if (body.lead_id && typeof body.lead_id === "string") {
+      // Validate lead against database
+      const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+      const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+      const supabase = createClient(supabaseUrl, supabaseKey);
+
+      const { data: dbLead, error } = await supabase
+        .from("leads")
+        .select("*")
+        .eq("id", body.lead_id)
+        .single();
+
+      if (error || !dbLead) {
+        return new Response(JSON.stringify({ error: "Lead not found" }), {
+          status: 404,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      lead = dbLead;
+    } else if (body.full_name && body.email) {
+      // Legacy: validate required fields and sanitize
+      lead = body;
+      if (typeof lead.full_name !== "string" || lead.full_name.length > 100) {
+        return new Response(JSON.stringify({ error: "Invalid name" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (typeof lead.email !== "string" || lead.email.length > 255) {
+        return new Response(JSON.stringify({ error: "Invalid email" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (typeof lead.phone !== "string" || lead.phone.length > 20) {
+        return new Response(JSON.stringify({ error: "Invalid phone" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    } else {
+      return new Response(JSON.stringify({ error: "Missing lead_id or lead data" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const NOTIFY_EMAIL = Deno.env.get("ADMIN_NOTIFICATION_EMAIL");
     const results = { email_sent: false, telegram_sent: false, lead_email_sent: false };
 
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
@@ -164,7 +212,7 @@ serve(async (req) => {
     // ---- AI-Powered Welcome Email to Lead ----
     if (RESEND_API_KEY && lead.email) {
       try {
-        const { subject, body } = await generateLeadEmail(lead);
+        const { subject, body: emailBody } = await generateLeadEmail(lead);
         const leadEmailRes = await fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: {
@@ -175,7 +223,7 @@ serve(async (req) => {
             from: "MAI Prop <onboarding@resend.dev>",
             to: [lead.email],
             subject,
-            html: body,
+            html: emailBody,
           }),
         });
         const leadEmailData = await leadEmailRes.json();
@@ -187,18 +235,18 @@ serve(async (req) => {
     }
 
     // ---- Admin Notification Email via Resend ----
-    if (RESEND_API_KEY) {
+    if (RESEND_API_KEY && NOTIFY_EMAIL) {
       const emailHtml = `
         <h2>🔔 New Lead Received</h2>
         <table style="border-collapse:collapse;font-family:sans-serif;">
-          <tr><td style="padding:6px 12px;font-weight:bold;">Name</td><td style="padding:6px 12px;">${lead.full_name}</td></tr>
-          <tr><td style="padding:6px 12px;font-weight:bold;">Phone</td><td style="padding:6px 12px;"><a href="tel:${lead.phone}">${lead.phone}</a></td></tr>
-          <tr><td style="padding:6px 12px;font-weight:bold;">Email</td><td style="padding:6px 12px;"><a href="mailto:${lead.email}">${lead.email}</a></td></tr>
-          <tr><td style="padding:6px 12px;font-weight:bold;">Nationality</td><td style="padding:6px 12px;">${lead.nationality}</td></tr>
+          <tr><td style="padding:6px 12px;font-weight:bold;">Name</td><td style="padding:6px 12px;">${escapeHtml(lead.full_name)}</td></tr>
+          <tr><td style="padding:6px 12px;font-weight:bold;">Phone</td><td style="padding:6px 12px;">${escapeHtml(lead.phone)}</td></tr>
+          <tr><td style="padding:6px 12px;font-weight:bold;">Email</td><td style="padding:6px 12px;">${escapeHtml(lead.email)}</td></tr>
+          <tr><td style="padding:6px 12px;font-weight:bold;">Nationality</td><td style="padding:6px 12px;">${escapeHtml(lead.nationality)}</td></tr>
           <tr><td style="padding:6px 12px;font-weight:bold;">Budget</td><td style="padding:6px 12px;">€${Number(lead.investment_budget).toLocaleString()}</td></tr>
-          <tr><td style="padding:6px 12px;font-weight:bold;">Location</td><td style="padding:6px 12px;">${lead.preferred_location || "—"}</td></tr>
-          <tr><td style="padding:6px 12px;font-weight:bold;">Type</td><td style="padding:6px 12px;">${lead.property_type || "—"}</td></tr>
-          <tr><td style="padding:6px 12px;font-weight:bold;">Timeline</td><td style="padding:6px 12px;">${lead.investment_timeline || "—"}</td></tr>
+          <tr><td style="padding:6px 12px;font-weight:bold;">Location</td><td style="padding:6px 12px;">${escapeHtml(lead.preferred_location || "—")}</td></tr>
+          <tr><td style="padding:6px 12px;font-weight:bold;">Type</td><td style="padding:6px 12px;">${escapeHtml(lead.property_type || "—")}</td></tr>
+          <tr><td style="padding:6px 12px;font-weight:bold;">Timeline</td><td style="padding:6px 12px;">${escapeHtml(lead.investment_timeline || "—")}</td></tr>
         </table>
       `;
 
@@ -212,7 +260,7 @@ serve(async (req) => {
           body: JSON.stringify({
             from: "MAI Prop <onboarding@resend.dev>",
             to: [NOTIFY_EMAIL],
-            subject: `🏠 New Lead: ${lead.full_name} — €${Number(lead.investment_budget).toLocaleString()}`,
+            subject: `🏠 New Lead: ${escapeHtml(lead.full_name)} — €${Number(lead.investment_budget).toLocaleString()}`,
             html: emailHtml,
           }),
         });
@@ -265,8 +313,7 @@ serve(async (req) => {
     });
   } catch (error: unknown) {
     console.error("Notification error:", error);
-    const msg = error instanceof Error ? error.message : "Unknown error";
-    return new Response(JSON.stringify({ success: false, error: msg }), {
+    return new Response(JSON.stringify({ success: false, error: "Internal error" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
