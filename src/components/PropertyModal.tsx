@@ -15,8 +15,22 @@ import {
   Calendar,
   LayoutGrid,
   FileText,
+  Plane,
+  Waves,
+  Anchor,
+  TrainFront,
+  Car,
+  GraduationCap,
+  ShoppingCart,
+  Cross,
+  Heart,
+  Landmark,
+  TreePine,
+  Loader2,
 } from "lucide-react";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import type { LucideIcon } from "lucide-react";
 
 const statusColors: Record<string, string> = {
   available: "bg-primary/20 text-primary border-primary/30",
@@ -25,6 +39,22 @@ const statusColors: Record<string, string> = {
   "under-construction": "bg-muted/30 text-muted-foreground border-muted-foreground/30",
 };
 
+const POI_ICONS: Record<string, LucideIcon> = {
+  "Airport": Plane,
+  "Sea": Waves,
+  "Ports": Anchor,
+  "Train Stations": TrainFront,
+  "Motorway Access": Car,
+  "Schools": GraduationCap,
+  "Supermarket": ShoppingCart,
+  "Pharmacies": Cross,
+  "Hospitals": Heart,
+  "Parthenon": Landmark,
+  "Parks": TreePine,
+};
+
+// Simple in-memory cache for AI POI results
+const poiCache: Record<string, string[]> = {};
 
 interface Props {
   property: Property | null;
@@ -38,12 +68,44 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
   const [imgIdx, setImgIdx] = useState(0);
   const [swipeY, setSwipeY] = useState(0);
   const [isSwiping, setIsSwiping] = useState(false);
+  const [relevantPoi, setRelevantPoi] = useState<string[] | null>(null);
+  const [poiLoading, setPoiLoading] = useState(false);
   const touchStartY = useRef(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // Fetch AI-determined relevant POIs when modal opens
+  useEffect(() => {
+    if (!open || !property?.location) {
+      setRelevantPoi(null);
+      return;
+    }
+
+    const location = property.location;
+
+    // Check cache first
+    if (poiCache[location]) {
+      setRelevantPoi(poiCache[location]);
+      return;
+    }
+
+    setPoiLoading(true);
+    supabase.functions
+      .invoke("location-poi", { body: { location } })
+      .then(({ data, error }) => {
+        if (error) {
+          console.error("POI fetch error:", error);
+          setRelevantPoi(null);
+        } else {
+          const poi = data?.poi || [];
+          poiCache[location] = poi;
+          setRelevantPoi(poi);
+        }
+      })
+      .finally(() => setPoiLoading(false));
+  }, [open, property?.location]);
+
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     const el = scrollRef.current;
-    // Only allow swipe-down-to-close when scrolled to top
     if (el && el.scrollTop <= 0) {
       touchStartY.current = e.touches[0].clientY;
       setIsSwiping(true);
@@ -68,12 +130,13 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
 
   if (!property) return null;
 
+  // Merge AI-relevant POIs with any property-specific ones
   const DEFAULT_POI = [
     "Airport", "Sea", "Ports", "Train Stations", "Motorway Access",
     "Schools", "Supermarket", "Pharmacies", "Hospitals", "Parthenon", "Parks",
   ];
-  // Merge default POIs with any property-specific ones (deduplicated)
-  const allPoi = Array.from(new Set([...DEFAULT_POI, ...property.poi.filter(Boolean)]));
+  const basePoi = relevantPoi ?? DEFAULT_POI;
+  const allPoi = Array.from(new Set([...basePoi, ...property.poi.filter(Boolean)]));
 
   const images = property.images.length > 0 ? property.images : ["/placeholder.svg"];
   const currentImg = images[imgIdx % images.length];
@@ -177,13 +240,18 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
           <div>
             <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Points of Interest
+              {poiLoading && <Loader2 className="ml-2 inline h-3 w-3 animate-spin" />}
             </h4>
             <div className="flex flex-wrap gap-1.5">
-              {allPoi.map((p) => (
-                <Badge key={p} variant="secondary" className="rounded-full px-3 py-1 text-xs">
-                  {p}
-                </Badge>
-              ))}
+              {allPoi.map((p) => {
+                const Icon = POI_ICONS[p] || MapPin;
+                return (
+                  <Badge key={p} variant="secondary" className="gap-1.5 rounded-full px-3 py-1 text-xs">
+                    <Icon className="h-3 w-3" />
+                    {p}
+                  </Badge>
+                );
+              })}
             </div>
           </div>
 
