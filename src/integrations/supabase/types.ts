@@ -75,6 +75,7 @@ export type Database = {
           location: string
           market_report: string
           poi: string[]
+          poi_cache: Json | null
           price: number | null
           project_type: string
           size: number | null
@@ -100,6 +101,7 @@ export type Database = {
           location?: string
           market_report?: string
           poi?: string[]
+          poi_cache?: Json | null
           price?: number | null
           project_type?: string
           size?: number | null
@@ -125,6 +127,7 @@ export type Database = {
           location?: string
           market_report?: string
           poi?: string[]
+          poi_cache?: Json | null
           price?: number | null
           project_type?: string
           size?: number | null
