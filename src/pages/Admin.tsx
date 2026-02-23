@@ -19,13 +19,14 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Pencil, Trash2, AlertTriangle, Home, ArrowRightCircle, CheckCircle, LogOut, GripVertical, Users } from "lucide-react";
+import { Plus, Pencil, Trash2, AlertTriangle, Home, ArrowRightCircle, CheckCircle, LogOut, GripVertical, Users, RefreshCw } from "lucide-react";
 import ImageUpload from "@/components/ImageUpload";
 import FileUpload from "@/components/FileUpload";
 import CrmTab from "@/components/CrmTab";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
+import { supabase } from "@/integrations/supabase/client";
 
 const propertySchema = z.object({
   title: z.string().min(1, "Title is required").max(200, "Title too long"),
@@ -121,6 +122,34 @@ const Admin = () => {
     setSelected(new Set());
   };
 
+  const [refreshingPoi, setRefreshingPoi] = useState<Set<string>>(new Set());
+
+  const refreshPoi = async (p: Property) => {
+    setRefreshingPoi((prev) => new Set(prev).add(p.id));
+    try {
+      // Clear cache first so AI is called fresh
+      await supabase.from("properties").update({ poi_cache: null } as any).eq("id", p.id);
+      const { data, error } = await supabase.functions.invoke("location-poi", {
+        body: { location: p.location, property_id: p.id },
+      });
+      if (error) throw error;
+      toast.success(`POI refreshed for "${p.title}" — ${data?.poi?.length || 0} POIs`);
+    } catch (e: any) {
+      toast.error(`POI refresh failed: ${e.message || "Unknown error"}`);
+    } finally {
+      setRefreshingPoi((prev) => { const n = new Set(prev); n.delete(p.id); return n; });
+    }
+  };
+
+  const refreshAllPoi = async () => {
+    const allProps = [...portfolioProperties, ...deliveredProperties].filter((p) => p.location);
+    toast.info(`Refreshing POI for ${allProps.length} properties...`);
+    for (const p of allProps) {
+      await refreshPoi(p);
+    }
+    toast.success("All POI caches refreshed!");
+  };
+
   const isDeliveredForm = editingType === "delivered" || form.project_type === "delivered";
 
   return (
@@ -146,7 +175,12 @@ const Admin = () => {
           <TabsContent value="properties">
         {/* ── PORTFOLIO SECTION ── */}
         <div className="mb-12">
-          <h2 className="mb-4 text-lg font-semibold">Portfolio <span className="text-sm font-normal text-muted-foreground">(drag to reorder)</span></h2>
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-semibold">Portfolio <span className="text-sm font-normal text-muted-foreground">(drag to reorder)</span></h2>
+            <Button variant="outline" size="sm" className="gap-2" onClick={refreshAllPoi}>
+              <RefreshCw className="h-3.5 w-3.5" /> Refresh All POI
+            </Button>
+          </div>
 
           {selected.size > 0 && (
             <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-primary/30 bg-primary/5 p-3">
@@ -227,6 +261,9 @@ const Admin = () => {
                                 </TableCell>
                                 <TableCell className="text-right">
                                   <div className="flex justify-end gap-1">
+                                    <Button size="icon" variant="ghost" title="Refresh POI" onClick={() => refreshPoi(p)} disabled={refreshingPoi.has(p.id)}>
+                                      <RefreshCw className={`h-4 w-4 ${refreshingPoi.has(p.id) ? "animate-spin" : ""}`} />
+                                    </Button>
                                     {isSold && (
                                       <Button size="icon" variant="ghost" title="Transfer to Delivered" onClick={() => transferToDelivered(p.id)} className="text-secondary">
                                         <ArrowRightCircle className="h-4 w-4" />
