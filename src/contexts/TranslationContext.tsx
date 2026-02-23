@@ -11,6 +11,7 @@ export const LANGUAGES = [
   { code: "fr", label: "Français", flag: "🇫🇷" },
   { code: "hi", label: "हिन्दी", flag: "🇮🇳" },
   { code: "he", label: "עברית", flag: "🇮🇱" },
+  { code: "tr", label: "Türkçe", flag: "🇹🇷" },
 ];
 
 interface TranslationContextType {
