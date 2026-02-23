@@ -53,8 +53,10 @@ const POI_ICONS: Record<string, LucideIcon> = {
   "Parks": TreePine,
 };
 
-// Simple in-memory cache for AI POI results
-const poiCache: Record<string, string[]> = {};
+interface PoiEntry {
+  name: string;
+  distance: string;
+}
 
 interface Props {
   property: Property | null;
@@ -68,41 +70,33 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
   const [imgIdx, setImgIdx] = useState(0);
   const [swipeY, setSwipeY] = useState(0);
   const [isSwiping, setIsSwiping] = useState(false);
-  const [relevantPoi, setRelevantPoi] = useState<string[] | null>(null);
+  const [poiEntries, setPoiEntries] = useState<PoiEntry[] | null>(null);
   const [poiLoading, setPoiLoading] = useState(false);
   const touchStartY = useRef(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Fetch AI-determined relevant POIs when modal opens
+  // Fetch POI with distances when modal opens
   useEffect(() => {
     if (!open || !property?.location) {
-      setRelevantPoi(null);
-      return;
-    }
-
-    const location = property.location;
-
-    // Check cache first
-    if (poiCache[location]) {
-      setRelevantPoi(poiCache[location]);
+      setPoiEntries(null);
       return;
     }
 
     setPoiLoading(true);
     supabase.functions
-      .invoke("location-poi", { body: { location } })
+      .invoke("location-poi", {
+        body: { location: property.location, property_id: property.id },
+      })
       .then(({ data, error }) => {
         if (error) {
           console.error("POI fetch error:", error);
-          setRelevantPoi(null);
+          setPoiEntries(null);
         } else {
-          const poi = data?.poi || [];
-          poiCache[location] = poi;
-          setRelevantPoi(poi);
+          setPoiEntries(data?.poi || []);
         }
       })
       .finally(() => setPoiLoading(false));
-  }, [open, property?.location]);
+  }, [open, property?.id, property?.location]);
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     const el = scrollRef.current;
@@ -130,17 +124,17 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
 
   if (!property) return null;
 
-  // Merge AI-relevant POIs with any property-specific ones
-  const DEFAULT_POI = [
-    "Airport", "Sea", "Ports", "Train Stations", "Motorway Access",
-    "Schools", "Supermarket", "Pharmacies", "Hospitals", "Parthenon", "Parks",
-  ];
-  const basePoi = relevantPoi ?? DEFAULT_POI;
-  const allPoi = Array.from(new Set([...basePoi, ...property.poi.filter(Boolean)]));
-
   const images = property.images.length > 0 ? property.images : ["/placeholder.svg"];
   const currentImg = images[imgIdx % images.length];
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
+
+  // Build POI display list
+  const DEFAULT_POI: PoiEntry[] = [
+    "Airport", "Sea", "Ports", "Train Stations", "Motorway Access",
+    "Schools", "Supermarket", "Pharmacies", "Hospitals", "Parthenon", "Parks",
+  ].map((name) => ({ name, distance: "" }));
+
+  const displayPoi = poiEntries ?? DEFAULT_POI;
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -235,7 +229,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
             )}
           </div>
 
-          {/* POI pills */}
+          {/* POI pills with distance */}
           <Separator className="bg-border" />
           <div>
             <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -243,12 +237,15 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
               {poiLoading && <Loader2 className="ml-2 inline h-3 w-3 animate-spin" />}
             </h4>
             <div className="flex flex-wrap gap-1.5">
-              {allPoi.map((p) => {
-                const Icon = POI_ICONS[p] || MapPin;
+              {displayPoi.map((entry) => {
+                const Icon = POI_ICONS[entry.name] || MapPin;
                 return (
-                  <Badge key={p} variant="secondary" className="gap-1.5 rounded-full px-3 py-1 text-xs">
+                  <Badge key={entry.name} variant="secondary" className="gap-1.5 rounded-full px-3 py-1 text-xs">
                     <Icon className="h-3 w-3" />
-                    {p}
+                    {entry.name}
+                    {entry.distance && (
+                      <span className="ml-0.5 text-primary font-medium">· {entry.distance}</span>
+                    )}
                   </Badge>
                 );
               })}
