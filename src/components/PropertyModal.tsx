@@ -68,6 +68,13 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
 
   if (!property) return null;
 
+  const DEFAULT_POI = [
+    "Airport", "Sea", "Ports", "Train Stations", "Motorway Access",
+    "Schools", "Supermarket", "Pharmacies", "Hospitals", "Parthenon", "Parks",
+  ];
+  // Merge default POIs with any property-specific ones (deduplicated)
+  const allPoi = Array.from(new Set([...DEFAULT_POI, ...property.poi.filter(Boolean)]));
+
   const images = property.images.length > 0 ? property.images : ["/placeholder.svg"];
   const currentImg = images[imgIdx % images.length];
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
@@ -166,23 +173,19 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
           </div>
 
           {/* POI pills */}
-          {property.poi.filter(Boolean).length > 0 && (
-            <>
-              <Separator className="bg-border" />
-              <div>
-                <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Points of Interest
-                </h4>
-                <div className="flex flex-wrap gap-1.5">
-                  {property.poi.filter(Boolean).map((p) => (
-                    <Badge key={p} variant="secondary" className="rounded-full px-3 py-1 text-xs">
-                      {p}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
+          <Separator className="bg-border" />
+          <div>
+            <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Points of Interest
+            </h4>
+            <div className="flex flex-wrap gap-1.5">
+              {allPoi.map((p) => (
+                <Badge key={p} variant="secondary" className="rounded-full px-3 py-1 text-xs">
+                  {p}
+                </Badge>
+              ))}
+            </div>
+          </div>
 
           {/* Tags pills */}
           {property.tags.filter(Boolean).length > 0 && (
