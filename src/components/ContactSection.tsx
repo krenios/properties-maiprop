@@ -1,7 +1,8 @@
-import { Check, Sparkles, Mail } from "lucide-react";
+import { Check, Sparkles, Mail, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { useTranslation } from "@/contexts/TranslationContext";
+import { useLeadBot } from "@/components/LeadBotProvider";
 
 const bullets = [
 "Pre-verified properties with full compliance",
@@ -10,6 +11,7 @@ const bullets = [
 
 const ContactSection = () => {
 const { t } = useTranslation();
+const { openWithLocation } = useLeadBot();
 return (
 <section id="contact" className="relative overflow-hidden bg-background py-16 sm:py-28">
     <div className="pointer-events-none absolute left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/15 blur-[150px]" />
@@ -48,6 +50,9 @@ return (
               <a href="mailto:kr@maiprop.co">
                 <Mail className="h-5 w-5" /> {t("Mail Us")}
               </a>
+            </Button>
+            <Button size="lg" variant="outline" className="gap-2 rounded-full border-primary/50 px-8 sm:px-12 text-base sm:text-lg font-semibold w-full sm:w-auto" onClick={() => openWithLocation("")}>
+              <MessageCircle className="h-5 w-5" /> {t("Talk to Us")}
             </Button>
           </div>
         </div>
