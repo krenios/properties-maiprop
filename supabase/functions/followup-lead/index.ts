@@ -108,15 +108,18 @@ async function generateStep1(lead: any, supabase: any, LOVABLE_API_KEY: string) 
 
   const topProps = props || [];
 
+  const budgetStr = `€${Number(lead.investment_budget).toLocaleString()}`;
   const prompt = `You are mAI Prop's investment advisor. Write a SHORT follow-up email (max 8 lines) for a Golden Visa lead who hasn't responded yet.
 
-Lead: ${escapeHtml(lead.full_name)}, ${escapeHtml(lead.nationality)}, budget €${Number(lead.investment_budget).toLocaleString()}, prefers ${escapeHtml(lead.preferred_location || "Greece")}.
+Lead: ${escapeHtml(lead.full_name)}, ${escapeHtml(lead.nationality)}, budget ${budgetStr}, prefers ${escapeHtml(lead.preferred_location || "Greece")}.
 
-Theme: NEW LISTINGS & MARKET OPPORTUNITY
-- Mention that new properties matching their criteria just became available
-- Create urgency: best properties get reserved quickly
-- Mention our renovation before/after transformations
-- End with invitation to book a 15-minute call
+CRITICAL: Centre the entire email around their ${budgetStr} budget:
+- Open by referencing their specific budget and what it unlocks right now
+- Explain what ${budgetStr} can get them: apartment size, location tier, expected rental yield
+- If budget is ≥€250k mention Golden Visa eligibility at this price point
+- If budget is <€250k mention high-yield renovation flips or rental income strategies
+- Mention that properties in this price range are moving fast
+- End with invitation to book a 15-minute call to discuss ${budgetStr}-range options
 
 Do NOT list specific property details. Property cards with images will appear below.
 Do NOT use markdown. Plain text only. Sign off: "The mAI Prop Team"`;
@@ -208,16 +211,19 @@ async function generateStep2(lead: any, supabase: any, LOVABLE_API_KEY: string) 
     </a>`;
   }).join("");
 
+  const budgetStr = `€${Number(lead.investment_budget).toLocaleString()}`;
   const prompt = `You are mAI Prop's senior investment advisor. Write a personalized follow-up email (max 10 lines) for a Golden Visa lead.
 
-Lead: ${escapeHtml(lead.full_name)}, ${escapeHtml(lead.nationality)}, budget €${Number(lead.investment_budget).toLocaleString()}, prefers ${escapeHtml(lead.preferred_location || "Greece")}.
+Lead: ${escapeHtml(lead.full_name)}, ${escapeHtml(lead.nationality)}, budget ${budgetStr}, prefers ${escapeHtml(lead.preferred_location || "Greece")}.
 
-Theme: DETAILED PORTFOLIO REVIEW
-- Reference that you've done a detailed analysis of their investment profile
-- Mention exclusive properties with full renovation packages
-- Highlight rental income potential and capital appreciation
-- Mention our end-to-end service: legal, renovation, property management
-- Invite them for a video call walkthrough of the properties
+CRITICAL: Make the entire email a ${budgetStr} investment breakdown:
+- Open with: "We've analysed what ${budgetStr} can achieve in the Greek property market"
+- Break down how their budget maps to: property acquisition, renovation costs, legal fees, and expected returns
+- Mention specific ROI projections for the ${budgetStr} range (e.g. rental yield %, capital appreciation)
+- If budget ≥€250k: emphasise Golden Visa + passive income combo at this tier
+- If budget <€250k: focus on high-yield renovation projects and rental returns
+- Mention our end-to-end service covers everything within their budget
+- Invite them for a video call to walk through the ${budgetStr} investment plan
 
 Do NOT list specific property details. Detailed property cards appear below.
 Do NOT use markdown. Plain text only. Sign off: "The mAI Prop Team"`;
@@ -239,23 +245,23 @@ Do NOT use markdown. Plain text only. Sign off: "The mAI Prop Team"`;
 async function generateStep3(lead: any, supabase: any, LOVABLE_API_KEY: string) {
   const firstName = escapeHtml(lead.full_name.split(" ")[0]);
 
+  const budgetStr = `€${Number(lead.investment_budget).toLocaleString()}`;
   const prompt = `You are mAI Prop's Golden Visa specialist. Write a compelling email (max 12 lines) about the Greek Golden Visa benefits for a lead who hasn't converted yet.
 
-Lead: ${escapeHtml(lead.full_name)}, ${escapeHtml(lead.nationality)}, budget €${Number(lead.investment_budget).toLocaleString()}.
+Lead: ${escapeHtml(lead.full_name)}, ${escapeHtml(lead.nationality)}, budget ${budgetStr}.
 
-Theme: GOLDEN VISA BENEFITS & URGENCY
-Cover these key benefits with bullet points (use • character):
-• EU Residency — live, work & travel across 27 Schengen countries
-• Family Inclusion — spouse, children under 21, and parents in one application
-• Fast Processing — permanent residency in 6-9 months
-• No Minimum Stay — maintain residency without living in Greece
-• Strong Returns — 8%+ annual appreciation + rental income
-• Path to Citizenship — eligible after 7 years of residency
+CRITICAL: Frame every benefit through the lens of their ${budgetStr} budget:
+Cover these benefits with bullet points (use • character), tying each to their budget:
+• EU Residency — at ${budgetStr}, they qualify for full Schengen access across 27 countries
+• Family Inclusion — their ${budgetStr} investment covers the whole family (spouse, children, parents)
+• Strong Returns — at this price point, expect X% rental yield + capital appreciation
+• Fast Processing — from signing to residency in 6-9 months
+• No Minimum Stay — earn returns on their ${budgetStr} property without relocating
 
 After the bullets, add 2-3 lines about:
-- Recent program changes making it more competitive (higher thresholds coming)
-- Limited availability at current investment levels
-- Final invitation to schedule a consultation before prices increase
+- The minimum threshold is rising — their ${budgetStr} budget qualifies NOW but may not later
+- At current prices, ${budgetStr} buys significantly more than it will in 12 months
+- Final invitation to lock in their ${budgetStr} investment before thresholds increase
 
 Do NOT use markdown formatting. Use • for bullets. Plain text only. Sign off: "The mAI Prop Team"`;
 
