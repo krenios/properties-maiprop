@@ -49,14 +49,6 @@ const HeroSection = () => {
             {t("Start Your Golden Visa")} <ArrowRight className="h-4 w-4" />
         </Button>
         <Button
-          variant="outline"
-          size="lg"
-          className="gap-2 rounded-full border-primary/50 px-8 w-full sm:w-auto"
-          onClick={() => openWithLocation("")}
-        >
-          {t("Talk to Us")}
-        </Button>
-        <Button
           asChild
           variant="outline"
           size="lg"
