@@ -58,12 +58,22 @@ Deno.serve(async (req) => {
       ? `${property.images[0]}?width=1200&height=630&fit=cover`
       : `${BASE_URL}/og-image.png`;
 
-    const title = escapeHtml(`${property.title} | ${property.location} | mAI Investments`);
+    const rawTitle = `${property.title} | ${property.location} | mAI Investments`;
+    const title = escapeHtml(rawTitle.length > 60 ? `${property.title} | mAI Investments` : rawTitle);
     const description = escapeHtml(
       property.description
         ? property.description.slice(0, 155) + (property.description.length > 155 ? "…" : "")
         : `${property.title} in ${property.location}, Greece.${property.price ? ` €${property.price.toLocaleString()}` : ""}${property.size ? ` · ${property.size} m²` : ""} Golden Visa eligible property.`
     );
+    const keywords = escapeHtml([
+      `Golden Visa ${property.location}`,
+      `${property.location} real estate investment`,
+      `Greek Golden Visa property`,
+      `EU residency ${property.location}`,
+      `Greece property investment`,
+      ...(property.tags?.filter(Boolean).slice(0, 4) ?? []),
+      property.bedrooms ? `${property.bedrooms} bedroom apartment Greece` : null,
+    ].filter(Boolean).join(", "));
     const safeOgImage = escapeHtml(ogImage);
     const safePageUrl = escapeHtml(pageUrl);
 
@@ -108,10 +118,11 @@ Deno.serve(async (req) => {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${title}</title>
   <meta name="description" content="${description}" />
+  <meta name="keywords" content="${keywords}" />
   <link rel="canonical" href="${safePageUrl}" />
 
   <!-- Open Graph -->
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content="product" />
   <meta property="og:url" content="${safePageUrl}" />
   <meta property="og:title" content="${title}" />
   <meta property="og:description" content="${description}" />
