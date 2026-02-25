@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import SectionDivider from "@/components/SectionDivider";
@@ -64,7 +64,19 @@ const faqJsonLd = {
   ],
 };
 
-const Index = () => (
+const Index = () => {
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash) return;
+    // Use a fixed delay to allow all lazy sections to render before scrolling
+    const timer = setTimeout(() => {
+      const el = document.querySelector(hash);
+      el?.scrollIntoView({ behavior: "smooth" });
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
   <main
     className="min-h-screen bg-background overflow-x-hidden"
     role="main"
@@ -76,35 +88,35 @@ const Index = () => (
       <Navbar />
       <HeroSection />
       <SectionDivider />
-      <Suspense fallback={<div className="min-h-[400px]" />}>
+      <Suspense fallback={<div className="min-h-[300px]" />}>
         <GoldenVisaStats />
       </Suspense>
       <SectionDivider />
-      <Suspense fallback={<div className="min-h-[400px]" />}>
+      <Suspense fallback={<div className="min-h-[1200px]" />}>
         <InvestmentOpportunities />
       </Suspense>
       <SectionDivider />
-      <Suspense fallback={<div className="min-h-[400px]" />}>
+      <Suspense fallback={<div className="min-h-[600px]" />}>
         <DeliveredProjects />
       </Suspense>
       <SectionDivider />
-      <Suspense fallback={<div className="min-h-[400px]" />}>
+      <Suspense fallback={<div className="min-h-[500px]" />}>
         <PlatformReference />
       </Suspense>
       <SectionDivider />
-      <Suspense fallback={<div className="min-h-[400px]" />}>
+      <Suspense fallback={<div className="min-h-[500px]" />}>
         <ValueSection />
       </Suspense>
       <SectionDivider />
-      <Suspense fallback={<div className="min-h-[400px]" />}>
+      <Suspense fallback={<div className="min-h-[600px]" />}>
         <JourneySection />
       </Suspense>
       <SectionDivider />
-      <Suspense fallback={<div className="min-h-[400px]" />}>
+      <Suspense fallback={<div className="min-h-[600px]" />}>
         <FaqSection />
       </Suspense>
       <SectionDivider />
-      <Suspense fallback={<div className="min-h-[400px]" />}>
+      <Suspense fallback={<div className="min-h-[500px]" />}>
         <ContactSection />
       </Suspense>
       <footer className="border-t border-border bg-background text-center py-[12px]" role="contentinfo">
@@ -166,6 +178,7 @@ const Index = () => (
       </Suspense>
     </LeadBotProvider>
   </main>
-);
+  );
+};
 
 export default Index;
