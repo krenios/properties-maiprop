@@ -1,11 +1,11 @@
-import { useState } from "react";
 import { Property } from "@/data/properties";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, MessageCircle, ExternalLink, Share2, Check } from "lucide-react";
+import { MapPin, MessageCircle, ExternalLink, Share2 } from "lucide-react";
 import { useLeadBot } from "@/components/LeadBotProvider";
 import { optimizeImage } from "@/lib/optimizeImage";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 interface Props {
   property: Property;
@@ -21,7 +21,6 @@ const statusColors: Record<string, string> = {
 
 const PropertyCard = ({ property, onClick }: Props) => {
   const { openWithLocation } = useLeadBot();
-  const [copied, setCopied] = useState(false);
 
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -36,12 +35,10 @@ const PropertyCard = ({ property, onClick }: Props) => {
     } else {
       try {
         await navigator.clipboard.writeText(shareUrl);
+        toast.success("Link copied!", { description: "Property link copied to clipboard." });
       } catch {
         window.prompt("Copy this link:", shareUrl);
-        return;
       }
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -125,7 +122,7 @@ const PropertyCard = ({ property, onClick }: Props) => {
           aria-label="Share property"
           title="Share this property"
         >
-          {copied ? <Check className="h-3.5 w-3.5 text-primary" /> : <Share2 className="h-3.5 w-3.5" />}
+          <Share2 className="h-3.5 w-3.5" />
         </button>
       </div>
     </div>

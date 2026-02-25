@@ -1,7 +1,8 @@
 import { useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useProperties } from "@/contexts/PropertyContext";
-import { CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag, ExternalLink, ChevronLeft, ChevronRight, Building, Calendar, Share2, Check } from "lucide-react";
+import { CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag, ExternalLink, ChevronLeft, ChevronRight, Building, Calendar, Share2 } from "lucide-react";
+import { toast } from "sonner";
 import { optimizeImage } from "@/lib/optimizeImage";
 import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -115,7 +116,6 @@ interface ModalProps {
 
 const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
   const [imgIdx, setImgIdx] = useState(0);
-  const [copied, setCopied] = useState(false);
 
   const handleShare = async () => {
     if (!property) return;
@@ -130,12 +130,10 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
     } else {
       try {
         await navigator.clipboard.writeText(shareUrl);
+        toast.success("Link copied!", { description: "Property link copied to clipboard." });
       } catch {
         window.prompt("Copy this link:", shareUrl);
-        return;
       }
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -255,7 +253,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
               className="gap-1.5 rounded-full px-3 py-1.5 h-auto text-sm font-normal"
               onClick={handleShare}
             >
-              {copied ? <><Check className="h-3.5 w-3.5 text-primary" /> Copied!</> : <><Share2 className="h-3.5 w-3.5" /> Share</>}
+              <><Share2 className="h-3.5 w-3.5" /> Share</>
             </Button>
           </div>
 
