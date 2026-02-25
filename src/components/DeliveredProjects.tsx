@@ -245,6 +245,14 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
                 <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" /> {property.yield}
               </Badge>
             }
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1.5 rounded-full px-3 py-1.5 h-auto text-sm font-normal"
+              onClick={handleShare}
+            >
+              {copied ? <><Check className="h-3.5 w-3.5 text-primary" /> Copied!</> : <><Share2 className="h-3.5 w-3.5" /> Share</>}
+            </Button>
           </div>
 
           {/* Before & After Slider */}
@@ -254,18 +262,6 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
               <BeforeAfterSlider before={property.before_image!} after={property.after_image!} />
             </div>
           }
-
-          {/* CTA row */}
-          <div className="pt-1">
-            <Button
-              variant="outline"
-              size="sm"
-              className="gap-2 rounded-full px-4"
-              onClick={handleShare}
-            >
-              {copied ? <><Check className="h-3.5 w-3.5 text-primary" /> Copied!</> : <><Share2 className="h-3.5 w-3.5" /> Share</>}
-            </Button>
-          </div>
 
         </div>
       </DialogContent>
