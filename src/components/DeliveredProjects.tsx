@@ -62,26 +62,39 @@ const DeliveredProjects = () => {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {delivered.map((p) =>
             <RevealItem key={p.id}>
-              <button
-                onClick={() => setSelected(p)}
-                className="group w-full overflow-hidden rounded-xl border border-border bg-card text-left transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5">
-                <div className="relative aspect-video overflow-hidden">
-                  <img
-                    src={optimizeImage(p.images[0] || p.after_image || "/placeholder.svg", { width: 600, height: 400 })}
-                    alt={`${p.title} — delivered Golden Visa property in ${p.location}`}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform group-hover:scale-105 rounded-2xl" />
-                  <Badge className="absolute right-3 top-3 border-none bg-primary/90 text-primary-foreground">
-                    Delivered
-                  </Badge>
+              <div className="group overflow-hidden rounded-xl border border-border bg-card text-left transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5">
+                <button
+                  onClick={() => setSelected(p)}
+                  className="w-full text-left">
+                  <div className="relative aspect-video overflow-hidden">
+                    <img
+                      src={optimizeImage(p.images[0] || p.after_image || "/placeholder.svg", { width: 600, height: 400 })}
+                      alt={`${p.title} — delivered Golden Visa property in ${p.location}`}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform group-hover:scale-105 rounded-2xl" />
+                    <Badge className="absolute right-3 top-3 border-none bg-primary/90 text-primary-foreground">
+                      Delivered
+                    </Badge>
+                  </div>
+                  <div className="p-4 pb-2">
+                    <h3 className="font-semibold">{p.title}</h3>
+                    <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+                      <MapPin className="h-3 w-3" /> {p.location}
+                    </p>
+                  </div>
+                </button>
+                <div className="flex gap-2 px-4 pb-4">
+                  <Link
+                    to={`/property/${p.id}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+                    aria-label="View full property page"
+                    title="View full property page"
+                  >
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </Link>
                 </div>
-                <div className="p-4">
-                  <h3 className="font-semibold">{p.title}</h3>
-                  <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-                    <MapPin className="h-3 w-3" /> {p.location}
-                  </p>
-                </div>
-              </button>
+              </div>
             </RevealItem>
             )}
           </div>
@@ -243,14 +256,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
           }
 
           {/* CTA row */}
-          <div className="flex items-center gap-2 pt-1">
-            <Link
-              to={`/property/${property.id}`}
-              className="flex flex-1 h-9 items-center justify-center gap-2 rounded-full border border-primary/30 px-4 text-sm font-medium text-primary hover:bg-primary/10 transition-colors"
-              onClick={() => onClose()}
-            >
-              <ExternalLink className="h-3.5 w-3.5" /> View Full Property Page
-            </Link>
+          <div className="pt-1">
             <Button
               variant="outline"
               size="sm"
