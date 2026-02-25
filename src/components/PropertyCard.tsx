@@ -25,17 +25,16 @@ const PropertyCard = ({ property, onClick }: Props) => {
 
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    const SUPABASE_PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-    const ogShareUrl = `https://${SUPABASE_PROJECT_ID}.supabase.co/functions/v1/og-meta?id=${property.id}`;
+    const shareUrl = `${window.location.origin}/property/${property.id}`;
     const shareData = {
       title: property.title,
       text: `${property.title} — Golden Visa property in ${property.location}, Greece${property.price ? ` · €${property.price.toLocaleString()}` : ""}`,
-      url: ogShareUrl,
+      url: shareUrl,
     };
     if (navigator.share && navigator.canShare?.(shareData)) {
       try { await navigator.share(shareData); } catch { /* cancelled */ }
     } else {
-      await navigator.clipboard.writeText(ogShareUrl);
+      await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
