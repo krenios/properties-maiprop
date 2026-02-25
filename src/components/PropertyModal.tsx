@@ -145,17 +145,23 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent
         onClick={(e) => e.stopPropagation()}
-        className="max-h-[100dvh] max-w-4xl overflow-y-auto border-border bg-card p-0 [-webkit-overflow-scrolling:touch] max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[90vh]"
+        onPointerDownOutside={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
+        className="max-h-[100dvh] max-w-4xl overflow-hidden border-border bg-card p-0 max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[90vh]"
         style={{
           transform: swipeY > 0 ? `translateY(${swipeY}px)` : undefined,
           opacity: swipeY > 0 ? Math.max(1 - swipeY / 300, 0.5) : undefined,
           transition: isSwiping ? 'none' : 'transform 0.3s ease, opacity 0.3s ease',
         }}
-        ref={scrollRef}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
       >
+        {/* Inner scroll container — swipe gestures attach here */}
+        <div
+          ref={scrollRef}
+          className="h-full max-h-[100dvh] overflow-y-auto [-webkit-overflow-scrolling:touch] sm:max-h-[90vh]"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
         {/* Swipe indicator for mobile */}
         <div className="flex justify-center pt-2 sm:hidden">
           <div className="h-1 w-10 rounded-full bg-muted-foreground/30" />
@@ -354,6 +360,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
             </>
           )}
         </div>
+        </div>{/* end inner scroll container */}
       </DialogContent>
     </Dialog>
   );
