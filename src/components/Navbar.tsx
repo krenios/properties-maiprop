@@ -46,7 +46,11 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
   const handleClick = (href: string) => {
     setMobileOpen(false);
     const el = document.querySelector(href);
-    el?.scrollIntoView({ behavior: "smooth" });
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.location.href = `/${href}`;
+    }
   };
 
   return (
