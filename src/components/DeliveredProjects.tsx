@@ -218,7 +218,17 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
 
         <div className="space-y-3 p-4">
           <DialogHeader>
-            <DialogTitle className="text-xl">{property.title}</DialogTitle>
+            <div className="flex items-center justify-between gap-2">
+              <DialogTitle className="text-xl">{property.title}</DialogTitle>
+              <button
+                onClick={handleShare}
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+                aria-label="Share property"
+                title="Share property"
+              >
+                <Share2 className="h-3.5 w-3.5" />
+              </button>
+            </div>
             <button
               onClick={() => window.open(mapsUrl, "_blank")}
               className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary">
@@ -239,17 +249,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
             </div>
           }
 
-          <div className="flex items-start gap-2">
-            <p className="flex-1 text-sm text-muted-foreground">{property.description}</p>
-            <button
-              onClick={handleShare}
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
-              aria-label="Share property"
-              title="Share property"
-            >
-              <Share2 className="h-3.5 w-3.5" />
-            </button>
-          </div>
+          <p className="text-sm text-muted-foreground">{property.description}</p>
 
           {/* Property Specs as pills */}
           <div className="flex flex-wrap gap-2">
