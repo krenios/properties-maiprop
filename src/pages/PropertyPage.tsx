@@ -96,12 +96,12 @@ const PropertyPageInner = () => {
     const shareData = {
       title: property.title,
       text: `${property.title} — Golden Visa property in ${property.location}, Greece${property.price ? ` · €${property.price.toLocaleString()}` : ""}`,
-      url: ogShareUrl,
+      url: pageUrl,
     };
     if (navigator.share && navigator.canShare?.(shareData)) {
       try { await navigator.share(shareData); } catch { /* user cancelled */ }
     } else {
-      await navigator.clipboard.writeText(ogShareUrl);
+      await navigator.clipboard.writeText(pageUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }

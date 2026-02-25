@@ -119,17 +119,16 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
 
   const handleShare = async () => {
     if (!property) return;
-    const SUPABASE_PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-    const ogShareUrl = `https://${SUPABASE_PROJECT_ID}.supabase.co/functions/v1/og-meta?id=${property.id}`;
+    const shareUrl = `${window.location.origin}/property/${property.id}`;
     const shareData = {
       title: property.title,
       text: `${property.title} — Delivered Golden Visa property in ${property.location}, Greece`,
-      url: ogShareUrl,
+      url: shareUrl,
     };
     if (navigator.share && navigator.canShare?.(shareData)) {
       try { await navigator.share(shareData); } catch { /* user cancelled */ }
     } else {
-      await navigator.clipboard.writeText(ogShareUrl);
+      await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
