@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from "react";
+import { Link } from "react-router-dom";
 import { useProperties } from "@/contexts/PropertyContext";
-import { CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag, MessageCircle, ExternalLink, ChevronLeft, ChevronRight, Building, Calendar, Share2, Check } from "lucide-react";
+import { CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag, ExternalLink, ChevronLeft, ChevronRight, Building, Calendar, Share2, Check } from "lucide-react";
 import { optimizeImage } from "@/lib/optimizeImage";
 import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -241,15 +242,22 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
             </div>
           }
 
-          {/* Share button */}
-          <div className="pt-1">
+          {/* CTA row */}
+          <div className="flex items-center gap-2 pt-1">
+            <Link
+              to={`/property/${property.id}`}
+              className="flex flex-1 h-9 items-center justify-center gap-2 rounded-full border border-primary/30 px-4 text-sm font-medium text-primary hover:bg-primary/10 transition-colors"
+              onClick={() => onClose()}
+            >
+              <ExternalLink className="h-3.5 w-3.5" /> View Full Property Page
+            </Link>
             <Button
               variant="outline"
               size="sm"
-              className="gap-2 rounded-full"
+              className="gap-2 rounded-full px-4"
               onClick={handleShare}
             >
-              {copied ? <><Check className="h-3.5 w-3.5 text-primary" /> Link Copied!</> : <><Share2 className="h-3.5 w-3.5" /> Share This Property</>}
+              {copied ? <><Check className="h-3.5 w-3.5 text-primary" /> Copied!</> : <><Share2 className="h-3.5 w-3.5" /> Share</>}
             </Button>
           </div>
 
