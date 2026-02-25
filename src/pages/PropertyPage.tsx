@@ -13,7 +13,7 @@ import {
   ExternalLink, Building, Calendar, LayoutGrid, FileText,
   Plane, Waves, Anchor, TrainFront, Car, GraduationCap,
   ShoppingCart, Cross, Heart, Landmark, TreePine, Loader2,
-  ArrowLeft, MessageCircle,
+  ArrowLeft, MessageCircle, Share2, Check, Copy,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -47,6 +47,7 @@ const PropertyPageInner = () => {
   const [imgIdx, setImgIdx] = useState(0);
   const [poiEntries, setPoiEntries] = useState<PoiEntry[] | null>(null);
   const [poiLoading, setPoiLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -81,6 +82,10 @@ const PropertyPageInner = () => {
   const currentImg = images[imgIdx % images.length];
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
   const pageUrl = `${BASE_URL}/property/${property.id}`;
+  // og-meta edge function URL — used as the share URL so social bots (WhatsApp, LinkedIn, etc.)
+  // receive pre-rendered OG tags; real users are redirected back to the SPA by the function.
+  const SUPABASE_PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+  const ogShareUrl = `https://${SUPABASE_PROJECT_ID}.supabase.co/functions/v1/og-meta?id=${property.id}`;
   const ogImage = images[0] ? optimizeImage(images[0], { width: 1200, height: 630 }) : `${BASE_URL}/og-image.png`;
 
   const DEFAULT_POI: PoiEntry[] = [
@@ -88,6 +93,21 @@ const PropertyPageInner = () => {
     "Schools", "Supermarket", "Pharmacies", "Hospitals", "Parthenon", "Parks",
   ].map((name) => ({ name, distance: "" }));
   const displayPoi = poiEntries ?? DEFAULT_POI;
+
+  const handleShare = async () => {
+    const shareData = {
+      title: property.title,
+      text: `${property.title} — Golden Visa property in ${property.location}, Greece${property.price ? ` · €${property.price.toLocaleString()}` : ""}`,
+      url: ogShareUrl,
+    };
+    if (navigator.share && navigator.canShare?.(shareData)) {
+      try { await navigator.share(shareData); } catch { /* user cancelled */ }
+    } else {
+      await navigator.clipboard.writeText(ogShareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   // Breadcrumb JSON-LD
   const breadcrumbLd = {
@@ -274,6 +294,19 @@ const PropertyPageInner = () => {
             <Button size="lg" className="gap-2 rounded-full px-8"
               onClick={() => openWithLocation(property.location)}>
               <MessageCircle className="h-5 w-5" /> Inquire About This Property
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="gap-2 rounded-full px-6"
+              onClick={handleShare}
+              aria-label="Share this property"
+            >
+              {copied ? (
+                <><Check className="h-4 w-4 text-primary" /> Link Copied!</>
+              ) : (
+                <><Share2 className="h-4 w-4" /> Share</>
+              )}
             </Button>
           </div>
 
