@@ -80,15 +80,39 @@ const DeliveredProjects = () => {
                   <div className="p-4 pb-3">
                     <div className="flex items-start justify-between gap-2">
                       <h3 className="font-semibold leading-snug">{p.title}</h3>
-                      <Link
-                        to={`/property/${p.id}`}
-                        onClick={(e) => e.stopPropagation()}
-                        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
-                        aria-label="View full property page"
-                        title="View full property page"
-                      >
-                        <ExternalLink className="h-3 w-3" />
-                      </Link>
+                      <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                        <button
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            const shareUrl = `${window.location.origin}/property/${p.id}`;
+                            const shareData = { title: p.title, url: shareUrl };
+                            if (navigator.share && navigator.canShare?.(shareData)) {
+                              try { await navigator.share(shareData); } catch { /* cancelled */ }
+                            } else {
+                              try {
+                                await navigator.clipboard.writeText(shareUrl);
+                                toast.success("Link copied!", { description: "Property link copied to clipboard." });
+                              } catch {
+                                window.prompt("Copy this link:", shareUrl);
+                              }
+                            }
+                          }}
+                          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+                          aria-label="Share property"
+                          title="Share property"
+                        >
+                          <Share2 className="h-3 w-3" />
+                        </button>
+                        <Link
+                          to={`/property/${p.id}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+                          aria-label="View full property page"
+                          title="View full property page"
+                        >
+                          <ExternalLink className="h-3 w-3" />
+                        </Link>
+                      </div>
                     </div>
                     <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
                       <MapPin className="h-3 w-3" /> {p.location}
