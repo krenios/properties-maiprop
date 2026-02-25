@@ -66,6 +66,23 @@ const PropertyPageInner = () => {
     }).finally(() => setPoiLoading(false));
   }, [property?.id, property?.location]);
 
+  // Google Ads remarketing — fires once property data is loaded
+  useEffect(() => {
+    if (!property) return;
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "page_view", {
+        send_to: "AW-17031338731",
+        value: property.price ?? undefined,
+        currency: "EUR",
+        items: [{
+          id: property.id,
+          google_business_vertical: "real_estate",
+          location_id: property.location,
+        }],
+      });
+    }
+  }, [property]);
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -173,15 +190,44 @@ const PropertyPageInner = () => {
     ? property.description.slice(0, 155) + (property.description.length > 155 ? "…" : "")
     : `${property.title} — Golden Visa property in ${property.location}, Greece.${property.price ? ` €${property.price.toLocaleString()}.` : ""}${property.size ? ` ${property.size} m².` : ""} EU residency eligible.`;
 
+  // Per-property keywords: location + tags + type
+  const keywords = [
+    `Golden Visa ${property.location}`,
+    `${property.location} real estate investment`,
+    `Greek Golden Visa property`,
+    `EU residency ${property.location}`,
+    `Greece property investment`,
+    ...(property.tags?.filter(Boolean).slice(0, 4) ?? []),
+    property.bedrooms ? `${property.bedrooms} bedroom apartment Greece` : null,
+  ].filter(Boolean).join(", ");
+
+  // LCP preload srcset for hero image
+  const heroSrc = images[0];
+  const heroPreloadSrcset = heroSrc
+    ? `${heroSrc}?width=480&quality=40&format=webp 480w, ${heroSrc}?width=800&quality=40&format=webp 800w, ${heroSrc}?width=1200&quality=55&format=webp 1200w`
+    : null;
+
+
   return (
     <>
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={description} />
+        <meta name="keywords" content={keywords} />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={pageUrl} />
+        {/* LCP preload for hero image */}
+        {heroPreloadSrcset && (
+          <link
+            rel="preload"
+            as="image"
+            type="image/webp"
+            imageSrcSet={heroPreloadSrcset}
+            imageSizes="100vw"
+          />
+        )}
         {/* Open Graph */}
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="product" />
         <meta property="og:site_name" content="mAI Investments" />
         <meta property="og:locale" content="en_US" />
         <meta property="og:url" content={pageUrl} />
