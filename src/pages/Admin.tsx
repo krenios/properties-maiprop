@@ -85,11 +85,12 @@ const Admin = () => {
     return missing;
   };
 
-  const openNew = () => { setEditingId(null); setEditingType("new"); setForm(emptyProperty); setFormOpen(true); };
+  const openNew = () => { setEditingId(null); setEditingType("new"); setForm(emptyProperty); setDescVariants([]); setDescVariantIdx(0); setFormOpen(true); };
   const openEdit = (p: Property) => {
     setEditingId(p.id);
     setEditingType(p.project_type);
     setForm({ title: p.title, description: p.description, images: p.images, before_image: p.before_image, after_image: p.after_image, price: p.price, size: p.size, bedrooms: p.bedrooms, floor_plan: p.floor_plan, location: p.location, poi: p.poi, tags: p.tags, status: p.status, project_type: p.project_type, yield: p.yield, floor: p.floor, construction_year: p.construction_year, market_report: p.market_report || "" });
+    setDescVariants([]); setDescVariantIdx(0);
     setFormOpen(true);
   };
 
@@ -124,6 +125,8 @@ const Admin = () => {
 
   const [refreshingPoi, setRefreshingPoi] = useState<Set<string>>(new Set());
   const [generatingDesc, setGeneratingDesc] = useState(false);
+  const [descVariants, setDescVariants] = useState<string[]>([]);
+  const [descVariantIdx, setDescVariantIdx] = useState(0);
 
   const generateDescription = async () => {
     setGeneratingDesc(true);
@@ -139,12 +142,24 @@ const Admin = () => {
         },
       });
       if (error) throw error;
-      if (data?.description) setForm((prev) => ({ ...prev, description: data.description }));
+      if (data?.description) {
+        const newVariants = [...descVariants, data.description];
+        setDescVariants(newVariants);
+        const newIdx = newVariants.length - 1;
+        setDescVariantIdx(newIdx);
+        setForm((prev) => ({ ...prev, description: data.description }));
+      }
     } catch (e: any) {
       toast.error(`Failed to generate description: ${e.message || "Unknown error"}`);
     } finally {
       setGeneratingDesc(false);
     }
+  };
+
+  const cycleVariant = (dir: 1 | -1) => {
+    const newIdx = (descVariantIdx + dir + descVariants.length) % descVariants.length;
+    setDescVariantIdx(newIdx);
+    setForm((prev) => ({ ...prev, description: descVariants[newIdx] }));
   };
 
   const refreshPoi = async (p: Property) => {
@@ -389,21 +404,30 @@ const Admin = () => {
               <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
             </div>
             <div className="grid gap-2">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <Label>Description</Label>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={generateDescription}
-                  disabled={generatingDesc}
-                  className="h-7 gap-1.5 rounded-full px-3 text-xs border-primary/30 text-primary hover:bg-primary/10"
-                >
-                  <Sparkles className="h-3 w-3" />
-                  {generatingDesc ? "Generating…" : "Generate with AI"}
-                </Button>
+                <div className="flex items-center gap-1">
+                  {descVariants.length > 1 && (
+                    <div className="flex items-center gap-1 rounded-full border border-border/60 bg-muted/40 px-2 py-0.5 text-xs text-muted-foreground">
+                      <button type="button" onClick={() => cycleVariant(-1)} className="hover:text-foreground disabled:opacity-30 px-0.5">‹</button>
+                      <span>{descVariantIdx + 1}/{descVariants.length}</span>
+                      <button type="button" onClick={() => cycleVariant(1)} className="hover:text-foreground disabled:opacity-30 px-0.5">›</button>
+                    </div>
+                  )}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={generateDescription}
+                    disabled={generatingDesc}
+                    className="h-7 gap-1.5 rounded-full px-3 text-xs border-primary/30 text-primary hover:bg-primary/10"
+                  >
+                    <Sparkles className="h-3 w-3" />
+                    {generatingDesc ? "Generating…" : descVariants.length === 0 ? "Generate with AI" : "Regenerate"}
+                  </Button>
+                </div>
               </div>
-              <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+              <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
