@@ -9,8 +9,9 @@ import {
   ExternalLink, Building, Calendar, LayoutGrid, FileText,
   Plane, Waves, Anchor, TrainFront, Car, GraduationCap,
   ShoppingCart, Cross, Heart, Landmark, TreePine, Loader2,
-  Share2, Check,
+  Share2,
 } from "lucide-react";
+import { toast } from "sonner";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { LucideIcon } from "lucide-react";
@@ -55,7 +56,6 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
   const [isSwiping, setIsSwiping] = useState(false);
   const [poiEntries, setPoiEntries] = useState<PoiEntry[] | null>(null);
   const [poiLoading, setPoiLoading] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   const handleShare = useCallback(async (e?: React.MouseEvent) => {
     e?.stopPropagation();
@@ -71,13 +71,10 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
     } else {
       try {
         await navigator.clipboard.writeText(shareUrl);
+        toast.success("Link copied!", { description: "Property link copied to clipboard." });
       } catch {
-        // fallback for sandboxed iframes
         window.prompt("Copy this link:", shareUrl);
-        return;
       }
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     }
   }, [property]);
   const touchStartY = useRef(0);
@@ -199,7 +196,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                 aria-label="Share property"
                 title="Share this property"
               >
-                {copied ? <Check className="h-3.5 w-3.5 text-primary" /> : <Share2 className="h-3.5 w-3.5" />}
+                {<Share2 className="h-3.5 w-3.5" />}
               </button>
             </div>
             <button

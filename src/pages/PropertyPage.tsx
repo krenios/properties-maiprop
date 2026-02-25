@@ -11,8 +11,9 @@ import {
   ExternalLink, Building, Calendar, LayoutGrid, FileText,
   Plane, Waves, Anchor, TrainFront, Car, GraduationCap,
   ShoppingCart, Cross, Heart, Landmark, TreePine, Loader2,
-  ArrowLeft, Share2, Check,
+  ArrowLeft, Share2,
 } from "lucide-react";
+import { toast } from "sonner";
 import type { LucideIcon } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
@@ -45,7 +46,6 @@ const PropertyPageInner = () => {
   const [imgIdx, setImgIdx] = useState(0);
   const [poiEntries, setPoiEntries] = useState<PoiEntry[] | null>(null);
   const [poiLoading, setPoiLoading] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -80,8 +80,6 @@ const PropertyPageInner = () => {
   const currentImg = images[imgIdx % images.length];
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
   const pageUrl = `${BASE_URL}/property/${property.id}`;
-  // og-meta edge function URL — used as the share URL so social bots (WhatsApp, LinkedIn, etc.)
-  // receive pre-rendered OG tags; real users are redirected back to the SPA by the function.
   const SUPABASE_PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID;
   const ogShareUrl = `https://${SUPABASE_PROJECT_ID}.supabase.co/functions/v1/og-meta?id=${property.id}`;
   const ogImage = images[0] ? optimizeImage(images[0], { width: 1200, height: 630 }) : `${BASE_URL}/og-image.png`;
@@ -103,12 +101,10 @@ const PropertyPageInner = () => {
     } else {
       try {
         await navigator.clipboard.writeText(pageUrl);
+        toast.success("Link copied!", { description: "Property link copied to clipboard." });
       } catch {
         window.prompt("Copy this link:", pageUrl);
-        return;
       }
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -259,7 +255,7 @@ const PropertyPageInner = () => {
                 aria-label="Share this property"
                 title="Share this property"
               >
-                {copied ? <Check className="h-4 w-4 text-primary" /> : <Share2 className="h-4 w-4" />}
+                {<Share2 className="h-4 w-4" />}
               </button>
             </div>
             <button onClick={() => window.open(mapsUrl, "_blank")}
