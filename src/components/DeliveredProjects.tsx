@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 import { useProperties } from "@/contexts/PropertyContext";
-import { CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag, MessageCircle, ExternalLink, ChevronLeft, ChevronRight, Building, Calendar } from "lucide-react";
+import { CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag, MessageCircle, ExternalLink, ChevronLeft, ChevronRight, Building, Calendar, Share2, Check } from "lucide-react";
 import { optimizeImage } from "@/lib/optimizeImage";
 import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -101,6 +101,25 @@ interface ModalProps {
 
 const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
   const [imgIdx, setImgIdx] = useState(0);
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = async () => {
+    if (!property) return;
+    const SUPABASE_PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+    const ogShareUrl = `https://${SUPABASE_PROJECT_ID}.supabase.co/functions/v1/og-meta?id=${property.id}`;
+    const shareData = {
+      title: property.title,
+      text: `${property.title} — Delivered Golden Visa property in ${property.location}, Greece`,
+      url: ogShareUrl,
+    };
+    if (navigator.share && navigator.canShare?.(shareData)) {
+      try { await navigator.share(shareData); } catch { /* user cancelled */ }
+    } else {
+      await navigator.clipboard.writeText(ogShareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   if (!property) return null;
 
@@ -221,6 +240,18 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
               <BeforeAfterSlider before={property.before_image!} after={property.after_image!} />
             </div>
           }
+
+          {/* Share button */}
+          <div className="pt-1">
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-2 rounded-full"
+              onClick={handleShare}
+            >
+              {copied ? <><Check className="h-3.5 w-3.5 text-primary" /> Link Copied!</> : <><Share2 className="h-3.5 w-3.5" /> Share This Property</>}
+            </Button>
+          </div>
 
         </div>
       </DialogContent>
