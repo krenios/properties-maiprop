@@ -76,24 +76,24 @@ const DeliveredProjects = () => {
                       Delivered
                     </Badge>
                   </div>
-                  <div className="p-4 pb-2">
-                    <h3 className="font-semibold">{p.title}</h3>
+                  <div className="p-4 pb-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="font-semibold leading-snug">{p.title}</h3>
+                      <Link
+                        to={`/property/${p.id}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+                        aria-label="View full property page"
+                        title="View full property page"
+                      >
+                        <ExternalLink className="h-3 w-3" />
+                      </Link>
+                    </div>
                     <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
                       <MapPin className="h-3 w-3" /> {p.location}
                     </p>
                   </div>
                 </button>
-                <div className="flex gap-2 px-4 pb-4">
-                  <Link
-                    to={`/property/${p.id}`}
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
-                    aria-label="View full property page"
-                    title="View full property page"
-                  >
-                    <ExternalLink className="h-3.5 w-3.5" />
-                  </Link>
-                </div>
               </div>
             </RevealItem>
             )}

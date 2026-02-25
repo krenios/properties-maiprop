@@ -4,20 +4,18 @@ import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import { Property } from "@/data/properties";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { optimizeImage } from "@/lib/optimizeImage";
-import { useLeadBot } from "@/components/LeadBotProvider";
 import {
   MapPin, Bed, Maximize, TrendingUp, ChevronLeft, ChevronRight,
   ExternalLink, Building, Calendar, LayoutGrid, FileText,
   Plane, Waves, Anchor, TrainFront, Car, GraduationCap,
   ShoppingCart, Cross, Heart, Landmark, TreePine, Loader2,
-  ArrowLeft, MessageCircle, Share2, Check, Copy,
+  ArrowLeft, Share2, Check,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import { LeadBotProvider } from "@/components/LeadBotProvider";
+import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
 import { lazy, Suspense } from "react";
 const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
@@ -248,7 +246,17 @@ const PropertyPageInner = () => {
 
           {/* Header */}
           <div className="mt-8">
-            <h1 className="text-3xl font-bold sm:text-4xl">{property.title}</h1>
+            <div className="flex items-start justify-between gap-3">
+              <h1 className="text-3xl font-bold sm:text-4xl">{property.title}</h1>
+              <button
+                onClick={handleShare}
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors mt-1"
+                aria-label="Share this property"
+                title="Share this property"
+              >
+                {copied ? <Check className="h-4 w-4 text-primary" /> : <Share2 className="h-4 w-4" />}
+              </button>
+            </div>
             <button onClick={() => window.open(mapsUrl, "_blank")}
               className="mt-2 flex items-center gap-1.5 text-muted-foreground hover:text-primary transition-colors">
               <MapPin className="h-4 w-4" /> {property.location}, Greece
@@ -299,27 +307,6 @@ const PropertyPageInner = () => {
               <p className="leading-relaxed text-muted-foreground">{property.description}</p>
             </>
           )}
-
-          {/* CTA */}
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <Button size="lg" className="gap-2 rounded-full px-8"
-              onClick={() => openWithLocation(property.location)}>
-              <MessageCircle className="h-5 w-5" /> Inquire About This Property
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="gap-2 rounded-full px-6"
-              onClick={handleShare}
-              aria-label="Share this property"
-            >
-              {copied ? (
-                <><Check className="h-4 w-4 text-primary" /> Link Copied!</>
-              ) : (
-                <><Share2 className="h-4 w-4" /> Share</>
-              )}
-            </Button>
-          </div>
 
           <Separator className="my-8 bg-border" />
 
@@ -423,29 +410,6 @@ const PropertyPageInner = () => {
         </main>
 
         {/* Sticky bottom bar — mobile only */}
-        <div className="fixed bottom-0 left-0 right-0 z-40 flex items-center gap-3 border-t border-border bg-background/95 px-4 py-3 backdrop-blur-sm sm:hidden">
-          <Button
-            size="lg"
-            className="flex-1 gap-2 rounded-full"
-            onClick={() => openWithLocation(property.location)}
-          >
-            <MessageCircle className="h-4 w-4" /> Inquire
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="gap-2 rounded-full px-5"
-            onClick={handleShare}
-            aria-label="Share this property"
-          >
-            {copied ? (
-              <Check className="h-4 w-4 text-primary" />
-            ) : (
-              <Share2 className="h-4 w-4" />
-            )}
-            {copied ? "Copied!" : "Share"}
-          </Button>
-        </div>
       </div>
     </>
   );

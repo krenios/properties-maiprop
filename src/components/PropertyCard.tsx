@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { Property } from "@/data/properties";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, MessageCircle, ExternalLink } from "lucide-react";
+import { MapPin, MessageCircle, ExternalLink, Share2, Check } from "lucide-react";
 import { useLeadBot } from "@/components/LeadBotProvider";
 import { optimizeImage } from "@/lib/optimizeImage";
 import { Link } from "react-router-dom";
@@ -20,6 +21,25 @@ const statusColors: Record<string, string> = {
 
 const PropertyCard = ({ property, onClick }: Props) => {
   const { openWithLocation } = useLeadBot();
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const SUPABASE_PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+    const ogShareUrl = `https://${SUPABASE_PROJECT_ID}.supabase.co/functions/v1/og-meta?id=${property.id}`;
+    const shareData = {
+      title: property.title,
+      text: `${property.title} — Golden Visa property in ${property.location}, Greece${property.price ? ` · €${property.price.toLocaleString()}` : ""}`,
+      url: ogShareUrl,
+    };
+    if (navigator.share && navigator.canShare?.(shareData)) {
+      try { await navigator.share(shareData); } catch { /* cancelled */ }
+    } else {
+      await navigator.clipboard.writeText(ogShareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   return (
     <div className="group relative overflow-hidden rounded-xl border border-border/60 bg-card text-left transition-all duration-500 hover:border-primary/50 hover:shadow-[0_0_40px_hsl(179_90%_63%/0.15),0_0_80px_hsl(179_90%_63%/0.05)] hover:-translate-y-1">
@@ -95,6 +115,14 @@ const PropertyCard = ({ property, onClick }: Props) => {
         >
           <ExternalLink className="h-3.5 w-3.5" />
         </Link>
+        <button
+          onClick={handleShare}
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+          aria-label="Share property"
+          title="Share this property"
+        >
+          {copied ? <Check className="h-3.5 w-3.5 text-primary" /> : <Share2 className="h-3.5 w-3.5" />}
+        </button>
       </div>
     </div>
   );

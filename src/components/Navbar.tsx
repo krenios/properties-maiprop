@@ -11,7 +11,8 @@ const navLinks = [
 { label: "Portfolio", href: "#opportunities" },
 { label: "Track Record", href: "#delivered" },
 { label: "mAI Prop OS", href: "#platform" },
-{ label: "Process", href: "#journey" }];
+{ label: "Process", href: "#journey" },
+{ label: "FAQ", href: "#faq" }];
 
 
 const whatsappMessage = [
