@@ -87,24 +87,31 @@ const Index = () => {
     <LeadBotProvider>
       <Navbar />
       <HeroSection />
+      <SectionDivider />
       <Suspense fallback={<div className="min-h-[300px]" />}>
         <GoldenVisaStats />
       </Suspense>
+      <SectionDivider />
       <Suspense fallback={<div className="min-h-[1200px]" />}>
         <InvestmentOpportunities />
       </Suspense>
+      <SectionDivider />
       <Suspense fallback={<div className="min-h-[600px]" />}>
         <DeliveredProjects />
       </Suspense>
+      <SectionDivider />
       <Suspense fallback={<div className="min-h-[500px]" />}>
         <PlatformReference />
       </Suspense>
+      <SectionDivider />
       <Suspense fallback={<div className="min-h-[500px]" />}>
         <ValueSection />
       </Suspense>
+      <SectionDivider />
       <Suspense fallback={<div className="min-h-[600px]" />}>
         <JourneySection />
       </Suspense>
+      <SectionDivider />
       <Suspense fallback={<div className="min-h-[600px]" />}>
         <FaqSection />
       </Suspense>
