@@ -26,7 +26,7 @@ const faqs = [
   {
     icon: TrendingUp,
     q: "Can I rent out my Golden Visa property?",
-    a: "Yes. Golden Visa properties in Greece can be rented out. mAI Investments' portfolio is specifically designed for rental income — properties are sourced, renovated, and stabilised with tenants in place, targeting average net yields of 5–7% annually through a mix of short-term and long-term rental strategies.",
+    a: "Yes. Golden Visa properties in Greece can be rented out. mAI Investments' portfolio is specifically designed for rental income — properties are sourced, renovated, and stabilised with tenants in place, targeting average net yields of 3–5% annually through a mix of mid-term and long-term rental strategies.",
     category: "Returns",
   },
   {
@@ -93,7 +93,9 @@ const FaqSection = () => {
 
                       <div className="flex flex-1 flex-col gap-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${categoryColors[faq.category]}`}>
+                          <span
+                            className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${categoryColors[faq.category]}`}
+                          >
                             {faq.category}
                           </span>
                         </div>
