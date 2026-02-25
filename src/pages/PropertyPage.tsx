@@ -204,7 +204,7 @@ const PropertyPageInner = () => {
       </Helmet>
 
       <div className="min-h-screen bg-background">
-        <Navbar />
+        <Navbar forceScrolled />
         <main className="container mx-auto max-w-4xl px-4 pt-24 pb-16 sm:pb-16 max-sm:pb-28">
           {/* Back link */}
           <button
