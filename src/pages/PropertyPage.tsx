@@ -207,9 +207,12 @@ const PropertyPageInner = () => {
         <Navbar />
         <main className="container mx-auto max-w-4xl px-4 pt-24 pb-16 sm:pb-16 max-sm:pb-28">
           {/* Back link */}
-          <Link to="/#opportunities" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+          <button
+            onClick={() => window.history.length > 1 ? window.history.back() : window.location.assign("/#opportunities")}
+            className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+          >
             <ArrowLeft className="h-4 w-4" /> Back to properties
-          </Link>
+          </button>
 
           {/* Gallery */}
           <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border">
