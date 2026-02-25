@@ -149,14 +149,11 @@ const LeadCaptureBot = () => {
     }
   }, [open, messages.length, submitted]);
 
-  // Auto-scroll — deferred with rAF to avoid forced reflow
+  // Auto-scroll
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const raf = requestAnimationFrame(() => {
-      el.scrollTop = el.scrollHeight;
-    });
-    return () => cancelAnimationFrame(raf);
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
   }, [messages, step, typing]);
 
   const showBotMessage = (text: string, onDone?: () => void) => {
