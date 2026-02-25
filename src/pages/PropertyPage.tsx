@@ -195,7 +195,7 @@ const PropertyPageInner = () => {
 
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main className="container mx-auto max-w-4xl px-4 pb-16 pt-24">
+        <main className="container mx-auto max-w-4xl px-4 pb-16 pt-24 sm:pb-16 pb-28">
           {/* Back link */}
           <Link to="/#opportunities" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
             <ArrowLeft className="h-4 w-4" /> Back to properties
@@ -410,6 +410,31 @@ const PropertyPageInner = () => {
             </>
           )}
         </main>
+
+        {/* Sticky bottom bar — mobile only */}
+        <div className="fixed bottom-0 left-0 right-0 z-40 flex items-center gap-3 border-t border-border bg-background/95 px-4 py-3 backdrop-blur-sm sm:hidden">
+          <Button
+            size="lg"
+            className="flex-1 gap-2 rounded-full"
+            onClick={() => openWithLocation(property.location)}
+          >
+            <MessageCircle className="h-4 w-4" /> Inquire
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            className="gap-2 rounded-full px-5"
+            onClick={handleShare}
+            aria-label="Share this property"
+          >
+            {copied ? (
+              <Check className="h-4 w-4 text-primary" />
+            ) : (
+              <Share2 className="h-4 w-4" />
+            )}
+            {copied ? "Copied!" : "Share"}
+          </Button>
+        </div>
       </div>
     </>
   );
