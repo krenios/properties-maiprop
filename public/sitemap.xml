@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://properties.maiprop.co/</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-</urlset>
+<!-- Dynamic sitemap is served from the backend function -->
+<!-- See: https://cqxcztafhnwkhxgaylne.supabase.co/functions/v1/sitemap -->
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://cqxcztafhnwkhxgaylne.supabase.co/functions/v1/sitemap</loc>
+  </sitemap>
+</sitemapindex>
