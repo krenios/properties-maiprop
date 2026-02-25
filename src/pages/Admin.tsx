@@ -19,7 +19,7 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Pencil, Trash2, AlertTriangle, Home, ArrowRightCircle, CheckCircle, LogOut, GripVertical, Users, RefreshCw } from "lucide-react";
+import { Plus, Pencil, Trash2, AlertTriangle, Home, ArrowRightCircle, CheckCircle, LogOut, GripVertical, Users, RefreshCw, Sparkles } from "lucide-react";
 import ImageUpload from "@/components/ImageUpload";
 import FileUpload from "@/components/FileUpload";
 import CrmTab from "@/components/CrmTab";
@@ -123,6 +123,29 @@ const Admin = () => {
   };
 
   const [refreshingPoi, setRefreshingPoi] = useState<Set<string>>(new Set());
+  const [generatingDesc, setGeneratingDesc] = useState(false);
+
+  const generateDescription = async () => {
+    setGeneratingDesc(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("generate-description", {
+        body: {
+          title: form.title,
+          location: form.location,
+          size: form.size,
+          bedrooms: form.bedrooms,
+          tags: form.tags,
+          poi: form.poi,
+        },
+      });
+      if (error) throw error;
+      if (data?.description) setForm((prev) => ({ ...prev, description: data.description }));
+    } catch (e: any) {
+      toast.error(`Failed to generate description: ${e.message || "Unknown error"}`);
+    } finally {
+      setGeneratingDesc(false);
+    }
+  };
 
   const refreshPoi = async (p: Property) => {
     setRefreshingPoi((prev) => new Set(prev).add(p.id));
@@ -366,7 +389,20 @@ const Admin = () => {
               <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
             </div>
             <div className="grid gap-2">
-              <Label>Description</Label>
+              <div className="flex items-center justify-between">
+                <Label>Description</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={generateDescription}
+                  disabled={generatingDesc}
+                  className="h-7 gap-1.5 rounded-full px-3 text-xs border-primary/30 text-primary hover:bg-primary/10"
+                >
+                  <Sparkles className="h-3 w-3" />
+                  {generatingDesc ? "Generating…" : "Generate with AI"}
+                </Button>
+              </div>
               <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
             </div>
             <div className="grid grid-cols-2 gap-4">
