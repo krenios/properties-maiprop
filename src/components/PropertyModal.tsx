@@ -57,7 +57,8 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
   const [poiLoading, setPoiLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const handleShare = useCallback(async () => {
+  const handleShare = useCallback(async (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     if (!property) return;
     const shareUrl = `${window.location.origin}/property/${property.id}`;
     const shareData = {
@@ -68,7 +69,13 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
     if (navigator.share && navigator.canShare?.(shareData)) {
       try { await navigator.share(shareData); } catch { /* cancelled */ }
     } else {
-      await navigator.clipboard.writeText(shareUrl);
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+      } catch {
+        // fallback for sandboxed iframes
+        window.prompt("Copy this link:", shareUrl);
+        return;
+      }
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }

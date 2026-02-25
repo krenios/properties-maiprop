@@ -101,7 +101,12 @@ const PropertyPageInner = () => {
     if (navigator.share && navigator.canShare?.(shareData)) {
       try { await navigator.share(shareData); } catch { /* user cancelled */ }
     } else {
-      await navigator.clipboard.writeText(pageUrl);
+      try {
+        await navigator.clipboard.writeText(pageUrl);
+      } catch {
+        window.prompt("Copy this link:", pageUrl);
+        return;
+      }
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
