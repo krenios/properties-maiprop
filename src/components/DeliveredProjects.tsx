@@ -79,8 +79,13 @@ const DeliveredProjects = () => {
                   </div>
                   <div className="p-4 pb-3">
                     <div className="flex items-start justify-between gap-2">
-                      <h3 className="font-semibold leading-snug">{p.title}</h3>
-                      <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                      <div className="min-w-0">
+                        <h3 className="font-semibold leading-snug">{p.title}</h3>
+                        <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+                          <MapPin className="h-3 w-3" /> {p.location}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0" onClick={(e) => e.stopPropagation()}>
                         <button
                           onClick={async (e) => {
                             e.stopPropagation();
@@ -97,7 +102,7 @@ const DeliveredProjects = () => {
                               }
                             }
                           }}
-                          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+                          className="flex h-7 w-7 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
                           aria-label="Share property"
                           title="Share property"
                         >
@@ -106,7 +111,7 @@ const DeliveredProjects = () => {
                         <Link
                           to={`/property/${p.id}`}
                           onClick={(e) => e.stopPropagation()}
-                          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+                          className="flex h-7 w-7 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
                           aria-label="View full property page"
                           title="View full property page"
                         >
@@ -114,9 +119,6 @@ const DeliveredProjects = () => {
                         </Link>
                       </div>
                     </div>
-                    <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-                      <MapPin className="h-3 w-3" /> {p.location}
-                    </p>
                   </div>
                 </button>
               </div>

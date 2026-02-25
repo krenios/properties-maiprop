@@ -17,8 +17,56 @@ const ContactSection = lazy(() => import("@/components/ContactSection"));
 const FaqSection = lazy(() => import("@/components/FaqSection"));
 const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the minimum investment for a Greek Golden Visa?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The minimum investment for a Greek Golden Visa is €250,000 in qualifying real estate. mAI Investments offers pre-verified properties starting at this threshold, covering Athens, Piraeus, Glyfada, and the Athenian Riviera."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does the Greek Golden Visa process take?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The Greek Golden Visa process typically takes 6–9 months from initial consultation to residency permit approval, including property purchase, legal registration, and biometrics appointment."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which countries can I access with a Greek Golden Visa?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A Greek Golden Visa grants the right to live in Greece and travel freely across all 27 Schengen Area countries without additional visas."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I rent out my Golden Visa property?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Golden Visa properties in Greece can be rented out. mAI Investments' portfolio is specifically designed for rental income — properties are sourced, renovated, and stabilised with tenants in place, targeting average net yields of 5–7% annually through a mix of short-term and long-term rental strategies."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to live in Greece to keep the Golden Visa?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The Greek Golden Visa does not require a minimum stay in Greece. You can maintain the residency permit simply by keeping the qualifying real estate investment."
+      }
+    }
+  ]
+};
+
 const Index = () =>
 <main className="min-h-screen bg-background overflow-x-hidden" role="main" itemScope itemType="https://schema.org/WebPage">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
     <LeadBotProvider>
       <Navbar />
       <HeroSection />
