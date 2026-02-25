@@ -167,35 +167,46 @@ const PropertyPageInner = () => {
     })),
   };
 
-  const title = `${property.title} | ${property.location} | mAI Investments`;
+  // Keep title under 60 chars where possible: "Title | Location | mAI Investments"
+  const rawTitle = `${property.title} | ${property.location} | mAI Investments`;
+  const title = rawTitle.length > 60 ? `${property.title} | mAI Investments` : rawTitle;
   const description = property.description
     ? property.description.slice(0, 155) + (property.description.length > 155 ? "…" : "")
-    : `${property.title} in ${property.location}, Greece. ${property.price ? `€${property.price.toLocaleString()}` : ""} ${property.size ? `· ${property.size} m²` : ""} Golden Visa eligible property.`;
+    : `${property.title} — Golden Visa property in ${property.location}, Greece.${property.price ? ` €${property.price.toLocaleString()}.` : ""}${property.size ? ` ${property.size} m².` : ""} EU residency eligible.`;
 
   return (
     <>
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={description} />
+        <meta name="robots" content="index, follow" />
         <link rel="canonical" href={pageUrl} />
+        {/* Open Graph */}
         <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="mAI Investments" />
+        <meta property="og:locale" content="en_US" />
         <meta property="og:url" content={pageUrl} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content={`${property.title} — ${property.location}, Greece`} />
+        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@maiprop" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
+        <meta name="twitter:image:alt" content={`${property.title} — ${property.location}, Greece`} />
+        {/* Structured Data */}
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main className="container mx-auto max-w-4xl px-4 pb-16 pt-24 sm:pb-16 pb-28">
+        <main className="container mx-auto max-w-4xl px-4 pt-24 pb-16 sm:pb-16 max-sm:pb-28">
           {/* Back link */}
           <Link to="/#opportunities" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
             <ArrowLeft className="h-4 w-4" /> Back to properties
