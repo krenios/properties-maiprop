@@ -93,7 +93,7 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
             )
           )}
           <LanguageSwitcher />
-          <Button size="sm" className="rounded-full px-6" onClick={() => { const el = document.querySelector("#contact"); el?.scrollIntoView({ behavior: "smooth" }); }}>
+          <Button size="sm" className="rounded-full px-6" onClick={() => { if (isHome) { const el = document.querySelector("#contact"); el?.scrollIntoView({ behavior: "smooth" }); } else { window.location.href = "/#contact"; } }}>
             {t("Get Started")}
           </Button>
         </nav>
@@ -127,7 +127,7 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
               )
             )}
             <LanguageSwitcher />
-            <Button size="sm" className="mt-2 rounded-full" onClick={() => { setMobileOpen(false); const el = document.querySelector("#contact"); el?.scrollIntoView({ behavior: "smooth" }); }}>
+            <Button size="sm" className="mt-2 rounded-full" onClick={() => { setMobileOpen(false); if (isHome) { const el = document.querySelector("#contact"); el?.scrollIntoView({ behavior: "smooth" }); } else { window.location.href = "/#contact"; } }}>
               {t("Get Started")}
             </Button>
           </nav>
