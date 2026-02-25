@@ -13,3 +13,5 @@ project_id = "cqxcztafhnwkhxgaylne"
     verify_jwt = false
   [functions.location-poi]
     verify_jwt = false
+  [functions.og-meta]
+    verify_jwt = false
