@@ -185,7 +185,17 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
 
         <div className="space-y-4 p-4">
           <DialogHeader>
-            <DialogTitle className="text-xl">{property.title}</DialogTitle>
+            <div className="flex items-start justify-between gap-3">
+              <DialogTitle className="text-xl leading-snug">{property.title}</DialogTitle>
+              <button
+                onClick={handleShare}
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+                aria-label="Share property"
+                title="Share this property"
+              >
+                {copied ? <Check className="h-3.5 w-3.5 text-primary" /> : <Share2 className="h-3.5 w-3.5" />}
+              </button>
+            </div>
             <button
               onClick={() => window.open(mapsUrl, "_blank")}
               className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
@@ -340,22 +350,6 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
               </a>
             </>
           )}
-
-          <Separator className="bg-border" />
-
-          {/* Share */}
-          <div className="pb-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="gap-2 rounded-full px-4"
-              onClick={handleShare}
-            >
-              {copied
-                ? <><Check className="h-3.5 w-3.5 text-primary" /> Link Copied!</>
-                : <><Share2 className="h-3.5 w-3.5" /> Share</>}
-            </Button>
-          </div>
         </div>
       </DialogContent>
     </Dialog>
