@@ -437,8 +437,11 @@ serve(async (req) => {
       });
     }
 
-    // Update followup_step
-    await supabase.from("leads").update({ followup_step: step }).eq("id", lead_id);
+    // Update followup_step and mark as contacted if still new
+    await supabase
+      .from("leads")
+      .update({ followup_step: step, ...(lead.status === "new" ? { status: "contacted" } : {}) })
+      .eq("id", lead_id);
 
     return new Response(JSON.stringify({ success: true, step, email_id: emailData.id }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
