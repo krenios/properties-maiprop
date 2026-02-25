@@ -2,31 +2,14 @@ import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { optimizeImage } from "@/lib/optimizeImage";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
-  MapPin,
-  Bed,
-  Maximize,
-  TrendingUp,
-  ChevronLeft,
-  ChevronRight,
-  ExternalLink,
-  Building,
-  Calendar,
-  LayoutGrid,
-  FileText,
-  Plane,
-  Waves,
-  Anchor,
-  TrainFront,
-  Car,
-  GraduationCap,
-  ShoppingCart,
-  Cross,
-  Heart,
-  Landmark,
-  TreePine,
-  Loader2,
+  MapPin, Bed, Maximize, TrendingUp, ChevronLeft, ChevronRight,
+  ExternalLink, Building, Calendar, LayoutGrid, FileText,
+  Plane, Waves, Anchor, TrainFront, Car, GraduationCap,
+  ShoppingCart, Cross, Heart, Landmark, TreePine, Loader2,
+  Share2, Check,
 } from "lucide-react";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -72,6 +55,25 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
   const [isSwiping, setIsSwiping] = useState(false);
   const [poiEntries, setPoiEntries] = useState<PoiEntry[] | null>(null);
   const [poiLoading, setPoiLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = useCallback(async () => {
+    if (!property) return;
+    const SUPABASE_PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+    const ogShareUrl = `https://${SUPABASE_PROJECT_ID}.supabase.co/functions/v1/og-meta?id=${property.id}`;
+    const shareData = {
+      title: property.title,
+      text: `${property.title} — Golden Visa property in ${property.location}, Greece${property.price ? ` · €${property.price.toLocaleString()}` : ""}`,
+      url: ogShareUrl,
+    };
+    if (navigator.share && navigator.canShare?.(shareData)) {
+      try { await navigator.share(shareData); } catch { /* cancelled */ }
+    } else {
+      await navigator.clipboard.writeText(ogShareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  }, [property]);
   const touchStartY = useRef(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -340,6 +342,20 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
           )}
 
           <Separator className="bg-border" />
+
+          {/* Share */}
+          <div className="pb-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-2 rounded-full px-4"
+              onClick={handleShare}
+            >
+              {copied
+                ? <><Check className="h-3.5 w-3.5 text-primary" /> Link Copied!</>
+                : <><Share2 className="h-3.5 w-3.5" /> Share</>}
+            </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
