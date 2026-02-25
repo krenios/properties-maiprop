@@ -31,16 +31,17 @@ const whatsappMessage = [
 ].join("\n");
 const WHATSAPP_URL = `https://wa.me/306971853470?text=${encodeURIComponent(whatsappMessage)}`;
 
-const Navbar = () => {
+const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
   const { t } = useTranslation();
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled] = useState(forceScrolled);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
+    if (forceScrolled) return;
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [forceScrolled]);
 
   const handleClick = (href: string) => {
     setMobileOpen(false);
