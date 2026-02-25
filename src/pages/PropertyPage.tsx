@@ -89,6 +89,32 @@ const PropertyPageInner = () => {
   ].map((name) => ({ name, distance: "" }));
   const displayPoi = poiEntries ?? DEFAULT_POI;
 
+  // Breadcrumb JSON-LD
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": BASE_URL + "/",
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Properties",
+        "item": BASE_URL + "/#opportunities",
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": property.title,
+        "item": pageUrl,
+      },
+    ],
+  };
+
   // JSON-LD structured data for this property
   const jsonLd = {
     "@context": "https://schema.org",
@@ -144,6 +170,7 @@ const PropertyPageInner = () => {
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-background">
