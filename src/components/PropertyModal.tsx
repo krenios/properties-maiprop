@@ -145,17 +145,8 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent
         onClick={(e) => e.stopPropagation()}
-        onPointerDownOutside={(e) => {
-          // Allow navbar buttons (z-50 header) to work — only block clicks inside modal area
-          const target = e.target as HTMLElement;
-          if (target.closest('header')) return; // let navbar clicks through
-          e.preventDefault();
-        }}
-        onInteractOutside={(e) => {
-          const target = e.target as HTMLElement;
-          if (target.closest('header')) return;
-          e.preventDefault();
-        }}
+        onPointerDownOutside={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
         className="max-h-[100dvh] max-w-4xl overflow-hidden border-border bg-card p-0 max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[90vh]"
         style={{
           transform: swipeY > 0 ? `translateY(${swipeY}px)` : undefined,

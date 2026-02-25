@@ -57,7 +57,7 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
 
   return (
     <header
-      className={`fixed left-0 right-0 top-0 z-[60] transition-all duration-300 ${
+      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
       scrolled ? "border-b border-border bg-background/95 backdrop-blur-xl shadow-lg" : "bg-background/0 backdrop-blur-none"}`
       }>
 
