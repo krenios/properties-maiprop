@@ -1,9 +1,10 @@
 import { Property } from "@/data/properties";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, MessageCircle } from "lucide-react";
+import { MapPin, MessageCircle, ExternalLink } from "lucide-react";
 import { useLeadBot } from "@/components/LeadBotProvider";
 import { optimizeImage } from "@/lib/optimizeImage";
+import { Link } from "react-router-dom";
 
 interface Props {
   property: Property;
@@ -73,11 +74,11 @@ const PropertyCard = ({ property, onClick }: Props) => {
           </div>
         </div>
       </button>
-      <div className="px-5 pb-4">
+      <div className="flex gap-2 px-5 pb-4">
         <Button
           size="sm"
           variant="outline"
-          className="w-full gap-2 rounded-full border-primary/30 text-primary hover:bg-primary/10"
+          className="flex-1 gap-2 rounded-full border-primary/30 text-primary hover:bg-primary/10"
           onClick={(e) => {
             e.stopPropagation();
             openWithLocation(property.location);
@@ -85,6 +86,15 @@ const PropertyCard = ({ property, onClick }: Props) => {
         >
           <MessageCircle className="h-4 w-4" /> Inquire
         </Button>
+        <Link
+          to={`/property/${property.id}`}
+          onClick={(e) => e.stopPropagation()}
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+          aria-label="View property page"
+          title="View full property page"
+        >
+          <ExternalLink className="h-3.5 w-3.5" />
+        </Link>
       </div>
     </div>
   );
