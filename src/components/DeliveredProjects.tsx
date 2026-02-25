@@ -86,6 +86,15 @@ const DeliveredProjects = () => {
                         </p>
                       </div>
                       <div className="flex items-center gap-1 shrink-0" onClick={(e) => e.stopPropagation()}>
+                        <Link
+                          to={`/property/${p.id}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="flex h-7 w-7 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+                          aria-label="View full property page"
+                          title="View full property page"
+                        >
+                          <ExternalLink className="h-3 w-3" />
+                        </Link>
                         <button
                           onClick={async (e) => {
                             e.stopPropagation();
@@ -108,15 +117,6 @@ const DeliveredProjects = () => {
                         >
                           <Share2 className="h-3 w-3" />
                         </button>
-                        <Link
-                          to={`/property/${p.id}`}
-                          onClick={(e) => e.stopPropagation()}
-                          className="flex h-7 w-7 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
-                          aria-label="View full property page"
-                          title="View full property page"
-                        >
-                          <ExternalLink className="h-3 w-3" />
-                        </Link>
                       </div>
                     </div>
                   </div>
@@ -239,7 +239,17 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
             </div>
           }
 
-          <p className="text-sm text-muted-foreground">{property.description}</p>
+          <div className="flex items-start gap-2">
+            <p className="flex-1 text-sm text-muted-foreground">{property.description}</p>
+            <button
+              onClick={handleShare}
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+              aria-label="Share property"
+              title="Share property"
+            >
+              <Share2 className="h-3.5 w-3.5" />
+            </button>
+          </div>
 
           {/* Property Specs as pills */}
           <div className="flex flex-wrap gap-2">
@@ -273,14 +283,6 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
                 <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" /> {property.yield}
               </Badge>
             }
-            <Button
-              variant="outline"
-              size="sm"
-              className="gap-1.5 rounded-full px-3 py-1.5 h-auto text-sm font-normal"
-              onClick={handleShare}
-            >
-              <><Share2 className="h-3.5 w-3.5" /> Share</>
-            </Button>
           </div>
 
           {/* Before & After Slider */}
