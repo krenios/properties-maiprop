@@ -128,7 +128,12 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
     if (navigator.share && navigator.canShare?.(shareData)) {
       try { await navigator.share(shareData); } catch { /* user cancelled */ }
     } else {
-      await navigator.clipboard.writeText(shareUrl);
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+      } catch {
+        window.prompt("Copy this link:", shareUrl);
+        return;
+      }
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
