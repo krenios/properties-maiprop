@@ -4,28 +4,28 @@ import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
 
 const stats = [
-  { value: "€250K", label: "Minimum Investment" },
-  { value: "6-9 Months", label: "To Visa Approval" },
-  { value: "27 Countries", label: "Schengen Access" },
-];
+{ value: "€250K", label: "Minimum Investment" },
+{ value: "6-9 Months", label: "To Visa Approval" },
+{ value: "27 Countries", label: "Schengen Access" }];
+
 
 const HeroSection = () => {
   const { openWithLocation } = useLeadBot();
   const { t } = useTranslation();
 
   return (
-  <section className="relative flex min-h-screen flex-col justify-end overflow-hidden">
+    <section className="relative flex min-h-screen flex-col justify-end overflow-hidden">
     {/* Background image */}
     <div className="absolute inset-0">
       <img
-        src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&q=40&fm=webp"
-        srcSet="https://images.unsplash.com/photo-1555993539-1732b0258235?w=480&q=40&fm=webp 480w, https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&q=40&fm=webp 800w, https://images.unsplash.com/photo-1555993539-1732b0258235?w=1440&q=45&fm=webp 1440w"
-        sizes="100vw"
-        alt="Aerial view of Greek coastline — Golden Visa real estate investment destination"
-        className="h-full w-full object-cover"
-        fetchPriority="high"
-        decoding="async"
-      />
+          src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&q=40&fm=webp"
+          srcSet="https://images.unsplash.com/photo-1555993539-1732b0258235?w=480&q=40&fm=webp 480w, https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&q=40&fm=webp 800w, https://images.unsplash.com/photo-1555993539-1732b0258235?w=1440&q=45&fm=webp 1440w"
+          sizes="100vw"
+          alt="Aerial view of Greek coastline — Golden Visa real estate investment destination"
+          className="h-full w-full object-cover"
+          fetchPriority="high"
+          decoding="async" />
+
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
     </div>
 
@@ -49,36 +49,36 @@ const HeroSection = () => {
             {t("Start Your Golden Visa")} <ArrowRight className="h-4 w-4" />
         </Button>
         <Button
-          asChild
-          variant="outline"
-          size="lg"
-          className="rounded-full border-border/50 bg-background/20 px-8 backdrop-blur-sm w-full sm:w-auto"
-        >
-          <a href="#opportunities">{t("View Properties")}</a>
+            asChild
+            variant="outline"
+            size="lg"
+            className="rounded-full border-border/50 bg-background/20 px-8 backdrop-blur-sm w-full sm:w-auto">
+
+          <a href="#opportunities" className="bg-accent">{t("View Properties")}</a>
         </Button>
         <Button
-          asChild
-          size="lg"
-          className="gap-2 rounded-full bg-[hsl(210,80%,60%)] px-8 text-white hover:bg-[hsl(210,80%,70%)] w-full sm:w-auto"
-        >
-          <a href="https://os.maiprop.co/" target="_blank" rel="noopener noreferrer">
-            {t("Access mAI Prop OS: Your Data Partner")}
-          </a>
+            asChild
+            size="lg"
+            className="gap-2 rounded-full bg-[hsl(210,80%,60%)] px-8 text-white hover:bg-[hsl(210,80%,70%)] w-full sm:w-auto">
+
+          
+
+
         </Button>
       </div>
 
       {/* Stats bar */}
       <div className="mt-12 grid grid-cols-3 gap-4 border-t border-border/40 pt-8 sm:grid-cols-4">
-        {stats.map((s) => (
+        {stats.map((s) =>
           <div key={s.label}>
             <p className="text-xl font-bold sm:text-3xl">{s.value}</p>
             <p className="text-xs sm:text-sm text-muted-foreground">{t(s.label)}</p>
           </div>
-        ))}
+          )}
       </div>
     </div>
-  </section>
-  );
+  </section>);
+
 };
 
 export default HeroSection;
