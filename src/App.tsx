@@ -15,6 +15,9 @@ const Login = lazy(() => import("./pages/Login"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const ProtectedRoute = lazy(() => import("@/components/ProtectedRoute"));
 const PropertyPage = lazy(() => import("./pages/PropertyPage"));
+const GreekGoldenVisa = lazy(() => import("./pages/GreekGoldenVisa"));
+const GreekGoldenVisaRequirements = lazy(() => import("./pages/GreekGoldenVisaRequirements"));
+const GoldenVisa250k = lazy(() => import("./pages/GoldenVisa250k"));
 
 const queryClient = new QueryClient();
 
@@ -31,6 +34,12 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Suspense fallback={null}><Index /></Suspense>} />
                 <Route path="/property/:id" element={<Suspense fallback={null}><PropertyPage /></Suspense>} />
+                <Route path="/greek-golden-visa" element={<Suspense fallback={null}><GreekGoldenVisa /></Suspense>} />
+                <Route path="/greek-golden-visa/" element={<Suspense fallback={null}><GreekGoldenVisa /></Suspense>} />
+                <Route path="/greek-golden-visa-requirements" element={<Suspense fallback={null}><GreekGoldenVisaRequirements /></Suspense>} />
+                <Route path="/greek-golden-visa-requirements/" element={<Suspense fallback={null}><GreekGoldenVisaRequirements /></Suspense>} />
+                <Route path="/250k-golden-visa-properties" element={<Suspense fallback={null}><GoldenVisa250k /></Suspense>} />
+                <Route path="/250k-golden-visa-properties/" element={<Suspense fallback={null}><GoldenVisa250k /></Suspense>} />
                 <Route path="/login" element={<Suspense fallback={null}><Login /></Suspense>} />
                 <Route path="/admin" element={<Suspense fallback={null}><ProtectedRoute><Admin /></ProtectedRoute></Suspense>} />
                 <Route path="*" element={<Suspense fallback={null}><NotFound /></Suspense>} />

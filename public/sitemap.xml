@@ -4,6 +4,10 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
     <loc>https://cqxcztafhnwkhxgaylne.supabase.co/functions/v1/sitemap</loc>
-    <lastmod>2026-02-25</lastmod>
+    <lastmod>2026-02-27</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://properties.maiprop.co/sitemap-static.xml</loc>
+    <lastmod>2026-02-27</lastmod>
   </sitemap>
 </sitemapindex>
