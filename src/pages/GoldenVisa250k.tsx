@@ -108,15 +108,20 @@ const Inner = () => {
         <meta name="keywords" content="250000 Golden Visa Greece, €250K Golden Visa property, Greece investment property, Athens Golden Visa, Golden Visa real estate Greece, affordable Golden Visa" />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={PAGE_URL} />
-        {/* Hreflang — US, UAE, Turkey, UK, China */}
+        {/* Hreflang — all supported languages */}
         <link rel="alternate" hrefLang="en" href={PAGE_URL} />
         <link rel="alternate" hrefLang="en-US" href={PAGE_URL} />
         <link rel="alternate" hrefLang="en-GB" href={PAGE_URL} />
+        <link rel="alternate" hrefLang="el" href={`${PAGE_URL}?lang=el`} />
         <link rel="alternate" hrefLang="ar" href={`${PAGE_URL}?lang=ar`} />
         <link rel="alternate" hrefLang="ar-AE" href={`${PAGE_URL}?lang=ar`} />
-        <link rel="alternate" hrefLang="tr" href={`${PAGE_URL}?lang=tr`} />
         <link rel="alternate" hrefLang="zh" href={`${PAGE_URL}?lang=zh`} />
         <link rel="alternate" hrefLang="zh-CN" href={`${PAGE_URL}?lang=zh`} />
+        <link rel="alternate" hrefLang="ru" href={`${PAGE_URL}?lang=ru`} />
+        <link rel="alternate" hrefLang="fr" href={`${PAGE_URL}?lang=fr`} />
+        <link rel="alternate" hrefLang="hi" href={`${PAGE_URL}?lang=hi`} />
+        <link rel="alternate" hrefLang="he" href={`${PAGE_URL}?lang=he`} />
+        <link rel="alternate" hrefLang="tr" href={`${PAGE_URL}?lang=tr`} />
         <link rel="alternate" hrefLang="x-default" href={PAGE_URL} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={PAGE_URL} />
