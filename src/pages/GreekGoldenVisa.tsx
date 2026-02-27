@@ -10,6 +10,35 @@ const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 const BASE_URL = "https://properties.maiprop.co";
 const PAGE_URL = `${BASE_URL}/greek-golden-visa/`;
 
+const articleLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Greek Golden Visa — EU Residency Through Real Estate Investment",
+  "description": "Complete guide to the Greek Golden Visa program. Invest €250,000+ in real estate and get EU residency with access to 27 Schengen countries.",
+  "url": `${BASE_URL}/greek-golden-visa/`,
+  "datePublished": "2024-01-01",
+  "dateModified": "2025-02-01",
+  "author": { "@type": "Organization", "name": "mAI Prop" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "mAI Prop",
+    "logo": { "@type": "ImageObject", "url": `${BASE_URL}/images/maiprop-logo.webp` }
+  },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": `${BASE_URL}/greek-golden-visa/` },
+  "about": { "@type": "Thing", "name": "Greek Golden Visa" },
+  "inLanguage": ["en", "ar", "zh", "tr"],
+  "audience": {
+    "@type": "Audience",
+    "geographicArea": [
+      { "@type": "Country", "name": "United States" },
+      { "@type": "Country", "name": "United Arab Emirates" },
+      { "@type": "Country", "name": "Turkey" },
+      { "@type": "Country", "name": "United Kingdom" },
+      { "@type": "Country", "name": "China" }
+    ]
+  }
+};
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -83,13 +112,24 @@ const Inner = () => {
         <meta name="keywords" content="Greek Golden Visa, Greece Golden Visa, EU residency Greece, Greek residency by investment, Golden Visa benefits, Schengen access Greece" />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={PAGE_URL} />
-        <meta property="og:type" content="website" />
+        {/* Hreflang — US, UAE, Turkey, UK, China */}
+        <link rel="alternate" hrefLang="en" href={PAGE_URL} />
+        <link rel="alternate" hrefLang="en-US" href={PAGE_URL} />
+        <link rel="alternate" hrefLang="en-GB" href={PAGE_URL} />
+        <link rel="alternate" hrefLang="ar" href={`${PAGE_URL}?lang=ar`} />
+        <link rel="alternate" hrefLang="ar-AE" href={`${PAGE_URL}?lang=ar`} />
+        <link rel="alternate" hrefLang="tr" href={`${PAGE_URL}?lang=tr`} />
+        <link rel="alternate" hrefLang="zh" href={`${PAGE_URL}?lang=zh`} />
+        <link rel="alternate" hrefLang="zh-CN" href={`${PAGE_URL}?lang=zh`} />
+        <link rel="alternate" hrefLang="x-default" href={PAGE_URL} />
+        <meta property="og:type" content="article" />
         <meta property="og:url" content={PAGE_URL} />
         <meta property="og:title" content="Greek Golden Visa — EU Residency Through Real Estate" />
         <meta property="og:description" content="Complete guide to the Greek Golden Visa. Invest €250K+ in real estate and get EU residency, Schengen access, and family coverage." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
       </Helmet>
 
       <Navbar forceScrolled />

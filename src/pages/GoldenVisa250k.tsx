@@ -14,6 +14,37 @@ const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 const BASE_URL = "https://properties.maiprop.co";
 const PAGE_URL = `${BASE_URL}/250k-golden-visa-properties/`;
 
+const offerLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "€250K Golden Visa Properties in Greece",
+  "description": "Pre-verified Greek real estate investment properties eligible for the Golden Visa program.",
+  "url": `${BASE_URL}/250k-golden-visa-properties/`,
+  "provider": {
+    "@type": "RealEstateAgent",
+    "name": "mAI Prop",
+    "url": BASE_URL,
+    "areaServed": [
+      { "@type": "City", "name": "Athens" },
+      { "@type": "City", "name": "Piraeus" },
+      { "@type": "City", "name": "Glyfada" }
+    ]
+  },
+  "offers": {
+    "@type": "AggregateOffer",
+    "priceCurrency": "EUR",
+    "lowPrice": "250000",
+    "offerCount": "10+",
+    "eligibleRegion": [
+      { "@type": "Country", "name": "United States" },
+      { "@type": "Country", "name": "United Arab Emirates" },
+      { "@type": "Country", "name": "Turkey" },
+      { "@type": "Country", "name": "United Kingdom" },
+      { "@type": "Country", "name": "China" }
+    ]
+  }
+};
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
@@ -77,12 +108,23 @@ const Inner = () => {
         <meta name="keywords" content="250000 Golden Visa Greece, €250K Golden Visa property, Greece investment property, Athens Golden Visa, Golden Visa real estate Greece, affordable Golden Visa" />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={PAGE_URL} />
+        {/* Hreflang — US, UAE, Turkey, UK, China */}
+        <link rel="alternate" hrefLang="en" href={PAGE_URL} />
+        <link rel="alternate" hrefLang="en-US" href={PAGE_URL} />
+        <link rel="alternate" hrefLang="en-GB" href={PAGE_URL} />
+        <link rel="alternate" hrefLang="ar" href={`${PAGE_URL}?lang=ar`} />
+        <link rel="alternate" hrefLang="ar-AE" href={`${PAGE_URL}?lang=ar`} />
+        <link rel="alternate" hrefLang="tr" href={`${PAGE_URL}?lang=tr`} />
+        <link rel="alternate" hrefLang="zh" href={`${PAGE_URL}?lang=zh`} />
+        <link rel="alternate" hrefLang="zh-CN" href={`${PAGE_URL}?lang=zh`} />
+        <link rel="alternate" hrefLang="x-default" href={PAGE_URL} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={PAGE_URL} />
         <meta property="og:title" content="€250K Golden Visa Properties Greece — Pre-Verified Investments" />
         <meta property="og:description" content="Browse €250,000+ Golden Visa eligible properties in Athens and the Athenian Riviera. Rental-ready real estate for EU residency." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(offerLd)}</script>
       </Helmet>
 
       <Navbar forceScrolled />

@@ -1,4 +1,6 @@
 import { lazy, Suspense, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
+import { useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import SectionDivider from "@/components/SectionDivider";
@@ -64,7 +66,15 @@ const faqJsonLd = {
   ],
 };
 
+const BASE_URL = "https://properties.maiprop.co";
+
 const Index = () => {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const lang = params.get("lang");
+  // Noindex ?lang= parameter variants to protect crawl budget
+  const isLangVariant = !!lang;
+  const canonicalUrl = `${BASE_URL}/`;
   useEffect(() => {
     const hash = window.location.hash;
     if (!hash) return;
@@ -83,6 +93,11 @@ const Index = () => {
     itemScope
     itemType="https://schema.org/WebPage"
   >
+    {/* Crawl budget: canonical always points to clean URL; noindex ?lang= variants */}
+    <Helmet>
+      <link rel="canonical" href={canonicalUrl} />
+      {isLangVariant && <meta name="robots" content="noindex, follow" />}
+    </Helmet>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
     <LeadBotProvider>
       <Navbar />
