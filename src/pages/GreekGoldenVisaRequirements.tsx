@@ -10,6 +10,35 @@ const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 const BASE_URL = "https://properties.maiprop.co";
 const PAGE_URL = `${BASE_URL}/greek-golden-visa-requirements/`;
 
+const articleLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Greek Golden Visa Requirements — Documents & Eligibility 2025",
+  "description": "Full checklist of Greek Golden Visa requirements. Documents needed, eligibility criteria, investment thresholds, and step-by-step process.",
+  "url": `${BASE_URL}/greek-golden-visa-requirements/`,
+  "datePublished": "2024-01-01",
+  "dateModified": "2025-02-01",
+  "author": { "@type": "Organization", "name": "mAI Prop" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "mAI Prop",
+    "logo": { "@type": "ImageObject", "url": `${BASE_URL}/images/maiprop-logo.webp` }
+  },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": `${BASE_URL}/greek-golden-visa-requirements/` },
+  "about": { "@type": "Thing", "name": "Greek Golden Visa Requirements" },
+  "inLanguage": ["en", "ar", "zh", "tr"],
+  "audience": {
+    "@type": "Audience",
+    "geographicArea": [
+      { "@type": "Country", "name": "United States" },
+      { "@type": "Country", "name": "United Arab Emirates" },
+      { "@type": "Country", "name": "Turkey" },
+      { "@type": "Country", "name": "United Kingdom" },
+      { "@type": "Country", "name": "China" }
+    ]
+  }
+};
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -75,12 +104,23 @@ const Inner = () => {
         <meta name="keywords" content="Greek Golden Visa requirements, Golden Visa documents Greece, Greece residency investment requirements, Golden Visa eligibility, €250000 Golden Visa Greece" />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={PAGE_URL} />
+        {/* Hreflang — US, UAE, Turkey, UK, China */}
+        <link rel="alternate" hrefLang="en" href={PAGE_URL} />
+        <link rel="alternate" hrefLang="en-US" href={PAGE_URL} />
+        <link rel="alternate" hrefLang="en-GB" href={PAGE_URL} />
+        <link rel="alternate" hrefLang="ar" href={`${PAGE_URL}?lang=ar`} />
+        <link rel="alternate" hrefLang="ar-AE" href={`${PAGE_URL}?lang=ar`} />
+        <link rel="alternate" hrefLang="tr" href={`${PAGE_URL}?lang=tr`} />
+        <link rel="alternate" hrefLang="zh" href={`${PAGE_URL}?lang=zh`} />
+        <link rel="alternate" hrefLang="zh-CN" href={`${PAGE_URL}?lang=zh`} />
+        <link rel="alternate" hrefLang="x-default" href={PAGE_URL} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={PAGE_URL} />
         <meta property="og:title" content="Greek Golden Visa Requirements — Documents & Eligibility 2025" />
         <meta property="og:description" content="Complete checklist of Greek Golden Visa requirements — documents, investment thresholds, and step-by-step application guide." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
       </Helmet>
 
       <Navbar forceScrolled />

@@ -43,10 +43,15 @@
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://properties.maiprop.co/" />
 
-    <!-- Hreflang -->
+    <!-- Hreflang — targeting US, UAE, Turkey, UK, China -->
     <link rel="alternate" hreflang="en" href="https://properties.maiprop.co/" />
-    <link rel="alternate" hreflang="zh" href="https://properties.maiprop.co/?lang=zh" />
+    <link rel="alternate" hreflang="en-US" href="https://properties.maiprop.co/" />
+    <link rel="alternate" hreflang="en-GB" href="https://properties.maiprop.co/" />
     <link rel="alternate" hreflang="ar" href="https://properties.maiprop.co/?lang=ar" />
+    <link rel="alternate" hreflang="ar-AE" href="https://properties.maiprop.co/?lang=ar" />
+    <link rel="alternate" hreflang="tr" href="https://properties.maiprop.co/?lang=tr" />
+    <link rel="alternate" hreflang="zh" href="https://properties.maiprop.co/?lang=zh" />
+    <link rel="alternate" hreflang="zh-CN" href="https://properties.maiprop.co/?lang=zh" />
     <link rel="alternate" hreflang="x-default" href="https://properties.maiprop.co/" />
 
     <!-- Open Graph -->
@@ -79,24 +84,61 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "RealEstateAgent",
+        "@type": "Organization",
         "name": "mAI Prop",
         "alternateName": "mAI Investments",
         "description": "Golden Visa investment platform for Greek real estate. EU residency through pre-verified property investments starting at €250,000.",
         "url": "https://properties.maiprop.co/",
-        "logo": "https://properties.maiprop.co/images/maiprop-logo.webp",
-        "sameAs": ["https://os.maiprop.co"],
-        "areaServed": {
-          "@type": "Country",
-          "name": "Greece"
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://properties.maiprop.co/images/maiprop-logo.webp",
+          "width": 200,
+          "height": 60
         },
-        "knowsAbout": ["Golden Visa Greece", "Greek real estate investment", "EU residency permits"],
+        "sameAs": [
+          "https://os.maiprop.co",
+          "https://www.facebook.com/maiprop",
+          "https://www.instagram.com/maipropos/",
+          "https://www.linkedin.com/company/mai-prop/",
+          "https://www.youtube.com/@maipropos"
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "sales",
+          "availableLanguage": ["English", "Arabic", "Chinese", "Turkish"]
+        }
+      }
+    </script>
+
+    <!-- Structured Data: RealEstateAgent -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "RealEstateAgent",
+        "name": "mAI Prop",
+        "url": "https://properties.maiprop.co/",
+        "logo": "https://properties.maiprop.co/images/maiprop-logo.webp",
+        "areaServed": [
+          { "@type": "Country", "name": "Greece" },
+          { "@type": "City", "name": "Athens" },
+          { "@type": "City", "name": "Piraeus" },
+          { "@type": "City", "name": "Glyfada" }
+        ],
+        "knowsAbout": ["Golden Visa Greece", "Greek real estate investment", "EU residency permits", "Schengen Area access"],
         "offers": {
           "@type": "Offer",
-          "name": "Golden Visa Real Estate Investment",
-          "description": "EU residency through Greek real estate investments starting at €250,000",
+          "name": "Greek Golden Visa Real Estate Investment",
+          "description": "EU residency through Greek real estate investments starting at €250,000. Includes pre-verified properties, legal support, and permit management.",
           "priceCurrency": "EUR",
           "price": "250000",
+          "availability": "https://schema.org/InStock",
+          "eligibleRegion": [
+            { "@type": "Country", "name": "United States" },
+            { "@type": "Country", "name": "United Arab Emirates" },
+            { "@type": "Country", "name": "Turkey" },
+            { "@type": "Country", "name": "United Kingdom" },
+            { "@type": "Country", "name": "China" }
+          ],
           "priceSpecification": {
             "@type": "PriceSpecification",
             "minPrice": "250000",

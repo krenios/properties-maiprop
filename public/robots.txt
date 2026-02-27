@@ -1,8 +1,14 @@
 User-agent: Googlebot
 Allow: /
+Disallow: /admin
+Disallow: /login
+Disallow: /*?lang=*
 
 User-agent: Bingbot
 Allow: /
+Disallow: /admin
+Disallow: /login
+Disallow: /*?lang=*
 
 User-agent: Twitterbot
 Allow: /
@@ -12,5 +18,11 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /login
+Disallow: /*?lang=*
+
+# Clean canonical URLs — noindex filtered/parameterized variants
+# via meta robots on-page for ?lang= and ?search= params
 
 Sitemap: https://properties.maiprop.co/sitemap.xml
