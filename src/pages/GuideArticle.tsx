@@ -141,21 +141,71 @@ const Inner = () => {
 
   const pageUrl = `${BASE_URL}/guides/${slug}/`;
 
-  const articleLd = article ? {
+  const datePublished = articleRecord?.updated_at
+    ? articleRecord.updated_at.split("T")[0]
+    : new Date().toISOString().split("T")[0];
+  const dateModified = datePublished;
+
+  // Estimate word count from article content
+  const wordCount = article
+    ? Math.round(
+        [article.intro, ...article.sections.map((s) => s.content), ...article.keyTakeaways]
+          .join(" ")
+          .split(/\s+/).length
+      )
+    : undefined;
+
+  const articleLd = article
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": article.title,
+        "description": article.metaDescription,
+        "url": pageUrl,
+        "datePublished": datePublished,
+        "dateModified": dateModified,
+        "wordCount": wordCount,
+        "articleSection": displayCategory,
+        "keywords": `Greek Golden Visa, ${displayCategory}, Greece real estate investment, property investment Greece`,
+        "inLanguage": "en",
+        "image": {
+          "@type": "ImageObject",
+          "url": `${BASE_URL}/og-image.png`,
+          "width": 1200,
+          "height": 630,
+        },
+        "author": {
+          "@type": "Organization",
+          "name": "mAI Prop",
+          "url": BASE_URL,
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "mAI Prop",
+          "url": BASE_URL,
+          "logo": {
+            "@type": "ImageObject",
+            "url": `${BASE_URL}/images/maiprop-logo.webp`,
+            "width": 200,
+            "height": 60,
+          },
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": pageUrl,
+        },
+      }
+    : null;
+
+  const breadcrumbLd = {
     "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": article.title,
-    "description": article.metaDescription,
-    "url": pageUrl,
-    "datePublished": "2025-01-01",
-    "dateModified": articleRecord?.updated_at?.split("T")[0] ?? new Date().toISOString().split("T")[0],
-    "author": { "@type": "Organization", "name": "mAI Prop" },
-    "publisher": {
-      "@type": "Organization",
-      "name": "mAI Prop",
-      "logo": { "@type": "ImageObject", "url": `${BASE_URL}/images/maiprop-logo.webp` },
-    },
-  } : null;
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": `${BASE_URL}/` },
+      { "@type": "ListItem", "position": 2, "name": "Guides", "item": `${BASE_URL}/guides/` },
+      { "@type": "ListItem", "position": 3, "name": displayTitle, "item": pageUrl },
+    ],
+  };
 
   return (
     <main className="min-h-screen bg-background">
@@ -166,11 +216,26 @@ const Inner = () => {
         <link rel="canonical" href={pageUrl} />
         <link rel="alternate" hrefLang="en" href={pageUrl} />
         <link rel="alternate" hrefLang="x-default" href={pageUrl} />
+        {/* Open Graph — Article */}
         <meta property="og:type" content="article" />
         <meta property="og:url" content={pageUrl} />
         <meta property="og:title" content={displayTitle} />
         <meta property="og:description" content={displayDescription} />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content="mAI Prop" />
+        {datePublished && <meta property="article:published_time" content={datePublished} />}
+        {dateModified && <meta property="article:modified_time" content={dateModified} />}
+        <meta property="article:author" content="mAI Prop" />
+        <meta property="article:section" content={displayCategory} />
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={displayTitle} />
+        <meta name="twitter:description" content={displayDescription} />
+        <meta name="twitter:image" content={`${BASE_URL}/og-image.png`} />
+        {/* JSON-LD */}
+        <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
         {articleLd && <script type="application/ld+json">{JSON.stringify(articleLd)}</script>}
       </Helmet>
 
