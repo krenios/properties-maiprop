@@ -167,7 +167,7 @@ Do NOT use markdown. Plain text only. Sign off: "The mAI Prop Team"`;
 
   return {
     subject: `${firstName}, new properties just listed — don't miss out`,
-    body: brandWrap(fullContent, "Book a Free Consultation →", "https://calendly.com/maipropos/30min"),
+    body: brandWrap(fullContent, "Book a Free Consultation →", "https://calendly.com/maipropos/consultation"),
   };
 }
 
@@ -237,7 +237,7 @@ Do NOT use markdown. Plain text only. Sign off: "The mAI Prop Team"`;
 
   return {
     subject: `${firstName}, your personalized investment portfolio — mAI Prop`,
-    body: brandWrap(fullContent, "Schedule a Video Call →", "https://calendly.com/maipropos/30min"),
+    body: brandWrap(fullContent, "Schedule a Video Call →", "https://calendly.com/maipropos/consultation"),
   };
 }
 
@@ -310,7 +310,7 @@ Do NOT use markdown formatting. Use • for bullets. Plain text only. Sign off: 
 
   return {
     subject: `${firstName}, your Golden Visa guide — act before thresholds increase`,
-    body: brandWrap(fullContent, "Book Your Free Consultation →", "https://calendly.com/maipropos/30min"),
+    body: brandWrap(fullContent, "Book Your Free Consultation →", "https://calendly.com/maipropos/consultation"),
   };
 }
 
