@@ -230,11 +230,11 @@ const Inner = () => {
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Button size="lg" className="rounded-full px-8 gap-2" asChild>
-              <Link to="/250k-golden-visa-properties/">
+              <a href="/#portfolio">
                 Browse Properties <ArrowRight className="h-4 w-4" />
-              </Link>
+              </a>
             </Button>
-            <Button size="lg" variant="outline" className="rounded-full px-8" onClick={() => openWithLocation("guides")}>
+            <Button size="lg" variant="outline" className="rounded-full px-8" onClick={() => openWithLocation("consultation")}>
               Free Consultation
             </Button>
           </div>
