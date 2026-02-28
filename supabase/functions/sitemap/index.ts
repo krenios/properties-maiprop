@@ -2,10 +2,48 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const BASE_URL = "https://properties.maiprop.co";
 
+const HREFLANG_LOCALES = ["el", "ar", "ar-AE", "zh", "zh-CN", "ru", "fr", "hi", "he", "tr"];
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+function hreflangBlock(path: string) {
+  const clean = `${BASE_URL}${path}`;
+  const lines = [
+    `    <xhtml:link rel="alternate" hreflang="en"        href="${clean}"/>`,
+    `    <xhtml:link rel="alternate" hreflang="en-US"     href="${clean}"/>`,
+    `    <xhtml:link rel="alternate" hreflang="en-GB"     href="${clean}"/>`,
+    ...HREFLANG_LOCALES.map((l) => {
+      const langCode = l.split("-")[0];
+      return `    <xhtml:link rel="alternate" hreflang="${l}"        href="${clean}?lang=${langCode}"/>`;
+    }),
+    `    <xhtml:link rel="alternate" hreflang="x-default" href="${clean}"/>`,
+  ];
+  return lines.join("\n");
+}
+
+function urlEntry({
+  path,
+  lastmod,
+  changefreq,
+  priority,
+  withHreflang = false,
+}: {
+  path: string;
+  lastmod: string;
+  changefreq: string;
+  priority: string;
+  withHreflang?: boolean;
+}) {
+  return `  <url>
+    <loc>${BASE_URL}${path}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>${withHreflang ? "\n" + hreflangBlock(path) : ""}
+  </url>`;
+}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -17,55 +55,71 @@ Deno.serve(async (req) => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
   );
 
-  const { data: properties } = await supabase
-    .from("properties")
-    .select("id, updated_at, status, project_type")
-    .order("sort_order", { ascending: true });
-
   const today = new Date().toISOString().split("T")[0];
 
-  // Priority by status and type
+  // Fetch properties and articles in parallel
+  const [{ data: properties }, { data: articles }] = await Promise.all([
+    supabase
+      .from("properties")
+      .select("id, updated_at, status, project_type")
+      .order("sort_order", { ascending: true }),
+    supabase
+      .from("articles")
+      .select("slug, updated_at")
+      .eq("published", true)
+      .order("updated_at", { ascending: false }),
+  ]);
+
+  // Priority/changefreq helpers for properties
   const getPriority = (p: { status: string; project_type: string }) => {
     if (p.status === "available") return "0.9";
     if (p.status === "booked") return "0.8";
     if (p.project_type === "delivered") return "0.6";
     return "0.7";
   };
+  const getChangefreq = (p: { status: string }) =>
+    p.status === "available" || p.status === "booked" ? "weekly" : "monthly";
 
-  const getChangefreq = (p: { status: string }) => {
-    if (p.status === "available" || p.status === "booked") return "weekly";
-    return "monthly";
-  };
+  // ── Static SEO pages (with full hreflang) ──────────────────────────────
+  const staticPages = [
+    { path: "/", changefreq: "weekly", priority: "1.0" },
+    { path: "/greek-golden-visa/", changefreq: "monthly", priority: "0.9" },
+    { path: "/greek-golden-visa-requirements/", changefreq: "monthly", priority: "0.85" },
+    { path: "/250k-golden-visa-properties/", changefreq: "weekly", priority: "0.9" },
+    { path: "/guides/", changefreq: "weekly", priority: "0.8" },
+  ].map(({ path, changefreq, priority }) =>
+    urlEntry({ path, lastmod: today, changefreq, priority, withHreflang: true })
+  );
 
-  // Static homepage entry with hreflang alternates
-  const homepageBlock = `  <url>
-    <loc>${BASE_URL}/</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="${BASE_URL}/?lang=zh"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="${BASE_URL}/?lang=ar"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="${BASE_URL}/"/>
-  </url>`;
+  // ── Published guide articles ────────────────────────────────────────────
+  const guideEntries = (articles || []).map((a) => {
+    const lastmod = a.updated_at ? a.updated_at.split("T")[0] : today;
+    return urlEntry({
+      path: `/guides/${a.slug}/`,
+      lastmod,
+      changefreq: "monthly",
+      priority: "0.75",
+      withHreflang: false,
+    });
+  });
 
+  // ── Property pages ──────────────────────────────────────────────────────
   const propertyEntries = (properties || []).map((p) => {
     const lastmod = p.updated_at ? p.updated_at.split("T")[0] : today;
-    const priority = getPriority(p);
-    const changefreq = getChangefreq(p);
-    const loc = `${BASE_URL}/property/${p.id}`;
-    return `  <url>
-    <loc>${loc}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>${changefreq}</changefreq>
-    <priority>${priority}</priority>
-  </url>`;
+    return urlEntry({
+      path: `/property/${p.id}/`,
+      lastmod,
+      changefreq: getChangefreq(p),
+      priority: getPriority(p),
+      withHreflang: false,
+    });
   });
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
-${homepageBlock}
+${staticPages.join("\n")}
+${guideEntries.join("\n")}
 ${propertyEntries.join("\n")}
 </urlset>`;
 

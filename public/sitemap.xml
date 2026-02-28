@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This sitemap redirects to the dynamic sitemap generated from the database. -->
-<!-- Dynamic sitemap: https://cqxcztafhnwkhxgaylne.supabase.co/functions/v1/sitemap -->
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Primary sitemap: dynamically generated from database (properties + guides + SEO pages) -->
   <sitemap>
     <loc>https://cqxcztafhnwkhxgaylne.supabase.co/functions/v1/sitemap</loc>
-    <lastmod>2026-02-27</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://properties.maiprop.co/sitemap-static.xml</loc>
-    <lastmod>2026-02-27</lastmod>
+    <lastmod>2026-02-28</lastmod>
   </sitemap>
 </sitemapindex>
