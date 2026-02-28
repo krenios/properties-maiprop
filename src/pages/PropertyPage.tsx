@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import { Property } from "@/data/properties";
@@ -96,7 +96,9 @@ const PropertyPageInner = () => {
   const images = property.images.length > 0 ? property.images : ["/placeholder.svg"];
   const currentImg = images[imgIdx % images.length];
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
-  const pageUrl = `${BASE_URL}/property/${property.id}`;
+  const pageUrl = `${BASE_URL}/property/${property.id}/`;
+  const { search } = useLocation();
+  const isLangVariant = new URLSearchParams(search).has("lang");
   const SUPABASE_PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID;
   const ogShareUrl = `https://${SUPABASE_PROJECT_ID}.supabase.co/functions/v1/og-meta?id=${property.id}`;
   const ogImage = images[0] ? optimizeImage(images[0], { width: 1200, height: 630 }) : `${BASE_URL}/og-image.png`;
@@ -214,7 +216,7 @@ const PropertyPageInner = () => {
         <title>{title}</title>
         <meta name="description" content={description} />
         <meta name="keywords" content={keywords} />
-        <meta name="robots" content="index, follow" />
+        <meta name="robots" content={isLangVariant ? "noindex, follow" : "index, follow"} />
         <link rel="canonical" href={pageUrl} />
         {/* LCP preload for hero image */}
         {heroPreloadSrcset && (
