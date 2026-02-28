@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ArrowLeft, Clock, CheckCircle2, Loader2, RefreshCw } from "lucide-react";
+import { ArrowRight, ArrowLeft, Clock, CheckCircle2, RefreshCw } from "lucide-react";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -272,16 +272,29 @@ const Inner = () => {
             {displayTitle}
           </h1>
 
-          {/* Loading state */}
+          {/* Loading state — skeleton for fast perceived render */}
           {loading && (
-            <div className="flex flex-col items-center justify-center gap-6 py-24 text-muted-foreground">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
-                <Loader2 className="h-8 w-8 text-primary animate-spin" />
+            <div className="space-y-6 animate-pulse" aria-hidden="true">
+              <div className="h-5 w-24 rounded-full bg-muted" />
+              <div className="h-12 w-3/4 rounded-lg bg-muted" />
+              <div className="space-y-3">
+                <div className="h-4 w-full rounded bg-muted" />
+                <div className="h-4 w-5/6 rounded bg-muted" />
+                <div className="h-4 w-4/6 rounded bg-muted" />
               </div>
-              <div className="text-center">
-                <p className="font-medium text-foreground">Generating article with AI…</p>
-                <p className="text-sm mt-1">This takes about 10–15 seconds</p>
+              <div className="space-y-3 pt-4">
+                <div className="h-7 w-48 rounded bg-muted" />
+                <div className="h-4 w-full rounded bg-muted" />
+                <div className="h-4 w-full rounded bg-muted" />
+                <div className="h-4 w-5/6 rounded bg-muted" />
               </div>
+              <div className="space-y-3 pt-4">
+                <div className="h-7 w-56 rounded bg-muted" />
+                <div className="h-4 w-full rounded bg-muted" />
+                <div className="h-4 w-full rounded bg-muted" />
+                <div className="h-4 w-4/6 rounded bg-muted" />
+              </div>
+              <p className="text-center text-xs text-muted-foreground pt-2">Generating article…</p>
             </div>
           )}
 
