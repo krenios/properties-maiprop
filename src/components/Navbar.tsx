@@ -13,7 +13,8 @@ const navLinks = [
 { label: "Track Record", href: "#delivered" },
 { label: "mAI Prop OS", href: "#platform" },
 { label: "Process", href: "#journey" },
-{ label: "FAQ", href: "#faq" }];
+{ label: "FAQ", href: "#faq" },
+{ label: "Guides", href: "/guides", isExternal: true }];
 
 
 const whatsappMessage = [
@@ -76,7 +77,14 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
         {/* Desktop nav */}
         <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((l) =>
-            isHome ? (
+            (l as any).isExternal ? (
+              <a
+                key={l.href}
+                href={l.href}
+                className="text-sm font-medium transition-colors text-secondary-foreground">
+                {t(l.label)}
+              </a>
+            ) : isHome ? (
               <button
                 key={l.href}
                 onClick={() => handleClick(l.href)}
@@ -109,7 +117,15 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
       <div className="border-t border-border bg-background/95 backdrop-blur-xl md:hidden">
           <nav className="container mx-auto flex flex-col gap-1 px-6 py-4">
             {navLinks.map((l) =>
-              isHome ? (
+              (l as any).isExternal ? (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+                  {t(l.label)}
+                </a>
+              ) : isHome ? (
                 <button
                   key={l.href}
                   onClick={() => handleClick(l.href)}

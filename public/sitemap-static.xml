@@ -77,4 +77,32 @@
     <xhtml:link rel="alternate" hreflang="tr"        href="https://properties.maiprop.co/250k-golden-visa-properties/?lang=tr" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://properties.maiprop.co/250k-golden-visa-properties/" />
   </url>
+  <url>
+    <loc>https://properties.maiprop.co/guides/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://properties.maiprop.co/guides/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://properties.maiprop.co/guides/" />
+  </url>
+  <url>
+    <loc>https://properties.maiprop.co/guides/benefits-greek-golden-visa-non-eu-citizens/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://properties.maiprop.co/guides/benefits-greek-golden-visa-non-eu-citizens/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://properties.maiprop.co/guides/benefits-greek-golden-visa-non-eu-citizens/" />
+  </url>
+  <url>
+    <loc>https://properties.maiprop.co/guides/athens-vs-thessaloniki-where-to-invest/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://properties.maiprop.co/guides/athens-vs-thessaloniki-where-to-invest/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://properties.maiprop.co/guides/athens-vs-thessaloniki-where-to-invest/" />
+  </url>
+  <url>
+    <loc>https://properties.maiprop.co/guides/how-to-calculate-roi-greek-rental-properties/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://properties.maiprop.co/guides/how-to-calculate-roi-greek-rental-properties/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://properties.maiprop.co/guides/how-to-calculate-roi-greek-rental-properties/" />
+  </url>
 </urlset>
