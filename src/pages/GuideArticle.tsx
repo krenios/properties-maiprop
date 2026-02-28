@@ -13,26 +13,26 @@ const BASE_URL = "https://properties.maiprop.co";
 
 const ARTICLE_META: Record<string, { topic: string; title: string; description: string; category: string }> = {
   "benefits-greek-golden-visa-non-eu-citizens": {
-    topic: "Benefits of Greek Golden Visa for Non-EU Citizens — why it's the best EU residency-by-investment program",
+    topic: "Benefits of Greek Golden Visa for Non-EU Citizens — why it's the best EU residency-by-investment program. Note: standard threshold is €250,000, but for Athens/Thessaloniki/Mykonos/Santorini the threshold is €800,000.",
     title: "Benefits of Greek Golden Visa for Non-EU Citizens",
     description: "Why the Greek Golden Visa is Europe's most attractive residency program for non-EU investors — Schengen access, no minimum stay, family coverage, and strong rental yields.",
     category: "Golden Visa",
   },
   "athens-vs-thessaloniki-where-to-invest": {
-    topic: "Athens vs. Thessaloniki: Where to Invest in Greek Real Estate — a data-driven comparison for Golden Visa investors",
+    topic: "Athens vs. Thessaloniki: Where to Invest in Greek Real Estate — a data-driven comparison for Golden Visa investors. Note: both Athens and Thessaloniki are in the high-demand zone requiring €800,000 minimum investment (vs €250,000 for the rest of Greece).",
     title: "Athens vs. Thessaloniki: Where to Invest in Greek Real Estate",
     description: "A data-driven comparison of Athens and Thessaloniki for real estate investors — price per sqm, rental yields, Golden Visa eligibility, and long-term growth potential.",
     category: "Market Analysis",
   },
   "how-to-calculate-roi-greek-rental-properties": {
-    topic: "How to Calculate ROI on Greek Rental Properties — gross yield, net yield, total return with Athens examples",
+    topic: "How to Calculate ROI on Greek Rental Properties — gross yield, net yield, total return with Athens examples. Note: Athens gross yields are typically 4–6%, net 3–5%. Athens is an €800K zone; most other regions are €250K zone for Golden Visa.",
     title: "How to Calculate ROI on Greek Rental Properties",
     description: "A step-by-step guide to calculating gross yield, net yield, and total return on Greek investment properties with real Athens market examples and tax considerations.",
     category: "Investment Strategy",
   },
 };
 
-interface ArticleData {
+interface ArticleContent {
   title: string;
   metaDescription: string;
   intro: string;
@@ -42,7 +42,17 @@ interface ArticleData {
   readTime: string;
 }
 
-const STORAGE_KEY = (slug: string) => `mai_guide_${slug}`;
+interface ArticleRecord {
+  id: string;
+  slug: string;
+  title: string;
+  meta_description: string;
+  content: ArticleContent;
+  category: string;
+  read_time: string;
+  published: boolean;
+  updated_at: string;
+}
 
 const Inner = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -52,33 +62,42 @@ const Inner = () => {
 
   const meta = slug ? ARTICLE_META[slug] : null;
 
-  const [article, setArticle] = useState<ArticleData | null>(null);
+  const [article, setArticle] = useState<ArticleContent | null>(null);
+  const [articleRecord, setArticleRecord] = useState<ArticleRecord | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!slug || !meta) return;
-
-    // Try to load from cache first
-    const cached = sessionStorage.getItem(STORAGE_KEY(slug));
-    if (cached) {
-      try {
-        setArticle(JSON.parse(cached));
-        return;
-      } catch { /* ignore */ }
-    }
-
-    generateArticle();
+    loadOrGenerate(false);
   }, [slug]);
 
-  const generateArticle = async () => {
+  const loadOrGenerate = async (forceRegenerate: boolean) => {
     if (!slug || !meta) return;
     setLoading(true);
     setError(null);
 
     try {
+      // First try to load from DB (published articles are publicly readable)
+      if (!forceRegenerate) {
+        const { data: dbRecord } = await supabase
+          .from("articles" as any)
+          .select("*")
+          .eq("slug", slug)
+          .eq("published", true)
+          .single();
+
+        if (dbRecord && (dbRecord as any).content && Object.keys((dbRecord as any).content).length > 0) {
+          setArticleRecord(dbRecord as any);
+          setArticle((dbRecord as any).content as ArticleContent);
+          setLoading(false);
+          return;
+        }
+      }
+
+      // Not in DB yet (or force regen) — call edge function
       const { data, error: fnError } = await supabase.functions.invoke("generate-article", {
-        body: { topic: meta.topic, slug },
+        body: { topic: meta.topic, slug, forceRegenerate },
       });
 
       if (fnError) throw new Error(fnError.message);
@@ -87,16 +106,13 @@ const Inner = () => {
           toast({ title: "Rate limit reached", description: "Please wait a moment and try again.", variant: "destructive" });
           throw new Error(data.error);
         }
-        if (data.error.includes("credits")) {
-          toast({ title: "Usage limit reached", description: "Please add AI credits to continue.", variant: "destructive" });
-          throw new Error(data.error);
-        }
         throw new Error(data.error);
       }
 
-      const articleData: ArticleData = data.article;
-      sessionStorage.setItem(STORAGE_KEY(slug), JSON.stringify(articleData));
-      setArticle(articleData);
+      setArticle(data.article as ArticleContent);
+      if (forceRegenerate) {
+        toast({ title: "Article regenerated", description: "Fresh AI content has been saved." });
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to generate article");
     } finally {
@@ -118,7 +134,7 @@ const Inner = () => {
     "description": article.metaDescription,
     "url": pageUrl,
     "datePublished": "2025-01-01",
-    "dateModified": new Date().toISOString().split("T")[0],
+    "dateModified": articleRecord?.updated_at?.split("T")[0] ?? new Date().toISOString().split("T")[0],
     "author": { "@type": "Organization", "name": "mAI Prop" },
     "publisher": {
       "@type": "Organization",
@@ -194,7 +210,7 @@ const Inner = () => {
           {error && !loading && (
             <div className="flex flex-col items-center gap-4 py-16 text-center">
               <p className="text-muted-foreground">{error}</p>
-              <Button onClick={generateArticle} variant="outline" className="gap-2">
+              <Button onClick={() => loadOrGenerate(false)} variant="outline" className="gap-2">
                 <RefreshCw className="h-4 w-4" /> Try Again
               </Button>
             </div>
@@ -237,7 +253,7 @@ const Inner = () => {
               <div className="rounded-2xl border border-border bg-background/60 p-8 text-center">
                 <p className="text-lg font-medium mb-2">{article.ctaText}</p>
                 <p className="text-sm text-muted-foreground mb-6">
-                  Explore our pre-verified €250K properties or speak with an advisor.
+                  Explore our pre-verified €250K+ properties or speak with an advisor.
                 </p>
                 <div className="flex flex-wrap gap-3 justify-center">
                   <Button size="lg" className="rounded-full px-8 gap-2" asChild>
