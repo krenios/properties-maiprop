@@ -45,6 +45,69 @@ const offerLd = {
   }
 };
 
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the minimum investment for the €250K Greek Golden Visa?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The minimum investment is €250,000 for residential or commercial real estate located outside the high-demand zones of Greater Athens, Thessaloniki, Mykonos, and Santorini. Properties in those high-demand zones require a minimum of €800,000.",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "Which areas of Greece qualify for the €250K Golden Visa threshold?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The €250,000 threshold applies to properties outside the designated high-demand zones. Eligible areas include most of the Greek mainland, secondary cities, regional islands, and coastal towns outside the premium tourist hotspots. Piraeus and parts of the Athenian Riviera may qualify — always verify the zone classification with your legal advisor before purchase.",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "Can I rent out a €250K Golden Visa property?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. There is no restriction on renting out your Golden Visa property. Many investors generate net rental yields of 5–7% annually through short-term platforms such as Airbnb or through long-term tenancy agreements.",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to live in Greece to keep the Golden Visa residency?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No minimum stay is required. Your 5-year renewable residency permit remains valid as long as you continue to hold the qualifying real estate investment.",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "How long does the €250K Golden Visa application take?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The full process typically takes 6–9 months: 1–2 months for property selection and due diligence, 1–2 months for legal purchase and registration, 4–6 weeks for the entry visa, and 2–4 months for the biometrics appointment in Greece followed by permit issuance.",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "Can family members be included in the €250K Golden Visa application?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The spouse or registered partner, children under 21, and parents of both the main applicant and their spouse can all be included in a single application at no additional investment cost.",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "What documents are required to purchase a €250K Golden Visa property in Greece?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You will need a valid passport, Greek tax number (AFM), a Greek bank account, and a power of attorney for your Greek lawyer. Your lawyer handles the title search, notarial deed, and land registry transfer. All foreign documents must be apostilled and accompanied by a certified Greek translation.",
+      },
+    },
+  ],
+};
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
@@ -130,6 +193,7 @@ const Inner = () => {
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(offerLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       </Helmet>
 
       <Navbar forceScrolled />
@@ -290,6 +354,21 @@ const Inner = () => {
       </section>
 
       {/* Internal links */}
+      {/* FAQ */}
+      <section className="py-16 bg-background/50">
+        <div className="container mx-auto max-w-4xl px-6">
+          <h2 className="mb-10 text-3xl font-bold text-center">Frequently Asked Questions</h2>
+          <div className="space-y-6">
+            {faqLd.mainEntity.map((q) => (
+              <div key={q.name} className="rounded-xl border border-border bg-background/40 p-6">
+                <h3 className="mb-2 font-semibold">{q.name}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{q.acceptedAnswer.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="py-16">
         <div className="container mx-auto px-6">
           <h2 className="mb-8 text-2xl font-bold text-center">Learn More</h2>
