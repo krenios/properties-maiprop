@@ -198,11 +198,7 @@ const Inner = () => {
               {properties.map((p) => {
                 const img = p.images?.[0];
                 return (
-                  <article
-                    key={p.id}
-                    className="group cursor-pointer rounded-2xl border border-border bg-background/40 overflow-hidden hover:border-primary/30 transition-all hover:shadow-[0_0_30px_hsl(179_90%_63%/0.08)]"
-                    onClick={() => navigate(`/property/${p.id}`)}
-                  >
+                  <article key={p.id} className="group rounded-2xl border border-border bg-background/40 overflow-hidden hover:border-primary/30 transition-all hover:shadow-[0_0_30px_hsl(179_90%_63%/0.08)]">
                     {/* Image */}
                     <div className="relative aspect-[4/3] overflow-hidden">
                       {img ? (
@@ -253,8 +249,8 @@ const Inner = () => {
                           </Badge>
                         )}
                       </div>
-                      <Button size="sm" variant="outline" className="w-full rounded-full text-xs">
-                        View Property →
+                      <Button size="sm" variant="outline" className="w-full rounded-full text-xs" asChild>
+                        <Link to={`/property/${p.id}`}>View Property →</Link>
                       </Button>
                     </div>
                   </article>

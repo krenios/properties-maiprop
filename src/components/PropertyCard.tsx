@@ -84,7 +84,13 @@ const PropertyCard = ({ property, onClick }: Props) => {
           </div>
         </div>
         <div className="p-5">
-          <h3 className="text-lg font-semibold">{property.title}</h3>
+          <Link
+            to={`/property/${property.id}`}
+            onClick={(e) => e.stopPropagation()}
+            className="hover:text-primary transition-colors"
+          >
+            <h3 className="text-lg font-semibold">{property.title}</h3>
+          </Link>
           <div className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
             <MapPin className="h-3.5 w-3.5" /> {property.location}
           </div>
