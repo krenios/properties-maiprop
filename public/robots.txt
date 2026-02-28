@@ -2,12 +2,16 @@ User-agent: Googlebot
 Allow: /
 Disallow: /admin
 Disallow: /login
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
 Disallow: /*?lang=*
 
 User-agent: Bingbot
 Allow: /
 Disallow: /admin
 Disallow: /login
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
 Disallow: /*?lang=*
 
 User-agent: Twitterbot
@@ -20,6 +24,8 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /login
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
 Disallow: /*?lang=*
 
 # Clean canonical URLs — noindex filtered/parameterized variants
