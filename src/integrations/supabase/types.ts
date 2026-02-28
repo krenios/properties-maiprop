@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      articles: {
+        Row: {
+          category: string
+          content: Json
+          created_at: string
+          id: string
+          meta_description: string
+          published: boolean
+          read_time: string
+          slug: string
+          title: string
+          topic: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          content?: Json
+          created_at?: string
+          id?: string
+          meta_description?: string
+          published?: boolean
+          read_time?: string
+          slug: string
+          title?: string
+          topic: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          content?: Json
+          created_at?: string
+          id?: string
+          meta_description?: string
+          published?: boolean
+          read_time?: string
+          slug?: string
+          title?: string
+          topic?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           created_at: string

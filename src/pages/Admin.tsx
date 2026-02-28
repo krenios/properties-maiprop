@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { z } from "zod";
 import { useProperties } from "@/contexts/PropertyContext";
 import { useAuth } from "@/hooks/useAuth";
@@ -19,7 +19,7 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Pencil, Trash2, AlertTriangle, Home, ArrowRightCircle, CheckCircle, LogOut, GripVertical, Users, RefreshCw, Sparkles } from "lucide-react";
+import { Plus, Pencil, Trash2, AlertTriangle, Home, ArrowRightCircle, CheckCircle, LogOut, GripVertical, Users, RefreshCw, Sparkles, BookOpen, Eye, EyeOff } from "lucide-react";
 import ImageUpload from "@/components/ImageUpload";
 import FileUpload from "@/components/FileUpload";
 import CrmTab from "@/components/CrmTab";
@@ -46,6 +46,255 @@ const emptyProperty: Omit<Property, "id" | "date_added" | "sort_order"> = {
   title: "", description: "", images: [], before_image: "", after_image: "", price: null, size: null, bedrooms: null,
   floor_plan: "", location: "", poi: [], tags: [], status: "", project_type: "new", yield: "", floor: "", construction_year: "", market_report: "",
 };
+
+// ── Articles Tab ────────────────────────────────────────────────────────────
+interface ArticleRow {
+  id: string;
+  slug: string;
+  topic: string;
+  title: string;
+  category: string;
+  read_time: string;
+  published: boolean;
+  updated_at: string;
+  content: Record<string, unknown>;
+}
+
+const ArticlesTab = () => {
+  const [articles, setArticles] = useState<ArticleRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [generating, setGenerating] = useState<string | null>(null);
+  const [newTopic, setNewTopic] = useState("");
+  const [newSlug, setNewSlug] = useState("");
+  const [newCategory, setNewCategory] = useState("Golden Visa");
+  const [addOpen, setAddOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editingArticle, setEditingArticle] = useState<ArticleRow | null>(null);
+  const [deleteArtId, setDeleteArtId] = useState<string | null>(null);
+
+  const fetchArticles = async () => {
+    setLoading(true);
+    const { data, error } = await supabase.from("articles" as any).select("*").order("updated_at", { ascending: false });
+    if (!error) setArticles((data as unknown as ArticleRow[]) || []);
+    setLoading(false);
+  };
+
+  useEffect(() => { fetchArticles(); }, []);
+
+
+
+  const generateAndSave = async (slug: string, topic: string, forceRegenerate = true) => {
+    setGenerating(slug);
+    try {
+      const { data, error } = await supabase.functions.invoke("generate-article", {
+        body: { topic, slug, forceRegenerate },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      toast.success(`Article "${slug}" generated and saved.`);
+      await fetchArticles();
+    } catch (e: any) {
+      toast.error(`Generation failed: ${e.message}`);
+    } finally {
+      setGenerating(null);
+    }
+  };
+
+  const handleAddNew = async () => {
+    if (!newTopic.trim() || !newSlug.trim()) { toast.error("Topic and slug are required"); return; }
+    const cleanSlug = newSlug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-");
+    setAddOpen(false);
+    await generateAndSave(cleanSlug, newTopic.trim());
+    setNewTopic(""); setNewSlug(""); setNewCategory("Golden Visa");
+  };
+
+  const togglePublish = async (art: ArticleRow) => {
+    const { error } = await supabase.from("articles" as any).update({ published: !art.published } as any).eq("id", art.id);
+    if (error) { toast.error("Failed to update publish status"); return; }
+    setArticles((prev) => prev.map((a) => a.id === art.id ? { ...a, published: !art.published } : a));
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingArticle) return;
+    const { error } = await supabase.from("articles" as any).update({
+      title: editingArticle.title,
+      topic: editingArticle.topic,
+      category: editingArticle.category,
+    } as any).eq("id", editingArticle.id);
+    if (error) { toast.error("Failed to save"); return; }
+    setEditOpen(false);
+    await fetchArticles();
+    toast.success("Article updated.");
+  };
+
+  const handleDelete = async () => {
+    if (!deleteArtId) return;
+    await supabase.from("articles" as any).delete().eq("id", deleteArtId);
+    setDeleteArtId(null);
+    await fetchArticles();
+    toast.success("Article deleted.");
+  };
+
+  return (
+    <div>
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-lg font-semibold">AI Articles</h2>
+        <Button size="sm" className="gap-2 rounded-full" onClick={() => setAddOpen(true)}>
+          <Plus className="h-4 w-4" /> New Article
+        </Button>
+      </div>
+
+      {loading ? (
+        <div className="flex items-center gap-2 py-12 justify-center text-muted-foreground">
+          <RefreshCw className="h-4 w-4 animate-spin" /> Loading articles…
+        </div>
+      ) : (
+        <div className="rounded-xl border border-border overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="border-border hover:bg-muted/50">
+                <TableHead>Title / Slug</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead>Updated</TableHead>
+                <TableHead>Published</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {articles.length === 0 && (
+                <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-8">No articles yet — create your first one!</TableCell></TableRow>
+              )}
+              {articles.map((art) => (
+                <TableRow key={art.id} className="border-border hover:bg-muted/30">
+                  <TableCell>
+                    <div>
+                      <p className="font-medium text-sm">{art.title || art.slug}</p>
+                      <p className="text-xs text-muted-foreground font-mono">/guides/{art.slug}</p>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge className="border text-xs border-primary/30 bg-primary/10 text-primary">{art.category}</Badge>
+                  </TableCell>
+                  <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
+                    {new Date(art.updated_at).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>
+                    <Button size="icon" variant="ghost" title={art.published ? "Unpublish" : "Publish"} onClick={() => togglePublish(art)}>
+                      {art.published ? <Eye className="h-4 w-4 text-primary" /> : <EyeOff className="h-4 w-4 text-muted-foreground" />}
+                    </Button>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-1">
+                      <Button size="icon" variant="ghost" title="Regenerate with AI" disabled={generating === art.slug} onClick={() => generateAndSave(art.slug, art.topic, true)}>
+                        <Sparkles className={`h-4 w-4 text-primary ${generating === art.slug ? "animate-pulse" : ""}`} />
+                      </Button>
+                      <Button size="icon" variant="ghost" title="Edit metadata" onClick={() => { setEditingArticle(art); setEditOpen(true); }}>
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button size="icon" variant="ghost" className="text-destructive" title="Delete" onClick={() => setDeleteArtId(art.id)}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
+
+      {/* Add New Article Dialog */}
+      <Dialog open={addOpen} onOpenChange={setAddOpen}>
+        <DialogContent className="border-border bg-card max-w-lg">
+          <DialogHeader><DialogTitle>New AI Article</DialogTitle></DialogHeader>
+          <div className="grid gap-4">
+            <div className="grid gap-2">
+              <Label>Topic / Subject <span className="text-xs text-muted-foreground">(be specific — AI uses this as the article brief)</span></Label>
+              <Textarea
+                value={newTopic}
+                onChange={(e) => setNewTopic(e.target.value)}
+                placeholder="e.g. Greek Golden Visa tax advantages for UAE investors compared to Portugal and Spain programs"
+                rows={3}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label>URL Slug <span className="text-xs text-muted-foreground">(kebab-case, used in /guides/[slug])</span></Label>
+              <Input
+                value={newSlug}
+                onChange={(e) => setNewSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-"))}
+                placeholder="greek-golden-visa-tax-advantages-uae"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label>Category</Label>
+              <Select value={newCategory} onValueChange={setNewCategory}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Golden Visa">Golden Visa</SelectItem>
+                  <SelectItem value="Market Analysis">Market Analysis</SelectItem>
+                  <SelectItem value="Investment Strategy">Investment Strategy</SelectItem>
+                  <SelectItem value="Legal & Tax">Legal &amp; Tax</SelectItem>
+                  <SelectItem value="Lifestyle">Lifestyle</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button onClick={handleAddNew} className="w-full rounded-full gap-2">
+              <Sparkles className="h-4 w-4" /> Generate with AI &amp; Save
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit metadata dialog */}
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent className="border-border bg-card max-w-lg">
+          <DialogHeader><DialogTitle>Edit Article Metadata</DialogTitle></DialogHeader>
+          {editingArticle && (
+            <div className="grid gap-4">
+              <div className="grid gap-2">
+                <Label>Title</Label>
+                <Input value={editingArticle.title} onChange={(e) => setEditingArticle({ ...editingArticle, title: e.target.value })} />
+              </div>
+              <div className="grid gap-2">
+                <Label>Topic (used for AI regeneration)</Label>
+                <Textarea value={editingArticle.topic} onChange={(e) => setEditingArticle({ ...editingArticle, topic: e.target.value })} rows={3} />
+              </div>
+              <div className="grid gap-2">
+                <Label>Category</Label>
+                <Select value={editingArticle.category} onValueChange={(v) => setEditingArticle({ ...editingArticle, category: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Golden Visa">Golden Visa</SelectItem>
+                    <SelectItem value="Market Analysis">Market Analysis</SelectItem>
+                    <SelectItem value="Investment Strategy">Investment Strategy</SelectItem>
+                    <SelectItem value="Legal & Tax">Legal &amp; Tax</SelectItem>
+                    <SelectItem value="Lifestyle">Lifestyle</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button onClick={handleSaveEdit} className="w-full rounded-full">Save Changes</Button>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete confirmation */}
+      <AlertDialog open={!!deleteArtId} onOpenChange={() => setDeleteArtId(null)}>
+        <AlertDialogContent className="border-border bg-card">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Article?</AlertDialogTitle>
+            <AlertDialogDescription>This will permanently delete the article and its cached content.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground">Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
+};
+// ── End ArticlesTab ──────────────────────────────────────────────────────────
 
 const Admin = () => {
   const { properties, addProperty, updateProperty, deleteProperty, bulkUpdateStatus, reorderProperties } = useProperties();
@@ -208,6 +457,7 @@ const Admin = () => {
           <TabsList className="mb-6">
             <TabsTrigger value="properties" className="gap-2"><Home className="h-4 w-4" /> Properties</TabsTrigger>
             <TabsTrigger value="crm" className="gap-2"><Users className="h-4 w-4" /> CRM</TabsTrigger>
+            <TabsTrigger value="articles" className="gap-2"><BookOpen className="h-4 w-4" /> Articles</TabsTrigger>
           </TabsList>
 
           <TabsContent value="properties">
@@ -388,6 +638,10 @@ const Admin = () => {
 
           <TabsContent value="crm">
             <CrmTab />
+          </TabsContent>
+
+          <TabsContent value="articles">
+            <ArticlesTab />
           </TabsContent>
         </Tabs>
       </div>
