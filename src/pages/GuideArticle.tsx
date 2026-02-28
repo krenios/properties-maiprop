@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -153,6 +153,8 @@ const Inner = () => {
   const displayCategory = articleRecord?.category ?? meta?.category ?? "Golden Visa";
 
   const pageUrl = `${BASE_URL}/guides/${slug}/`;
+  const { search } = useLocation();
+  const isLangVariant = new URLSearchParams(search).has("lang");
 
   const datePublished = articleRecord?.updated_at
     ? articleRecord.updated_at.split("T")[0]
@@ -225,7 +227,7 @@ const Inner = () => {
       <Helmet>
         <title>{`${displayTitle} — mAI Investments`}</title>
         <meta name="description" content={displayDescription} />
-        <meta name="robots" content="index, follow" />
+        <meta name="robots" content={isLangVariant ? "noindex, follow" : "index, follow"} />
         <link rel="canonical" href={pageUrl} />
         <link rel="alternate" hrefLang="en" href={pageUrl} />
         <link rel="alternate" hrefLang="x-default" href={pageUrl} />
