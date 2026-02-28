@@ -247,6 +247,25 @@ const PropertyPageInner = () => {
         {/* Structured Data */}
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": ["Organization", "RealEstateAgent"],
+          "@id": "https://properties.maiprop.co/#organization",
+          "name": "mAI Investments Properties",
+          "alternateName": "mAI Prop",
+          "url": "https://properties.maiprop.co",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://properties.maiprop.co/images/maiprop-logo.webp",
+            "width": 200,
+            "height": 60,
+          },
+          "sameAs": [
+            "https://www.facebook.com/maiprop",
+            "https://www.linkedin.com/company/maiprop",
+            "https://www.instagram.com/maiprop",
+          ],
+        })}</script>
       </Helmet>
 
       <div className="min-h-screen bg-background">

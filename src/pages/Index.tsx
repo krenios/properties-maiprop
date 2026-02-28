@@ -69,6 +69,39 @@ const faqJsonLd = {
 
 const BASE_URL = "https://properties.maiprop.co";
 
+const organizationLd = {
+  "@context": "https://schema.org",
+  "@type": ["Organization", "RealEstateAgent"],
+  "@id": `${BASE_URL}/#organization`,
+  "name": "mAI Investments Properties",
+  "alternateName": "mAI Prop",
+  "url": BASE_URL,
+  "logo": {
+    "@type": "ImageObject",
+    "url": `${BASE_URL}/images/maiprop-logo.webp`,
+    "width": 200,
+    "height": 60,
+  },
+  "description": "mAI Investments connects non-EU investors with Golden Visa eligible real estate in Athens and the Greek Riviera. We source, renovate, and manage income-generating properties targeting net yields of 5–7%.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Athens",
+    "addressCountry": "GR",
+  },
+  "areaServed": [
+    { "@type": "City", "name": "Athens", "sameAs": "https://www.wikidata.org/wiki/Q1524" },
+    { "@type": "City", "name": "Piraeus" },
+    { "@type": "City", "name": "Glyfada" },
+  ],
+  "knowsAbout": ["Greek Golden Visa", "Real Estate Investment Greece", "EU Residency by Investment"],
+  "availableLanguage": ["en", "el", "ar", "zh", "ru", "fr", "hi", "he", "tr"],
+  "sameAs": [
+    "https://www.facebook.com/maiprop",
+    "https://www.linkedin.com/company/maiprop",
+    "https://www.instagram.com/maiprop",
+  ],
+};
+
 const Index = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
@@ -100,6 +133,7 @@ const Index = () => {
       {isLangVariant && <meta name="robots" content="noindex, follow" />}
     </Helmet>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }} />
     <LeadBotProvider>
       <Navbar />
       <HeroSection />
