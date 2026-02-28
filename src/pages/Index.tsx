@@ -17,6 +17,7 @@ const PlatformReference = lazy(() => import("@/components/PlatformReference"));
 const JourneySection = lazy(() => import("@/components/JourneySection"));
 const ContactSection = lazy(() => import("@/components/ContactSection"));
 const FaqSection = lazy(() => import("@/components/FaqSection"));
+const GuidesTeaser = lazy(() => import("@/components/GuidesTeaser"));
 const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const faqJsonLd = {
@@ -129,6 +130,10 @@ const Index = () => {
       <SectionDivider />
       <Suspense fallback={<div className="min-h-[600px]" />}>
         <FaqSection />
+      </Suspense>
+      <SectionDivider />
+      <Suspense fallback={<div className="min-h-[400px]" />}>
+        <GuidesTeaser />
       </Suspense>
       <SectionDivider />
       <Suspense fallback={<div className="min-h-[500px]" />}>
