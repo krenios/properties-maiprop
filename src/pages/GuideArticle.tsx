@@ -60,25 +60,26 @@ const Inner = () => {
   const { openWithLocation } = useLeadBot();
   const { toast } = useToast();
 
+  // meta is used as fallback for hardcoded articles; DB-created articles don't need it
   const meta = slug ? ARTICLE_META[slug] : null;
 
   const [article, setArticle] = useState<ArticleContent | null>(null);
   const [articleRecord, setArticleRecord] = useState<ArticleRecord | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!slug || !meta) return;
+    if (!slug) return;
     loadOrGenerate(false);
   }, [slug]);
 
   const loadOrGenerate = async (forceRegenerate: boolean) => {
-    if (!slug || !meta) return;
+    if (!slug) return;
     setLoading(true);
     setError(null);
 
     try {
-      // First try to load from DB (published articles are publicly readable)
+      // Always try DB first (works for both hardcoded + admin-created articles)
       if (!forceRegenerate) {
         const { data: dbRecord } = await supabase
           .from("articles" as any)
@@ -95,7 +96,14 @@ const Inner = () => {
         }
       }
 
-      // Not in DB yet (or force regen) — call edge function
+      // Not in DB — only generate if we have a hardcoded topic (legacy articles)
+      if (!meta) {
+        setError("Article not found.");
+        setLoading(false);
+        return;
+      }
+
+      // Call edge function to generate + save
       const { data, error: fnError } = await supabase.functions.invoke("generate-article", {
         body: { topic: meta.topic, slug, forceRegenerate },
       });
@@ -120,10 +128,16 @@ const Inner = () => {
     }
   };
 
-  if (!meta) {
+
+  if (!slug) {
     navigate("/guides");
     return null;
   }
+
+  // Derive display values — prefer live article/record data, fallback to hardcoded meta
+  const displayTitle = article?.title ?? articleRecord?.title ?? meta?.title ?? slug;
+  const displayDescription = article?.metaDescription ?? articleRecord?.meta_description ?? meta?.description ?? "";
+  const displayCategory = articleRecord?.category ?? meta?.category ?? "Golden Visa";
 
   const pageUrl = `${BASE_URL}/guides/${slug}/`;
 
@@ -146,16 +160,16 @@ const Inner = () => {
   return (
     <main className="min-h-screen bg-background">
       <Helmet>
-        <title>{article ? `${article.title} — mAI Investments` : `${meta.title} — mAI Investments`}</title>
-        <meta name="description" content={article?.metaDescription ?? meta.description} />
+        <title>{`${displayTitle} — mAI Investments`}</title>
+        <meta name="description" content={displayDescription} />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={pageUrl} />
         <link rel="alternate" hrefLang="en" href={pageUrl} />
         <link rel="alternate" hrefLang="x-default" href={pageUrl} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={pageUrl} />
-        <meta property="og:title" content={article?.title ?? meta.title} />
-        <meta property="og:description" content={article?.metaDescription ?? meta.description} />
+        <meta property="og:title" content={displayTitle} />
+        <meta property="og:description" content={displayDescription} />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
         {articleLd && <script type="application/ld+json">{JSON.stringify(articleLd)}</script>}
       </Helmet>
@@ -172,14 +186,14 @@ const Inner = () => {
               <span>/</span>
               <li><Link to="/guides" className="hover:text-primary transition-colors">Guides</Link></li>
               <span>/</span>
-              <li className="text-foreground truncate max-w-[200px]">{meta.title}</li>
+              <li className="text-foreground truncate max-w-[200px]">{displayTitle}</li>
             </ol>
           </nav>
 
           {/* Category + read time */}
           <div className="mb-4 flex items-center gap-3">
             <span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-              {meta.category}
+              {displayCategory}
             </span>
             {article && (
               <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -190,7 +204,7 @@ const Inner = () => {
           </div>
 
           <h1 className="text-4xl font-bold leading-tight sm:text-5xl mb-6">
-            {article?.title ?? meta.title}
+            {displayTitle}
           </h1>
 
           {/* Loading state */}
