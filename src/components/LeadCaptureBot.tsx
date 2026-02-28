@@ -8,8 +8,17 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { motion, AnimatePresence } from "framer-motion";
 import { useLeadBot } from "@/components/LeadBotProvider";
 
+const CALENDLY_URL = "https://calendly.com/maipropos/consultation";
+
 const STEPS = [
-  { key: "full_name", label: "What's your full name?", type: "text", placeholder: "John Doe", emoji: "👋" },
+  {
+    key: "intent",
+    label: "How can I help you today?",
+    type: "select",
+    options: ["Explore investment options", "Book a free consultation"],
+    emoji: "👋",
+  },
+  { key: "full_name", label: "What's your full name?", type: "text", placeholder: "John Doe", emoji: "👤" },
   {
     key: "phone",
     label: "Your phone number (international format)",
@@ -56,6 +65,7 @@ const STEPS = [
 ] as const;
 
 type FormData = {
+  intent: string;
   full_name: string;
   phone: string;
   email: string;
@@ -67,6 +77,7 @@ type FormData = {
 };
 
 const initial: FormData = {
+  intent: "",
   full_name: "",
   phone: "",
   email: "",
@@ -107,6 +118,7 @@ const LeadCaptureBot = () => {
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormData>(initial);
   const [submitted, setSubmitted] = useState(false);
+  const [isConsultation, setIsConsultation] = useState(false);
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [typing, setTyping] = useState(false);
@@ -128,9 +140,11 @@ const LeadCaptureBot = () => {
   // Reset form when opened with a location
   useEffect(() => {
     if (open && pendingLocation !== undefined) {
-      setForm({ ...initial, preferred_location: pendingLocation });
+      const isConsult = pendingLocation === "consultation";
+      setForm({ ...initial, preferred_location: isConsult ? "" : pendingLocation });
       setStep(0);
       setSubmitted(false);
+      setIsConsultation(false);
       setMessages([]);
     }
   }, [open, pendingLocation]);
@@ -187,7 +201,6 @@ const LeadCaptureBot = () => {
     }
 
     const displayValue = currentValue;
-
     setMessages((prev) => [...prev, { role: "user", text: displayValue }]);
 
     if (step < STEPS.length - 1) {
@@ -229,6 +242,7 @@ const LeadCaptureBot = () => {
       toast.error("Something went wrong. Please try again.");
       return;
     }
+    if (form.intent === "Book a free consultation") setIsConsultation(true);
     setSubmitted(true);
     // Google Ads conversion tracking
     if (typeof (window as any).gtag === "function") {
@@ -247,6 +261,7 @@ const LeadCaptureBot = () => {
       setStep(0);
       setForm(initial);
       setSubmitted(false);
+      setIsConsultation(false);
       setMessages([]);
     }
   };
@@ -255,6 +270,7 @@ const LeadCaptureBot = () => {
     setForm(initial);
     setStep(0);
     setSubmitted(false);
+    setIsConsultation(false);
     setMessages([]);
     setIsOpen(true);
   };
@@ -374,11 +390,27 @@ const LeadCaptureBot = () => {
                     <h4 className="text-base font-semibold text-foreground">
                       Thank you, {form.full_name.split(" ")[0]}!
                     </h4>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      We'll reach out within 24 hours with tailored options.
-                    </p>
+                    {isConsultation ? (
+                      <>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          Book your free consultation slot below — pick a time that works for you.
+                        </p>
+                        <a
+                          href={CALENDLY_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_hsl(var(--primary)/0.4)] transition-all hover:bg-primary/90 hover:shadow-[0_0_50px_hsl(var(--primary)/0.6)]"
+                        >
+                          📅 Book a Consultation
+                        </a>
+                      </>
+                    ) : (
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        We'll reach out within 24 hours with tailored options.
+                      </p>
+                    )}
                   </div>
-                  <Button onClick={handleClose} size="sm" className="mt-1 rounded-full">
+                  <Button onClick={handleClose} size="sm" variant="outline" className="mt-1 rounded-full">
                     Close
                   </Button>
                 </motion.div>
@@ -397,6 +429,17 @@ const LeadCaptureBot = () => {
                           const updatedForm = { ...form, [currentStep.key]: opt };
                           setForm(updatedForm);
                           setMessages((prev) => [...prev, { role: "user", text: opt }]);
+
+                          // If user chose consultation at step 0, shortcut the flow
+                          if (currentStep.key === "intent" && opt === "Book a free consultation") {
+                            setIsConsultation(true);
+                            showBotMessage(
+                              `✨ Great! To personalise your session, let me gather a few quick details first. ${STEPS[1].emoji} ${STEPS[1].label}`,
+                            );
+                            setStep(1);
+                            return;
+                          }
+
                           if (step < STEPS.length - 1) {
                             const nextStep = STEPS[step + 1];
                             showBotMessage(`${nextStep.emoji} ${nextStep.label}`);
