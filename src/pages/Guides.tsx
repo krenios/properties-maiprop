@@ -1,56 +1,107 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BookOpen, Clock, TrendingUp } from "lucide-react";
+import { ArrowRight, BookOpen, Clock, TrendingUp, Landmark, DollarSign, FileText, Loader2 } from "lucide-react";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { supabase } from "@/integrations/supabase/client";
 const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const BASE_URL = "https://properties.maiprop.co";
 const PAGE_URL = `${BASE_URL}/guides/`;
 
-const guides = [
+// Fallback static guides shown while DB loads or if DB is empty
+const STATIC_GUIDES = [
   {
     slug: "benefits-greek-golden-visa-non-eu-citizens",
     title: "Benefits of Greek Golden Visa for Non-EU Citizens",
-    description: "Discover why the Greek Golden Visa is one of Europe's most attractive residency-by-investment programs — Schengen access, no minimum stay, full family coverage, and strong rental yields.",
+    meta_description: "Discover why the Greek Golden Visa is one of Europe's most attractive residency-by-investment programs — Schengen access, no minimum stay, full family coverage, and strong rental yields.",
     category: "Golden Visa",
-    readTime: "6 min read",
-    icon: TrendingUp,
-    tag: "Most Popular",
+    read_time: "6 min read",
   },
   {
     slug: "athens-vs-thessaloniki-where-to-invest",
     title: "Athens vs. Thessaloniki: Where to Invest in Greek Real Estate",
-    description: "A data-driven comparison of Greece's two largest cities for real estate investors — price per sqm, rental yields, Golden Visa eligibility, market liquidity, and growth trajectory.",
+    meta_description: "A data-driven comparison of Greece's two largest cities for real estate investors — price per sqm, rental yields, Golden Visa eligibility, market liquidity, and growth trajectory.",
     category: "Market Analysis",
-    readTime: "7 min read",
-    icon: BookOpen,
-    tag: "Market Insight",
+    read_time: "7 min read",
   },
   {
     slug: "how-to-calculate-roi-greek-rental-properties",
     title: "How to Calculate ROI on Greek Rental Properties",
-    description: "A practical step-by-step guide to calculating gross yield, net yield, and total return on Greek investment properties — with real Athens market examples and tax considerations.",
+    meta_description: "A practical step-by-step guide to calculating gross yield, net yield, and total return on Greek investment properties — with real Athens market examples and tax considerations.",
     category: "Investment Strategy",
-    readTime: "8 min read",
-    icon: TrendingUp,
-    tag: "Investor Guide",
+    read_time: "8 min read",
   },
 ];
+
+const CATEGORY_ICONS: Record<string, React.ElementType> = {
+  "Golden Visa": TrendingUp,
+  "Market Analysis": BookOpen,
+  "Investment Strategy": DollarSign,
+  "Legal & Tax": Landmark,
+  "Lifestyle": FileText,
+};
+
+const CATEGORY_TAGS: Record<string, string> = {
+  "Golden Visa": "Most Popular",
+  "Market Analysis": "Market Insight",
+  "Investment Strategy": "Investor Guide",
+  "Legal & Tax": "Expert Guide",
+  "Lifestyle": "Lifestyle",
+};
+
+interface ArticleRow {
+  id: string;
+  slug: string;
+  title: string;
+  meta_description: string;
+  category: string;
+  read_time: string;
+  updated_at: string;
+  published: boolean;
+}
 
 const breadcrumbLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
-  "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Home", "item": BASE_URL + "/" },
-    { "@type": "ListItem", "position": 2, "name": "Guides", "item": PAGE_URL },
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL + "/" },
+    { "@type": "ListItem", position: 2, name: "Guides", item: PAGE_URL },
   ],
 };
 
 const Inner = () => {
   const { openWithLocation } = useLeadBot();
+  const [articles, setArticles] = useState<ArticleRow[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      const { data, error } = await supabase
+        .from("articles" as any)
+        .select("id, slug, title, meta_description, category, read_time, updated_at, published")
+        .eq("published", true)
+        .order("updated_at", { ascending: false });
+
+      if (!error && data && (data as any[]).length > 0) {
+        setArticles(data as unknown as ArticleRow[]);
+      } else {
+        // Fallback to static list if DB is empty or unavailable
+        setArticles(STATIC_GUIDES as any);
+      }
+      setLoading(false);
+    };
+    fetchArticles();
+  }, []);
+
+  // Merge: DB articles take priority; add static ones that aren't in DB yet
+  const displayGuides = loading
+    ? STATIC_GUIDES
+    : articles.length > 0
+    ? articles
+    : STATIC_GUIDES;
 
   return (
     <main className="min-h-screen bg-background">
@@ -101,45 +152,72 @@ const Inner = () => {
       {/* Guides Grid */}
       <section className="py-16">
         <div className="container mx-auto px-6">
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {guides.map((guide) => (
-              <Link
-                key={guide.slug}
-                to={`/guides/${guide.slug}`}
-                className="group flex flex-col rounded-2xl border border-border bg-background/40 p-8 hover:border-primary/40 hover:shadow-[0_0_40px_hsl(179_90%_63%/0.08)] transition-all duration-300"
-              >
-                <div className="mb-5 flex items-center justify-between">
-                  <span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                    {guide.category}
-                  </span>
-                  <span className="rounded-full bg-secondary/60 px-3 py-1 text-xs font-medium text-secondary-foreground">
-                    {guide.tag}
-                  </span>
+          {loading ? (
+            <div className="flex items-center justify-center gap-3 py-20 text-muted-foreground">
+              <Loader2 className="h-5 w-5 animate-spin text-primary" />
+              <span className="text-sm">Loading guides…</span>
+            </div>
+          ) : (
+            <>
+              {/* Category filter summary */}
+              {displayGuides.length > 3 && (
+                <div className="mb-8 flex flex-wrap gap-2">
+                  {Array.from(new Set(displayGuides.map((g) => g.category))).map((cat) => (
+                    <span key={cat} className="rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
+                      {cat}
+                    </span>
+                  ))}
                 </div>
+              )}
 
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-                  <guide.icon className="h-6 w-6 text-primary" />
-                </div>
+              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                {displayGuides.map((guide, idx) => {
+                  const Icon = CATEGORY_ICONS[guide.category] ?? BookOpen;
+                  const tag = CATEGORY_TAGS[guide.category] ?? "Guide";
+                  const isNew = !!(guide as any).updated_at &&
+                    new Date((guide as any).updated_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
-                <h2 className="mb-3 text-xl font-bold leading-snug group-hover:text-primary transition-colors">
-                  {guide.title}
-                </h2>
-                <p className="flex-1 text-sm text-muted-foreground leading-relaxed">
-                  {guide.description}
-                </p>
+                  return (
+                    <Link
+                      key={guide.slug}
+                      to={`/guides/${guide.slug}`}
+                      className="group flex flex-col rounded-2xl border border-border bg-background/40 p-8 hover:border-primary/40 hover:shadow-[0_0_40px_hsl(179_90%_63%/0.08)] transition-all duration-300"
+                    >
+                      <div className="mb-5 flex items-center justify-between">
+                        <span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                          {guide.category}
+                        </span>
+                        <span className="rounded-full bg-secondary/60 px-3 py-1 text-xs font-medium text-secondary-foreground">
+                          {isNew ? "New" : idx === 0 ? "Most Popular" : tag}
+                        </span>
+                      </div>
 
-                <div className="mt-6 flex items-center justify-between">
-                  <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <Clock className="h-3.5 w-3.5" />
-                    {guide.readTime}
-                  </span>
-                  <span className="flex items-center gap-1 text-sm font-medium text-primary group-hover:gap-2 transition-all">
-                    Read guide <ArrowRight className="h-4 w-4" />
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
+                      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+                        <Icon className="h-6 w-6 text-primary" />
+                      </div>
+
+                      <h2 className="mb-3 text-xl font-bold leading-snug group-hover:text-primary transition-colors">
+                        {guide.title}
+                      </h2>
+                      <p className="flex-1 text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                        {guide.meta_description}
+                      </p>
+
+                      <div className="mt-6 flex items-center justify-between">
+                        <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                          <Clock className="h-3.5 w-3.5" />
+                          {guide.read_time || "7 min read"}
+                        </span>
+                        <span className="flex items-center gap-1 text-sm font-medium text-primary group-hover:gap-2 transition-all">
+                          Read guide <ArrowRight className="h-4 w-4" />
+                        </span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </>
+          )}
         </div>
       </section>
 
