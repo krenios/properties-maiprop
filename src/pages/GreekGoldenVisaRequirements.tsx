@@ -94,6 +94,69 @@ const documents = [
   "Application form (signed by each family member)",
 ];
 
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the minimum investment for the Greek Golden Visa?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The minimum investment starts at €250,000 for properties in low-demand areas (outside Greater Athens, Thessaloniki, Mykonos, and Santorini). In high-demand zones — including Greater Athens and tourist islands — the threshold is €800,000.",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "What documents are required for the Greek Golden Visa?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Required documents include a valid passport, birth certificate, marriage certificate (if applicable), clean criminal record certificate, proof of health insurance, proof of real estate purchase (notarised deed + land registry transfer certificate), and recent passport-size photographs. All foreign documents must be apostilled and accompanied by a certified Greek translation.",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "How long does the Greek Golden Visa application process take?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "From property purchase to residency permit issuance typically takes 6–9 months. The main steps are: property search and due diligence (1–2 months), purchase completion and legal registration (1–2 months), visa/entry permit application (4–6 weeks), and biometrics appointment in Greece followed by permit issuance (2–4 months).",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "Can I include my family in the Greek Golden Visa application?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The spouse or registered partner, children under 21, and parents of both the main applicant and spouse are all eligible for inclusion in a single application with no additional investment required.",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to live in Greece to maintain my Golden Visa?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. There is no minimum stay requirement. Your 5-year renewable residency permit remains valid as long as you continue to hold the qualifying real estate investment.",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "Can the Golden Visa property be rented out?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. There is no restriction on renting out the investment property. Many investors earn net rental yields of 5–7% annually through short-term platforms such as Airbnb or long-term tenancies.",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "What happens after 5 years — can I apply for citizenship?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The Golden Visa itself does not automatically lead to citizenship. However, if you physically reside in Greece for at least 7 years (183+ days/year) you may apply for permanent residency and eventually naturalisation. The permit is renewable indefinitely as long as the property investment is maintained.",
+      },
+    },
+  ],
+};
+
 const Inner = () => {
   const { openWithLocation } = useLeadBot();
   return (
@@ -126,6 +189,7 @@ const Inner = () => {
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       </Helmet>
 
       <Navbar forceScrolled />
@@ -239,6 +303,21 @@ const Inner = () => {
               <div key={doc} className="flex items-start gap-3">
                 <FileText className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                 <span className="text-sm text-muted-foreground">{doc}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-16 bg-background/50">
+        <div className="container mx-auto max-w-4xl px-6">
+          <h2 className="mb-10 text-3xl font-bold text-center">Frequently Asked Questions</h2>
+          <div className="space-y-6">
+            {faqLd.mainEntity.map((q) => (
+              <div key={q.name} className="rounded-xl border border-border bg-background/40 p-6">
+                <h3 className="mb-2 font-semibold">{q.name}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{q.acceptedAnswer.text}</p>
               </div>
             ))}
           </div>
