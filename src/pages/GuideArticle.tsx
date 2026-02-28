@@ -3,7 +3,8 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ArrowLeft, Clock, CheckCircle2, RefreshCw } from "lucide-react";
+import { ArrowRight, ArrowLeft, Clock, CheckCircle2, RefreshCw, MapPin } from "lucide-react";
+import { optimizeImage } from "@/lib/optimizeImage";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -67,11 +68,23 @@ const Inner = () => {
   const [articleRecord, setArticleRecord] = useState<ArticleRecord | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [relatedProperties, setRelatedProperties] = useState<{ id: string; title: string; location: string; price: number | null; images: string[]; status: string }[]>([]);
 
   useEffect(() => {
     if (!slug) return;
     loadOrGenerate(false);
   }, [slug]);
+
+  // Fetch a small set of available properties to link from article pages
+  useEffect(() => {
+    supabase
+      .from("properties")
+      .select("id, title, location, price, images, status")
+      .eq("status", "available")
+      .order("sort_order", { ascending: true })
+      .limit(3)
+      .then(({ data }) => { if (data) setRelatedProperties(data); });
+  }, []);
 
   const loadOrGenerate = async (forceRegenerate: boolean) => {
     if (!slug) return;
@@ -386,6 +399,52 @@ const Inner = () => {
           </div>
         </div>
       </section>
+
+      {/* Related properties — internal links to reduce orphan pages */}
+      {relatedProperties.length > 0 && (
+        <section className="py-16 border-t border-border">
+          <div className="container mx-auto px-6 max-w-3xl">
+            <h2 className="text-xl font-bold mb-2">Golden Visa Eligible Properties</h2>
+            <p className="text-sm text-muted-foreground mb-8">Pre-verified properties ready for €250K+ Golden Visa investment in Greece.</p>
+            <div className="grid gap-4 sm:grid-cols-3">
+              {relatedProperties.map((p) => (
+                <Link
+                  key={p.id}
+                  to={`/property/${p.id}`}
+                  className="group rounded-xl border border-border bg-background/40 overflow-hidden hover:border-primary/40 transition-all hover:shadow-[0_0_20px_hsl(179_90%_63%/0.1)]"
+                >
+                  <div className="aspect-[4/3] overflow-hidden">
+                    <img
+                      src={optimizeImage(p.images?.[0] || "/placeholder.svg", { width: 400, height: 300 })}
+                      alt={`${p.title} — Golden Visa property in ${p.location}, Greece`}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-sm leading-snug group-hover:text-primary transition-colors mb-1">{p.title}</h3>
+                    <p className="flex items-center gap-1 text-xs text-muted-foreground mb-2">
+                      <MapPin className="h-3 w-3" /> {p.location}
+                    </p>
+                    {p.price && (
+                      <p className="text-sm font-bold text-primary">€{p.price.toLocaleString()}</p>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <div className="mt-6 text-center">
+              <Link
+                to="/250k-golden-visa-properties/"
+                className="inline-flex items-center gap-2 text-sm text-primary hover:underline font-medium"
+              >
+                View all available properties <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       <footer className="border-t border-border bg-background text-center py-4">
         <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. All rights reserved.</p>
