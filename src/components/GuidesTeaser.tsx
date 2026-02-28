@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Clock } from "lucide-react";
+import { ArrowRight, BookOpen, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
+import { Badge } from "@/components/ui/badge";
 
 interface Article {
   id: string;
@@ -42,22 +43,16 @@ export default function GuidesTeaser() {
     <section id="resources" className="py-20 bg-background" aria-labelledby="guides-teaser-heading">
       <div className="container mx-auto px-6 max-w-6xl">
         <ScrollReveal>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-3">Resources</p>
-              <h2 id="guides-teaser-heading" className="text-3xl md:text-4xl font-bold text-foreground leading-tight">
-                Investor Guides &amp; Insights
-              </h2>
-              <p className="mt-3 text-muted-foreground max-w-lg">
-                Expert analysis on Greek Golden Visa rules, investment strategies, and market opportunities.
-              </p>
-            </div>
-            <Link
-              to="/guides"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline shrink-0"
-            >
-              View all guides <ArrowRight className="h-4 w-4" />
-            </Link>
+          <div className="mb-12 text-center">
+            <Badge className="mb-4 border-primary/30 bg-primary/10 text-primary">
+              <BookOpen className="mr-1 h-3 w-3" /> Resources
+            </Badge>
+            <h2 id="guides-teaser-heading" className="mb-4 text-3xl font-bold md:text-4xl">
+              Investor Guides &amp; Insights
+            </h2>
+            <p className="mx-auto max-w-2xl text-muted-foreground">
+              Expert analysis on Greek Golden Visa rules, investment strategies, and market opportunities.
+            </p>
           </div>
         </ScrollReveal>
 
