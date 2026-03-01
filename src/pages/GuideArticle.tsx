@@ -194,17 +194,7 @@ const Inner = () => {
           "name": "mAI Prop",
           "url": BASE_URL,
         },
-        "publisher": {
-          "@type": "Organization",
-          "name": "mAI Prop",
-          "url": BASE_URL,
-          "logo": {
-            "@type": "ImageObject",
-            "url": `${BASE_URL}/images/maiprop-logo.webp`,
-            "width": 200,
-            "height": 60,
-          },
-        },
+        "publisher": { "@id": "https://properties.maiprop.co/#organization" },
         "mainEntityOfPage": {
           "@type": "WebPage",
           "@id": pageUrl,

@@ -19,11 +19,7 @@ const articleLd = {
   "datePublished": "2024-01-01",
   "dateModified": "2025-02-01",
   "author": { "@type": "Organization", "name": "mAI Prop" },
-  "publisher": {
-    "@type": "Organization",
-    "name": "mAI Prop",
-    "logo": { "@type": "ImageObject", "url": `${BASE_URL}/images/maiprop-logo.webp` }
-  },
+  "publisher": { "@id": "https://properties.maiprop.co/#organization" },
   "mainEntityOfPage": { "@type": "WebPage", "@id": `${BASE_URL}/greek-golden-visa-requirements/` },
   "about": { "@type": "Thing", "name": "Greek Golden Visa Requirements" },
   "inLanguage": ["en", "ar", "zh", "tr"],
