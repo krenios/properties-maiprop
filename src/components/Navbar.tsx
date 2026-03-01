@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -8,13 +8,14 @@ import brandLogo from "@/assets/brand-1.png";
 import brandLight from "@/assets/brand-light.png";
 
 const navLinks = [
-{ label: "Benefits", href: "#overview" },
-{ label: "Portfolio", href: "#opportunities" },
-{ label: "Track Record", href: "#delivered" },
-{ label: "mAI Prop OS", href: "#platform" },
-{ label: "Process", href: "#journey" },
-{ label: "FAQ", href: "#faq" },
-{ label: "Guides", href: "#resources" }];
+  { label: "Benefits", href: "#overview" },
+  { label: "Opportunities", href: "#opportunities" },
+  { label: "Portfolio", href: "/portfolio", isPage: true },
+  { label: "mAI Prop OS", href: "#platform" },
+  { label: "Process", href: "#journey" },
+  { label: "FAQ", href: "#faq" },
+  { label: "Guides", href: "/guides", isPage: true },
+];
 
 
 const whatsappMessage = [
@@ -77,7 +78,14 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
         {/* Desktop nav */}
         <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((l) =>
-            (l as any).isExternal ? (
+            (l as any).isPage ? (
+              <Link
+                key={l.href}
+                to={l.href}
+                className="text-sm font-medium transition-colors text-secondary-foreground hover:text-foreground">
+                {t(l.label)}
+              </Link>
+            ) : (l as any).isExternal ? (
               <a
                 key={l.href}
                 href={l.href}
@@ -117,7 +125,15 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
       <div className="border-t border-border bg-background/95 backdrop-blur-xl md:hidden">
           <nav className="container mx-auto flex flex-col gap-1 px-6 py-4">
             {navLinks.map((l) =>
-              (l as any).isExternal ? (
+              (l as any).isPage ? (
+                <Link
+                  key={l.href}
+                  to={l.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+                  {t(l.label)}
+                </Link>
+              ) : (l as any).isExternal ? (
                 <a
                   key={l.href}
                   href={l.href}
