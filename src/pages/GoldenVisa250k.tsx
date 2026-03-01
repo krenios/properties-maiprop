@@ -160,7 +160,7 @@ const Inner = () => {
     supabase
       .from("properties")
       .select("id, title, location, price, size, bedrooms, yield, status, images, tags, project_type")
-      .eq("project_type", "current")
+      .eq("project_type", "new")
       .order("sort_order", { ascending: true })
       .then(({ data }) => {
         setProperties((data as Property[]) || []);
