@@ -369,23 +369,6 @@ const Inner = () => {
                 </ul>
               </div>
 
-              {/* Internal CTA */}
-              <div className="rounded-2xl border border-border bg-background/60 p-8 text-center">
-                <p className="text-lg font-medium mb-2">{article.ctaText}</p>
-                <p className="text-sm text-muted-foreground mb-6">
-                  Explore our pre-verified €250K+ properties or speak with an advisor.
-                </p>
-                <div className="flex flex-wrap gap-3 justify-center">
-                  <Button size="lg" className="rounded-full px-8 gap-2" asChild>
-                    <a href="/#portfolio">
-                      Browse Properties <ArrowRight className="h-4 w-4" />
-                    </a>
-                  </Button>
-                  <Button size="lg" variant="outline" className="rounded-full px-8" onClick={() => openWithLocation(`guide-${slug}`)}>
-                    Free Consultation
-                  </Button>
-                </div>
-              </div>
             </div>
           )}
 
