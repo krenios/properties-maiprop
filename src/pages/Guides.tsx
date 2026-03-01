@@ -194,7 +194,7 @@ const Inner = () => {
                           {guide.category}
                         </span>
                         <span className="rounded-full bg-secondary/60 px-3 py-1 text-xs font-medium text-secondary-foreground">
-                          {isNew ? "New" : idx === 0 ? "Most Popular" : tag}
+                          {isNew ? "New" : tag}
                         </span>
                       </div>
 
