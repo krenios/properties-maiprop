@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BookOpen, Clock, TrendingUp, Landmark, DollarSign, FileText, Loader2 } from "lucide-react";
+import { ArrowRight, BookOpen, Clock, TrendingUp, Landmark, DollarSign, FileText, Loader2, MessageCircle } from "lucide-react";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
 import { supabase } from "@/integrations/supabase/client";
 const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
@@ -229,19 +229,15 @@ const Inner = () => {
 
       {/* CTA Banner */}
       <section className="py-20 bg-background/50">
-        <div className="container mx-auto px-6 max-w-3xl text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Invest?</h2>
-          <p className="text-muted-foreground mb-8">
-            Browse our pre-verified €250K+ properties or speak with an investment advisor to start your Golden Visa journey.
-          </p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Button size="lg" className="rounded-full px-8 gap-2" asChild>
-              <a href="/#portfolio">
-                Browse Properties <ArrowRight className="h-4 w-4" />
-              </a>
-            </Button>
-            <Button size="lg" variant="outline" className="rounded-full px-8" onClick={() => openWithLocation("consultation")}>
-              Free Consultation
+        <div className="container mx-auto px-6">
+          <div className="rounded-2xl border border-primary/20 bg-primary/5 p-8 text-center max-w-3xl mx-auto">
+            <h2 className="text-2xl font-bold mb-2">Looking for something specific?</h2>
+            <p className="text-muted-foreground mb-6">
+              Our team sources off-market opportunities tailored to your budget and timeline.
+            </p>
+            <Button size="lg" className="gap-2" onClick={() => openWithLocation("consultation")}>
+              <MessageCircle className="h-4 w-4" />
+              Contact Us
             </Button>
           </div>
         </div>
