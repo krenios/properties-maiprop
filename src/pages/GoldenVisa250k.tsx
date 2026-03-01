@@ -14,22 +14,26 @@ const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 const BASE_URL = "https://properties.maiprop.co";
 const PAGE_URL = `${BASE_URL}/250k-golden-visa-properties/`;
 
+const pageLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${PAGE_URL}#webpage`,
+  "name": "€250K Golden Visa Properties in Greece — mAI Investments",
+  "description": "Pre-verified Greek real estate investment properties eligible for the Golden Visa program at €250,000.",
+  "url": PAGE_URL,
+  "isPartOf": { "@id": "https://properties.maiprop.co/#website" },
+  "author": { "@id": "https://properties.maiprop.co/#organization" },
+  "publisher": { "@id": "https://properties.maiprop.co/#organization" },
+  "inLanguage": "en",
+};
+
 const offerLd = {
   "@context": "https://schema.org",
   "@type": "ItemList",
   "name": "€250K Golden Visa Properties in Greece",
   "description": "Pre-verified Greek real estate investment properties eligible for the Golden Visa program.",
-  "url": `${BASE_URL}/250k-golden-visa-properties/`,
-  "provider": {
-    "@type": "RealEstateAgent",
-    "name": "mAI Prop",
-    "url": BASE_URL,
-    "areaServed": [
-      { "@type": "City", "name": "Athens" },
-      { "@type": "City", "name": "Piraeus" },
-      { "@type": "City", "name": "Glyfada" }
-    ]
-  },
+  "url": PAGE_URL,
+  "provider": { "@id": "https://properties.maiprop.co/#organization" },
   "offers": {
     "@type": "AggregateOffer",
     "priceCurrency": "EUR",
@@ -191,6 +195,7 @@ const Inner = () => {
         <meta property="og:title" content="€250K Golden Visa Properties Greece — Pre-Verified Investments" />
         <meta property="og:description" content="Browse €250,000+ Golden Visa eligible properties in Athens and the Athenian Riviera. Rental-ready real estate for EU residency." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
+        <script type="application/ld+json">{JSON.stringify(pageLd)}</script>
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(offerLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
