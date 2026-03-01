@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { lazy, Suspense, useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -9,32 +9,19 @@ import { Property } from "@/data/properties";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Home, ChevronRight } from "lucide-react";
+import { Home, ChevronRight, MessageCircle } from "lucide-react";
+import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+
+const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const BASE_URL = "https://properties.maiprop.co";
 
-const whatsappMessage = [
-  "Hello! I would like to explore investment opportunities under the Greek Golden Visa program.",
-  "",
-  "Please share the following details:",
-  "",
-  "1. Full Name:",
-  "2. Phone (International format):",
-  "3. Email:",
-  "4. Nationality (Country of citizenship):",
-  "5. Investment Budget (in EUR - minimum 250000):",
-  "6. Preferred Property Location:",
-  "7. Property Type (Apartment or Villa):",
-  "8. When are you planning to invest (0-6 months or 6-12 months):",
-].join("\n");
-const WHATSAPP_URL = `https://wa.me/306971853470?text=${encodeURIComponent(whatsappMessage)}`;
-
-const Properties = () => {
+const Inner = () => {
   const { properties } = useProperties();
   const [selected, setSelected] = useState<Property | null>(null);
+  const { setIsOpen } = useLeadBot();
   const current = properties.filter((p) => p.project_type === "new");
 
-  // Open property modal from hash link (e.g. #property-uuid)
   useEffect(() => {
     const openFromHash = () => {
       const hash = window.location.hash;
@@ -118,10 +105,9 @@ const Properties = () => {
                 <p className="mb-6 text-muted-foreground">
                   Our team sources off-market opportunities tailored to your budget and timeline.
                 </p>
-                <Button asChild size="lg">
-                  <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                    Speak to an Advisor
-                  </a>
+                <Button size="lg" className="gap-2" onClick={() => setIsOpen(true)}>
+                  <MessageCircle className="h-4 w-4" />
+                  Contact Us
                 </Button>
               </div>
             </ScrollReveal>
@@ -130,8 +116,17 @@ const Properties = () => {
       </main>
 
       <PropertyModal property={selected} open={!!selected} onClose={() => setSelected(null)} />
+      <Suspense fallback={null}>
+        <LeadCaptureBot />
+      </Suspense>
     </>
   );
 };
+
+const Properties = () => (
+  <LeadBotProvider>
+    <Inner />
+  </LeadBotProvider>
+);
 
 export default Properties;
