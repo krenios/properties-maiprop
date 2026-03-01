@@ -13,35 +13,35 @@ const PAGE_URL = `${BASE_URL}/guides/`;
 
 // Fallback static guides shown while DB loads or if DB is empty
 const STATIC_GUIDES = [
-  {
-    slug: "benefits-greek-golden-visa-non-eu-citizens",
-    title: "Benefits of Greek Golden Visa for Non-EU Citizens",
-    meta_description: "Discover why the Greek Golden Visa is one of Europe's most attractive residency-by-investment programs — Schengen access, no minimum stay, full family coverage, and strong rental yields.",
-    category: "Golden Visa",
-    read_time: "6 min read",
-  },
-  {
-    slug: "athens-vs-thessaloniki-where-to-invest",
-    title: "Athens vs. Thessaloniki: Where to Invest in Greek Real Estate",
-    meta_description: "A data-driven comparison of Greece's two largest cities for real estate investors — price per sqm, rental yields, Golden Visa eligibility, market liquidity, and growth trajectory.",
-    category: "Market Analysis",
-    read_time: "7 min read",
-  },
-  {
-    slug: "how-to-calculate-roi-greek-rental-properties",
-    title: "How to Calculate ROI on Greek Rental Properties",
-    meta_description: "A practical step-by-step guide to calculating gross yield, net yield, and total return on Greek investment properties — with real Athens market examples and tax considerations.",
-    category: "Investment Strategy",
-    read_time: "8 min read",
-  },
-];
+{
+  slug: "benefits-greek-golden-visa-non-eu-citizens",
+  title: "Benefits of Greek Golden Visa for Non-EU Citizens",
+  meta_description: "Discover why the Greek Golden Visa is one of Europe's most attractive residency-by-investment programs — Schengen access, no minimum stay, full family coverage, and strong rental yields.",
+  category: "Golden Visa",
+  read_time: "6 min read"
+},
+{
+  slug: "athens-vs-thessaloniki-where-to-invest",
+  title: "Athens vs. Thessaloniki: Where to Invest in Greek Real Estate",
+  meta_description: "A data-driven comparison of Greece's two largest cities for real estate investors — price per sqm, rental yields, Golden Visa eligibility, market liquidity, and growth trajectory.",
+  category: "Market Analysis",
+  read_time: "7 min read"
+},
+{
+  slug: "how-to-calculate-roi-greek-rental-properties",
+  title: "How to Calculate ROI on Greek Rental Properties",
+  meta_description: "A practical step-by-step guide to calculating gross yield, net yield, and total return on Greek investment properties — with real Athens market examples and tax considerations.",
+  category: "Investment Strategy",
+  read_time: "8 min read"
+}];
+
 
 const CATEGORY_ICONS: Record<string, React.ElementType> = {
   "Golden Visa": TrendingUp,
   "Market Analysis": BookOpen,
   "Investment Strategy": DollarSign,
   "Legal & Tax": Landmark,
-  "Lifestyle": FileText,
+  "Lifestyle": FileText
 };
 
 const CATEGORY_TAGS: Record<string, string> = {
@@ -49,7 +49,7 @@ const CATEGORY_TAGS: Record<string, string> = {
   "Market Analysis": "Market Insight",
   "Investment Strategy": "Investor Guide",
   "Legal & Tax": "Expert Guide",
-  "Lifestyle": "Lifestyle",
+  "Lifestyle": "Lifestyle"
 };
 
 interface ArticleRow {
@@ -67,9 +67,9 @@ const breadcrumbLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL + "/" },
-    { "@type": "ListItem", position: 2, name: "Guides", item: PAGE_URL },
-  ],
+  { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL + "/" },
+  { "@type": "ListItem", position: 2, name: "Guides", item: PAGE_URL }]
+
 };
 
 const Inner = () => {
@@ -79,11 +79,11 @@ const Inner = () => {
 
   useEffect(() => {
     const fetchArticles = async () => {
-      const { data, error } = await supabase
-        .from("articles" as any)
-        .select("id, slug, title, meta_description, category, read_time, updated_at, published")
-        .eq("published", true)
-        .order("updated_at", { ascending: false });
+      const { data, error } = await supabase.
+      from("articles" as any).
+      select("id, slug, title, meta_description, category, read_time, updated_at, published").
+      eq("published", true).
+      order("updated_at", { ascending: false });
 
       if (!error && data && (data as any[]).length > 0) {
         setArticles(data as unknown as ArticleRow[]);
@@ -97,11 +97,11 @@ const Inner = () => {
   }, []);
 
   // Merge: DB articles take priority; add static ones that aren't in DB yet
-  const displayGuides = loading
-    ? STATIC_GUIDES
-    : articles.length > 0
-    ? articles
-    : STATIC_GUIDES;
+  const displayGuides = loading ?
+  STATIC_GUIDES :
+  articles.length > 0 ?
+  articles :
+  STATIC_GUIDES;
 
   return (
     <main className="min-h-screen bg-background">
@@ -158,37 +158,37 @@ const Inner = () => {
       {/* Guides Grid */}
       <section className="py-16">
         <div className="container mx-auto px-6">
-          {loading ? (
-            <div className="flex items-center justify-center gap-3 py-20 text-muted-foreground">
+          {loading ?
+          <div className="flex items-center justify-center gap-3 py-20 text-muted-foreground">
               <Loader2 className="h-5 w-5 animate-spin text-primary" />
               <span className="text-sm">Loading guides…</span>
-            </div>
-          ) : (
-            <>
+            </div> :
+
+          <>
               {/* Category filter summary */}
-              {displayGuides.length > 3 && (
-                <div className="mb-8 flex flex-wrap gap-2">
-                  {Array.from(new Set(displayGuides.map((g) => g.category))).map((cat) => (
-                    <span key={cat} className="rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
+              {displayGuides.length > 3 &&
+            <div className="mb-8 flex flex-wrap gap-2">
+                  {Array.from(new Set(displayGuides.map((g) => g.category))).map((cat) =>
+              <span key={cat} className="rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
                       {cat}
                     </span>
-                  ))}
-                </div>
               )}
+                </div>
+            }
 
               <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                 {displayGuides.map((guide, idx) => {
-                  const Icon = CATEGORY_ICONS[guide.category] ?? BookOpen;
-                  const tag = CATEGORY_TAGS[guide.category] ?? "Guide";
-                  const isNew = !!(guide as any).updated_at &&
-                    new Date((guide as any).updated_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+                const Icon = CATEGORY_ICONS[guide.category] ?? BookOpen;
+                const tag = CATEGORY_TAGS[guide.category] ?? "Guide";
+                const isNew = !!(guide as any).updated_at &&
+                new Date((guide as any).updated_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
-                  return (
-                    <Link
-                      key={guide.slug}
-                      to={`/guides/${guide.slug}`}
-                      className="group flex flex-col rounded-2xl border border-border bg-background/40 p-8 hover:border-primary/40 hover:shadow-[0_0_40px_hsl(179_90%_63%/0.08)] transition-all duration-300"
-                    >
+                return (
+                  <Link
+                    key={guide.slug}
+                    to={`/guides/${guide.slug}`}
+                    className="group flex flex-col rounded-2xl border border-border bg-background/40 p-8 hover:border-primary/40 hover:shadow-[0_0_40px_hsl(179_90%_63%/0.08)] transition-all duration-300">
+
                       <div className="mb-5 flex items-center justify-between">
                         <span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
                           {guide.category}
@@ -218,12 +218,12 @@ const Inner = () => {
                           Read guide <ArrowRight className="h-4 w-4" />
                         </span>
                       </div>
-                    </Link>
-                  );
-                })}
+                    </Link>);
+
+              })}
               </div>
             </>
-          )}
+          }
         </div>
       </section>
 
@@ -231,9 +231,9 @@ const Inner = () => {
       <section className="py-20 bg-background/50">
         <div className="container mx-auto px-6">
           <div className="rounded-2xl border border-primary/20 bg-primary/5 p-8 text-center max-w-3xl mx-auto">
-            <h2 className="text-2xl font-bold mb-2">Looking for something specific?</h2>
-            <p className="text-muted-foreground mb-6">
-              Our team sources off-market opportunities tailored to your budget and timeline.
+            <h2 className="text-2xl font-bold mb-2">Is there anything specific you’d like us to clarify?</h2>
+            <p className="text-muted-foreground mb-6">Start your journey today — we’re here to guide you.
+
             </p>
             <Button size="lg" className="gap-2" onClick={() => openWithLocation("consultation")}>
               <MessageCircle className="h-4 w-4" />
@@ -247,14 +247,14 @@ const Inner = () => {
         <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. All rights reserved.</p>
       </footer>
       <Suspense fallback={null}><LeadCaptureBot /></Suspense>
-    </main>
-  );
+    </main>);
+
 };
 
-const Guides = () => (
-  <LeadBotProvider>
+const Guides = () =>
+<LeadBotProvider>
     <Inner />
-  </LeadBotProvider>
-);
+  </LeadBotProvider>;
+
 
 export default Guides;
