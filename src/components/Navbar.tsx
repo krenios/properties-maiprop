@@ -10,7 +10,7 @@ import brandLight from "@/assets/brand-light.png";
 const navLinks = [
   { label: "Benefits", href: "#overview" },
   { label: "Opportunities", href: "#opportunities" },
-  { label: "Portfolio", href: "/portfolio", isPage: true },
+  { label: "Track Record", href: "/portfolio", isPage: true },
   { label: "mAI Prop OS", href: "#platform" },
   { label: "Process", href: "#journey" },
   { label: "FAQ", href: "#faq" },
