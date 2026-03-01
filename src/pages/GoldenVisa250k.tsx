@@ -27,13 +27,14 @@ const pageLd = {
   "inLanguage": "en",
 };
 
-const offerLd = {
+const offerLd = (hasPart: { "@id": string }[]) => ({
   "@context": "https://schema.org",
   "@type": "ItemList",
   "name": "€250K Golden Visa Properties in Greece",
   "description": "Pre-verified Greek real estate investment properties eligible for the Golden Visa program.",
   "url": PAGE_URL,
   "provider": { "@id": "https://properties.maiprop.co/#organization" },
+  ...(hasPart.length > 0 ? { "hasPart": hasPart } : {}),
   "offers": {
     "@type": "AggregateOffer",
     "priceCurrency": "EUR",
@@ -47,7 +48,7 @@ const offerLd = {
       { "@type": "Country", "name": "China" }
     ]
   }
-};
+});
 
 const faqLd = {
   "@context": "https://schema.org",
@@ -167,6 +168,10 @@ const Inner = () => {
       });
   }, []);
 
+  const hasPart = properties.map((p) => ({
+    "@id": `${BASE_URL}/property/${p.id}/#apartment`,
+  }));
+
   return (
     <main className="min-h-screen bg-background">
       <Helmet>
@@ -197,7 +202,7 @@ const Inner = () => {
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
         <script type="application/ld+json">{JSON.stringify(pageLd)}</script>
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(offerLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(offerLd(hasPart))}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       </Helmet>
 
