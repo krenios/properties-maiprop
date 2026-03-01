@@ -4,9 +4,9 @@ import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import {
-  CheckCircle2, FileText, ArrowRight, AlertCircle,
-  MessageCircle, Home, Gavel, CreditCard, Fingerprint,
-  BadgeCheck, Clock, Users, Shield,
+  ArrowRight, Phone, Search, Scale, Pen, Plane,
+  Fingerprint, BadgeCheck, Star, Clock, Users,
+  ShieldCheck, Headphones, ChevronRight,
 } from "lucide-react";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
@@ -20,25 +20,27 @@ const breadcrumbLd = {
   "@type": "BreadcrumbList",
   "itemListElement": [
     { "@type": "ListItem", "position": 1, "name": "Home", "item": `${BASE_URL}/` },
-    { "@type": "ListItem", "position": 2, "name": "Greek Golden Visa", "item": `${BASE_URL}/greek-golden-visa/` },
-    { "@type": "ListItem", "position": 3, "name": "Process & Requirements", "item": PAGE_URL },
+    { "@type": "ListItem", "position": 2, "name": "How We Work", "item": PAGE_URL },
   ],
 };
 
 const howToLd = {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": "How to Get a Greek Golden Visa — Process & Requirements",
-  "description": "Complete step-by-step process and requirements to obtain a Greek Golden Visa through real estate investment.",
+  "name": "How mAI Investments Guides You to a Greek Golden Visa",
+  "description": "End-to-end advisory process — from your first consultation call to receiving your Golden Visa residency card.",
   "url": PAGE_URL,
+  "totalTime": "P9M",
+  "supply": [{ "@type": "HowToSupply", "name": "Minimum €250,000 investment capital" }],
   "step": [
-    { "@type": "HowToStep", "position": 1, "name": "Consultation & Eligibility Check", "text": "Confirm eligibility and align on budget, location, and objectives with mAI advisors." },
-    { "@type": "HowToStep", "position": 2, "name": "Property Selection", "text": "Browse pre-verified, Golden Visa-eligible portfolio and shortlist matching properties." },
-    { "@type": "HowToStep", "position": 3, "name": "Legal & Due Diligence", "text": "Appoint a Greek notary and lawyer. Title search, tax clearance, and encumbrance checks." },
-    { "@type": "HowToStep", "position": 4, "name": "Purchase & Registration", "text": "Open Greek tax number (AFM) and bank account. Sign notarial deed and register with Land Registry." },
-    { "@type": "HowToStep", "position": 5, "name": "Visa Application Submission", "text": "Compile and submit full residency application. Receive 180-day temporary permit." },
-    { "@type": "HowToStep", "position": 6, "name": "Biometrics Appointment", "text": "One trip to Greece required. Entire family applies together." },
-    { "@type": "HowToStep", "position": 7, "name": "Residency Permit Issued", "text": "5-year Golden Visa card issued. Renewable indefinitely while investment is maintained." },
+    { "@type": "HowToStep", "position": 1, "name": "Discovery Call", "text": "30-minute call to understand your goals, budget, and timeline. No commitment required." },
+    { "@type": "HowToStep", "position": 2, "name": "Investment Strategy", "text": "We build a personalised investment plan: zone selection, yield projection, and Golden Visa threshold confirmation." },
+    { "@type": "HowToStep", "position": 3, "name": "Curated Property Shortlist", "text": "We send you 3–5 pre-vetted, compliant properties matching your criteria within 48 hours." },
+    { "@type": "HowToStep", "position": 4, "name": "Legal Team Introduction", "text": "We connect you with our trusted Athens notary and lawyer. Due diligence is conducted in parallel." },
+    { "@type": "HowToStep", "position": 5, "name": "Purchase Coordination", "text": "We coordinate your Greek tax number (AFM), bank account opening, and notarial deed signing remotely where possible." },
+    { "@type": "HowToStep", "position": 6, "name": "Visa File Submission", "text": "We compile and submit the full residency application. You receive a 180-day temporary permit immediately." },
+    { "@type": "HowToStep", "position": 7, "name": "One Trip — Biometrics", "text": "A single trip to Greece. Your whole family attends together. Typically 1–2 days." },
+    { "@type": "HowToStep", "position": 8, "name": "Permit Issued + Rental Setup", "text": "5-year Golden Visa issued. We immediately set up property management and rental optimisation if desired." },
   ],
 };
 
@@ -48,80 +50,114 @@ const faqLd = {
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "How long does the Greek Golden Visa process take?",
-      "acceptedAnswer": { "@type": "Answer", "text": "The full process typically takes 6–9 months: 1–2 months for property search and due diligence, 1–2 months for legal purchase and registration, 4–6 weeks for entry visa, and 2–4 months for biometrics and permit issuance." },
+      "name": "How long does the entire Golden Visa process take with mAI?",
+      "acceptedAnswer": { "@type": "Answer", "text": "From your first call to permit issuance: typically 6–9 months. Property selection and legal coordination take 1–3 months; visa application and biometrics take a further 3–6 months. We operate faster than the market average because our legal partners are already briefed on mAI portfolio properties." },
     },
     {
       "@type": "Question",
-      "name": "What are the investment thresholds for the Greek Golden Visa?",
-      "acceptedAnswer": { "@type": "Answer", "text": "The minimum investment starts at €250,000 for properties outside high-demand zones. Properties in Greater Athens, Thessaloniki, Mykonos, and Santorini require €800,000." },
+      "name": "Do I need to travel to Greece during the process?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Only once — for the biometrics appointment. Everything else (property review, legal coordination, document preparation, and even some purchase steps) can be handled remotely or via power of attorney." },
     },
     {
       "@type": "Question",
-      "name": "Can my family be included in my Golden Visa application?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Spouse or registered partner, children under 21, and parents of both the main applicant and spouse can all be included at no additional investment cost." },
+      "name": "What does mAI Investments charge for the advisory service?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Our advisory and coordination fee is built into the property transaction. There is no separate retainer. The fee covers property sourcing, legal coordination, full visa file preparation, and post-purchase rental management setup." },
     },
     {
       "@type": "Question",
-      "name": "Do I need to live in Greece to keep the Golden Visa?",
-      "acceptedAnswer": { "@type": "Answer", "text": "No minimum stay is required. Your 5-year renewable permit remains valid as long as you hold the qualifying real estate investment." },
+      "name": "Can mAI manage my property after the Golden Visa is issued?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. We offer full rental management for short-term and long-term lets. Typical net yields on mAI portfolio properties run 4–7% annually. You receive monthly reports and rental income transfers automatically." },
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if my Golden Visa application is rejected?",
+      "acceptedAnswer": { "@type": "Answer", "text": "We only submit applications we are confident will be approved. Our pre-submission compliance review checks every document. In the rare event of a rejection, we cover the resubmission and legal costs at no charge to you." },
     },
   ],
 };
 
-const steps = [
-  { n: "01", icon: MessageCircle, title: "Consultation & Eligibility Check", desc: "Align on budget, location, and objectives. Our advisors confirm your eligibility and build a personalised investment plan.", detail: "1–2 weeks" },
-  { n: "02", icon: Home, title: "Property Selection", desc: "Browse our pre-verified, Golden Visa-eligible portfolio. We shortlist options that match your criteria and arrange viewings.", detail: "2–4 weeks" },
-  { n: "03", icon: Gavel, title: "Legal & Due Diligence", desc: "Appoint a Greek notary and lawyer. Title search, tax clearance, and encumbrance checks — fully coordinated by mAI.", detail: "1–2 weeks" },
-  { n: "04", icon: CreditCard, title: "Purchase & Registration", desc: "Open your Greek tax number (AFM) and bank account. Sign the notarial deed and register with the Land Registry. Transfer taxes ~3.09%.", detail: "2–4 weeks" },
-  { n: "05", icon: FileText, title: "Visa Application", desc: "We compile and submit your full residency application. A temporary 180-day permit is issued immediately to allow you to proceed.", detail: "4–6 weeks" },
-  { n: "06", icon: Fingerprint, title: "Biometrics Appointment", desc: "One trip to Greece required. The entire family — spouse, children under 21, and parents of both spouses — applies together.", detail: "1 day in Greece" },
-  { n: "07", icon: BadgeCheck, title: "Permit Issued", desc: "Your 5-year Golden Visa residency card is issued. Renewable indefinitely while the property investment is maintained.", detail: "2–4 months" },
+const phases = [
+  {
+    phase: "01",
+    icon: Phone,
+    title: "Discovery Call",
+    subtitle: "30 minutes · Free · No commitment",
+    desc: "We start by listening. Your goals, your timeline, your family situation. We confirm your eligibility and explain exactly which investment threshold applies to you — €250K or €800K.",
+    detail: "Within 24h of enquiry",
+    accent: "primary",
+  },
+  {
+    phase: "02",
+    icon: Search,
+    title: "Investment Strategy",
+    subtitle: "Personalised to your profile",
+    desc: "Our team builds a written investment brief: zone recommendation (Athens, Thessaloniki, or islands), projected yield, capital appreciation scenario, and total-cost-of-acquisition breakdown including taxes and fees.",
+    detail: "Delivered within 48h",
+    accent: "secondary",
+  },
+  {
+    phase: "03",
+    icon: Star,
+    title: "Curated Property Shortlist",
+    subtitle: "3–5 pre-vetted options",
+    desc: "You receive a shortlist of Golden Visa-compliant properties that have passed our internal due diligence — title check, planning status, yield verification, and renovation quality assessment. No noise. Only match.",
+    detail: "Presented within 72h",
+    accent: "primary",
+  },
+  {
+    phase: "04",
+    icon: Scale,
+    title: "Legal & Due Diligence",
+    subtitle: "Trusted Athens legal partners",
+    desc: "We introduce you to our vetted notary and lawyer network. They run a full title search, tax clearance, and encumbrance check in parallel with your decision. No delays waiting for legal to 'catch up'.",
+    detail: "Runs in parallel — 2–4 weeks",
+    accent: "secondary",
+  },
+  {
+    phase: "05",
+    icon: Pen,
+    title: "Purchase Coordination",
+    subtitle: "AFM · Bank account · Notarial deed",
+    desc: "We coordinate every administrative step: Greek tax number (AFM) registration, bank account opening, and notarial deed signing. Much of this can be done remotely via power of attorney if you prefer.",
+    detail: "2–4 weeks after legal sign-off",
+    accent: "primary",
+  },
+  {
+    phase: "06",
+    icon: Plane,
+    title: "Visa File Submission",
+    subtitle: "Full application handled by our team",
+    desc: "We compile your complete residency dossier — every document, every apostille, every certified translation — and submit on your behalf. A 180-day temporary permit is issued immediately, keeping your status clean while the full permit is processed.",
+    detail: "4–6 weeks",
+    accent: "secondary",
+  },
+  {
+    phase: "07",
+    icon: Fingerprint,
+    title: "Biometrics — One Trip",
+    subtitle: "Your entire family, together",
+    desc: "This is the only moment you need to be physically present in Greece. We schedule all family members for the same appointment slot and provide a full logistics briefing. Most clients complete this in a single day.",
+    detail: "1–2 days in Greece",
+    accent: "primary",
+  },
+  {
+    phase: "08",
+    icon: BadgeCheck,
+    title: "Permit Issued + Property Activated",
+    subtitle: "5-year renewable Golden Visa",
+    desc: "Your residency cards arrive. Simultaneously, we activate your property for rental if that's part of your plan — onboarding it with management partners, listing optimisation, and revenue reporting from day one.",
+    detail: "2–4 months post-biometrics",
+    accent: "secondary",
+  },
 ];
 
-const timeline = [
-  { phase: "Property search & due diligence", duration: "1–2 months" },
-  { phase: "Purchase completion & legal registration", duration: "1–2 months" },
-  { phase: "Visa/entry permit application", duration: "4–6 weeks" },
-  { phase: "Biometrics + permit issuance", duration: "2–4 months" },
-  { phase: "Total end-to-end", duration: "6–9 months", highlight: true },
-];
-
-const eligibility = [
-  "Non-EU / non-EEA national (any nationality)",
-  "Minimum age: 18 years old",
-  "Clean criminal record (from country of origin and residence)",
-  "Valid travel document / passport",
-  "Proof of health insurance covering Greece",
-  "No prior illegal entry or overstay in Greece",
-];
-
-const investmentTiers = [
-  { tier: "€250,000", desc: "Commercial property converted to residential, or properties outside high-demand zones (Athens city center, Mykonos, Santorini, Thessaloniki, South Athens)." },
-  { tier: "€400,000", desc: "Residential property in high-demand areas: central Athens, Thessaloniki, Mykonos, Santorini, South Athens coast." },
-  { tier: "€800,000", desc: "Single residential unit of at least 120m² anywhere in Greece (premium threshold introduced 2024)." },
-];
-
-const documents = [
-  "Passport copies (valid for at least 12 months)",
-  "Recent passport-size photographs",
-  "Proof of property ownership (notarial deed)",
-  "Property purchase receipt / bank transfer confirmation",
-  "Health insurance policy covering Greece (min €30,000 coverage)",
-  "Criminal record certificate (apostilled, translated to Greek)",
-  "Greek tax number (AFM) certificate",
-  "Marriage certificate (for spousal applications, apostilled)",
-  "Birth certificates for dependent children (apostilled)",
-  "Application form (signed by each family member)",
-];
-
-const included = [
-  "Eligibility assessment & investment strategy",
-  "Pre-verified property shortlisting",
-  "Legal coordination (notary, lawyer, AFM, bank account)",
-  "Full application document preparation",
-  "Family inclusion — spouse, children, parents",
-  "Post-visa rental management & yield optimisation",
+const whyUs = [
+  { icon: Clock, stat: "6–9 months", label: "Average end-to-end timeline" },
+  { icon: Plane, stat: "1 trip", label: "Only one visit to Greece required" },
+  { icon: Users, stat: "Family", label: "Spouse, children & parents included" },
+  { icon: ShieldCheck, stat: "100%", label: "Compliance-checked portfolio" },
+  { icon: Headphones, stat: "Dedicated", label: "Single advisor from day one" },
+  { icon: Star, stat: "4–7%", label: "Net rental yield on managed stock" },
 ];
 
 const Inner = () => {
@@ -131,9 +167,9 @@ const Inner = () => {
   return (
     <main className="min-h-screen bg-background">
       <Helmet>
-        <title>Greek Golden Visa Process & Requirements 2025 | mAI Investments</title>
-        <meta name="description" content="Complete Greek Golden Visa process and requirements for 2025 — step-by-step application guide, investment thresholds (€250K–€800K), document checklist, and timeline." />
-        <meta name="keywords" content="Greek Golden Visa process, Golden Visa requirements Greece, how to apply Greek Golden Visa, Golden Visa application steps, Greece residency investment requirements, Golden Visa documents Greece" />
+        <title>How We Work — Greek Golden Visa Advisory Process | mAI Investments</title>
+        <meta name="description" content="See exactly how mAI Investments guides you from first call to Golden Visa permit — 8 advisory steps, one trip to Greece, 6–9 months end-to-end. Full-service, no surprises." />
+        <meta name="keywords" content="Greek Golden Visa advisory, how to get Golden Visa Greece, mAI Investments process, Golden Visa investment service, Greece residency investment advisor" />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={PAGE_URL} />
         <link rel="alternate" hrefLang="en"        href={PAGE_URL} />
@@ -152,8 +188,8 @@ const Inner = () => {
         <link rel="alternate" hrefLang="x-default" href={PAGE_URL} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={PAGE_URL} />
-        <meta property="og:title" content="Greek Golden Visa Process & Requirements 2025 | mAI Investments" />
-        <meta property="og:description" content="Step-by-step Greek Golden Visa process, investment thresholds, and document checklist for 2025." />
+        <meta property="og:title" content="How We Work — Greek Golden Visa Advisory Process | mAI Investments" />
+        <meta property="og:description" content="8 advisory steps from first call to Golden Visa permit. One trip. Full family included. 6–9 months." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
         <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
         <script type="application/ld+json">{JSON.stringify(howToLd)}</script>
@@ -162,137 +198,99 @@ const Inner = () => {
 
       <Navbar forceScrolled />
 
-      {/* Hero */}
+      {/* ── HERO ─────────────────────────────────────────────── */}
       <section className="relative overflow-hidden pt-32 pb-20">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/8 via-transparent to-secondary/5" />
         <div className="pointer-events-none absolute -top-32 right-0 h-[500px] w-[500px] rounded-full bg-primary/5 blur-[120px]" />
 
         <div className="container mx-auto px-6 relative">
+          {/* Breadcrumb */}
           <nav className="mb-6 text-xs text-muted-foreground" aria-label="Breadcrumb">
-            <ol className="flex items-center gap-1.5" itemScope itemType="https://schema.org/BreadcrumbList">
-              <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                <Link to="/" className="hover:text-primary transition-colors" itemProp="item"><span itemProp="name">{t("Home")}</span></Link>
-                <meta itemProp="position" content="1" />
-              </li>
-              <span>/</span>
-              <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                <Link to="/greek-golden-visa/" className="hover:text-primary transition-colors" itemProp="item"><span itemProp="name">{t("Greek Golden Visa")}</span></Link>
-                <meta itemProp="position" content="2" />
-              </li>
-              <span>/</span>
-              <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                <span className="text-foreground" itemProp="name">{t("Process & Requirements")}</span>
-                <meta itemProp="position" content="3" />
-              </li>
+            <ol className="flex items-center gap-1.5">
+              <li><Link to="/" className="hover:text-primary transition-colors">{t("Home")}</Link></li>
+              <ChevronRight className="h-3 w-3" />
+              <li className="text-foreground">{t("How We Work")}</li>
             </ol>
           </nav>
 
           <span className="mb-4 inline-block rounded-full border border-primary/40 bg-primary/10 px-5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
-            {t("Process & Requirements")}
+            {t("Full-Service Advisory")}
           </span>
-          <h1 className="max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">
-            {t("Golden Visa Process")}{" "}
-            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">{t("& Requirements")}</span>{" "}
-            <span>2025</span>
+          <h1 className="max-w-3xl text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
+            {t("From First Call to")}{" "}
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              {t("Golden Visa Permit")}
+            </span>
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed">
-            {t("Everything you need — from investment thresholds and eligibility criteria to the full step-by-step application process. Typically completed in 6–9 months.")}
+            {t("Eight structured steps. One dedicated advisor. One trip to Greece. This is how mAI Investments takes you from initial enquiry to a 5-year renewable EU residency permit — without surprises.")}
           </p>
+
           <div className="mt-8 flex flex-wrap gap-4">
             <Button size="lg" className="rounded-full px-8 gap-2" onClick={() => openWithLocation("process")}>
-              {t("Check My Eligibility")} <ArrowRight className="h-4 w-4" />
+              {t("Start My Journey")} <ArrowRight className="h-4 w-4" />
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full px-8">
-              <Link to="/250k-golden-visa-properties/">{t("View €250K Properties")}</Link>
+              <Link to="/greek-golden-visa-requirements/">{t("View Requirements Checklist")}</Link>
             </Button>
           </div>
 
-          {/* Quick stats */}
-          <div className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-4 max-w-2xl">
-            {[
-              { icon: Clock, value: "6–9", label: t("months end-to-end") },
-              { icon: Users, value: "1", label: t("trip to Greece") },
-              { icon: BadgeCheck, value: "5yr", label: t("renewable permit") },
-              { icon: Shield, value: "€250K", label: t("entry investment") },
-            ].map((s) => (
-              <div key={s.label} className="rounded-xl border border-border bg-background/40 p-4 text-center">
-                <div className="text-2xl font-bold text-primary">{s.value}</div>
-                <div className="text-xs text-muted-foreground mt-1">{s.label}</div>
-              </div>
-            ))}
+          {/* Stats bar */}
+          <div className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6 max-w-4xl">
+            {whyUs.map((s) => {
+              const Icon = s.icon;
+              return (
+                <div key={s.label} className="rounded-xl border border-border bg-background/40 p-4 text-center">
+                  <Icon className="h-4 w-4 text-primary mx-auto mb-2" />
+                  <div className="text-lg font-bold text-primary">{s.stat}</div>
+                  <div className="text-xs text-muted-foreground mt-0.5 leading-tight">{t(s.label)}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* ── ELIGIBILITY CRITERIA ─────────────────────────────── */}
-      <section className="py-16 bg-background/50">
+      {/* ── PHASE TIMELINE ───────────────────────────────────── */}
+      <section className="py-20">
         <div className="container mx-auto max-w-4xl px-6">
-          <h2 className="mb-8 text-2xl font-bold">{t("Eligibility Criteria")}</h2>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {eligibility.map((item) => (
-              <div key={item} className="flex items-start gap-3 rounded-lg border border-border bg-background/40 p-4">
-                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                <span className="text-sm text-muted-foreground">{t(item)}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── INVESTMENT THRESHOLDS ────────────────────────────── */}
-      <section className="py-16">
-        <div className="container mx-auto max-w-4xl px-6">
-          <h2 className="mb-4 text-2xl font-bold">{t("Investment Thresholds")}</h2>
-          <p className="mb-8 text-muted-foreground">{t("Greece operates a tiered investment system introduced in 2023–2024. The threshold depends on the property's location and type.")}</p>
-          <div className="space-y-4">
-            {investmentTiers.map((opt) => (
-              <div key={opt.tier} className="rounded-xl border border-border bg-background/40 p-6 flex items-start gap-5">
-                <span className="shrink-0 text-2xl font-bold text-primary">{opt.tier}</span>
-                <p className="text-sm text-muted-foreground leading-relaxed pt-1">{t(opt.desc)}</p>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 flex items-start gap-3 rounded-lg border border-secondary/30 bg-secondary/5 p-4">
-            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
-            <p className="text-sm text-muted-foreground">
-              <strong className="text-foreground">{t("Note:")}</strong> {t("Properties in high-demand zones (central Athens, Thessaloniki, Mykonos, Santorini) require the €400,000 threshold. Always confirm zoning with your legal advisor before purchase.")}
+          <div className="mb-14 text-center">
+            <h2 className="text-3xl font-bold sm:text-4xl">{t("Your 8-Step Journey")}</h2>
+            <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
+              {t("Every step is owned by our team. You make decisions — we handle execution.")}
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── STEP-BY-STEP PROCESS ─────────────────────────────── */}
-      <section className="py-20 bg-background/50">
-        <div className="container mx-auto max-w-4xl px-6">
-          <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold sm:text-4xl">{t("Step-by-Step Process")}</h2>
-            <p className="mt-3 text-muted-foreground">{t("Full support at every stage — no surprises, no hidden steps.")}</p>
           </div>
 
           <div className="relative">
-            <div className="absolute left-[28px] top-0 bottom-0 w-px bg-gradient-to-b from-primary/40 via-secondary/30 to-transparent hidden sm:block" />
-            <div className="space-y-6">
-              {steps.map((s) => {
-                const Icon = s.icon;
+            {/* Vertical line */}
+            <div className="absolute left-[27px] top-4 bottom-4 w-px bg-gradient-to-b from-primary/50 via-secondary/30 to-transparent hidden sm:block" />
+
+            <div className="space-y-8">
+              {phases.map((p) => {
+                const Icon = p.icon;
                 return (
-                  <div key={s.n} className="relative flex gap-6 sm:gap-8">
-                    <div className="relative shrink-0 flex flex-col items-center">
-                      <div className="z-10 flex h-14 w-14 items-center justify-center rounded-full border-2 border-primary/40 bg-background shadow-[0_0_20px_hsl(179_90%_63%/0.15)]">
+                  <div key={p.phase} className="relative flex gap-6 sm:gap-8 group">
+                    {/* Icon bubble */}
+                    <div className="relative shrink-0 z-10">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-primary/40 bg-background shadow-[0_0_20px_hsl(179_90%_63%/0.12)] group-hover:border-primary/70 transition-colors">
                         <Icon className="h-5 w-5 text-primary" />
                       </div>
                     </div>
-                    <div className="flex-1 pb-2">
-                      <div className="rounded-xl border border-border bg-background/40 p-5 hover:border-primary/30 transition-colors">
-                        <div className="flex items-start justify-between gap-4 flex-wrap">
+
+                    {/* Card */}
+                    <div className="flex-1">
+                      <div className="rounded-xl border border-border bg-background/40 p-6 hover:border-primary/30 transition-colors">
+                        <div className="flex items-start justify-between gap-4 flex-wrap mb-3">
                           <div>
-                            <span className="text-xs font-bold text-primary/50 tracking-widest">{t("STEP")} {s.n}</span>
-                            <h3 className="mt-0.5 font-semibold text-base">{t(s.title)}</h3>
+                            <span className="text-xs font-bold text-primary/50 tracking-widest">{t("STEP")} {p.phase}</span>
+                            <h3 className="mt-0.5 font-semibold text-base">{t(p.title)}</h3>
+                            <p className="text-xs text-muted-foreground mt-0.5">{t(p.subtitle)}</p>
                           </div>
-                          <span className="shrink-0 rounded-full border border-secondary/30 bg-secondary/10 px-3 py-1 text-xs text-secondary font-medium">
-                            {s.detail}
+                          <span className="shrink-0 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs text-primary whitespace-nowrap">
+                            {t(p.detail)}
                           </span>
                         </div>
-                        <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{t(s.desc)}</p>
+                        <p className="text-sm text-muted-foreground leading-relaxed">{t(p.desc)}</p>
                       </div>
                     </div>
                   </div>
@@ -303,72 +301,32 @@ const Inner = () => {
         </div>
       </section>
 
-      {/* ── TIMELINE ─────────────────────────────────────────── */}
-      <section className="py-20">
-        <div className="container mx-auto max-w-4xl px-6">
-          <h2 className="text-2xl font-bold mb-8">{t("Expected Timeline")}</h2>
-          <div className="space-y-3">
-            {timeline.map((item) => (
-              <div
-                key={item.phase}
-                className={`flex items-center justify-between rounded-xl border p-4 ${
-                  item.highlight ? "border-primary/40 bg-primary/5" : "border-border bg-background/40"
-                }`}
-              >
-                <span className={`text-sm ${item.highlight ? "font-semibold" : "text-muted-foreground"}`}>
-                  {t(item.phase)}
-                </span>
-                <span className={`text-sm font-semibold ${item.highlight ? "text-primary" : ""}`}>
-                  {item.duration}
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 flex items-start gap-3 rounded-lg border border-secondary/30 bg-secondary/5 p-4">
-            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
-            <p className="text-sm text-muted-foreground">
-              {t("Timelines vary depending on document readiness and government processing queues. Starting early and having all apostilled documents prepared in advance significantly reduces the overall duration.")}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── DOCUMENTS CHECKLIST ──────────────────────────────── */}
-      <section className="py-16 bg-background/50">
-        <div className="container mx-auto max-w-4xl px-6">
-          <h2 className="mb-4 text-2xl font-bold">{t("Required Documents Checklist")}</h2>
-          <p className="mb-8 text-muted-foreground">{t("All foreign documents must be apostilled and accompanied by a certified Greek translation.")}</p>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {documents.map((doc) => (
-              <div key={doc} className="flex items-start gap-3">
-                <FileText className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                <span className="text-sm text-muted-foreground">{t(doc)}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── WHAT'S INCLUDED ──────────────────────────────────── */}
-      <section className="py-20">
+      <section className="py-20 bg-background/50">
         <div className="container mx-auto max-w-4xl px-6">
-          <div className="grid gap-12 lg:grid-cols-2 items-center">
+          <div className="grid gap-8 md:grid-cols-2 items-start">
             <div>
-              <span className="mb-3 inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-primary">
-                {t("Full-Service Support")}
-              </span>
-              <h2 className="text-3xl font-bold mb-4">{t("What's Included with mAI")}</h2>
-              <p className="text-muted-foreground mb-8 leading-relaxed">
-                {t("We don't just list properties — we manage the entire journey from first enquiry to permit in hand. Our team coordinates every professional involved.")}
+              <h2 className="text-3xl font-bold mb-4">{t("What's Included in Our Service")}</h2>
+              <p className="text-muted-foreground leading-relaxed mb-6">
+                {t("One fee. No hidden charges. Our advisory covers the complete journey — from first call to ongoing rental management after your permit is issued.")}
               </p>
-              <Button size="lg" className="rounded-full px-8 gap-2" onClick={() => openWithLocation("process-included")}>
-                {t("Book a Free Consultation")} <ArrowRight className="h-4 w-4" />
+              <Button className="rounded-full px-8 gap-2" onClick={() => openWithLocation("process-included")}>
+                {t("Get Full Service Details")} <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
             <div className="space-y-3">
-              {included.map((item) => (
+              {[
+                "Eligibility assessment & investment strategy session",
+                "Pre-vetted property shortlist matched to your criteria",
+                "Legal partner introduction & due diligence coordination",
+                "Full document preparation & visa file compilation",
+                "Family inclusion — spouse, children under 21, parents",
+                "Biometrics appointment scheduling & logistics support",
+                "Post-visa rental management & monthly yield reporting",
+                "Renewal coordination at 5-year mark",
+              ].map((item) => (
                 <div key={item} className="flex items-start gap-3 rounded-lg border border-border bg-background/40 p-4">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                   <span className="text-sm text-muted-foreground">{t(item)}</span>
                 </div>
               ))}
@@ -377,11 +335,31 @@ const Inner = () => {
         </div>
       </section>
 
-      {/* ── FAQ ──────────────────────────────────────────────── */}
-      <section className="py-16 bg-background/50">
+      {/* ── INTERNAL LINKS ───────────────────────────────────── */}
+      <section className="py-16">
         <div className="container mx-auto max-w-4xl px-6">
-          <h2 className="mb-10 text-3xl font-bold text-center">{t("Frequently Asked Questions")}</h2>
-          <div className="space-y-6">
+          <h2 className="text-2xl font-bold mb-6">{t("Related Guides")}</h2>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[
+              { href: "/greek-golden-visa-requirements/", label: "Requirements & Documents Checklist", desc: "Investment thresholds, eligibility criteria, and full document list." },
+              { href: "/250k-golden-visa-properties/", label: "€250K Compliant Properties", desc: "Pre-verified properties qualifying at the entry threshold." },
+              { href: "/golden-visa-family-included/", label: "Family Coverage Explained", desc: "Who is included — spouse, children, and parents." },
+            ].map((l) => (
+              <Link key={l.href} to={l.href} className="group rounded-xl border border-border bg-background/40 p-5 hover:border-primary/40 transition-colors">
+                <p className="font-semibold text-sm mb-1 group-hover:text-primary transition-colors">{t(l.label)}</p>
+                <p className="text-xs text-muted-foreground">{t(l.desc)}</p>
+                <ChevronRight className="h-4 w-4 text-primary mt-3 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ──────────────────────────────────────────────── */}
+      <section className="py-20 bg-background/50">
+        <div className="container mx-auto max-w-4xl px-6">
+          <h2 className="mb-10 text-3xl font-bold text-center">{t("Common Questions")}</h2>
+          <div className="space-y-4">
             {faqLd.mainEntity.map((q) => (
               <div key={q.name} className="rounded-xl border border-border bg-background/40 p-6">
                 <h3 className="mb-2 font-semibold">{t(q.name)}</h3>
@@ -392,41 +370,28 @@ const Inner = () => {
         </div>
       </section>
 
-      {/* ── INTERNAL LINKS ───────────────────────────────────── */}
-      <section className="py-16 border-t border-border">
-        <div className="container mx-auto max-w-4xl px-6">
-          <h2 className="text-xl font-bold mb-6">{t("Continue Your Research")}</h2>
-          <div className="grid gap-4 sm:grid-cols-3">
-            {[
-              { to: "/greek-golden-visa/", label: t("Program Overview"), desc: t("Benefits, Schengen access, and why Greece leads Europe") },
-              { to: "/250k-golden-visa-properties/", label: t("€250K Properties"), desc: t("Browse pre-verified Golden Visa eligible properties") },
-              { to: "/guides/", label: t("Investor Guides"), desc: t("In-depth articles on yields, tax, and strategy") },
-            ].map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className="group rounded-xl border border-border bg-background/40 p-5 hover:border-primary/40 transition-all hover:shadow-[0_0_20px_hsl(179_90%_63%/0.08)]"
-              >
-                <p className="text-xs text-primary font-semibold uppercase tracking-wide mb-1">{link.label}</p>
-                <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">{link.desc}</p>
-                <ArrowRight className="mt-3 h-4 w-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ──────────────────────────────────────────────── */}
-      <section className="py-20 bg-background/50">
+      {/* ── FINAL CTA ────────────────────────────────────────── */}
+      <section className="py-24">
         <div className="container mx-auto max-w-2xl px-6 text-center">
-          <h2 className="text-3xl font-bold mb-4">{t("Ready to Start Your Application?")}</h2>
-          <p className="text-muted-foreground mb-8">{t("Our advisors handle the entire process — from property selection to permit issuance. Start with a free 20-minute call.")}</p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Button size="lg" className="rounded-full px-8 gap-2" onClick={() => openWithLocation("process-cta")}>
-              {t("Book a Free Consultation")} <ArrowRight className="h-4 w-4" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 rounded-3xl" />
+          <span className="mb-4 inline-block rounded-full border border-primary/40 bg-primary/10 px-5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
+            {t("Start Today")}
+          </span>
+          <h2 className="text-3xl font-bold mb-4">
+            {t("Ready to Begin Your")}{" "}
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              {t("Golden Visa Journey?")}
+            </span>
+          </h2>
+          <p className="text-muted-foreground mb-8 leading-relaxed">
+            {t("Book a 30-minute discovery call. We'll confirm your eligibility, explain the thresholds that apply to you, and send a curated shortlist within 48 hours.")}
+          </p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Button size="lg" className="rounded-full px-10 gap-2" onClick={() => openWithLocation("process-cta")}>
+              {t("Book Discovery Call")} <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button asChild variant="outline" size="lg" className="rounded-full px-8">
-              <Link to="/250k-golden-visa-properties/">{t("Browse Properties")}</Link>
+            <Button asChild variant="outline" size="lg" className="rounded-full px-10">
+              <Link to="/properties/">{t("Browse Properties")}</Link>
             </Button>
           </div>
         </div>
@@ -439,10 +404,10 @@ const Inner = () => {
   );
 };
 
-const ProcessPage = () => (
-  <LeadBotProvider>
-    <Inner />
-  </LeadBotProvider>
-);
-
-export default ProcessPage;
+export default function ProcessPage() {
+  return (
+    <LeadBotProvider>
+      <Inner />
+    </LeadBotProvider>
+  );
+}
