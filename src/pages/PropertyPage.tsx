@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import type { LucideIcon } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useTranslation } from "@/contexts/TranslationContext";
 import { lazy, Suspense } from "react";
 const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
@@ -41,6 +42,7 @@ const PropertyPageInner = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { openWithLocation } = useLeadBot();
+  const { t } = useTranslation();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [imgIdx, setImgIdx] = useState(0);
@@ -295,7 +297,7 @@ const PropertyPageInner = () => {
             onClick={() => window.history.length > 1 ? window.history.back() : window.location.assign("/#opportunities")}
             className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
           >
-            <ArrowLeft className="h-4 w-4" /> Back to properties
+            <ArrowLeft className="h-4 w-4" /> {t("Back to properties")}
           </button>
 
           {/* Gallery */}

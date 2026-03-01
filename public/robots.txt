@@ -32,3 +32,5 @@ Disallow: /*?lang=*
 # via meta robots on-page for ?lang= and ?search= params
 
 Sitemap: https://properties.maiprop.co/sitemap.xml
+
+# Pages covered: /, /greek-golden-visa/, /greek-golden-visa-requirements/, /250k-golden-visa-properties/, /guides/, /golden-visa-journey/, /property/* , /guides/*
