@@ -32,6 +32,7 @@ const Inner = () => {
       <Helmet>
         <title>Golden Visa Portfolio & Track Record — 19+ Delivered Properties | mAI Investments</title>
         <meta name="description" content="19+ successfully delivered Golden Visa properties in Athens. €6.3M invested, 100% visa success rate, 6.4% average ROI. Browse our full track record." />
+        <meta name="keywords" content="Golden Visa track record, Greece property portfolio, mAI Investments delivered properties, Athens Golden Visa investment results, Greek real estate ROI, Golden Visa success rate" />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={`${BASE_URL}/trackrecord/`} />
         <link rel="alternate" hrefLang="en"        href={`${BASE_URL}/trackrecord/`} />

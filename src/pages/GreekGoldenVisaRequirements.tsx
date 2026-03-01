@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, FileText, ArrowRight, AlertCircle } from "lucide-react";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useTranslation } from "@/contexts/TranslationContext";
 const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const BASE_URL = "https://properties.maiprop.co";
@@ -155,6 +156,7 @@ const faqLd = {
 
 const Inner = () => {
   const { openWithLocation } = useLeadBot();
+  const { t } = useTranslation();
   return (
     <main className="min-h-screen bg-background">
       <Helmet>
@@ -214,21 +216,21 @@ const Inner = () => {
           </nav>
 
           <span className="mb-4 inline-block rounded-full border border-primary/40 bg-primary/10 px-5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
-            Requirements & Eligibility
+            {t("Requirements & Eligibility")}
           </span>
           <h1 className="max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">
-            Greek Golden Visa Requirements{" "}
+            {t("Greek Golden Visa Requirements")}{" "}
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">2025</span>
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-            Everything you need to qualify, apply, and receive your Greek Golden Visa — from investment thresholds to the full document checklist.
+            {t("Everything you need to qualify, apply, and receive your Greek Golden Visa — from investment thresholds to the full document checklist.")}
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Button size="lg" className="rounded-full px-8 gap-2" onClick={() => openWithLocation("requirements")}>
-              Check My Eligibility <ArrowRight className="h-4 w-4" />
+              {t("Check My Eligibility")} <ArrowRight className="h-4 w-4" />
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full px-8">
-              <Link to="/250k-golden-visa-properties/">View €250K Properties</Link>
+              <Link to="/250k-golden-visa-properties/">{t("View €250K Properties")}</Link>
             </Button>
           </div>
         </div>
@@ -237,12 +239,12 @@ const Inner = () => {
       {/* Eligibility */}
       <section className="py-16 bg-background/50">
         <div className="container mx-auto max-w-4xl px-6">
-          <h2 className="mb-8 text-2xl font-bold">Eligibility Criteria</h2>
+          <h2 className="mb-8 text-2xl font-bold">{t("Eligibility Criteria")}</h2>
           <div className="grid gap-3 sm:grid-cols-2">
             {eligibility.map((item) => (
               <div key={item} className="flex items-start gap-3 rounded-lg border border-border bg-background/40 p-4">
                 <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                <span className="text-sm text-muted-foreground">{item}</span>
+                <span className="text-sm text-muted-foreground">{t(item)}</span>
               </div>
             ))}
           </div>
@@ -252,20 +254,20 @@ const Inner = () => {
       {/* Investment tiers */}
       <section className="py-16">
         <div className="container mx-auto max-w-4xl px-6">
-          <h2 className="mb-4 text-2xl font-bold">Investment Thresholds</h2>
-          <p className="mb-8 text-muted-foreground">Greece operates a tiered investment system introduced in 2023–2024. The threshold depends on the property's location and type.</p>
+          <h2 className="mb-4 text-2xl font-bold">{t("Investment Thresholds")}</h2>
+          <p className="mb-8 text-muted-foreground">{t("Greece operates a tiered investment system introduced in 2023–2024. The threshold depends on the property's location and type.")}</p>
           <div className="space-y-4">
             {investmentOptions.map((opt) => (
               <div key={opt.tier} className="rounded-xl border border-border bg-background/40 p-6 flex items-start gap-5">
                 <span className="shrink-0 text-2xl font-bold text-primary">{opt.tier}</span>
-                <p className="text-sm text-muted-foreground leading-relaxed pt-1">{opt.desc}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed pt-1">{t(opt.desc)}</p>
               </div>
             ))}
           </div>
           <div className="mt-4 flex items-start gap-3 rounded-lg border border-secondary/30 bg-secondary/5 p-4">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
             <p className="text-sm text-muted-foreground">
-              <strong className="text-foreground">Note:</strong> Properties in high-demand zones (central Athens, Thessaloniki, Mykonos, Santorini) require the €400,000 threshold. Always confirm zoning with your legal advisor before purchase.
+              <strong className="text-foreground">{t("Note:")}</strong> {t("Properties in high-demand zones (central Athens, Thessaloniki, Mykonos, Santorini) require the €400,000 threshold. Always confirm zoning with your legal advisor before purchase.")}
             </p>
           </div>
         </div>
@@ -274,14 +276,14 @@ const Inner = () => {
       {/* Step-by-step process */}
       <section className="py-16 bg-background/50">
         <div className="container mx-auto max-w-4xl px-6">
-          <h2 className="mb-8 text-2xl font-bold">Step-by-Step Application Process</h2>
+          <h2 className="mb-8 text-2xl font-bold">{t("Step-by-Step Application Process")}</h2>
           <div className="space-y-4">
             {steps.map((s) => (
               <div key={s.n} className="flex gap-5 rounded-xl border border-border bg-background/40 p-5">
                 <span className="shrink-0 text-3xl font-bold text-primary/30">{s.n}</span>
                 <div>
-                  <h3 className="font-semibold mb-1">{s.title}</h3>
-                  <p className="text-sm text-muted-foreground">{s.desc}</p>
+                  <h3 className="font-semibold mb-1">{t(s.title)}</h3>
+                  <p className="text-sm text-muted-foreground">{t(s.desc)}</p>
                 </div>
               </div>
             ))}
@@ -292,13 +294,13 @@ const Inner = () => {
       {/* Documents */}
       <section className="py-16">
         <div className="container mx-auto max-w-4xl px-6">
-          <h2 className="mb-4 text-2xl font-bold">Required Documents Checklist</h2>
-          <p className="mb-8 text-muted-foreground">All foreign documents must be apostilled and accompanied by a certified Greek translation.</p>
+          <h2 className="mb-4 text-2xl font-bold">{t("Required Documents Checklist")}</h2>
+          <p className="mb-8 text-muted-foreground">{t("All foreign documents must be apostilled and accompanied by a certified Greek translation.")}</p>
           <div className="grid gap-3 sm:grid-cols-2">
             {documents.map((doc) => (
               <div key={doc} className="flex items-start gap-3">
                 <FileText className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                <span className="text-sm text-muted-foreground">{doc}</span>
+                <span className="text-sm text-muted-foreground">{t(doc)}</span>
               </div>
             ))}
           </div>
@@ -308,12 +310,12 @@ const Inner = () => {
       {/* FAQ */}
       <section className="py-16 bg-background/50">
         <div className="container mx-auto max-w-4xl px-6">
-          <h2 className="mb-10 text-3xl font-bold text-center">Frequently Asked Questions</h2>
+          <h2 className="mb-10 text-3xl font-bold text-center">{t("Frequently Asked Questions")}</h2>
           <div className="space-y-6">
             {faqLd.mainEntity.map((q) => (
               <div key={q.name} className="rounded-xl border border-border bg-background/40 p-6">
-                <h3 className="mb-2 font-semibold">{q.name}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{q.acceptedAnswer.text}</p>
+                <h3 className="mb-2 font-semibold">{t(q.name)}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{t(q.acceptedAnswer.text)}</p>
               </div>
             ))}
           </div>
@@ -323,14 +325,14 @@ const Inner = () => {
       {/* CTA */}
       <section className="py-20 bg-background/50">
         <div className="container mx-auto max-w-2xl px-6 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Start?</h2>
-          <p className="text-muted-foreground mb-8">Our advisors handle the entire process — from property selection to permit issuance. Talk to us today.</p>
+          <h2 className="text-3xl font-bold mb-4">{t("Ready to Start?")}</h2>
+          <p className="text-muted-foreground mb-8">{t("Our advisors handle the entire process — from property selection to permit issuance. Talk to us today.")}</p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button size="lg" className="rounded-full px-8 gap-2" onClick={() => openWithLocation("requirements")}>
-              Start My Application <ArrowRight className="h-4 w-4" />
+              {t("Start My Application")} <ArrowRight className="h-4 w-4" />
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full px-8">
-              <Link to="/250k-golden-visa-properties/">Browse €250K Properties</Link>
+              <Link to="/250k-golden-visa-properties/">{t("Browse €250K Properties")}</Link>
             </Button>
           </div>
         </div>
