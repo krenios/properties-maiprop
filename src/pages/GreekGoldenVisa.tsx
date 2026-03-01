@@ -18,7 +18,7 @@ const articleLd = {
   "url": `${BASE_URL}/greek-golden-visa/`,
   "datePublished": "2024-01-01",
   "dateModified": "2025-02-01",
-  "author": { "@type": "Organization", "name": "mAI Prop" },
+  "author": { "@id": "https://properties.maiprop.co/#organization" },
   "publisher": { "@id": "https://properties.maiprop.co/#organization" },
   "mainEntityOfPage": { "@type": "WebPage", "@id": `${BASE_URL}/greek-golden-visa/` },
   "about": { "@type": "Thing", "name": "Greek Golden Visa" },

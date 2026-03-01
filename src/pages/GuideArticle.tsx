@@ -189,11 +189,7 @@ const Inner = () => {
           "width": 1200,
           "height": 630,
         },
-        "author": {
-          "@type": "Organization",
-          "name": "mAI Prop",
-          "url": BASE_URL,
-        },
+        "author": { "@id": "https://properties.maiprop.co/#organization" },
         "publisher": { "@id": "https://properties.maiprop.co/#organization" },
         "mainEntityOfPage": {
           "@type": "WebPage",
