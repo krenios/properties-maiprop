@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { lazy, Suspense, useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
@@ -6,7 +6,7 @@ import { useProperties } from "@/contexts/PropertyContext";
 import {
   CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag,
   ExternalLink, ChevronLeft, ChevronRight, Building,
-  Calendar, Share2,
+  Calendar, Share2, MessageCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { optimizeImage } from "@/lib/optimizeImage";
@@ -15,29 +15,17 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
+import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+
+const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const BASE_URL = "https://properties.maiprop.co";
 
-const whatsappMessage = [
-  "Hello! I would like to explore investment opportunities under the Greek Golden Visa program.",
-  "",
-  "Please share the following details:",
-  "",
-  "1. Full Name:",
-  "2. Phone (International format):",
-  "3. Email:",
-  "4. Nationality (Country of citizenship):",
-  "5. Investment Budget (in EUR - minimum 250000):",
-  "6. Preferred Property Location:",
-  "7. Property Type (Apartment or Villa):",
-  "8. When are you planning to invest (0-6 months or 6-12 months):",
-].join("\n");
-const WHATSAPP_URL = `https://wa.me/306971853470?text=${encodeURIComponent(whatsappMessage)}`;
-
-const Portfolio = () => {
+const Inner = () => {
   const { properties } = useProperties();
   const delivered = properties.filter((p) => p.project_type === "delivered");
   const [selected, setSelected] = useState<Property | null>(null);
+  const { setIsOpen } = useLeadBot();
 
   return (
     <>
@@ -47,11 +35,11 @@ const Portfolio = () => {
           name="description"
           content="Browse our full portfolio of 19+ successfully delivered Golden Visa properties in Athens. €6.3M closed, 100% visa success rate, 6.4% average ROI."
         />
-        <link rel="canonical" href={`${BASE_URL}/portfolio`} />
+        <link rel="canonical" href={`${BASE_URL}/trackrecord`} />
       </Helmet>
 
       <main className="min-h-screen bg-background">
-        <Navbar />
+        <Navbar forceScrolled />
 
         {/* Hero */}
         <section className="bg-background pt-32 pb-16">
@@ -70,7 +58,6 @@ const Portfolio = () => {
             </ScrollReveal>
           </div>
         </section>
-
 
         {/* Full grid */}
         <section className="py-20">
@@ -142,14 +129,13 @@ const Portfolio = () => {
             {/* CTA */}
             <ScrollReveal>
               <div className="mt-16 rounded-2xl border border-primary/20 bg-primary/5 p-8 text-center">
-                <h2 className="mb-2 text-2xl font-bold">Ready to add your property here?</h2>
+                <h2 className="mb-2 text-2xl font-bold">Looking for something similar?</h2>
                 <p className="mb-6 text-muted-foreground">
-                  Join 19+ investors who've already secured their Golden Visa through mAI Investments.
+                  Contact us today and we'll match you with a Golden Visa property that fits your goals.
                 </p>
-                <Button asChild size="lg">
-                  <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                    Start Your Investment Journey
-                  </a>
+                <Button size="lg" className="gap-2" onClick={() => setIsOpen(true)}>
+                  <MessageCircle className="h-4 w-4" />
+                  Contact Us
                 </Button>
               </div>
             </ScrollReveal>
@@ -158,11 +144,14 @@ const Portfolio = () => {
       </main>
 
       <DeliveredModal property={selected} open={!!selected} onClose={() => setSelected(null)} />
+      <Suspense fallback={null}>
+        <LeadCaptureBot />
+      </Suspense>
     </>
   );
 };
 
-/* ─── Modal (copied from DeliveredProjects) ─── */
+/* ─── Modal ─── */
 interface ModalProps { property: Property | null; open: boolean; onClose: () => void; }
 
 const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
@@ -284,5 +273,11 @@ const BeforeAfterSlider = ({ before, after }: { before: string; after: string })
     </div>
   );
 };
+
+const Portfolio = () => (
+  <LeadBotProvider>
+    <Inner />
+  </LeadBotProvider>
+);
 
 export default Portfolio;

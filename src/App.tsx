@@ -50,6 +50,8 @@ const App = () => (
                 <Route path="/guides/:slug/" element={<Suspense fallback={null}><GuideArticle /></Suspense>} />
                 <Route path="/portfolio" element={<Suspense fallback={null}><Portfolio /></Suspense>} />
                 <Route path="/portfolio/" element={<Suspense fallback={null}><Portfolio /></Suspense>} />
+                <Route path="/trackrecord" element={<Suspense fallback={null}><Portfolio /></Suspense>} />
+                <Route path="/trackrecord/" element={<Suspense fallback={null}><Portfolio /></Suspense>} />
                 <Route path="/properties" element={<Suspense fallback={null}><Properties /></Suspense>} />
                 <Route path="/properties/" element={<Suspense fallback={null}><Properties /></Suspense>} />
                 <Route path="/login" element={<Suspense fallback={null}><Login /></Suspense>} />
