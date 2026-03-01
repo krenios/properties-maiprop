@@ -65,12 +65,20 @@ const Inner = () => {
         <div className="border-b border-border/50 bg-background/80 backdrop-blur-sm">
           <div className="container mx-auto px-6 pt-20 pb-3">
             <nav className="flex items-center gap-2 text-sm text-muted-foreground" aria-label="Breadcrumb">
-              <Link to="/" className="flex items-center gap-1 hover:text-foreground transition-colors">
-                <HomeIcon className="h-3.5 w-3.5" />
-                Home
-              </Link>
-              <ChevronRight className="h-3.5 w-3.5 opacity-40" />
-              <span className="text-foreground font-medium">Track Record</span>
+              <ol className="flex items-center gap-2" itemScope itemType="https://schema.org/BreadcrumbList">
+                <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                  <Link to="/" className="flex items-center gap-1 hover:text-foreground transition-colors" itemProp="item">
+                    <HomeIcon className="h-3.5 w-3.5" />
+                    <span itemProp="name">Home</span>
+                  </Link>
+                  <meta itemProp="position" content="1" />
+                </li>
+                <ChevronRight className="h-3.5 w-3.5 opacity-40" />
+                <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                  <span className="text-foreground font-medium" itemProp="name">Track Record</span>
+                  <meta itemProp="position" content="2" />
+                </li>
+              </ol>
             </nav>
           </div>
         </div>
