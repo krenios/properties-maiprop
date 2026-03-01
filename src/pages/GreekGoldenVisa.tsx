@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { Globe, Users, Home, TrendingUp, Sun, Zap, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Globe, Users, Home, TrendingUp, Sun, Zap, ArrowRight, CheckCircle2, MapPin, Gavel, BadgeCheck } from "lucide-react";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useTranslation } from "@/contexts/TranslationContext";
 const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const BASE_URL = "https://properties.maiprop.co";
@@ -100,6 +101,7 @@ const benefits = [
 
 const Inner = () => {
   const { openWithLocation } = useLeadBot();
+  const { t } = useTranslation();
   return (
     <main className="min-h-screen bg-background">
       <Helmet>
@@ -154,23 +156,23 @@ const Inner = () => {
           </nav>
 
           <span className="mb-4 inline-block rounded-full border border-primary/40 bg-primary/10 px-5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
-            Greek Golden Visa Program
+            {t("Greek Golden Visa Program")}
           </span>
           <h1 className="max-w-3xl text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
-            Greek Golden Visa —{" "}
+            {t("Greek Golden Visa")} —{" "}
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              EU Residency Through Real Estate
+              {t("EU Residency Through Real Estate")}
             </span>
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-            Greece's Golden Visa program grants non-EU investors and their families a 5-year renewable EU residency permit in exchange for a real estate investment starting at <strong className="text-foreground">€250,000</strong>. It is one of Europe's most accessible and rewarding residency-by-investment pathways.
+            {t("Greece's Golden Visa program grants non-EU investors and their families a 5-year renewable EU residency permit in exchange for a real estate investment starting at")} <strong className="text-foreground">€250,000</strong>. {t("It is one of Europe's most accessible and rewarding residency-by-investment pathways.")}
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Button size="lg" className="rounded-full px-8 gap-2" onClick={() => openWithLocation("greek-golden-visa")}>
-              Start Your Application <ArrowRight className="h-4 w-4" />
+              {t("Start Your Application")} <ArrowRight className="h-4 w-4" />
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full px-8">
-              <Link to="/greek-golden-visa-requirements/">View Requirements</Link>
+              <Link to="/greek-golden-visa-requirements/">{t("View Requirements")}</Link>
             </Button>
           </div>
         </div>
@@ -179,16 +181,16 @@ const Inner = () => {
       {/* Benefits grid */}
       <section className="py-20 bg-background/50">
         <div className="container mx-auto px-6">
-          <h2 className="mb-3 text-3xl font-bold text-center">Why Choose the Greek Golden Visa?</h2>
-          <p className="mb-12 text-center text-muted-foreground">Six reasons international investors choose Greece over other EU programs.</p>
+          <h2 className="mb-3 text-3xl font-bold text-center">{t("Why Choose the Greek Golden Visa?")}</h2>
+          <p className="mb-12 text-center text-muted-foreground">{t("Six reasons international investors choose Greece over other EU programs.")}</p>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {benefits.map((b) => (
               <div key={b.title} className="rounded-xl border border-border bg-background/40 p-6 backdrop-blur transition-all hover:border-primary/30 hover:shadow-[0_0_30px_hsl(179_90%_63%/0.06)]">
                 <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10">
                   <b.icon className="h-5 w-5 text-primary" />
                 </div>
-                <h3 className="mb-1 font-semibold">{b.title}</h3>
-                <p className="text-sm text-muted-foreground">{b.desc}</p>
+                <h3 className="mb-1 font-semibold">{t(b.title)}</h3>
+                <p className="text-sm text-muted-foreground">{t(b.desc)}</p>
               </div>
             ))}
           </div>
@@ -198,16 +200,16 @@ const Inner = () => {
       {/* Program overview */}
       <section className="py-20">
         <div className="container mx-auto max-w-4xl px-6">
-          <h2 className="mb-8 text-3xl font-bold">What Is the Greek Golden Visa Program?</h2>
+          <h2 className="mb-8 text-3xl font-bold">{t("What Is the Greek Golden Visa Program?")}</h2>
           <div className="prose prose-invert max-w-none space-y-4 text-muted-foreground leading-relaxed">
             <p>
-              Introduced in 2013, Greece's <strong className="text-foreground">Golden Visa program</strong> (Law 4146/2013) allows citizens of non-EU/EEA countries to obtain a long-term EU residency permit by investing in Greek real estate. It has since become one of the most popular investor visa programs in Europe, attracting thousands of applications from Asia, the Middle East, the Americas, and beyond.
+              {t("Introduced in 2013, Greece's Golden Visa program (Law 4146/2013) allows citizens of non-EU/EEA countries to obtain a long-term EU residency permit by investing in Greek real estate. It has since become one of the most popular investor visa programs in Europe, attracting thousands of applications from Asia, the Middle East, the Americas, and beyond.")}
             </p>
             <p>
-              The permit is valid for <strong className="text-foreground">5 years</strong> and is fully renewable as long as the investment is maintained. Holders can live, work, and study anywhere in Greece, and travel without visas across the entire <strong className="text-foreground">Schengen zone</strong>.
+              {t("The permit is valid for 5 years and is fully renewable as long as the investment is maintained. Holders can live, work, and study anywhere in Greece, and travel without visas across the entire Schengen zone.")}
             </p>
             <p>
-              Unlike many competing programs, the Greek Golden Visa imposes <strong className="text-foreground">no minimum stay requirements</strong> — making it ideal for investors who want EU access without relocating. After 7 years of residency, holders may apply for Greek citizenship.
+              {t("Unlike many competing programs, the Greek Golden Visa imposes no minimum stay requirements — making it ideal for investors who want EU access without relocating. After 7 years of residency, holders may apply for Greek citizenship.")}
             </p>
           </div>
 
@@ -224,9 +226,36 @@ const Inner = () => {
             ].map((point) => (
               <div key={point} className="flex items-start gap-3">
                 <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                <span className="text-sm text-muted-foreground">{point}</span>
+                <span className="text-sm text-muted-foreground">{t(point)}</span>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Next step: Your Journey — contextual CTA */}
+      <section className="py-16 bg-background/50 border-y border-border">
+        <div className="container mx-auto max-w-4xl px-6">
+          <div className="rounded-2xl border border-secondary/30 bg-gradient-to-br from-secondary/5 via-transparent to-primary/5 p-8 sm:p-10 flex flex-col sm:flex-row items-start sm:items-center gap-8">
+            <div className="flex-1">
+              <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-widest text-secondary">
+                {t("Next Step")}
+              </span>
+              <h2 className="text-2xl font-bold mb-2">{t("Your Golden Visa Journey")}</h2>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                {t("Ready to go deeper? See the complete step-by-step process — from consultation and property selection to biometrics and your 5-year permit — with expected timelines at each stage.")}
+              </p>
+            </div>
+            <div className="shrink-0 flex flex-col gap-3">
+              <Button asChild size="lg" className="rounded-full px-8 gap-2 whitespace-nowrap">
+                <Link to="/golden-visa-journey/">
+                  {t("See the Full Journey")} <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="sm" className="rounded-full px-6 text-center">
+                <Link to="/greek-golden-visa-requirements/">{t("View Requirements")}</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
@@ -234,12 +263,12 @@ const Inner = () => {
       {/* FAQ */}
       <section className="py-20 bg-background/50">
         <div className="container mx-auto max-w-3xl px-6">
-          <h2 className="mb-10 text-3xl font-bold text-center">Frequently Asked Questions</h2>
+          <h2 className="mb-10 text-3xl font-bold text-center">{t("Frequently Asked Questions")}</h2>
           <div className="space-y-6">
             {faqLd.mainEntity.map((q: any) => (
               <div key={q.name} className="rounded-xl border border-border bg-background/40 p-6">
-                <h3 className="mb-2 font-semibold">{q.name}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{q.acceptedAnswer.text}</p>
+                <h3 className="mb-2 font-semibold">{t(q.name)}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{t(q.acceptedAnswer.text)}</p>
               </div>
             ))}
           </div>
@@ -249,19 +278,19 @@ const Inner = () => {
       {/* Internal links */}
       <section className="py-20">
         <div className="container mx-auto px-6">
-          <h2 className="mb-10 text-2xl font-bold text-center">Explore Further</h2>
+          <h2 className="mb-10 text-2xl font-bold text-center">{t("Explore Further")}</h2>
           <div className="grid gap-4 sm:grid-cols-3 max-w-3xl mx-auto">
             <Link to="/greek-golden-visa-requirements/" className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all">
-              <h3 className="font-semibold group-hover:text-primary transition-colors">Requirements</h3>
-              <p className="mt-1 text-xs text-muted-foreground">Full documentation checklist and eligibility criteria.</p>
+              <h3 className="font-semibold group-hover:text-primary transition-colors">{t("Requirements")}</h3>
+              <p className="mt-1 text-xs text-muted-foreground">{t("Full documentation checklist and eligibility criteria.")}</p>
             </Link>
             <Link to="/250k-golden-visa-properties/" className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all">
-              <h3 className="font-semibold group-hover:text-primary transition-colors">€250K Properties</h3>
-              <p className="mt-1 text-xs text-muted-foreground">Pre-verified investment properties starting at €250,000.</p>
+              <h3 className="font-semibold group-hover:text-primary transition-colors">{t("€250K Properties")}</h3>
+              <p className="mt-1 text-xs text-muted-foreground">{t("Pre-verified investment properties starting at €250,000.")}</p>
             </Link>
             <Link to="/#contact" className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all">
-              <h3 className="font-semibold group-hover:text-primary transition-colors">Get a Consultation</h3>
-              <p className="mt-1 text-xs text-muted-foreground">Speak with our investment advisors today.</p>
+              <h3 className="font-semibold group-hover:text-primary transition-colors">{t("Get a Consultation")}</h3>
+              <p className="mt-1 text-xs text-muted-foreground">{t("Speak with our investment advisors today.")}</p>
             </Link>
           </div>
         </div>
