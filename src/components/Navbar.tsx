@@ -12,7 +12,7 @@ const navLinks = [
   { label: "Opportunities", href: "#opportunities" },
   { label: "Track Record", href: "#delivered" },
   { label: "mAI Prop OS", href: "#platform" },
-  { label: "Process", href: "/process", isPage: true },
+  { label: "Process", href: "#journey" },
   { label: "FAQ", href: "#faq" },
   { label: "Guides", href: "/guides", isPage: true },
 ];
