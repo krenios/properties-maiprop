@@ -48,6 +48,14 @@ const Inner = () => {
         <meta property="og:description" content="19+ successfully delivered Golden Visa properties in Athens. €6.3M closed, 100% visa success rate, 6.4% average ROI." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
         <meta property="og:image:alt" content="mAI Investments delivered Golden Visa property portfolio in Athens, Greece" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": `${BASE_URL}/` },
+            { "@type": "ListItem", "position": 2, "name": "Golden Visa Portfolio & Track Record", "item": `${BASE_URL}/trackrecord/` },
+          ]
+        })}</script>
       </Helmet>
 
       <main className="min-h-screen bg-background">
