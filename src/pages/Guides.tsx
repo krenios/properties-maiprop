@@ -122,18 +122,24 @@ const Inner = () => {
 
       <Navbar forceScrolled />
 
+      {/* Breadcrumb */}
+      <div className="border-b border-border/50 bg-background/80 backdrop-blur-sm">
+        <div className="container mx-auto px-6 pt-20 pb-3">
+          <nav className="flex items-center gap-2 text-sm text-muted-foreground" aria-label="Breadcrumb">
+            <Link to="/" className="flex items-center gap-1 hover:text-foreground transition-colors">
+              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1V10" /></svg>
+              Home
+            </Link>
+            <svg className="h-3.5 w-3.5 opacity-40" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+            <span className="text-foreground font-medium">Guides</span>
+          </nav>
+        </div>
+      </div>
+
       {/* Hero */}
-      <section className="relative overflow-hidden pt-32 pb-16">
+      <section className="relative overflow-hidden pt-12 pb-16">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
         <div className="container mx-auto px-6 relative">
-          <nav className="mb-6 text-xs text-muted-foreground" aria-label="Breadcrumb">
-            <ol className="flex items-center gap-1.5">
-              <li><Link to="/" className="hover:text-primary transition-colors">Home</Link></li>
-              <span>/</span>
-              <li className="text-foreground">Guides</li>
-            </ol>
-          </nav>
-
           <span className="mb-4 inline-block rounded-full border border-primary/40 bg-primary/10 px-5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
             Investor Resources
           </span>
