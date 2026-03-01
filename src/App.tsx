@@ -8,7 +8,7 @@ import { PropertyProvider } from "@/contexts/PropertyContext";
 import { TranslationProvider } from "@/contexts/TranslationContext";
 import { AuthProvider } from "@/hooks/useAuth";
 import { HelmetProvider } from "react-helmet-async";
-// Lazy-load all routes
+
 const Index = lazy(() => import("./pages/Index"));
 const Admin = lazy(() => import("./pages/Admin"));
 const Login = lazy(() => import("./pages/Login"));
@@ -24,8 +24,21 @@ const Portfolio = lazy(() => import("./pages/Portfolio"));
 const Properties = lazy(() => import("./pages/Properties"));
 const GoldenVisaJourney = lazy(() => import("./pages/GoldenVisaJourney"));
 const ProcessPage = lazy(() => import("./pages/Process"));
+// SEO Landing Pages
+const BuyTheLifestyle = lazy(() => import("./pages/BuyTheLifestyle"));
+const GreeceVsPortugalGoldenVisa = lazy(() => import("./pages/GreeceVsPortugalGoldenVisa"));
+const GoldenVisaFamilyIncluded = lazy(() => import("./pages/GoldenVisaFamilyIncluded"));
+const GoldenVisaRentalIncomeProperties = lazy(() => import("./pages/GoldenVisaRentalIncomeProperties"));
+const GoldenVisaTaxBenefits = lazy(() => import("./pages/GoldenVisaTaxBenefits"));
+const GoldenVisaForInvestors = lazy(() => import("./pages/GoldenVisaForInvestors"));
+const GoldenVisaForHighNetWorth = lazy(() => import("./pages/GoldenVisaForHighNetWorth"));
+const GoldenVisaPropertyCompliance = lazy(() => import("./pages/GoldenVisaPropertyCompliance"));
+const IsGoldenVisaWorthIt = lazy(() => import("./pages/IsGoldenVisaWorthIt"));
+const GreeceVsDubaiGoldenVisa = lazy(() => import("./pages/GreeceVsDubaiGoldenVisa"));
 
 const queryClient = new QueryClient();
+
+const W = ({ c }: { c: React.ReactNode }) => <Suspense fallback={null}>{c}</Suspense>;
 
 const App = () => (
   <HelmetProvider>
@@ -38,31 +51,52 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <Routes>
-                <Route path="/" element={<Suspense fallback={null}><Index /></Suspense>} />
-                <Route path="/property/:id" element={<Suspense fallback={null}><PropertyPage /></Suspense>} />
-                <Route path="/greek-golden-visa" element={<Suspense fallback={null}><GreekGoldenVisa /></Suspense>} />
-                <Route path="/greek-golden-visa/" element={<Suspense fallback={null}><GreekGoldenVisa /></Suspense>} />
-                <Route path="/greek-golden-visa-requirements" element={<Suspense fallback={null}><GreekGoldenVisaRequirements /></Suspense>} />
-                <Route path="/greek-golden-visa-requirements/" element={<Suspense fallback={null}><GreekGoldenVisaRequirements /></Suspense>} />
-                <Route path="/250k-golden-visa-properties" element={<Suspense fallback={null}><GoldenVisa250k /></Suspense>} />
-                <Route path="/250k-golden-visa-properties/" element={<Suspense fallback={null}><GoldenVisa250k /></Suspense>} />
-                <Route path="/guides" element={<Suspense fallback={null}><Guides /></Suspense>} />
-                <Route path="/guides/" element={<Suspense fallback={null}><Guides /></Suspense>} />
-                <Route path="/guides/:slug" element={<Suspense fallback={null}><GuideArticle /></Suspense>} />
-                <Route path="/guides/:slug/" element={<Suspense fallback={null}><GuideArticle /></Suspense>} />
-                <Route path="/portfolio" element={<Suspense fallback={null}><Portfolio /></Suspense>} />
-                <Route path="/portfolio/" element={<Suspense fallback={null}><Portfolio /></Suspense>} />
-                <Route path="/trackrecord" element={<Suspense fallback={null}><Portfolio /></Suspense>} />
-                <Route path="/trackrecord/" element={<Suspense fallback={null}><Portfolio /></Suspense>} />
-                <Route path="/properties" element={<Suspense fallback={null}><Properties /></Suspense>} />
-                <Route path="/properties/" element={<Suspense fallback={null}><Properties /></Suspense>} />
-                <Route path="/golden-visa-journey" element={<Suspense fallback={null}><GoldenVisaJourney /></Suspense>} />
-                <Route path="/golden-visa-journey/" element={<Suspense fallback={null}><GoldenVisaJourney /></Suspense>} />
-                <Route path="/process" element={<Suspense fallback={null}><ProcessPage /></Suspense>} />
-                <Route path="/process/" element={<Suspense fallback={null}><ProcessPage /></Suspense>} />
-                <Route path="/login" element={<Suspense fallback={null}><Login /></Suspense>} />
-                <Route path="/admin" element={<Suspense fallback={null}><ProtectedRoute><Admin /></ProtectedRoute></Suspense>} />
-                <Route path="*" element={<Suspense fallback={null}><NotFound /></Suspense>} />
+                <Route path="/" element={<W c={<Index />} />} />
+                <Route path="/property/:id" element={<W c={<PropertyPage />} />} />
+                <Route path="/greek-golden-visa" element={<W c={<GreekGoldenVisa />} />} />
+                <Route path="/greek-golden-visa/" element={<W c={<GreekGoldenVisa />} />} />
+                <Route path="/greek-golden-visa-requirements" element={<W c={<GreekGoldenVisaRequirements />} />} />
+                <Route path="/greek-golden-visa-requirements/" element={<W c={<GreekGoldenVisaRequirements />} />} />
+                <Route path="/250k-golden-visa-properties" element={<W c={<GoldenVisa250k />} />} />
+                <Route path="/250k-golden-visa-properties/" element={<W c={<GoldenVisa250k />} />} />
+                <Route path="/guides" element={<W c={<Guides />} />} />
+                <Route path="/guides/" element={<W c={<Guides />} />} />
+                <Route path="/guides/:slug" element={<W c={<GuideArticle />} />} />
+                <Route path="/guides/:slug/" element={<W c={<GuideArticle />} />} />
+                <Route path="/portfolio" element={<W c={<Portfolio />} />} />
+                <Route path="/portfolio/" element={<W c={<Portfolio />} />} />
+                <Route path="/trackrecord" element={<W c={<Portfolio />} />} />
+                <Route path="/trackrecord/" element={<W c={<Portfolio />} />} />
+                <Route path="/properties" element={<W c={<Properties />} />} />
+                <Route path="/properties/" element={<W c={<Properties />} />} />
+                <Route path="/golden-visa-journey" element={<W c={<GoldenVisaJourney />} />} />
+                <Route path="/golden-visa-journey/" element={<W c={<GoldenVisaJourney />} />} />
+                <Route path="/process" element={<W c={<ProcessPage />} />} />
+                <Route path="/process/" element={<W c={<ProcessPage />} />} />
+                {/* SEO Landing Pages */}
+                <Route path="/buy-the-lifestyle" element={<W c={<BuyTheLifestyle />} />} />
+                <Route path="/buy-the-lifestyle/" element={<W c={<BuyTheLifestyle />} />} />
+                <Route path="/greece-vs-portugal-golden-visa" element={<W c={<GreeceVsPortugalGoldenVisa />} />} />
+                <Route path="/greece-vs-portugal-golden-visa/" element={<W c={<GreeceVsPortugalGoldenVisa />} />} />
+                <Route path="/golden-visa-family-included" element={<W c={<GoldenVisaFamilyIncluded />} />} />
+                <Route path="/golden-visa-family-included/" element={<W c={<GoldenVisaFamilyIncluded />} />} />
+                <Route path="/golden-visa-rental-income-properties" element={<W c={<GoldenVisaRentalIncomeProperties />} />} />
+                <Route path="/golden-visa-rental-income-properties/" element={<W c={<GoldenVisaRentalIncomeProperties />} />} />
+                <Route path="/golden-visa-tax-benefits" element={<W c={<GoldenVisaTaxBenefits />} />} />
+                <Route path="/golden-visa-tax-benefits/" element={<W c={<GoldenVisaTaxBenefits />} />} />
+                <Route path="/golden-visa-for-investors" element={<W c={<GoldenVisaForInvestors />} />} />
+                <Route path="/golden-visa-for-investors/" element={<W c={<GoldenVisaForInvestors />} />} />
+                <Route path="/golden-visa-for-high-net-worth" element={<W c={<GoldenVisaForHighNetWorth />} />} />
+                <Route path="/golden-visa-for-high-net-worth/" element={<W c={<GoldenVisaForHighNetWorth />} />} />
+                <Route path="/golden-visa-property-compliance" element={<W c={<GoldenVisaPropertyCompliance />} />} />
+                <Route path="/golden-visa-property-compliance/" element={<W c={<GoldenVisaPropertyCompliance />} />} />
+                <Route path="/is-golden-visa-worth-it" element={<W c={<IsGoldenVisaWorthIt />} />} />
+                <Route path="/is-golden-visa-worth-it/" element={<W c={<IsGoldenVisaWorthIt />} />} />
+                <Route path="/greece-vs-dubai-golden-visa" element={<W c={<GreeceVsDubaiGoldenVisa />} />} />
+                <Route path="/greece-vs-dubai-golden-visa/" element={<W c={<GreeceVsDubaiGoldenVisa />} />} />
+                <Route path="/login" element={<W c={<Login />} />} />
+                <Route path="/admin" element={<W c={<ProtectedRoute><Admin /></ProtectedRoute>} />} />
+                <Route path="*" element={<W c={<NotFound />} />} />
               </Routes>
             </BrowserRouter>
           </PropertyProvider>
