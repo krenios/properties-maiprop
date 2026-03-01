@@ -49,6 +49,10 @@ const Inner = () => {
         <link rel="alternate" hrefLang="ar"        href={`${BASE_URL}/properties/?lang=ar`} />
         <link rel="alternate" hrefLang="zh"        href={`${BASE_URL}/properties/?lang=zh`} />
         <link rel="alternate" hrefLang="ru"        href={`${BASE_URL}/properties/?lang=ru`} />
+        <link rel="alternate" hrefLang="fr"        href={`${BASE_URL}/properties/?lang=fr`} />
+        <link rel="alternate" hrefLang="hi"        href={`${BASE_URL}/properties/?lang=hi`} />
+        <link rel="alternate" hrefLang="he"        href={`${BASE_URL}/properties/?lang=he`} />
+        <link rel="alternate" hrefLang="tr"        href={`${BASE_URL}/properties/?lang=tr`} />
         <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}/properties/`} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`${BASE_URL}/properties/`} />
@@ -63,6 +67,21 @@ const Inner = () => {
             { "@type": "ListItem", "position": 1, "name": "Home", "item": `${BASE_URL}/` },
             { "@type": "ListItem", "position": 2, "name": "Golden Visa Properties in Greece", "item": `${BASE_URL}/properties/` },
           ]
+        })}</script>
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "@id": `${BASE_URL}/properties/#collectionpage`,
+          "name": "Golden Visa Properties in Greece",
+          "description": "Browse all Golden Visa eligible properties in Athens, Piraeus, and the Greek Riviera. Pre-verified, fully compliant, investment-ready from €250,000.",
+          "url": `${BASE_URL}/properties/`,
+          "isPartOf": { "@id": `${BASE_URL}/#website` },
+          "publisher": { "@id": "https://properties.maiprop.co/#organization" },
+          "inLanguage": "en",
+          "about": {
+            "@type": "Thing",
+            "name": "Greek Golden Visa Real Estate Investment"
+          }
         })}</script>
       </Helmet>
 
