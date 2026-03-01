@@ -6,7 +6,7 @@ import { useProperties } from "@/contexts/PropertyContext";
 import {
   CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag,
   ExternalLink, ChevronLeft, ChevronRight, Building,
-  Calendar, Share2, Award, BarChart3, Percent, DollarSign,
+  Calendar, Share2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { optimizeImage } from "@/lib/optimizeImage";
@@ -17,13 +17,6 @@ import { Button } from "@/components/ui/button";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 
 const BASE_URL = "https://properties.maiprop.co";
-
-const trackRecord = [
-  { value: "€6.3M", label: "Successfully Closed", icon: DollarSign },
-  { value: "19", label: "Projects Delivered", icon: Award },
-  { value: "100%", label: "Visa Success Rate", icon: Percent },
-  { value: "6.4%", label: "Avg Portfolio ROI", icon: BarChart3 },
-];
 
 const whatsappMessage = [
   "Hello! I would like to explore investment opportunities under the Greek Golden Visa program.",
@@ -78,26 +71,6 @@ const Portfolio = () => {
           </div>
         </section>
 
-        {/* Stats strip */}
-        <section className="border-y border-border bg-muted/30 py-10">
-          <div className="container mx-auto px-6">
-            <ScrollReveal variant="stagger">
-              <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-                {trackRecord.map(({ value, label, icon: Icon }) => (
-                  <RevealItem key={label}>
-                    <div className="flex flex-col items-center gap-2 text-center">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                        <Icon className="h-5 w-5 text-primary" />
-                      </div>
-                      <span className="text-3xl font-bold text-foreground">{value}</span>
-                      <span className="text-sm text-muted-foreground">{label}</span>
-                    </div>
-                  </RevealItem>
-                ))}
-              </div>
-            </ScrollReveal>
-          </div>
-        </section>
 
         {/* Full grid */}
         <section className="py-20">
