@@ -6,7 +6,7 @@ import { useProperties } from "@/contexts/PropertyContext";
 import {
   CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag,
   ExternalLink, ChevronLeft, ChevronRight, Building,
-  Calendar, Share2, MessageCircle,
+  Calendar, Share2, MessageCircle, Home as HomeIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { optimizeImage } from "@/lib/optimizeImage";
@@ -41,8 +41,22 @@ const Inner = () => {
       <main className="min-h-screen bg-background">
         <Navbar forceScrolled />
 
+        {/* Breadcrumb */}
+        <div className="border-b border-border/50 bg-background/80 backdrop-blur-sm">
+          <div className="container mx-auto px-6 pt-20 pb-3">
+            <nav className="flex items-center gap-2 text-sm text-muted-foreground" aria-label="Breadcrumb">
+              <Link to="/" className="flex items-center gap-1 hover:text-foreground transition-colors">
+                <HomeIcon className="h-3.5 w-3.5" />
+                Home
+              </Link>
+              <ChevronRight className="h-3.5 w-3.5 opacity-40" />
+              <span className="text-foreground font-medium">Track Record</span>
+            </nav>
+          </div>
+        </div>
+
         {/* Hero */}
-        <section className="bg-background pt-32 pb-16">
+        <section className="bg-background pt-12 pb-16">
           <div className="container mx-auto px-6 text-center">
             <ScrollReveal>
               <Badge className="mb-4 border-primary/30 bg-primary/10 text-primary">
