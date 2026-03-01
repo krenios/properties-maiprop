@@ -38,12 +38,24 @@ const Inner = () => {
   return (
     <>
       <Helmet>
-        <title>Golden Visa Eligible Properties — mAI Investments</title>
-        <meta
-          name="description"
-          content="Browse all Golden Visa eligible properties in Athens, Piraeus, and the Greek Riviera. Pre-verified, fully compliant, and investment-ready from €250,000."
-        />
-        <link rel="canonical" href={`${BASE_URL}/properties`} />
+        <title>Golden Visa Properties in Greece — Athens, Piraeus & Riviera | mAI Investments</title>
+        <meta name="description" content="Browse all Golden Visa eligible properties in Athens, Piraeus, and the Greek Riviera. Pre-verified, fully compliant, investment-ready from €250,000." />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href={`${BASE_URL}/properties/`} />
+        <link rel="alternate" hrefLang="en"        href={`${BASE_URL}/properties/`} />
+        <link rel="alternate" hrefLang="en-US"     href={`${BASE_URL}/properties/`} />
+        <link rel="alternate" hrefLang="en-GB"     href={`${BASE_URL}/properties/`} />
+        <link rel="alternate" hrefLang="el"        href={`${BASE_URL}/properties/?lang=el`} />
+        <link rel="alternate" hrefLang="ar"        href={`${BASE_URL}/properties/?lang=ar`} />
+        <link rel="alternate" hrefLang="zh"        href={`${BASE_URL}/properties/?lang=zh`} />
+        <link rel="alternate" hrefLang="ru"        href={`${BASE_URL}/properties/?lang=ru`} />
+        <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}/properties/`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${BASE_URL}/properties/`} />
+        <meta property="og:title" content="Golden Visa Properties in Greece — Athens, Piraeus & Riviera | mAI Investments" />
+        <meta property="og:description" content="Browse all Golden Visa eligible properties in Athens, Piraeus, and the Greek Riviera. Pre-verified from €250,000." />
+        <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
+        <meta property="og:image:alt" content="Golden Visa eligible properties in Athens, Greece — mAI Investments" />
       </Helmet>
 
       <main className="min-h-screen bg-background">
@@ -71,7 +83,7 @@ const Inner = () => {
                 <Home className="mr-1 h-3 w-3" /> Golden Visa Eligible Properties
               </Badge>
               <h1 className="mb-4 text-4xl font-bold md:text-5xl">
-                Visa-Ready Real Estate Portfolio
+                Golden Visa Properties in Greece
               </h1>
               <p className="mx-auto max-w-2xl text-muted-foreground text-lg">
                 Pre-verified Golden Visa properties with full compliance — analyze and compare
