@@ -30,12 +30,24 @@ const Inner = () => {
   return (
     <>
       <Helmet>
-        <title>Portfolio & Track Record — mAI Investments</title>
-        <meta
-          name="description"
-          content="Browse our full portfolio of 19+ successfully delivered Golden Visa properties in Athens. €6.3M closed, 100% visa success rate, 6.4% average ROI."
-        />
-        <link rel="canonical" href={`${BASE_URL}/trackrecord`} />
+        <title>Golden Visa Portfolio & Track Record — 19+ Delivered Properties | mAI Investments</title>
+        <meta name="description" content="19+ successfully delivered Golden Visa properties in Athens. €6.3M invested, 100% visa success rate, 6.4% average ROI. Browse our full track record." />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href={`${BASE_URL}/trackrecord/`} />
+        <link rel="alternate" hrefLang="en"        href={`${BASE_URL}/trackrecord/`} />
+        <link rel="alternate" hrefLang="en-US"     href={`${BASE_URL}/trackrecord/`} />
+        <link rel="alternate" hrefLang="en-GB"     href={`${BASE_URL}/trackrecord/`} />
+        <link rel="alternate" hrefLang="el"        href={`${BASE_URL}/trackrecord/?lang=el`} />
+        <link rel="alternate" hrefLang="ar"        href={`${BASE_URL}/trackrecord/?lang=ar`} />
+        <link rel="alternate" hrefLang="zh"        href={`${BASE_URL}/trackrecord/?lang=zh`} />
+        <link rel="alternate" hrefLang="ru"        href={`${BASE_URL}/trackrecord/?lang=ru`} />
+        <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}/trackrecord/`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${BASE_URL}/trackrecord/`} />
+        <meta property="og:title" content="Golden Visa Portfolio & Track Record — 19+ Delivered Properties | mAI Investments" />
+        <meta property="og:description" content="19+ successfully delivered Golden Visa properties in Athens. €6.3M closed, 100% visa success rate, 6.4% average ROI." />
+        <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
+        <meta property="og:image:alt" content="mAI Investments delivered Golden Visa property portfolio in Athens, Greece" />
       </Helmet>
 
       <main className="min-h-screen bg-background">
@@ -63,7 +75,7 @@ const Inner = () => {
                 <CheckCircle className="mr-1 h-3 w-3" /> Track Record
               </Badge>
               <h1 className="mb-4 text-4xl font-bold md:text-5xl">
-                Our Portfolio &amp; Track Record
+                Golden Visa Portfolio &amp; Track Record
               </h1>
               <p className="mx-auto max-w-2xl text-muted-foreground text-lg">
                 Every project below has been sourced, renovated, tenanted, and delivered to
@@ -193,7 +205,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
       <DialogContent className="max-h-[95vh] max-w-5xl overflow-y-auto border-border bg-card p-0 w-[95vw] sm:w-auto">
         {hasPhotos && (
           <div className="relative h-[300px] sm:h-[520px] w-full overflow-hidden">
-            <img src={optimizeImage(allPhotos[imgIdx % allPhotos.length], { width: 900, height: 600 })} alt={property.title} className="h-full w-full object-cover" />
+            <img src={optimizeImage(allPhotos[imgIdx % allPhotos.length], { width: 900, height: 600 })} alt={`${property.title} — delivered Golden Visa property in ${property.location}, Athens Greece`} className="h-full w-full object-cover" />
             {allPhotos.length > 1 && (
               <>
                 <button onClick={() => setImgIdx((i) => (i - 1 + allPhotos.length) % allPhotos.length)} className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background">
@@ -271,9 +283,9 @@ const BeforeAfterSlider = ({ before, after }: { before: string; after: string })
       onPointerDown={(e) => { dragging.current = true; (e.target as HTMLElement).setPointerCapture(e.pointerId); updatePosition(e.clientX); }}
       onPointerMove={(e) => { if (dragging.current) updatePosition(e.clientX); }}
       onPointerUp={() => { dragging.current = false; }}>
-      <img src={optimizeImage(after, { width: 800, height: 400 })} alt="After" className="absolute inset-0 h-full w-full object-cover" />
+      <img src={optimizeImage(after, { width: 800, height: 400 })} alt={`After renovation — Golden Visa investment property`} className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 overflow-hidden" style={{ width: `${position}%` }}>
-        <img src={optimizeImage(before, { width: 800, height: 400 })} alt="Before" className="h-full w-full object-cover grayscale-[40%]" style={{ width: containerRef.current?.offsetWidth ?? "100%" }} />
+        <img src={optimizeImage(before, { width: 800, height: 400 })} alt={`Before renovation — Greek real estate investment`} className="h-full w-full object-cover grayscale-[40%]" style={{ width: containerRef.current?.offsetWidth ?? "100%" }} />
       </div>
       <div className="absolute top-0 bottom-0 z-10 w-0.5 bg-primary" style={{ left: `${position}%` }}>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary bg-card shadow-lg">

@@ -129,8 +129,42 @@ const Index = () => {
   >
     {/* Crawl budget: canonical always points to clean URL; noindex ?lang= variants */}
     <Helmet>
+      <title>Greek Golden Visa Real Estate — EU Residency from €250K | mAI Investments</title>
+      <meta name="description" content="Invest in Golden Visa eligible Greek real estate from €250,000. EU residency, Schengen access, and 5–7% net rental yields. Pre-verified properties in Athens & the Greek Riviera." />
+      <meta name="robots" content={isLangVariant ? "noindex, follow" : "index, follow"} />
       <link rel="canonical" href={canonicalUrl} />
-      {isLangVariant && <meta name="robots" content="noindex, follow" />}
+      {/* Hreflang — all supported languages */}
+      <link rel="alternate" hrefLang="en"      href={canonicalUrl} />
+      <link rel="alternate" hrefLang="en-US"   href={canonicalUrl} />
+      <link rel="alternate" hrefLang="en-GB"   href={canonicalUrl} />
+      <link rel="alternate" hrefLang="el"      href={`${canonicalUrl}?lang=el`} />
+      <link rel="alternate" hrefLang="ar"      href={`${canonicalUrl}?lang=ar`} />
+      <link rel="alternate" hrefLang="ar-AE"   href={`${canonicalUrl}?lang=ar`} />
+      <link rel="alternate" hrefLang="zh"      href={`${canonicalUrl}?lang=zh`} />
+      <link rel="alternate" hrefLang="zh-CN"   href={`${canonicalUrl}?lang=zh`} />
+      <link rel="alternate" hrefLang="ru"      href={`${canonicalUrl}?lang=ru`} />
+      <link rel="alternate" hrefLang="fr"      href={`${canonicalUrl}?lang=fr`} />
+      <link rel="alternate" hrefLang="hi"      href={`${canonicalUrl}?lang=hi`} />
+      <link rel="alternate" hrefLang="he"      href={`${canonicalUrl}?lang=he`} />
+      <link rel="alternate" hrefLang="tr"      href={`${canonicalUrl}?lang=tr`} />
+      <link rel="alternate" hrefLang="x-default" href={canonicalUrl} />
+      {/* Open Graph */}
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={canonicalUrl} />
+      <meta property="og:site_name" content="mAI Investments" />
+      <meta property="og:title" content="Greek Golden Visa Real Estate — EU Residency from €250K | mAI Investments" />
+      <meta property="og:description" content="Invest in Golden Visa eligible Greek real estate from €250,000. EU residency, Schengen access, and 5–7% net rental yields." />
+      <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content="mAI Investments — Greek Golden Visa real estate platform" />
+      {/* Twitter */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@maiprop" />
+      <meta name="twitter:title" content="Greek Golden Visa Real Estate — EU Residency from €250K | mAI Investments" />
+      <meta name="twitter:description" content="Pre-verified Golden Visa properties in Athens from €250,000. EU residency, Schengen access, rental income." />
+      <meta name="twitter:image" content={`${BASE_URL}/og-image.png`} />
+      <meta name="twitter:image:alt" content="mAI Investments — Greek Golden Visa real estate platform" />
     </Helmet>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }} />

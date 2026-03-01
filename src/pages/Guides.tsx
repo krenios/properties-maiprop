@@ -106,17 +106,30 @@ const Inner = () => {
   return (
     <main className="min-h-screen bg-background">
       <Helmet>
-        <title>Greek Real Estate Investment Guides — mAI Investments</title>
-        <meta name="description" content="Expert guides on Greek Golden Visa, Athens real estate ROI, and property investment strategy for non-EU investors. Research-stage resources for serious investors." />
+        <title>Greek Golden Visa Investment Guides & Research — mAI Investments</title>
+        <meta name="description" content="Expert guides on Greek Golden Visa rules, Athens real estate ROI, and property investment strategy for non-EU investors. Research-stage resources for serious investors." />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={PAGE_URL} />
-        <link rel="alternate" hrefLang="en" href={PAGE_URL} />
+        <link rel="alternate" hrefLang="en"        href={PAGE_URL} />
+        <link rel="alternate" hrefLang="en-US"     href={PAGE_URL} />
+        <link rel="alternate" hrefLang="en-GB"     href={PAGE_URL} />
+        <link rel="alternate" hrefLang="el"        href={`${PAGE_URL}?lang=el`} />
+        <link rel="alternate" hrefLang="ar"        href={`${PAGE_URL}?lang=ar`} />
+        <link rel="alternate" hrefLang="ar-AE"     href={`${PAGE_URL}?lang=ar`} />
+        <link rel="alternate" hrefLang="zh"        href={`${PAGE_URL}?lang=zh`} />
+        <link rel="alternate" hrefLang="zh-CN"     href={`${PAGE_URL}?lang=zh`} />
+        <link rel="alternate" hrefLang="ru"        href={`${PAGE_URL}?lang=ru`} />
+        <link rel="alternate" hrefLang="fr"        href={`${PAGE_URL}?lang=fr`} />
+        <link rel="alternate" hrefLang="hi"        href={`${PAGE_URL}?lang=hi`} />
+        <link rel="alternate" hrefLang="he"        href={`${PAGE_URL}?lang=he`} />
+        <link rel="alternate" hrefLang="tr"        href={`${PAGE_URL}?lang=tr`} />
         <link rel="alternate" hrefLang="x-default" href={PAGE_URL} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={PAGE_URL} />
-        <meta property="og:title" content="Greek Real Estate Investment Guides — mAI Investments" />
+        <meta property="og:title" content="Greek Golden Visa Investment Guides & Research — mAI Investments" />
         <meta property="og:description" content="Expert guides on Greek Golden Visa and real estate investment strategy for non-EU investors." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
+        <meta property="og:image:alt" content="mAI Investments — Greek Golden Visa investment guides and research" />
         <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
       </Helmet>
 
@@ -144,7 +157,7 @@ const Inner = () => {
             Investor Resources
           </span>
           <h1 className="max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">
-            Greek Investment{" "}
+            Greek Golden Visa Investment{" "}
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               Guides &amp; Research
             </span>
@@ -202,9 +215,9 @@ const Inner = () => {
                         <Icon className="h-6 w-6 text-primary" />
                       </div>
 
-                      <h2 className="mb-3 text-xl font-bold leading-snug group-hover:text-primary transition-colors">
+                      <h3 className="mb-3 text-xl font-bold leading-snug group-hover:text-primary transition-colors">
                         {guide.title}
-                      </h2>
+                      </h3>
                       <p className="flex-1 text-sm text-muted-foreground leading-relaxed line-clamp-3">
                         {guide.meta_description}
                       </p>
