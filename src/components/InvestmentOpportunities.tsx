@@ -1,13 +1,17 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useProperties } from "@/contexts/PropertyContext";
 import PropertyCard from "@/components/PropertyCard";
 import PropertyModal from "@/components/PropertyModal";
 import { Property } from "@/data/properties";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { useTranslation } from "@/contexts/TranslationContext";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 const InvestmentOpportunities = () => {
   const { properties } = useProperties();
+  const navigate = useNavigate();
   const [selected, setSelected] = useState<Property | null>(null);
   const { t } = useTranslation();
 
@@ -20,7 +24,6 @@ const InvestmentOpportunities = () => {
       const found = properties.find((p) => p.id === id);
       if (found) {
         setSelected(found);
-        // Scroll to opportunities section
         document.getElementById("opportunities")?.scrollIntoView({ behavior: "smooth" });
       }
     };
@@ -30,6 +33,7 @@ const InvestmentOpportunities = () => {
   }, [properties]);
 
   const current = properties.filter((p) => p.project_type === "new");
+  const preview = current.slice(0, 3);
 
   return (
     <section id="opportunities" className="relative bg-background py-24">
@@ -44,16 +48,32 @@ const InvestmentOpportunities = () => {
         </ScrollReveal>
         <ScrollReveal variant="stagger">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {current.map((p) =>
-            <RevealItem key={p.id}>
-              <PropertyCard property={p} onClick={() => setSelected(p)} />
-            </RevealItem>
-            )}
+            {preview.map((p) => (
+              <RevealItem key={p.id}>
+                <PropertyCard property={p} onClick={() => setSelected(p)} />
+              </RevealItem>
+            ))}
           </div>
         </ScrollReveal>
+
+        {/* View all CTA */}
+        {current.length > 3 && (
+          <ScrollReveal>
+            <div className="mt-10 text-center">
+              <p className="mb-4 text-muted-foreground">
+                Showing 3 of {current.length} available properties
+              </p>
+              <Button onClick={() => navigate("/properties")} size="lg" variant="outline" className="gap-2">
+                View All Properties
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </ScrollReveal>
+        )}
       </div>
       <PropertyModal property={selected} open={!!selected} onClose={() => setSelected(null)} />
-    </section>);
+    </section>
+  );
 };
 
 export default InvestmentOpportunities;
