@@ -218,6 +218,21 @@ const PropertyPageInner = () => {
         <meta name="keywords" content={keywords} />
         <meta name="robots" content={isLangVariant ? "noindex, follow" : "index, follow"} />
         <link rel="canonical" href={pageUrl} />
+        {/* hreflang — language variants */}
+        <link rel="alternate" hrefLang="en"      href={pageUrl} />
+        <link rel="alternate" hrefLang="en-US"   href={pageUrl} />
+        <link rel="alternate" hrefLang="en-GB"   href={pageUrl} />
+        <link rel="alternate" hrefLang="el"      href={`${pageUrl}?lang=el`} />
+        <link rel="alternate" hrefLang="ar"      href={`${pageUrl}?lang=ar`} />
+        <link rel="alternate" hrefLang="ar-AE"   href={`${pageUrl}?lang=ar`} />
+        <link rel="alternate" hrefLang="zh"      href={`${pageUrl}?lang=zh`} />
+        <link rel="alternate" hrefLang="zh-CN"   href={`${pageUrl}?lang=zh`} />
+        <link rel="alternate" hrefLang="ru"      href={`${pageUrl}?lang=ru`} />
+        <link rel="alternate" hrefLang="fr"      href={`${pageUrl}?lang=fr`} />
+        <link rel="alternate" hrefLang="hi"      href={`${pageUrl}?lang=hi`} />
+        <link rel="alternate" hrefLang="he"      href={`${pageUrl}?lang=he`} />
+        <link rel="alternate" hrefLang="tr"      href={`${pageUrl}?lang=tr`} />
+        <link rel="alternate" hrefLang="x-default" href={pageUrl} />
         {/* LCP preload for hero image */}
         {heroPreloadSrcset && (
           <link
