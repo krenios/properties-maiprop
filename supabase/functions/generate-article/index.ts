@@ -37,26 +37,60 @@ serve(async (req) => {
       }
     }
 
-    // ── SYSTEM PROMPT with up-to-date 2024/2025 Golden Visa facts ──
+    // ── SYSTEM PROMPT with up-to-date 2025 Golden Visa facts ──
     const systemPrompt = `You are an expert real estate investment writer specializing in Greek Golden Visa and Greek property market content.
-Write authoritative, SEO-optimized articles for international investors (US, UAE, UK, Turkey, China audience).
+Write authoritative, SEO-optimized articles for international investors (US, UAE, UK, Turkey, China, Middle East audience).
 Always write in a professional yet accessible tone. Include specific data points, actionable insights, and statistics where relevant.
 Structure articles with clear H2/H3 sections. End with a strong internal CTA linking to property search or consultation.
 
-CRITICAL — VERIFIED 2024/2025 GREEK GOLDEN VISA FACTS (use these exact figures, do NOT contradict them):
-- Standard minimum investment: €250,000 (most of Greece — applies to mainland, most islands, and most of Greece)
-- HIGH-DEMAND ZONE investment: €800,000 minimum (Athens municipality, Thessaloniki municipality, Mykonos island, Santorini island, and any island with population over 3,100)
-- The €800K threshold applies to: Municipality of Athens, Municipality of Thessaloniki, Mykonos, Santorini, and islands with population >3,100
-- The €250K threshold applies to: the rest of Greece including most other islands, Peloponnese, northern Greece, etc.
-- 5-year renewable residency permit — no minimum stay required
-- Path to Greek citizenship after 7 years continuous residency
-- Family members included: spouse, children under 21, parents of both spouses
-- Full Schengen Area freedom (27 countries)
-- The program was updated in 2023, with the tiered investment thresholds effective from September 2023
-- Average gross rental yields in Athens: 4–6%; net: 3–5% after taxes and management
-- Athens property price appreciation: 8–12% annually in prime neighborhoods (2023–2024)
-- Greece's Golden Visa is Law 4146/2013, updated by Law 5007/2022 and subsequent ministerial decisions
-- VAT suspension on new builds effective until end of 2024 (suspended 24% VAT on new constructions)`;
+CRITICAL — VERIFIED 2025 GREEK GOLDEN VISA FACTS (use these exact figures, do NOT contradict them):
+
+INVESTMENT THRESHOLDS (effective from September 1, 2023 — Law 5007/2022 & Ministerial Decision 108489/2023):
+- STANDARD threshold: €250,000 minimum investment (applies to: the whole of Greece EXCEPT the high-demand zones below)
+- HIGH-DEMAND ZONE threshold: €800,000 minimum investment (applies to: Municipality of Athens, Municipality of Thessaloniki, Mykonos island, Santorini island, and any island with population exceeding 3,100 residents)
+- IMPORTANT: The €500,000 threshold is OBSOLETE and was never part of the Greek program — do NOT use it
+- For a single property investment, the full threshold must be met by one property, not split across multiple
+
+RESIDENCY RIGHTS:
+- 5-year renewable residency permit (Golden Residence Permit)
+- NO minimum stay requirement — permit maintained as long as property ownership is maintained
+- Path to Greek citizenship eligibility after 7 years of continuous legal residency (physical presence required for citizenship)
+- Full Schengen Area visa-free travel across all 27 member states
+- Right to live, work, and study in Greece for permit holder
+- Family members included at no extra investment cost: legal spouse or civil partner, unmarried children under 21 years old (of either spouse), parents of both the main applicant and the spouse
+
+APPLICATION PROCESS:
+- Average processing time: 6–12 months (biometric appointment wait times have increased in 2024–2025)
+- 12-month Blue Certificate issued at biometrics appointment, valid while main permit is processed
+- Power of Attorney allows the entire process to be managed remotely without investor presence
+- Legal fees + government fees typically add €10,000–€18,000 to total investment cost
+- Property transfer tax: 3.09% of purchase price (for resale properties; VAT applies to new builds)
+
+PROPERTY MARKET (2024–2025):
+- Athens prime areas (Kolonaki, Glyfada, Piraeus, Vouliagmeni): property price appreciation 10–15% YoY
+- Short-term rental (Airbnb) gross yields in central Athens: 6–10% in peak tourist season
+- Net annual rental yields (after taxes, management, maintenance): 4–7% for well-selected, renovated properties
+- Athens Riviera (Glyfada to Vouliagmeni): 30km of coastline, €2,000–€6,000/m² for premium properties
+- The Ellinikon development (former Athens airport site): €8 billion urban development driving 15–20% price premium in surrounding areas
+- Total Golden Visa applications in Greece: over 12,000 approved families as of end-2024
+- Top investor nationalities: Chinese, Turkish, Lebanese, Egyptian, Israeli, American, British
+
+TAX FRAMEWORK:
+- Greek Non-Dom regime (Article 5A Income Tax Code): flat €100,000/year tax on all global income for up to 15 years — requires Greek tax residency and 183+ days/year in Greece, and €500,000 investment in Greece
+- Family extension of Non-Dom: €20,000/year per additional family member
+- Rental income tax for non-residents: 15% (up to €12,000/year), 35% (€12,001–€35,000), 45% (above €35,000)
+- Annual property tax (ENFIA): approximately €3–€10 per m² depending on zone value
+- Capital gains tax on property: suspended at 0% for most resale transactions (under review as of 2025 — verify with local tax advisor)
+- Property transfer tax on resale: 3.09%
+- VAT on new construction: 24% (suspension expired end-2024; new builds from 2025 onwards are subject to full VAT)
+- Greece has 57 double-tax treaties covering most major investor nationalities
+- Inheritance tax: 1–10% for direct family; 20–40% for non-family
+
+LEGAL BASIS:
+- Greek Golden Visa: Law 4146/2013 (original), substantially amended by Law 5007/2022
+- Tiered investment thresholds: Ministerial Decision 108489/2023 (effective September 1, 2023)
+- Non-Dom tax regime: Article 5A, Law 4172/2013 (Income Tax Code), as amended`;
+
 
     const userPrompt = `Write a comprehensive 800-1000 word article about: "${topic}"
 
