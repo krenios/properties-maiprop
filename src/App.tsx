@@ -23,6 +23,7 @@ const GuideArticle = lazy(() => import("./pages/GuideArticle"));
 const Portfolio = lazy(() => import("./pages/Portfolio"));
 const Properties = lazy(() => import("./pages/Properties"));
 const GoldenVisaJourney = lazy(() => import("./pages/GoldenVisaJourney"));
+const ProcessPage = lazy(() => import("./pages/Process"));
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,8 @@ const App = () => (
                 <Route path="/properties/" element={<Suspense fallback={null}><Properties /></Suspense>} />
                 <Route path="/golden-visa-journey" element={<Suspense fallback={null}><GoldenVisaJourney /></Suspense>} />
                 <Route path="/golden-visa-journey/" element={<Suspense fallback={null}><GoldenVisaJourney /></Suspense>} />
+                <Route path="/process" element={<Suspense fallback={null}><ProcessPage /></Suspense>} />
+                <Route path="/process/" element={<Suspense fallback={null}><ProcessPage /></Suspense>} />
                 <Route path="/login" element={<Suspense fallback={null}><Login /></Suspense>} />
                 <Route path="/admin" element={<Suspense fallback={null}><ProtectedRoute><Admin /></ProtectedRoute></Suspense>} />
                 <Route path="*" element={<Suspense fallback={null}><NotFound /></Suspense>} />
