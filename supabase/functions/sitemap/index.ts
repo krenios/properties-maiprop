@@ -89,6 +89,17 @@ Deno.serve(async (req) => {
     { path: "/guides/", changefreq: "weekly", priority: "0.8" },
     { path: "/golden-visa-journey/", changefreq: "monthly", priority: "0.85" },
     { path: "/process/", changefreq: "monthly", priority: "0.9" },
+    // SEO Landing Pages
+    { path: "/buy-the-lifestyle/", changefreq: "monthly", priority: "0.8" },
+    { path: "/greece-vs-portugal-golden-visa/", changefreq: "monthly", priority: "0.85" },
+    { path: "/golden-visa-family-included/", changefreq: "monthly", priority: "0.85" },
+    { path: "/golden-visa-rental-income-properties/", changefreq: "weekly", priority: "0.85" },
+    { path: "/golden-visa-tax-benefits/", changefreq: "monthly", priority: "0.85" },
+    { path: "/golden-visa-for-investors/", changefreq: "monthly", priority: "0.85" },
+    { path: "/golden-visa-for-high-net-worth/", changefreq: "monthly", priority: "0.8" },
+    { path: "/golden-visa-property-compliance/", changefreq: "monthly", priority: "0.8" },
+    { path: "/is-golden-visa-worth-it/", changefreq: "monthly", priority: "0.85" },
+    { path: "/greece-vs-dubai-golden-visa/", changefreq: "weekly", priority: "0.85" },
   ].map(({ path, changefreq, priority }) =>
     urlEntry({ path, lastmod: today, changefreq, priority, withHreflang: true })
   );
