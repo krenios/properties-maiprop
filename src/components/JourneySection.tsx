@@ -1,5 +1,8 @@
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { useTranslation } from "@/contexts/TranslationContext";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const steps = [
 { num: "01", title: "Consultation & Eligibility", desc: "Confirm eligibility and discuss investment goals" },
@@ -37,6 +40,16 @@ const JourneySection = () => {
             </div>
         </RevealItem>
         )}
+        </div>
+      </ScrollReveal>
+
+      <ScrollReveal>
+        <div className="mt-12 text-center">
+          <Button asChild size="lg" variant="outline" className="rounded-full px-8 gap-2">
+            <Link to="/golden-visa-journey/">
+              {t("Learn More")} <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
         </div>
       </ScrollReveal>
     </div>
