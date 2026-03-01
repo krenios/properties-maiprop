@@ -81,7 +81,10 @@ const Inner = () => {
           "about": {
             "@type": "Thing",
             "name": "Greek Golden Visa Real Estate Investment"
-          }
+          },
+          ...(current.length > 0 ? {
+            "hasPart": current.map((p) => ({ "@id": `${BASE_URL}/property/${p.id}/#apartment` }))
+          } : {})
         })}</script>
       </Helmet>
 
