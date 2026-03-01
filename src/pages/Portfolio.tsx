@@ -41,6 +41,10 @@ const Inner = () => {
         <link rel="alternate" hrefLang="ar"        href={`${BASE_URL}/trackrecord/?lang=ar`} />
         <link rel="alternate" hrefLang="zh"        href={`${BASE_URL}/trackrecord/?lang=zh`} />
         <link rel="alternate" hrefLang="ru"        href={`${BASE_URL}/trackrecord/?lang=ru`} />
+        <link rel="alternate" hrefLang="fr"        href={`${BASE_URL}/trackrecord/?lang=fr`} />
+        <link rel="alternate" hrefLang="hi"        href={`${BASE_URL}/trackrecord/?lang=hi`} />
+        <link rel="alternate" hrefLang="he"        href={`${BASE_URL}/trackrecord/?lang=he`} />
+        <link rel="alternate" hrefLang="tr"        href={`${BASE_URL}/trackrecord/?lang=tr`} />
         <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}/trackrecord/`} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`${BASE_URL}/trackrecord/`} />
@@ -55,6 +59,21 @@ const Inner = () => {
             { "@type": "ListItem", "position": 1, "name": "Home", "item": `${BASE_URL}/` },
             { "@type": "ListItem", "position": 2, "name": "Golden Visa Portfolio & Track Record", "item": `${BASE_URL}/trackrecord/` },
           ]
+        })}</script>
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "@id": `${BASE_URL}/trackrecord/#collectionpage`,
+          "name": "Golden Visa Portfolio & Track Record",
+          "description": "19+ successfully delivered Golden Visa properties in Athens. €6.3M invested, 100% visa success rate, 6.4% average ROI.",
+          "url": `${BASE_URL}/trackrecord/`,
+          "isPartOf": { "@id": `${BASE_URL}/#website` },
+          "publisher": { "@id": "https://properties.maiprop.co/#organization" },
+          "inLanguage": "en",
+          "about": {
+            "@type": "Thing",
+            "name": "Greek Golden Visa Delivered Properties"
+          }
         })}</script>
       </Helmet>
 
