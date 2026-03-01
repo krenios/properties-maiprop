@@ -14,7 +14,7 @@ const navLinks = [
   { label: "mAI Prop OS", href: "#platform" },
   { label: "Process", href: "#journey" },
   { label: "FAQ", href: "#faq" },
-  { label: "Guides", href: "/guides", isPage: true },
+  { label: "Resources", href: "#resources" },
 ];
 
 
