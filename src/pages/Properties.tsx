@@ -9,7 +9,7 @@ import { Property } from "@/data/properties";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Home } from "lucide-react";
+import { Home, ChevronRight } from "lucide-react";
 
 const BASE_URL = "https://properties.maiprop.co";
 
@@ -62,8 +62,22 @@ const Properties = () => {
       <main className="min-h-screen bg-background">
         <Navbar forceScrolled />
 
+        {/* Breadcrumb */}
+        <div className="border-b border-border/50 bg-background/80 backdrop-blur-sm">
+          <div className="container mx-auto px-6 pt-20 pb-3">
+            <nav className="flex items-center gap-2 text-sm text-muted-foreground" aria-label="Breadcrumb">
+              <Link to="/" className="flex items-center gap-1 hover:text-foreground transition-colors">
+                <Home className="h-3.5 w-3.5" />
+                Home
+              </Link>
+              <ChevronRight className="h-3.5 w-3.5 opacity-40" />
+              <span className="text-foreground font-medium">Properties</span>
+            </nav>
+          </div>
+        </div>
+
         {/* Hero */}
-        <section className="pt-32 pb-16">
+        <section className="pt-12 pb-16">
           <div className="container mx-auto px-6 text-center">
             <ScrollReveal>
               <Badge className="mb-4 border-primary/30 bg-primary/10 text-primary">
