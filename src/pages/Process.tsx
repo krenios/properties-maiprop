@@ -1,12 +1,14 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   ArrowRight, Phone, Search, Scale, Pen, Plane,
   Fingerprint, BadgeCheck, Star, Clock, Users,
-  ShieldCheck, Headphones, ChevronRight,
+  ShieldCheck, Headphones, ChevronRight, ChevronDown,
+  CheckCircle2, FileText, AlertCircle,
 } from "lucide-react";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
@@ -76,6 +78,34 @@ const faqLd = {
   ],
 };
 
+// ── Requirements data embedded in steps ─────────────────────────────────────
+const eligibilityCriteria = [
+  "Non-EU / non-EEA national (any nationality)",
+  "Minimum age: 18 years old",
+  "Clean criminal record (from country of origin and residence)",
+  "Valid travel document / passport",
+  "Proof of health insurance covering Greece",
+  "No prior illegal entry or overstay in Greece",
+];
+
+const investmentTiers = [
+  { tier: "€250,000", zones: "All areas outside high-demand zones", desc: "Commercial property converted to residential, or any residential property outside Greater Athens, Thessaloniki, Mykonos, Santorini, and South Athens coast." },
+  { tier: "€800,000", zones: "High-demand zones", desc: "Residential property in Greater Athens, Thessaloniki, Mykonos, Santorini, or South Athens coast. Single residential unit of at least 120 m²." },
+];
+
+const requiredDocuments = [
+  "Passport copies (valid for at least 12 months)",
+  "Recent passport-size photographs",
+  "Proof of property ownership (notarial deed)",
+  "Property purchase receipt / bank transfer confirmation",
+  "Health insurance policy covering Greece (min €30,000 coverage)",
+  "Criminal record certificate (apostilled, translated to Greek)",
+  "Greek tax number (AFM) certificate",
+  "Marriage certificate (for spousal applications, apostilled)",
+  "Birth certificates for dependent children (apostilled)",
+  "Application form (signed by each family member)",
+];
+
 const phases = [
   {
     phase: "01",
@@ -84,7 +114,22 @@ const phases = [
     subtitle: "30 minutes · Free · No commitment",
     desc: "We start by listening. Your goals, your timeline, your family situation. We confirm your eligibility and explain exactly which investment threshold applies to you — €250K or €800K.",
     detail: "Within 24h of enquiry",
-    accent: "primary",
+    learnMore: {
+      label: "Eligibility requirements",
+      content: (
+        <div className="space-y-3">
+          <p className="text-sm text-muted-foreground mb-4">To qualify for the Greek Golden Visa, you must meet all of the following criteria before we proceed to property selection:</p>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {eligibilityCriteria.map((item) => (
+              <div key={item} className="flex items-start gap-2.5 rounded-lg border border-border/60 bg-background/60 px-3 py-2.5">
+                <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                <span className="text-xs text-muted-foreground leading-relaxed">{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ),
+    },
   },
   {
     phase: "02",
@@ -93,7 +138,29 @@ const phases = [
     subtitle: "Personalised to your profile",
     desc: "Our team builds a written investment brief: zone recommendation (Athens, Thessaloniki, or islands), projected yield, capital appreciation scenario, and total-cost-of-acquisition breakdown including taxes and fees.",
     detail: "Delivered within 48h",
-    accent: "secondary",
+    learnMore: {
+      label: "Investment thresholds",
+      content: (
+        <div className="space-y-3">
+          <p className="text-sm text-muted-foreground mb-4">Greece uses a two-tier threshold system. The zone where the property is located determines your minimum investment:</p>
+          <div className="space-y-3">
+            {investmentTiers.map((tier) => (
+              <div key={tier.tier} className="rounded-lg border border-border/60 bg-background/60 p-4 flex items-start gap-4">
+                <span className="shrink-0 text-xl font-bold text-primary">{tier.tier}</span>
+                <div>
+                  <p className="text-xs font-semibold text-foreground mb-1">{tier.zones}</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{tier.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="flex items-start gap-2.5 rounded-lg border border-secondary/30 bg-secondary/5 px-3 py-2.5">
+            <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-secondary" />
+            <p className="text-xs text-muted-foreground">Always confirm zoning classification with your legal advisor. We do this for you as part of the due diligence step.</p>
+          </div>
+        </div>
+      ),
+    },
   },
   {
     phase: "03",
@@ -102,7 +169,6 @@ const phases = [
     subtitle: "3–5 pre-vetted options",
     desc: "You receive a shortlist of Golden Visa-compliant properties that have passed our internal due diligence — title check, planning status, yield verification, and renovation quality assessment. No noise. Only match.",
     detail: "Presented within 72h",
-    accent: "primary",
   },
   {
     phase: "04",
@@ -111,7 +177,6 @@ const phases = [
     subtitle: "Trusted Athens legal partners",
     desc: "We introduce you to our vetted notary and lawyer network. They run a full title search, tax clearance, and encumbrance check in parallel with your decision. No delays waiting for legal to 'catch up'.",
     detail: "Runs in parallel — 2–4 weeks",
-    accent: "secondary",
   },
   {
     phase: "05",
@@ -120,7 +185,6 @@ const phases = [
     subtitle: "AFM · Bank account · Notarial deed",
     desc: "We coordinate every administrative step: Greek tax number (AFM) registration, bank account opening, and notarial deed signing. Much of this can be done remotely via power of attorney if you prefer.",
     detail: "2–4 weeks after legal sign-off",
-    accent: "primary",
   },
   {
     phase: "06",
@@ -129,7 +193,22 @@ const phases = [
     subtitle: "Full application handled by our team",
     desc: "We compile your complete residency dossier — every document, every apostille, every certified translation — and submit on your behalf. A 180-day temporary permit is issued immediately, keeping your status clean while the full permit is processed.",
     detail: "4–6 weeks",
-    accent: "secondary",
+    learnMore: {
+      label: "Required documents checklist",
+      content: (
+        <div className="space-y-3">
+          <p className="text-sm text-muted-foreground mb-4">All foreign documents must be apostilled and accompanied by a certified Greek translation. We coordinate the full document collection on your behalf:</p>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {requiredDocuments.map((doc) => (
+              <div key={doc} className="flex items-start gap-2.5 rounded-lg border border-border/60 bg-background/60 px-3 py-2.5">
+                <FileText className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                <span className="text-xs text-muted-foreground leading-relaxed">{doc}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ),
+    },
   },
   {
     phase: "07",
@@ -138,7 +217,6 @@ const phases = [
     subtitle: "Your entire family, together",
     desc: "This is the only moment you need to be physically present in Greece. We schedule all family members for the same appointment slot and provide a full logistics briefing. Most clients complete this in a single day.",
     detail: "1–2 days in Greece",
-    accent: "primary",
   },
   {
     phase: "08",
@@ -147,7 +225,6 @@ const phases = [
     subtitle: "5-year renewable Golden Visa",
     desc: "Your residency cards arrive. Simultaneously, we activate your property for rental if that's part of your plan — onboarding it with management partners, listing optimisation, and revenue reporting from day one.",
     detail: "2–4 months post-biometrics",
-    accent: "secondary",
   },
 ];
 
@@ -159,6 +236,63 @@ const whyUs = [
   { icon: Headphones, stat: "Dedicated", label: "Single advisor from day one" },
   { icon: Star, stat: "4–7%", label: "Net rental yield on managed stock" },
 ];
+
+// ── Step card with expandable "Learn more" ────────────────────────────────────
+type Phase = typeof phases[number];
+
+const StepCard = ({ p, t }: { p: Phase; t: (s: string) => string }) => {
+  const [open, setOpen] = useState(false);
+  const Icon = p.icon;
+
+  return (
+    <div className="relative flex gap-6 sm:gap-8 group">
+      {/* Icon bubble */}
+      <div className="relative shrink-0 z-10">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-primary/40 bg-background shadow-[0_0_20px_hsl(179_90%_63%/0.12)] group-hover:border-primary/70 transition-colors">
+          <Icon className="h-5 w-5 text-primary" />
+        </div>
+      </div>
+
+      {/* Card */}
+      <div className="flex-1">
+        <div className={`rounded-xl border bg-background/40 transition-colors ${open ? "border-primary/40" : "border-border hover:border-primary/30"}`}>
+          {/* Header row */}
+          <div className="p-6">
+            <div className="flex items-start justify-between gap-4 flex-wrap mb-3">
+              <div>
+                <span className="text-xs font-bold text-primary/50 tracking-widest">{t("STEP")} {p.phase}</span>
+                <h3 className="mt-0.5 font-semibold text-base">{t(p.title)}</h3>
+                <p className="text-xs text-muted-foreground mt-0.5">{t(p.subtitle)}</p>
+              </div>
+              <span className="shrink-0 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs text-primary whitespace-nowrap">
+                {t(p.detail)}
+              </span>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">{t(p.desc)}</p>
+
+            {/* Learn more toggle — only for steps with extra content */}
+            {p.learnMore && (
+              <button
+                onClick={() => setOpen((v) => !v)}
+                className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-primary/80 transition-colors"
+              >
+                {open ? t("Hide details") : t(p.learnMore.label)}
+                <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+              </button>
+            )}
+          </div>
+
+          {/* Expandable panel */}
+          {p.learnMore && open && (
+            <div className="border-t border-border/60 px-6 py-5 bg-background/20 rounded-b-xl">
+              {p.learnMore.content}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Inner = () => {
   const { openWithLocation } = useLeadBot();
@@ -259,43 +393,20 @@ const Inner = () => {
             <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
               {t("Every step is owned by our team. You make decisions — we handle execution.")}
             </p>
+            <div className="mt-4 flex items-center justify-center gap-2 text-xs text-muted-foreground">
+              <Badge variant="outline" className="border-primary/30 text-primary bg-primary/5 gap-1.5">
+                <ChevronDown className="h-3 w-3" /> {t("Steps marked with details are expandable")}
+              </Badge>
+            </div>
           </div>
 
           <div className="relative">
             {/* Vertical line */}
             <div className="absolute left-[27px] top-4 bottom-4 w-px bg-gradient-to-b from-primary/50 via-secondary/30 to-transparent hidden sm:block" />
-
             <div className="space-y-8">
-              {phases.map((p) => {
-                const Icon = p.icon;
-                return (
-                  <div key={p.phase} className="relative flex gap-6 sm:gap-8 group">
-                    {/* Icon bubble */}
-                    <div className="relative shrink-0 z-10">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-primary/40 bg-background shadow-[0_0_20px_hsl(179_90%_63%/0.12)] group-hover:border-primary/70 transition-colors">
-                        <Icon className="h-5 w-5 text-primary" />
-                      </div>
-                    </div>
-
-                    {/* Card */}
-                    <div className="flex-1">
-                      <div className="rounded-xl border border-border bg-background/40 p-6 hover:border-primary/30 transition-colors">
-                        <div className="flex items-start justify-between gap-4 flex-wrap mb-3">
-                          <div>
-                            <span className="text-xs font-bold text-primary/50 tracking-widest">{t("STEP")} {p.phase}</span>
-                            <h3 className="mt-0.5 font-semibold text-base">{t(p.title)}</h3>
-                            <p className="text-xs text-muted-foreground mt-0.5">{t(p.subtitle)}</p>
-                          </div>
-                          <span className="shrink-0 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs text-primary whitespace-nowrap">
-                            {t(p.detail)}
-                          </span>
-                        </div>
-                        <p className="text-sm text-muted-foreground leading-relaxed">{t(p.desc)}</p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+              {phases.map((p) => (
+                <StepCard key={p.phase} p={p} t={t} />
+              ))}
             </div>
           </div>
         </div>
@@ -373,7 +484,6 @@ const Inner = () => {
       {/* ── FINAL CTA ────────────────────────────────────────── */}
       <section className="py-24">
         <div className="container mx-auto max-w-2xl px-6 text-center">
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 rounded-3xl" />
           <span className="mb-4 inline-block rounded-full border border-primary/40 bg-primary/10 px-5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
             {t("Start Today")}
           </span>
