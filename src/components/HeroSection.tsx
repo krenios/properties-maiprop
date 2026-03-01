@@ -45,7 +45,7 @@ const HeroSection = () => {
       </h1>
       <p className="mt-6 max-w-xl text-base text-muted-foreground font-thin sm:text-xl font-sans text-left">
         {t("EU residency through €250K+ Greek real estate investments.")}
-        <br /> {t("AI-powered platform for independent assessment.")}
+        <br /><br /> {t("Live freely, invest wisely, and protect your global future.")}
       </p>
       <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
         <Button size="lg" className="gap-2 rounded-full px-8 w-full sm:w-auto" onClick={() => openWithLocation("")}>
