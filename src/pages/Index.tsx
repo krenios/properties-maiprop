@@ -131,6 +131,7 @@ const Index = () => {
     <Helmet>
       <title>Greek Golden Visa Real Estate — EU Residency from €250K | mAI Investments</title>
       <meta name="description" content="Invest in Golden Visa eligible Greek real estate from €250,000. EU residency, Schengen access, and 5–7% net rental yields. Pre-verified properties in Athens & the Greek Riviera." />
+      <meta name="keywords" content="Greek Golden Visa, Greece real estate investment, EU residency investment, Athens property investment, Golden Visa property Greece, Greece Golden Visa €250000, Schengen residency, buy property Greece" />
       <meta name="robots" content={isLangVariant ? "noindex, follow" : "index, follow"} />
       <link rel="canonical" href={canonicalUrl} />
       {/* Hreflang — all supported languages */}
@@ -168,6 +169,21 @@ const Index = () => {
     </Helmet>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": `${BASE_URL}/#website`,
+      "name": "mAI Investments Properties",
+      "url": BASE_URL,
+      "description": "Greek Golden Visa real estate investment platform — pre-verified properties in Athens from €250,000.",
+      "publisher": { "@id": `${BASE_URL}/#organization` },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": `${BASE_URL}/properties/?q={search_term_string}`,
+        "query-input": "required name=search_term_string"
+      },
+      "inLanguage": ["en", "el", "ar", "zh", "ru", "fr", "hi", "he", "tr"]
+    }) }} />
     <LeadBotProvider>
       <Navbar />
       <HeroSection />

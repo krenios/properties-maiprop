@@ -110,6 +110,7 @@ const Inner = () => {
       <Helmet>
         <title>Greek Golden Visa Investment Guides & Research — mAI Investments</title>
         <meta name="description" content="Expert guides on Greek Golden Visa rules, Athens real estate ROI, and property investment strategy for non-EU investors. Research-stage resources for serious investors." />
+        <meta name="keywords" content="Greek Golden Visa guide, Athens real estate guide, Greece property investment guide, Golden Visa eligibility, how to invest in Greece, Athens ROI, Greece residency by investment articles" />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={PAGE_URL} />
         <link rel="alternate" hrefLang="en"        href={PAGE_URL} />

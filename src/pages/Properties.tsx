@@ -40,6 +40,7 @@ const Inner = () => {
       <Helmet>
         <title>Golden Visa Properties in Greece — Athens, Piraeus & Riviera | mAI Investments</title>
         <meta name="description" content="Browse all Golden Visa eligible properties in Athens, Piraeus, and the Greek Riviera. Pre-verified, fully compliant, investment-ready from €250,000." />
+        <meta name="keywords" content="Golden Visa properties Greece, Athens investment property, Piraeus real estate, Greek Golden Visa property list, buy apartment Athens, Greece property investment, EU residency property" />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={`${BASE_URL}/properties/`} />
         <link rel="alternate" hrefLang="en"        href={`${BASE_URL}/properties/`} />
