@@ -87,6 +87,7 @@ Deno.serve(async (req) => {
     { path: "/greek-golden-visa-requirements/", changefreq: "monthly", priority: "0.85" },
     { path: "/250k-golden-visa-properties/", changefreq: "weekly", priority: "0.9" },
     { path: "/guides/", changefreq: "weekly", priority: "0.8" },
+    { path: "/golden-visa-journey/", changefreq: "monthly", priority: "0.85" },
   ].map(({ path, changefreq, priority }) =>
     urlEntry({ path, lastmod: today, changefreq, priority, withHreflang: true })
   );

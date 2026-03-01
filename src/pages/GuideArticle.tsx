@@ -213,6 +213,14 @@ const Inner = () => {
       <Helmet>
         <title>{`${displayTitle} — mAI Investments`}</title>
         <meta name="description" content={displayDescription} />
+        <meta name="keywords" content={[
+          displayCategory,
+          meta?.topic?.split("—")[0]?.trim() ?? "",
+          "Greek Golden Visa",
+          "Greece real estate investment",
+          "property investment Greece",
+          "Athens investment property",
+        ].filter(Boolean).join(", ")} />
         <meta name="robots" content={isLangVariant ? "noindex, follow" : "index, follow"} />
         <link rel="canonical" href={pageUrl} />
         {/* hreflang — language variants */}

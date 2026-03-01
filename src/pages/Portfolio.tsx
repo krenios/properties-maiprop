@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
@@ -26,6 +27,7 @@ const Inner = () => {
   const delivered = properties.filter((p) => p.project_type === "delivered");
   const [selected, setSelected] = useState<Property | null>(null);
   const { setIsOpen } = useLeadBot();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -111,11 +113,10 @@ const Inner = () => {
                 <CheckCircle className="mr-1 h-3 w-3" /> Track Record
               </Badge>
               <h1 className="mb-4 text-4xl font-bold md:text-5xl">
-                Golden Visa Portfolio &amp; Track Record
+                {t("Golden Visa Portfolio & Track Record")}
               </h1>
               <p className="mx-auto max-w-2xl text-muted-foreground text-lg">
-                Every project below has been sourced, renovated, tenanted, and delivered to
-                investors who hold an active Greek Golden Visa. No delays, no surprises.
+                {t("Every project below has been sourced, renovated, tenanted, and delivered to investors who hold an active Greek Golden Visa. No delays, no surprises.")}
               </p>
             </ScrollReveal>
           </div>
@@ -191,13 +192,13 @@ const Inner = () => {
             {/* CTA */}
             <ScrollReveal>
               <div className="mt-16 rounded-2xl border border-primary/20 bg-primary/5 p-8 text-center">
-                <h2 className="mb-2 text-2xl font-bold">Looking for something similar?</h2>
+                <h2 className="mb-2 text-2xl font-bold">{t("Looking for something similar?")}</h2>
                 <p className="mb-6 text-muted-foreground">
-                  Contact us today and we'll match you with a Golden Visa property that fits your goals.
+                  {t("Contact us today and we'll match you with a Golden Visa property that fits your goals.")}
                 </p>
                 <Button size="lg" className="gap-2" onClick={() => setIsOpen(true)}>
                   <MessageCircle className="h-4 w-4" />
-                  Contact Us
+                  {t("Contact Us")}
                 </Button>
               </div>
             </ScrollReveal>
