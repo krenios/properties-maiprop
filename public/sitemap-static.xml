@@ -59,6 +59,13 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://properties.maiprop.co/greek-golden-visa-requirements/" />
   </url>
   <url>
+    <loc>https://properties.maiprop.co/golden-visa-journey/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://properties.maiprop.co/golden-visa-journey/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://properties.maiprop.co/golden-visa-journey/" />
+  </url>
+  <url>
     <loc>https://properties.maiprop.co/250k-golden-visa-properties/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
