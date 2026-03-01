@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, BookOpen, Clock, TrendingUp, Landmark, DollarSign, FileText, Loader2, MessageCircle } from "lucide-react";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "@/contexts/TranslationContext";
 const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const BASE_URL = "https://properties.maiprop.co";
@@ -74,6 +75,7 @@ const breadcrumbLd = {
 
 const Inner = () => {
   const { openWithLocation } = useLeadBot();
+  const { t } = useTranslation();
   const [articles, setArticles] = useState<ArticleRow[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -154,16 +156,16 @@ const Inner = () => {
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
         <div className="container mx-auto px-6 relative">
           <span className="mb-4 inline-block rounded-full border border-primary/40 bg-primary/10 px-5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
-            Investor Resources
+            {t("Investor Resources")}
           </span>
           <h1 className="max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">
-            Greek Golden Visa Investment{" "}
+            {t("Greek Golden Visa Investment")}{" "}
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Guides &amp; Research
+              {t("Guides & Research")}
             </span>
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-            Everything you need to make an informed decision — from Golden Visa program mechanics to city-by-city yield comparisons and ROI calculators.
+            {t("Everything you need to make an informed decision — from Golden Visa program mechanics to city-by-city yield comparisons and ROI calculators.")}
           </p>
         </div>
       </section>
@@ -174,7 +176,7 @@ const Inner = () => {
           {loading ?
           <div className="flex items-center justify-center gap-3 py-20 text-muted-foreground">
               <Loader2 className="h-5 w-5 animate-spin text-primary" />
-              <span className="text-sm">Loading guides…</span>
+              <span className="text-sm">{t("Loading guides…")}</span>
             </div> :
 
           <>
@@ -216,19 +218,19 @@ const Inner = () => {
                       </div>
 
                       <h3 className="mb-3 text-xl font-bold leading-snug group-hover:text-primary transition-colors">
-                        {guide.title}
+                        {t(guide.title)}
                       </h3>
                       <p className="flex-1 text-sm text-muted-foreground leading-relaxed line-clamp-3">
-                        {guide.meta_description}
+                        {t(guide.meta_description)}
                       </p>
 
                       <div className="mt-6 flex items-center justify-between">
                         <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                           <Clock className="h-3.5 w-3.5" />
-                          {guide.read_time || "7 min read"}
+                          {guide.read_time || t("7 min read")}
                         </span>
                         <span className="flex items-center gap-1 text-sm font-medium text-primary group-hover:gap-2 transition-all">
-                          Read guide <ArrowRight className="h-4 w-4" />
+                          {t("Read guide")} <ArrowRight className="h-4 w-4" />
                         </span>
                       </div>
                     </Link>);
@@ -244,13 +246,11 @@ const Inner = () => {
       <section className="py-20 bg-background/50">
         <div className="container mx-auto px-6">
           <div className="rounded-2xl border border-primary/20 bg-primary/5 p-8 text-center max-w-3xl mx-auto">
-            <h2 className="text-2xl font-bold mb-2">Is there anything specific you’d like us to clarify?</h2>
-            <p className="text-muted-foreground mb-6">Start your journey today — we’re here to guide you.
-
-            </p>
+            <h2 className="text-2xl font-bold mb-2">{t("Is there anything specific you'd like us to clarify?")}</h2>
+            <p className="text-muted-foreground mb-6">{t("Start your journey today — we're here to guide you.")}</p>
             <Button size="lg" className="gap-2" onClick={() => openWithLocation("consultation")}>
               <MessageCircle className="h-4 w-4" />
-              Contact Us
+              {t("Contact Us")}
             </Button>
           </div>
         </div>
