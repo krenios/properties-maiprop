@@ -43,7 +43,7 @@ const HeroSection = () => {
           {t("Golden Visa in Greece")}
         </span>
       </h1>
-      <p className="mt-6 max-w-xl text-base sm:text-lg text-muted-foreground text-justify">
+      <p className="mt-6 max-w-xl text-base text-muted-foreground font-thin sm:text-xl font-sans text-left">
         {t("EU residency through €250K+ Greek real estate investments.")}
         <br /> {t("AI-powered platform for independent assessment.")}
       </p>
