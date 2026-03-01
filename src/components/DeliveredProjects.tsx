@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useProperties } from "@/contexts/PropertyContext";
 import { CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag, ExternalLink, ChevronLeft, ChevronRight, Building, Calendar, Share2 } from "lucide-react";
 import { toast } from "sonner";
@@ -36,7 +36,9 @@ const trackRecord = [
 
 const DeliveredProjects = () => {
   const { properties } = useProperties();
+  const navigate = useNavigate();
   const delivered = properties.filter((p) => p.project_type === "delivered");
+  const preview = delivered.slice(0, 3);
   const [selected, setSelected] = useState<Property | null>(null);
   const { t } = useTranslation();
 
@@ -45,7 +47,7 @@ const DeliveredProjects = () => {
   return (
     <section id="delivered" className="bg-background py-20">
       <div className="container mx-auto px-6">
-        {/* Track record stats */}
+        {/* Section heading */}
         <ScrollReveal>
         <div className="mb-16 text-center">
           <Badge className="mb-4 border-primary/30 bg-primary/10 text-primary">
@@ -58,10 +60,10 @@ const DeliveredProjects = () => {
         </div>
         </ScrollReveal>
 
-        {/* Property cards */}
+        {/* Property cards — max 3 on homepage */}
         <ScrollReveal variant="stagger">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {delivered.map((p) =>
+            {preview.map((p) =>
             <RevealItem key={p.id}>
               <div className="group overflow-hidden rounded-xl border border-border bg-card text-left transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5">
                 <button
@@ -126,6 +128,21 @@ const DeliveredProjects = () => {
             )}
           </div>
         </ScrollReveal>
+
+        {/* View all CTA */}
+        {delivered.length > 3 && (
+          <ScrollReveal>
+            <div className="mt-10 text-center">
+              <p className="mb-4 text-muted-foreground">
+                Showing 3 of {delivered.length} delivered projects
+              </p>
+              <Button onClick={() => navigate("/portfolio")} size="lg" variant="outline" className="gap-2">
+                View Full Portfolio
+                <ExternalLink className="h-4 w-4" />
+              </Button>
+            </div>
+          </ScrollReveal>
+        )}
       </div>
 
       {/* Delivered Modal */}

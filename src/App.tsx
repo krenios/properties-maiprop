@@ -20,6 +20,7 @@ const GreekGoldenVisaRequirements = lazy(() => import("./pages/GreekGoldenVisaRe
 const GoldenVisa250k = lazy(() => import("./pages/GoldenVisa250k"));
 const Guides = lazy(() => import("./pages/Guides"));
 const GuideArticle = lazy(() => import("./pages/GuideArticle"));
+const Portfolio = lazy(() => import("./pages/Portfolio"));
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,8 @@ const App = () => (
                 <Route path="/guides/" element={<Suspense fallback={null}><Guides /></Suspense>} />
                 <Route path="/guides/:slug" element={<Suspense fallback={null}><GuideArticle /></Suspense>} />
                 <Route path="/guides/:slug/" element={<Suspense fallback={null}><GuideArticle /></Suspense>} />
+                <Route path="/portfolio" element={<Suspense fallback={null}><Portfolio /></Suspense>} />
+                <Route path="/portfolio/" element={<Suspense fallback={null}><Portfolio /></Suspense>} />
                 <Route path="/login" element={<Suspense fallback={null}><Login /></Suspense>} />
                 <Route path="/admin" element={<Suspense fallback={null}><ProtectedRoute><Admin /></ProtectedRoute></Suspense>} />
                 <Route path="*" element={<Suspense fallback={null}><NotFound /></Suspense>} />
