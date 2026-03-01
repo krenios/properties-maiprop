@@ -46,7 +46,7 @@ const JourneySection = () => {
       <ScrollReveal>
         <div className="mt-12 text-center">
           <Button asChild size="lg" variant="outline" className="rounded-full px-8 gap-2">
-            <Link to="/golden-visa-journey/">
+            <Link to="/process">
               {t("Learn More")} <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
