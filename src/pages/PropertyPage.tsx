@@ -157,7 +157,9 @@ const PropertyPageInner = () => {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Apartment",
+    "@id": `${pageUrl}#apartment`,
     "name": property.title,
+    "publisher": { "@id": "https://properties.maiprop.co/#organization" },
     "description": property.description || `${property.title} — Golden Visa eligible property in ${property.location}, Greece.`,
     "url": pageUrl,
     "image": images[0] || ogImage,
