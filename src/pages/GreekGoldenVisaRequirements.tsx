@@ -193,7 +193,7 @@ const Inner = () => {
       <Navbar forceScrolled />
 
       {/* Breadcrumb */}
-      <nav className="border-b border-border/40 bg-background/80 backdrop-blur-sm" aria-label="Breadcrumb">
+      <nav className="mt-[64px] border-b border-border/40 bg-background/80 backdrop-blur-sm" aria-label="Breadcrumb">
         <div className="container mx-auto px-6 py-3">
           <ol className="flex items-center gap-1.5 text-xs text-muted-foreground" itemScope itemType="https://schema.org/BreadcrumbList">
             <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
