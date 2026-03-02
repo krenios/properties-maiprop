@@ -332,20 +332,23 @@ const Inner = () => {
 
       <Navbar forceScrolled />
 
+      {/* ── BREADCRUMB ────────────────────────────────────────── */}
+      <nav className="border-b border-border/40 bg-background/80 backdrop-blur-sm" aria-label="Breadcrumb">
+        <div className="container mx-auto px-6 py-3">
+          <ol className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <li><Link to="/" className="hover:text-primary transition-colors">{t("Home")}</Link></li>
+            <ChevronRight className="h-3 w-3" />
+            <li className="text-foreground font-medium">{t("How We Work")}</li>
+          </ol>
+        </div>
+      </nav>
+
       {/* ── HERO ─────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden pt-32 pb-20">
+      <section className="relative overflow-hidden pt-20 pb-20">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/8 via-transparent to-secondary/5" />
         <div className="pointer-events-none absolute -top-32 right-0 h-[500px] w-[500px] rounded-full bg-primary/5 blur-[120px]" />
 
         <div className="container mx-auto px-6 relative text-center">
-          {/* Breadcrumb */}
-          <nav className="mb-6 text-xs text-muted-foreground" aria-label="Breadcrumb">
-            <ol className="items-left ustify-start flex-row gap-0 flex items-center justify-start">
-              <li><Link to="/" className="hover:text-primary transition-colors">{t("Home")}</Link></li>
-              <ChevronRight className="h-3 w-3" />
-              <li className="text-foreground">{t("How We Work")}</li>
-            </ol>
-          </nav>
 
           <span className="mb-4 inline-block rounded-full border border-primary/40 bg-primary/10 px-5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
             {t("Full-Service Advisory")}
