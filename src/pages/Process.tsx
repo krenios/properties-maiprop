@@ -350,13 +350,13 @@ const Inner = () => {
           <span className="mb-4 inline-block rounded-full border border-primary/40 bg-primary/10 px-5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
             {t("Full-Service Advisory")}
           </span>
-          <h1 className="max-w-3xl mx-auto text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
+          <h1 className="max-w-3xl mx-auto text-3xl font-bold leading-tight sm:text-5xl lg:text-6xl">
             {t("From First Call to")}{" "}
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               {t("Golden Visa Permit")}
             </span>
           </h1>
-          <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed">
+          <p className="mt-6 max-w-2xl mx-auto text-muted-foreground leading-relaxed text-base">
             {t("Eight structured steps. One dedicated advisor. One trip to Greece. This is how mAI Investments takes you from initial enquiry to a 5-year renewable EU residency permit — without surprises.")}
           </p>
 
