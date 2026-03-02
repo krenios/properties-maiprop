@@ -94,15 +94,15 @@ const Inner = () => {
 
         {/* Breadcrumb */}
         <nav className="mt-[64px] border-b border-border/40 bg-background/80 backdrop-blur-sm" aria-label="Breadcrumb">
-          <div className="container mx-auto px-6 py-3">
-            <ol className="flex items-center gap-1.5 text-xs text-muted-foreground" itemScope itemType="https://schema.org/BreadcrumbList">
+          <div className="container mx-auto px-6 py-4">
+            <ol className="flex items-center gap-2 text-xs text-muted-foreground" itemScope itemType="https://schema.org/BreadcrumbList">
               <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
                 <Link to="/" className="hover:text-primary transition-colors" itemProp="item">
                   <span itemProp="name">Home</span>
                 </Link>
                 <meta itemProp="position" content="1" />
               </li>
-              <ChevronRight className="h-3 w-3" />
+              <li className="text-muted-foreground/50 select-none">›</li>
               <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
                 <span className="text-foreground font-medium" itemProp="name">Properties</span>
                 <meta itemProp="position" content="2" />
