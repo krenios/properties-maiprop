@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BookOpen, Clock, TrendingUp, Landmark, DollarSign, FileText, Loader2, MessageCircle } from "lucide-react";
+import { ArrowRight, BookOpen, Clock, TrendingUp, Landmark, DollarSign, FileText, Loader2, MessageCircle, ChevronRight } from "lucide-react";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "@/contexts/TranslationContext";
@@ -139,18 +139,15 @@ const Inner = () => {
       <Navbar forceScrolled />
 
       {/* Breadcrumb */}
-      <div className="border-b border-border/50 bg-background/80 backdrop-blur-sm">
-        <div className="container mx-auto px-6 pt-20 pb-3">
-          <nav className="flex items-center gap-2 text-sm text-muted-foreground" aria-label="Breadcrumb">
-            <Link to="/" className="flex items-center gap-1 hover:text-foreground transition-colors">
-              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1V10" /></svg>
-              Home
-            </Link>
-            <svg className="h-3.5 w-3.5 opacity-40" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-            <span className="text-foreground font-medium">Guides</span>
-          </nav>
+      <nav className="border-b border-border/40 bg-background/80 backdrop-blur-sm" aria-label="Breadcrumb">
+        <div className="container mx-auto px-6 py-3">
+          <ol className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <li><Link to="/" className="hover:text-primary transition-colors">{t("Home")}</Link></li>
+            <ChevronRight className="h-3 w-3" />
+            <li className="text-foreground font-medium">{t("Guides")}</li>
+          </ol>
         </div>
-      </div>
+      </nav>
 
       {/* Hero */}
       <section className="relative overflow-hidden pt-12 pb-16">

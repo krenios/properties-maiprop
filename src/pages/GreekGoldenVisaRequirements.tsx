@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, FileText, ArrowRight, AlertCircle } from "lucide-react";
+import { CheckCircle2, FileText, ArrowRight, AlertCircle, ChevronRight } from "lucide-react";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
 const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
@@ -192,28 +192,32 @@ const Inner = () => {
 
       <Navbar forceScrolled />
 
+      {/* Breadcrumb */}
+      <nav className="border-b border-border/40 bg-background/80 backdrop-blur-sm" aria-label="Breadcrumb">
+        <div className="container mx-auto px-6 py-3">
+          <ol className="flex items-center gap-1.5 text-xs text-muted-foreground" itemScope itemType="https://schema.org/BreadcrumbList">
+            <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+              <Link to="/" className="hover:text-primary transition-colors" itemProp="item"><span itemProp="name">{t("Home")}</span></Link>
+              <meta itemProp="position" content="1" />
+            </li>
+            <ChevronRight className="h-3 w-3" />
+            <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+              <Link to="/greek-golden-visa/" className="hover:text-primary transition-colors" itemProp="item"><span itemProp="name">{t("Greek Golden Visa")}</span></Link>
+              <meta itemProp="position" content="2" />
+            </li>
+            <ChevronRight className="h-3 w-3" />
+            <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+              <span className="text-foreground font-medium" itemProp="name">{t("Requirements")}</span>
+              <meta itemProp="position" content="3" />
+            </li>
+          </ol>
+        </div>
+      </nav>
+
       {/* Hero */}
-      <section className="relative overflow-hidden pt-32 pb-20">
+      <section className="relative overflow-hidden pt-20 pb-20">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
         <div className="container mx-auto px-6 relative">
-          <nav className="mb-6 text-xs text-muted-foreground" aria-label="Breadcrumb">
-            <ol className="flex items-center gap-1.5" itemScope itemType="https://schema.org/BreadcrumbList">
-              <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                <Link to="/" className="hover:text-primary transition-colors" itemProp="item"><span itemProp="name">Home</span></Link>
-                <meta itemProp="position" content="1" />
-              </li>
-              <span>/</span>
-              <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                <Link to="/greek-golden-visa/" className="hover:text-primary transition-colors" itemProp="item"><span itemProp="name">Greek Golden Visa</span></Link>
-                <meta itemProp="position" content="2" />
-              </li>
-              <span>/</span>
-              <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                <span className="text-foreground" itemProp="name">Requirements</span>
-                <meta itemProp="position" content="3" />
-              </li>
-            </ol>
-          </nav>
 
           <span className="mb-4 inline-block rounded-full border border-primary/40 bg-primary/10 px-5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
             {t("Requirements & Eligibility")}
