@@ -337,10 +337,10 @@ const Inner = () => {
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/8 via-transparent to-secondary/5" />
         <div className="pointer-events-none absolute -top-32 right-0 h-[500px] w-[500px] rounded-full bg-primary/5 blur-[120px]" />
 
-        <div className="container mx-auto px-6 relative">
+        <div className="container mx-auto px-6 relative text-center">
           {/* Breadcrumb */}
           <nav className="mb-6 text-xs text-muted-foreground" aria-label="Breadcrumb">
-            <ol className="flex items-center gap-1.5">
+            <ol className="flex items-center justify-center gap-1.5">
               <li><Link to="/" className="hover:text-primary transition-colors">{t("Home")}</Link></li>
               <ChevronRight className="h-3 w-3" />
               <li className="text-foreground">{t("How We Work")}</li>
@@ -350,17 +350,17 @@ const Inner = () => {
           <span className="mb-4 inline-block rounded-full border border-primary/40 bg-primary/10 px-5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
             {t("Full-Service Advisory")}
           </span>
-          <h1 className="max-w-3xl text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
+          <h1 className="max-w-3xl mx-auto text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
             {t("From First Call to")}{" "}
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               {t("Golden Visa Permit")}
             </span>
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed">
+          <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed">
             {t("Eight structured steps. One dedicated advisor. One trip to Greece. This is how mAI Investments takes you from initial enquiry to a 5-year renewable EU residency permit — without surprises.")}
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-4">
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Button size="lg" className="rounded-full px-8 gap-2" onClick={() => openWithLocation("process")}>
               {t("Start My Journey")} <ArrowRight className="h-4 w-4" />
             </Button>
@@ -370,7 +370,7 @@ const Inner = () => {
           </div>
 
           {/* Stats bar */}
-          <div className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6 max-w-4xl">
+          <div className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6 max-w-4xl mx-auto">
             {whyUs.map((s) => {
               const Icon = s.icon;
               return (
