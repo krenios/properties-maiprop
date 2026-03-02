@@ -340,7 +340,7 @@ const Inner = () => {
         <div className="container mx-auto px-6 relative text-center">
           {/* Breadcrumb */}
           <nav className="mb-6 text-xs text-muted-foreground" aria-label="Breadcrumb">
-            <ol className="flex items-center justify-center gap-1.5">
+            <ol className="items-left ustify-start flex-row gap-0 flex items-center justify-start">
               <li><Link to="/" className="hover:text-primary transition-colors">{t("Home")}</Link></li>
               <ChevronRight className="h-3 w-3" />
               <li className="text-foreground">{t("How We Work")}</li>
