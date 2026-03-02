@@ -152,17 +152,17 @@ const Inner = () => {
       {/* Hero */}
       <section className="relative overflow-hidden pt-12 pb-16">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
-        <div className="container mx-auto px-6 relative">
+        <div className="container mx-auto px-6 relative text-center">
           <span className="mb-4 inline-block rounded-full border border-primary/40 bg-primary/10 px-5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
             {t("Investor Resources")}
           </span>
-          <h1 className="max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">
+          <h1 className="mx-auto max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">
             {t("Greek Golden Visa Investment")}{" "}
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               {t("Guides & Research")}
             </span>
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
             {t("Everything you need to make an informed decision — from Golden Visa program mechanics to city-by-city yield comparisons and ROI calculators.")}
           </p>
         </div>
