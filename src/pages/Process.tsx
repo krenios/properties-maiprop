@@ -334,10 +334,10 @@ const Inner = () => {
 
       {/* ── BREADCRUMB ────────────────────────────────────────── */}
       <nav className="mt-[64px] border-b border-border/40 bg-background/80 backdrop-blur-sm" aria-label="Breadcrumb">
-        <div className="container mx-auto px-6 py-3">
-          <ol className="flex items-center gap-1.5 text-xs text-muted-foreground">
+        <div className="container mx-auto px-6 py-4">
+          <ol className="flex items-center gap-2 text-xs text-muted-foreground">
             <li><Link to="/" className="hover:text-primary transition-colors">{t("Home")}</Link></li>
-            <ChevronRight className="h-3 w-3" />
+            <li className="text-muted-foreground/50 select-none">›</li>
             <li className="text-foreground font-medium">{t("How We Work")}</li>
           </ol>
         </div>
