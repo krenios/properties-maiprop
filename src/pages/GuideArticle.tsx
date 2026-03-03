@@ -79,14 +79,15 @@ const Inner = () => {
   useEffect(() => {
     if (!article) return;
     if (typeof window !== "undefined" && (window as any).gtag) {
+      const category = articleRecord?.category ?? meta?.category ?? "Golden Visa";
       (window as any).gtag("event", "page_view", {
         send_to: "AW-17031338731",
         content_type: "article",
         content_id: slug,
-        content_category: displayCategory,
+        content_category: category,
       });
     }
-  }, [article, slug, displayCategory]);
+  }, [article, slug, articleRecord?.category, meta?.category]);
 
   // Fetch a small set of available properties to link from article pages
   useEffect(() => {
