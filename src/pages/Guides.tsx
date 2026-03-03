@@ -98,6 +98,17 @@ const Inner = () => {
     fetchArticles();
   }, []);
 
+  // Google Ads remarketing — guides index page
+  useEffect(() => {
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "page_view", {
+        send_to: "AW-17031338731",
+        content_type: "guides_index",
+        content_id: "guides",
+      });
+    }
+  }, []);
+
   // Merge: DB articles take priority; add static ones that aren't in DB yet
   const displayGuides = loading ?
   STATIC_GUIDES :

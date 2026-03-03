@@ -75,6 +75,19 @@ const Inner = () => {
     loadOrGenerate(false);
   }, [slug]);
 
+  // Google Ads remarketing — fires once article data is resolved
+  useEffect(() => {
+    if (!article) return;
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "page_view", {
+        send_to: "AW-17031338731",
+        content_type: "article",
+        content_id: slug,
+        content_category: displayCategory,
+      });
+    }
+  }, [article, slug, displayCategory]);
+
   // Fetch a small set of available properties to link from article pages
   useEffect(() => {
     supabase
