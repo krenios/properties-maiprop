@@ -22,6 +22,17 @@ const Inner = () => {
   const { setIsOpen } = useLeadBot();
   const current = properties.filter((p) => p.project_type === "new");
 
+  // Google Ads remarketing — properties listing page
+  useEffect(() => {
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "page_view", {
+        send_to: "AW-17031338731",
+        content_type: "property_listing",
+        content_id: "properties",
+      });
+    }
+  }, []);
+
   useEffect(() => {
     const openFromHash = () => {
       const hash = window.location.hash;
