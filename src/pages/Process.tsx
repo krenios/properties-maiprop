@@ -376,7 +376,13 @@ const Inner = () => {
           <div className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6 max-w-4xl mx-auto">
             {whyUs.map((s) => {
               const Icon = s.icon;
-              return;
+              return (
+                <div key={s.label} className="flex flex-col items-center text-center gap-1 rounded-xl border border-border/40 bg-background/60 p-4">
+                  <Icon className="h-5 w-5 text-primary mb-1" />
+                  <p className="text-lg font-bold">{s.stat}</p>
+                  <p className="text-xs text-muted-foreground">{t(s.label)}</p>
+                </div>
+              );
 
 
 
