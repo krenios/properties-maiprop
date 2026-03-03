@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
@@ -37,6 +37,60 @@ const POI_ICONS: Record<string, LucideIcon> = {
 interface PoiEntry { name: string; distance: string; }
 
 const BASE_URL = "https://properties.maiprop.co";
+
+/* ─── Before / After Slider ─── */
+const BeforeAfterSlider = ({ before, after }: { before: string; after: string }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState(50);
+  const dragging = useRef(false);
+
+  const updatePosition = useCallback((clientX: number) => {
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+    setPosition((x / rect.width) * 100);
+  }, []);
+
+  const onPointerDown = useCallback((e: React.PointerEvent) => {
+    dragging.current = true;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    updatePosition(e.clientX);
+  }, [updatePosition]);
+
+  const onPointerMove = useCallback((e: React.PointerEvent) => {
+    if (!dragging.current) return;
+    updatePosition(e.clientX);
+  }, [updatePosition]);
+
+  const onPointerUp = useCallback(() => { dragging.current = false; }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative h-[240px] sm:h-[320px] w-full cursor-col-resize select-none overflow-hidden rounded-xl border border-border"
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+    >
+      {/* After (base) */}
+      <img src={optimizeImage(after, { width: 1200, height: 675 })} alt="After renovation" className="absolute inset-0 h-full w-full object-cover" draggable={false} />
+      {/* Before (clipped) */}
+      <div className="absolute inset-0 overflow-hidden" style={{ width: `${position}%` }}>
+        <img src={optimizeImage(before, { width: 1200, height: 675 })} alt="Before renovation" className="absolute inset-0 h-full w-full object-cover" style={{ width: `${100 / (position / 100)}%` }} draggable={false} />
+      </div>
+      {/* Divider handle */}
+      <div className="absolute inset-y-0 w-0.5 bg-white shadow-lg" style={{ left: `${position}%` }}>
+        <div className="absolute left-1/2 top-1/2 flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-background shadow-xl">
+          <ChevronLeft className="h-3 w-3 text-foreground" />
+          <ChevronRight className="h-3 w-3 text-foreground" />
+        </div>
+      </div>
+      {/* Labels */}
+      <span className="absolute bottom-2 left-3 rounded-full bg-background/80 px-2 py-0.5 text-xs font-semibold backdrop-blur-sm">Before</span>
+      <span className="absolute bottom-2 right-3 rounded-full bg-background/80 px-2 py-0.5 text-xs font-semibold backdrop-blur-sm">After</span>
+    </div>
+  );
+};
 
 const PropertyPageInner = () => {
   const { id } = useParams<{ id: string }>();
@@ -196,7 +250,6 @@ const PropertyPageInner = () => {
     ? property.description.slice(0, 155) + (property.description.length > 155 ? "…" : "")
     : `${property.title} — Golden Visa property in ${property.location}, Greece.${property.price ? ` €${property.price.toLocaleString()}.` : ""}${property.size ? ` ${property.size} m².` : ""} EU residency eligible.`;
 
-  // Per-property keywords: location + tags + type
   const keywords = [
     `Golden Visa ${property.location}`,
     `${property.location} real estate investment`,
@@ -207,12 +260,10 @@ const PropertyPageInner = () => {
     property.bedrooms ? `${property.bedrooms} bedroom apartment Greece` : null,
   ].filter(Boolean).join(", ");
 
-  // LCP preload srcset for hero image
   const heroSrc = images[0];
   const heroPreloadSrcset = heroSrc
     ? `${heroSrc}?width=480&quality=40&format=webp 480w, ${heroSrc}?width=800&quality=40&format=webp 800w, ${heroSrc}?width=1200&quality=55&format=webp 1200w`
     : null;
-
 
   return (
     <>
@@ -222,22 +273,20 @@ const PropertyPageInner = () => {
         <meta name="keywords" content={keywords} />
         <meta name="robots" content={isLangVariant ? "noindex, follow" : "index, follow"} />
         <link rel="canonical" href={pageUrl} />
-        {/* hreflang — language variants */}
-        <link rel="alternate" hrefLang="en"      href={pageUrl} />
-        <link rel="alternate" hrefLang="en-US"   href={pageUrl} />
-        <link rel="alternate" hrefLang="en-GB"   href={pageUrl} />
-        <link rel="alternate" hrefLang="el"      href={`${pageUrl}?lang=el`} />
-        <link rel="alternate" hrefLang="ar"      href={`${pageUrl}?lang=ar`} />
-        <link rel="alternate" hrefLang="ar-AE"   href={`${pageUrl}?lang=ar`} />
-        <link rel="alternate" hrefLang="zh"      href={`${pageUrl}?lang=zh`} />
-        <link rel="alternate" hrefLang="zh-CN"   href={`${pageUrl}?lang=zh`} />
-        <link rel="alternate" hrefLang="ru"      href={`${pageUrl}?lang=ru`} />
-        <link rel="alternate" hrefLang="fr"      href={`${pageUrl}?lang=fr`} />
-        <link rel="alternate" hrefLang="hi"      href={`${pageUrl}?lang=hi`} />
-        <link rel="alternate" hrefLang="he"      href={`${pageUrl}?lang=he`} />
-        <link rel="alternate" hrefLang="tr"      href={`${pageUrl}?lang=tr`} />
+        <link rel="alternate" hrefLang="en"        href={pageUrl} />
+        <link rel="alternate" hrefLang="en-US"     href={pageUrl} />
+        <link rel="alternate" hrefLang="en-GB"     href={pageUrl} />
+        <link rel="alternate" hrefLang="el"        href={`${pageUrl}?lang=el`} />
+        <link rel="alternate" hrefLang="ar"        href={`${pageUrl}?lang=ar`} />
+        <link rel="alternate" hrefLang="ar-AE"     href={`${pageUrl}?lang=ar`} />
+        <link rel="alternate" hrefLang="zh"        href={`${pageUrl}?lang=zh`} />
+        <link rel="alternate" hrefLang="zh-CN"     href={`${pageUrl}?lang=zh`} />
+        <link rel="alternate" hrefLang="ru"        href={`${pageUrl}?lang=ru`} />
+        <link rel="alternate" hrefLang="fr"        href={`${pageUrl}?lang=fr`} />
+        <link rel="alternate" hrefLang="hi"        href={`${pageUrl}?lang=hi`} />
+        <link rel="alternate" hrefLang="he"        href={`${pageUrl}?lang=he`} />
+        <link rel="alternate" hrefLang="tr"        href={`${pageUrl}?lang=tr`} />
         <link rel="alternate" hrefLang="x-default" href={pageUrl} />
-        {/* LCP preload for hero image */}
         {heroPreloadSrcset && (
           <link
             rel="preload"
@@ -247,7 +296,6 @@ const PropertyPageInner = () => {
             imageSizes="100vw"
           />
         )}
-        {/* Open Graph */}
         <meta property="og:type" content="product" />
         <meta property="og:site_name" content="mAI Investments" />
         <meta property="og:locale" content="en_US" />
@@ -258,14 +306,12 @@ const PropertyPageInner = () => {
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content={`${property.title} — ${property.location}, Greece`} />
-        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@maiprop" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
         <meta name="twitter:image:alt" content={`${property.title} — ${property.location}, Greece`} />
-        {/* Structured Data */}
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
         <script type="application/ld+json">{JSON.stringify({
@@ -402,33 +448,38 @@ const PropertyPageInner = () => {
 
           {/* POI */}
           <section aria-label="Points of Interest">
-            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-              Points of Interest
-              {poiLoading && <Loader2 className="ml-2 inline h-3 w-3 animate-spin" />}
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              {poiLoading ? "Loading nearby places…" : "Nearby"}
             </h2>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
               {displayPoi.map((entry) => {
-                const Icon = POI_ICONS[entry.name] || MapPin;
+                const Icon = POI_ICONS[entry.name] ?? MapPin;
                 return (
-                  <Badge key={entry.name} variant="secondary" className="gap-1.5 rounded-full px-3 py-1 text-xs">
-                    <Icon className="h-3 w-3" />
-                    {entry.name}
-                    {entry.distance && <span className="ml-0.5 font-medium text-primary">· {entry.distance}</span>}
-                  </Badge>
+                  <div key={entry.name} className="flex items-center gap-2.5 rounded-lg border border-border/50 bg-muted/20 px-3 py-2.5">
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                      <Icon className="h-3.5 w-3.5 text-primary" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="truncate text-xs font-medium">{entry.name}</p>
+                      {entry.distance && <p className="text-[11px] text-muted-foreground">{entry.distance}</p>}
+                    </div>
+                  </div>
                 );
               })}
             </div>
           </section>
 
           {/* Tags */}
-          {property.tags.filter(Boolean).length > 0 && (
+          {property.tags?.filter(Boolean).length > 0 && (
             <>
-              <Separator className="my-6 bg-border" />
-              <section aria-label="Property Features">
+              <Separator className="my-8 bg-border" />
+              <section aria-label="Property features">
                 <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Features</h2>
-                <div className="flex flex-wrap gap-1.5">
-                  {property.tags.filter(Boolean).map((t) => (
-                    <Badge key={t} variant="outline" className="rounded-full px-3 py-1 text-xs">{t}</Badge>
+                <div className="flex flex-wrap gap-2">
+                  {property.tags.filter(Boolean).map((tag) => (
+                    <Badge key={tag} variant="secondary" className="gap-1.5 rounded-full px-3 py-1 text-xs">
+                      <LayoutGrid className="h-3 w-3" /> {tag}
+                    </Badge>
                   ))}
                 </div>
               </section>
@@ -437,33 +488,20 @@ const PropertyPageInner = () => {
 
           <Separator className="my-8 bg-border" />
 
-          {/* Map */}
-          <section aria-label="Location map">
-            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Location</h2>
-            <div className="overflow-hidden rounded-xl border border-border">
-              <iframe
-                title={`Map of ${property.location}`}
-                src={`https://www.google.com/maps?q=${encodeURIComponent(property.location + ", Greece")}&output=embed`}
-                className="h-[280px] w-full border-0"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                allowFullScreen
-              />
-              <a href={mapsUrl} target="_blank" rel="noopener noreferrer"
-                className="group flex items-center justify-between bg-muted/30 p-3 hover:bg-muted/50 transition-colors">
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-primary" />
-                  <p className="text-sm font-medium">{property.location}, Greece</p>
-                </div>
-                <ExternalLink className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-colors" />
-              </a>
-            </div>
-          </section>
+          {/* Before & After Slider */}
+          {property.before_image && property.after_image && (
+            <>
+              <section aria-label="Before and after renovation">
+                <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Before &amp; After</h2>
+                <BeforeAfterSlider before={property.before_image} after={property.after_image} />
+              </section>
+              <Separator className="my-8 bg-border" />
+            </>
+          )}
 
           {/* Floor Plan */}
           {property.floor_plan && (
             <>
-              <Separator className="my-8 bg-border" />
               <section aria-label="Floor plan">
                 <div className="rounded-xl border-2 border-primary/20 bg-primary/5 p-5">
                   <div className="mb-3 flex items-center gap-2">
@@ -477,29 +515,29 @@ const PropertyPageInner = () => {
                     loading="lazy" decoding="async" />
                 </div>
               </section>
+              <Separator className="my-8 bg-border" />
             </>
           )}
 
           {/* Market Report */}
           {property.market_report && (
-            <>
-              <Separator className="my-8 bg-border" />
-              <a href={property.market_report} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-xl border-2 border-primary/20 bg-primary/5 p-4 hover:bg-primary/10 transition-colors">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/15">
-                  <FileText className="h-4.5 w-4.5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-semibold text-primary">Market Report</p>
-                  <p className="text-xs text-muted-foreground">View PDF report</p>
-                </div>
-                <ExternalLink className="h-4 w-4 text-muted-foreground" />
-              </a>
-            </>
+            <a href={property.market_report} target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-3 rounded-xl border-2 border-primary/20 bg-primary/5 p-4 hover:bg-primary/10 transition-colors">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/15">
+                <FileText className="h-4 w-4 text-primary" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold">Market Report</p>
+                <p className="text-xs text-muted-foreground">Download the full investment analysis PDF</p>
+              </div>
+              <ExternalLink className="h-4 w-4 text-muted-foreground" />
+            </a>
           )}
         </main>
 
-        {/* Sticky bottom bar — mobile only */}
+        <Suspense fallback={null}>
+          <LeadCaptureBot />
+        </Suspense>
       </div>
     </>
   );
@@ -508,9 +546,6 @@ const PropertyPageInner = () => {
 const PropertyPage = () => (
   <LeadBotProvider>
     <PropertyPageInner />
-    <Suspense fallback={null}>
-      <LeadCaptureBot />
-    </Suspense>
   </LeadBotProvider>
 );
 
