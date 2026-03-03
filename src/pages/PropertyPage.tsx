@@ -126,6 +126,7 @@ const PropertyPageInner = () => {
   useEffect(() => {
     if (!property) return;
     if (typeof window !== "undefined" && (window as any).gtag) {
+      // Standard property remarketing
       (window as any).gtag("event", "page_view", {
         send_to: "AW-17031338731",
         value: property.price ?? undefined,
@@ -136,6 +137,23 @@ const PropertyPageInner = () => {
           location_id: property.location,
         }],
       });
+
+      // High-intent signal: visitor previously read a guide in this session
+      // Use this event in Google Ads → Audiences to build a "guide reader → property viewer" segment
+      try {
+        const guideReads = JSON.parse(sessionStorage.getItem("mai_guide_reads") || "[]");
+        const lastGuideCategory = sessionStorage.getItem("mai_last_guide_category") ?? undefined;
+        if (guideReads.length > 0) {
+          (window as any).gtag("event", "high_intent_investor", {
+            send_to: "AW-17031338731",
+            property_id: property.id,
+            property_location: property.location,
+            property_price: property.price ?? undefined,
+            prior_guide_reads: guideReads.length,
+            prior_guide_category: lastGuideCategory,
+          });
+        }
+      } catch (_) { /* sessionStorage unavailable */ }
     }
   }, [property]);
 

@@ -76,13 +76,30 @@ const Inner = () => {
   }, [slug]);
 
   // Google Ads remarketing — fires once article data is resolved
+  // Also flags this session so property pages can fire the high_intent_investor event
   useEffect(() => {
     if (!article) return;
+    const category = articleRecord?.category ?? meta?.category ?? "Golden Visa";
+
+    // Mark session as "guide reader" so property pages can detect cross-page journey
+    try {
+      const existing = JSON.parse(sessionStorage.getItem("mai_guide_reads") || "[]");
+      if (!existing.includes(slug)) {
+        sessionStorage.setItem("mai_guide_reads", JSON.stringify([...existing, slug]));
+      }
+      sessionStorage.setItem("mai_last_guide_category", category);
+    } catch (_) { /* sessionStorage unavailable */ }
+
     if (typeof window !== "undefined" && (window as any).gtag) {
-      const category = articleRecord?.category ?? meta?.category ?? "Golden Visa";
       (window as any).gtag("event", "page_view", {
         send_to: "AW-17031338731",
         content_type: "article",
+        content_id: slug,
+        content_category: category,
+      });
+      // Dedicated event for audience list "guide_readers"
+      (window as any).gtag("event", "guide_view", {
+        send_to: "AW-17031338731",
         content_id: slug,
         content_category: category,
       });
