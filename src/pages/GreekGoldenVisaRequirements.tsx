@@ -42,6 +42,8 @@ const jsonLd = {
   "name": "Greek Golden Visa Requirements — Documents & Eligibility",
   "description": "Full checklist of Greek Golden Visa requirements. Documents needed, eligibility criteria, investment thresholds, and step-by-step process.",
   "url": PAGE_URL,
+  "datePublished": "2024-01-01",
+  "dateModified": "2025-03-01",
   "breadcrumb": {
     "@type": "BreadcrumbList",
     "itemListElement": [

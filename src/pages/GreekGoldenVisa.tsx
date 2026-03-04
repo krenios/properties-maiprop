@@ -42,6 +42,8 @@ const jsonLd = {
   "name": "Greek Golden Visa Guide — EU Residency Through Real Estate",
   "description": "Complete guide to the Greek Golden Visa program. Invest €250,000+ in real estate and get EU residency with access to 27 Schengen countries.",
   "url": PAGE_URL,
+  "datePublished": "2024-01-01",
+  "dateModified": "2025-03-01",
   "breadcrumb": {
     "@type": "BreadcrumbList",
     "itemListElement": [
