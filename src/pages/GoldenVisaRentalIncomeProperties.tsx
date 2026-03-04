@@ -69,6 +69,21 @@ const statusColors: Record<string, string> = {
   sold: "bg-destructive/20 text-destructive border-destructive/30",
 };
 
+const articleLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Golden Visa Properties with Rental Income — 4–7% Yield Greece",
+  "description": "Greek Golden Visa properties generating 4–7% net rental yield. Pre-renovated, Airbnb-ready investments in Athens & Riviera. Managed income from day one.",
+  "url": PAGE,
+  "datePublished": "2024-06-01",
+  "dateModified": "2025-03-01",
+  "author": { "@id": "https://properties.maiprop.co/#organization" },
+  "publisher": { "@id": "https://properties.maiprop.co/#organization" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE },
+  "about": { "@type": "Thing", "name": "Greek Golden Visa Rental Yield Properties" },
+  "inLanguage": "en",
+};
+
 const Inner = () => {
   const { openWithLocation } = useLeadBot();
   const { t } = useTranslation();
@@ -103,6 +118,7 @@ const Inner = () => {
             { "@type": "ListItem", position: 3, name: "Rental Income Properties", item: PAGE },
           ]},
         })}</script>
+        <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       </Helmet>
 

@@ -186,6 +186,20 @@ const Inner = () => {
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": "Your Golden Visa Journey — Step-by-Step Guide",
+          "description": "The complete step-by-step Greek Golden Visa journey — from consultation and property selection to biometrics and permit issuance.",
+          "url": PAGE_URL,
+          "datePublished": "2024-06-01",
+          "dateModified": "2025-03-01",
+          "author": { "@id": `${BASE_URL}/#organization` },
+          "publisher": { "@id": `${BASE_URL}/#organization` },
+          "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE_URL },
+          "about": { "@type": "Thing", "name": "Greek Golden Visa Application Process" },
+          "inLanguage": "en",
+        })}</script>
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
           "@type": "WebPage",
           "@id": `${PAGE_URL}#webpage`,
           "name": "Your Golden Visa Journey — Step-by-Step Guide",

@@ -65,6 +65,21 @@ const metrics = [
   { icon: ShieldCheck, title: "Hard Asset Protection", desc: "Physical real estate in an EU jurisdiction is one of the most inflation-resistant, politically stable stores of value for capital preservation." },
 ];
 
+const articleLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Greek Golden Visa for Investors — ROI, Yields & Market Analysis 2025",
+  "description": "A pure investment analysis of the Greek Golden Visa: 4–7% net yields, 10–15% annual appreciation, portfolio diversification into EU real estate from €250,000.",
+  "url": PAGE,
+  "datePublished": "2024-06-01",
+  "dateModified": "2025-03-01",
+  "author": { "@id": "https://properties.maiprop.co/#organization" },
+  "publisher": { "@id": "https://properties.maiprop.co/#organization" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE },
+  "about": { "@type": "Thing", "name": "Greek Golden Visa Investment Returns" },
+  "inLanguage": "en",
+};
+
 const Inner = () => {
   const { openWithLocation } = useLeadBot();
   const { t } = useTranslation();
@@ -91,6 +106,7 @@ const Inner = () => {
             { "@type": "ListItem", position: 3, name: "For Investors", item: PAGE },
           ]},
         })}</script>
+        <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       </Helmet>
 

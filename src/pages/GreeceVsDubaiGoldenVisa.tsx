@@ -71,6 +71,21 @@ const compare = [
   { cat: "Legal System", gr: "EU civil law, ECJ enforcement", ae: "UAE civil law, no ECJ access" },
 ];
 
+const articleLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Greece vs Dubai Golden Visa — Security, EU Access & MENA Risk 2025",
+  "description": "Greece vs Dubai Golden Visa: EU citizenship path vs no path, Schengen access vs none, NATO security vs MENA exposure. Honest side-by-side comparison for MENA investors in 2025.",
+  "url": PAGE,
+  "datePublished": "2024-06-01",
+  "dateModified": "2025-03-01",
+  "author": { "@id": "https://properties.maiprop.co/#organization" },
+  "publisher": { "@id": "https://properties.maiprop.co/#organization" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE },
+  "about": { "@type": "Thing", "name": "Greece vs Dubai Golden Visa Comparison" },
+  "inLanguage": "en",
+};
+
 const Inner = () => {
   const { openWithLocation } = useLeadBot();
   const { t } = useTranslation();
@@ -96,6 +111,7 @@ const Inner = () => {
             { "@type": "ListItem", position: 2, name: "Greece vs Dubai Golden Visa", item: PAGE },
           ]},
         })}</script>
+        <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       </Helmet>
 

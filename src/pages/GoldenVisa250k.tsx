@@ -153,6 +153,21 @@ interface Property {
   project_type: string;
 }
 
+const articleLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "€250K Greek Golden Visa Properties — Pre-Verified Real Estate Investment",
+  "description": "Pre-verified Greek real estate investment properties eligible for the Golden Visa program at €250,000. Browse available properties in Athens, Piraeus, and the Riviera.",
+  "url": PAGE_URL,
+  "datePublished": "2024-06-01",
+  "dateModified": "2025-03-01",
+  "author": { "@id": "https://properties.maiprop.co/#organization" },
+  "publisher": { "@id": "https://properties.maiprop.co/#organization" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE_URL },
+  "about": { "@type": "Thing", "name": "€250K Greek Golden Visa Properties" },
+  "inLanguage": "en",
+};
+
 const Inner = () => {
   const { openWithLocation } = useLeadBot();
   const navigate = useNavigate();
@@ -207,6 +222,7 @@ const Inner = () => {
         <script type="application/ld+json">{JSON.stringify(pageLd)}</script>
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(offerLd(hasPart))}</script>
+        <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       </Helmet>
 

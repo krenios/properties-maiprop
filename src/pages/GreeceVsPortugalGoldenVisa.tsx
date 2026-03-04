@@ -71,6 +71,21 @@ const rows = [
   { cat: "EU Schengen Access", gr: "Full (27 countries)", pt: "Full (27 countries)" },
 ];
 
+const articleLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Greece vs Portugal Golden Visa — 2025 Full Comparison",
+  "description": "Greece vs Portugal Golden Visa: investment thresholds, processing times, citizenship paths, rental yields, and tax regimes compared side-by-side for 2025 investors.",
+  "url": PAGE,
+  "datePublished": "2024-06-01",
+  "dateModified": "2025-03-01",
+  "author": { "@id": "https://properties.maiprop.co/#organization" },
+  "publisher": { "@id": "https://properties.maiprop.co/#organization" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE },
+  "about": { "@type": "Thing", "name": "Greece vs Portugal Golden Visa Comparison" },
+  "inLanguage": "en",
+};
+
 const Inner = () => {
   const { openWithLocation } = useLeadBot();
   const { t } = useTranslation();
@@ -96,6 +111,7 @@ const Inner = () => {
             { "@type": "ListItem", position: 2, name: "Greece vs Portugal Golden Visa", item: PAGE },
           ]},
         })}</script>
+        <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       </Helmet>
 
