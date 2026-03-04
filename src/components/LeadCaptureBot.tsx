@@ -1,14 +1,15 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Bot, Send, ChevronLeft, Check, X, Sparkles } from "lucide-react";
+import { Bot, Send, ChevronLeft, Check, X, Sparkles, ShieldCheck } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLeadBot } from "@/components/LeadBotProvider";
 
 const CALENDLY_URL = "https://calendly.com/maipropos/consultation";
+const TURNSTILE_SITE_KEY = "0x4AAAAAACmEa8xMGdIJZT2a";
 
 const STEPS = [
   {
