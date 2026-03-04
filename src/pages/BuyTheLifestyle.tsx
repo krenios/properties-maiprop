@@ -110,6 +110,7 @@ const Inner = () => {
             { "@type": "ListItem", position: 2, name: "Buy the Lifestyle", item: PAGE },
           ]},
         })}</script>
+        <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       </Helmet>
 
