@@ -168,7 +168,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
         </div>
         {/* Gallery */}
         <div className="relative h-[200px] w-full shrink-0 overflow-hidden sm:h-[420px]">
-          <img src={optimizeImage(currentImg, { width: 800, height: 600 })} alt={property.title} className="h-full w-full object-cover" loading="lazy" decoding="async" />
+          <img src={optimizeImage(currentImg, { width: 800, height: 600 })} alt={`${property.title} — Golden Visa property in ${property.location}, Greece`} className="h-full w-full object-cover" loading="lazy" decoding="async" />
           {property.status && (
             <Badge className={`absolute left-3 top-3 border ${statusColors[property.status] || ""}`}>
               {property.status.replace("-", " ")}
@@ -329,7 +329,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                 </div>
                 <img
                   src={property.floor_plan}
-                  alt="Floor plan"
+                  alt={`Floor plan of ${property.title} — property layout`}
                   className="max-h-[200px] w-full rounded-lg border border-border bg-background object-contain"
                   loading="lazy"
                   decoding="async"
