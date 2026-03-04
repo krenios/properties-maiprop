@@ -222,6 +222,7 @@ const Inner = () => {
         <script type="application/ld+json">{JSON.stringify(pageLd)}</script>
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(offerLd(hasPart))}</script>
+        <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       </Helmet>
 
