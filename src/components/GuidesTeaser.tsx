@@ -83,7 +83,7 @@ export default function GuidesTeaser() {
                         {article.meta_description}
                       </p>
                       <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary mt-auto">
-                        Read article <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                        Read: {article.title} <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
                       </span>
                     </div>
                   </Link>
