@@ -495,7 +495,7 @@ const LeadCaptureBot = () => {
             </div>
 
             {/* Input area */}
-            {!submitted && currentStep && (
+            {!submitted && !showCaptcha && currentStep && (
               <div className="border-t border-border bg-background/50 px-4 py-3">
                 {currentStep.type === "select" ? (
                   <div className="flex flex-wrap gap-2">
