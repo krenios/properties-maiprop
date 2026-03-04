@@ -138,6 +138,12 @@ const PropertyPageInner = () => {
         }],
       });
 
+      // Always stamp this property visit in sessionStorage for funnel tracking
+      try {
+        sessionStorage.setItem("mai_viewed_property", "1");
+        sessionStorage.setItem("mai_last_property_id", property.id);
+      } catch (_) { /* sessionStorage unavailable */ }
+
       // High-intent signal: visitor previously read a guide in this session
       // Use this event in Google Ads → Audiences to build a "guide reader → property viewer" segment
       try {
