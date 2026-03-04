@@ -184,6 +184,20 @@ const Inner = () => {
         <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
         <script type="application/ld+json">{JSON.stringify(howToLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "@id": `${PAGE_URL}#webpage`,
+          "name": "Your Golden Visa Journey — Step-by-Step Guide",
+          "description": "The complete step-by-step Greek Golden Visa journey — from consultation and property selection to biometrics and permit issuance.",
+          "url": PAGE_URL,
+          "datePublished": "2024-06-01",
+          "dateModified": "2025-03-01",
+          "isPartOf": { "@id": `${BASE_URL}/#website` },
+          "author": { "@id": `${BASE_URL}/#organization` },
+          "publisher": { "@id": `${BASE_URL}/#organization` },
+          "inLanguage": "en",
+        })}</script>
       </Helmet>
 
       <Navbar forceScrolled />
