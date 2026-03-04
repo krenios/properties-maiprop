@@ -22,6 +22,8 @@ const pageLd = {
   "name": "€250K Golden Visa Properties in Greece — mAI Investments",
   "description": "Pre-verified Greek real estate investment properties eligible for the Golden Visa program at €250,000.",
   "url": PAGE_URL,
+  "datePublished": "2024-06-01",
+  "dateModified": "2025-03-01",
   "isPartOf": { "@id": "https://properties.maiprop.co/#website" },
   "author": { "@id": "https://properties.maiprop.co/#organization" },
   "publisher": { "@id": "https://properties.maiprop.co/#organization" },
