@@ -239,7 +239,7 @@ const Inner = () => {
                           {guide.read_time || t("7 min read")}
                         </span>
                         <span className="flex items-center gap-1 text-sm font-medium text-primary group-hover:gap-2 transition-all">
-                          {t("Read guide")} <ArrowRight className="h-4 w-4" />
+                          {t("Read")} {guide.title} <ArrowRight className="h-4 w-4" />
                         </span>
                       </div>
                     </Link>);

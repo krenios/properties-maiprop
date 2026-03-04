@@ -326,7 +326,7 @@ const Inner = () => {
                         )}
                       </div>
                       <Button size="sm" variant="outline" className="w-full rounded-full text-xs" asChild>
-                        <Link to={`/property/${p.id}`}>View Property →</Link>
+                        <Link to={`/property/${p.id}`} aria-label={`View ${p.title} — Golden Visa property in ${p.location}`}>View {p.title} →</Link>
                       </Button>
                     </div>
                   </article>

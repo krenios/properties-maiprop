@@ -462,7 +462,7 @@ const Inner = () => {
                 to="/250k-golden-visa-properties/"
                 className="inline-flex items-center gap-2 text-sm text-primary hover:underline font-medium"
               >
-                View all available properties <ArrowRight className="h-3.5 w-3.5" />
+                Browse all €250K+ Golden Visa properties in Greece <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
           </div>
