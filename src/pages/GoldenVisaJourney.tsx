@@ -369,6 +369,21 @@ const Inner = () => {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section className="py-20">
+        <div className="container mx-auto max-w-3xl px-6">
+          <h2 className="mb-10 text-3xl font-bold text-center">{t("Frequently Asked Questions")}</h2>
+          <div className="space-y-6">
+            {faqLd.mainEntity.map((q) => (
+              <div key={q.name} className="rounded-xl border border-border bg-background/40 p-6">
+                <h3 className="mb-2 font-semibold">{t(q.name)}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{t(q.acceptedAnswer.text)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-20 bg-background/50">
         <div className="container mx-auto max-w-2xl px-6 text-center">
