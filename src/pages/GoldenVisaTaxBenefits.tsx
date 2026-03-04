@@ -65,6 +65,21 @@ const taxFeatures = [
   { icon: FileText, title: "57 Double-Tax Treaties", desc: "Greece has signed 57 double tax treaties. Most investors can apply treaty benefits to avoid double taxation on dividends, interest, and business income." },
 ];
 
+const articleLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Greek Golden Visa Tax Benefits — Non-Dom €100K Flat Tax Guide",
+  "description": "How Greece's Golden Visa unlocks the non-dom €100K flat-tax regime, zero wealth tax, suspended capital gains, and 57 double-tax treaties for international investors.",
+  "url": PAGE,
+  "datePublished": "2024-06-01",
+  "dateModified": "2025-03-01",
+  "author": { "@id": "https://properties.maiprop.co/#organization" },
+  "publisher": { "@id": "https://properties.maiprop.co/#organization" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE },
+  "about": { "@type": "Thing", "name": "Greek Golden Visa Tax Benefits" },
+  "inLanguage": "en",
+};
+
 const Inner = () => {
   const { openWithLocation } = useLeadBot();
   const { t } = useTranslation();

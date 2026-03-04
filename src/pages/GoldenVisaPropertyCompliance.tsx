@@ -65,6 +65,21 @@ const steps = [
   { icon: CheckCircle2, num: "04", title: "Land Registry Inscription", desc: "The property title is inscribed in your name at the local Land Registry — proof of qualifying ownership." },
 ];
 
+const articleLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Greek Golden Visa Property Compliance — Legal Checklist & Due Diligence",
+  "description": "Complete legal and compliance guide for buying a Greek Golden Visa property: title checks, notary process, AFM requirements, qualifying property types, and common pitfalls to avoid.",
+  "url": PAGE,
+  "datePublished": "2024-06-01",
+  "dateModified": "2025-03-01",
+  "author": { "@id": "https://properties.maiprop.co/#organization" },
+  "publisher": { "@id": "https://properties.maiprop.co/#organization" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE },
+  "about": { "@type": "Thing", "name": "Greek Golden Visa Property Compliance" },
+  "inLanguage": "en",
+};
+
 const Inner = () => {
   const { openWithLocation } = useLeadBot();
   const { t } = useTranslation();

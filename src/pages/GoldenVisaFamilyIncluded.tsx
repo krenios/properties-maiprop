@@ -65,6 +65,21 @@ const members = [
   { icon: GraduationCap, title: "Students Up to Age 24", desc: "Children aged 21–24 in full-time higher education can qualify for a student extension of the family permit." },
 ];
 
+const articleLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Greek Golden Visa — Full Family Included at No Extra Cost",
+  "description": "Greece's Golden Visa covers spouse, children under 21, and parents of both spouses under one €250K investment. Every family member gets their own Schengen residency card.",
+  "url": PAGE,
+  "datePublished": "2024-06-01",
+  "dateModified": "2025-03-01",
+  "author": { "@id": "https://properties.maiprop.co/#organization" },
+  "publisher": { "@id": "https://properties.maiprop.co/#organization" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE },
+  "about": { "@type": "Thing", "name": "Greek Golden Visa Family Extension" },
+  "inLanguage": "en",
+};
+
 const Inner = () => {
   const { openWithLocation } = useLeadBot();
   const { t } = useTranslation();
