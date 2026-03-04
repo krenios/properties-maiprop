@@ -170,6 +170,32 @@ const Inner = () => {
   articles :
   STATIC_GUIDES;
 
+  // CollectionPage JSON-LD — built from live article list
+  const collectionPageLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${PAGE_URL}#collectionpage`,
+    name: "Greek Golden Visa Investment Guides & Research",
+    description: "Expert guides on Greek Golden Visa rules, Athens real estate ROI, and property investment strategy for non-EU investors.",
+    url: PAGE_URL,
+    isPartOf: { "@id": `${BASE_URL}/#website` },
+    author: { "@id": `${BASE_URL}/#organization` },
+    publisher: { "@id": `${BASE_URL}/#organization` },
+    inLanguage: "en",
+    hasPart: displayGuides.map((g) => ({
+      "@type": "Article",
+      "@id": `${BASE_URL}/guides/${g.slug}/#article`,
+      headline: g.title,
+      description: g.meta_description,
+      url: `${BASE_URL}/guides/${g.slug}/`,
+      articleSection: g.category,
+      author: { "@id": `${BASE_URL}/#organization` },
+      publisher: { "@id": `${BASE_URL}/#organization` },
+      inLanguage: "en",
+      ...(g.read_time ? { timeRequired: `PT${g.read_time.replace(" min read", "M")}` } : {}),
+    })),
+  };
+
   return (
     <main className="min-h-screen bg-background">
       <Helmet>
