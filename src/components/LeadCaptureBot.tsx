@@ -481,11 +481,27 @@ const LeadCaptureBot = () => {
                               .insert(leadData)
                               .then(({ error }) => {
                                 setLoading(false);
-                                if (error) {
-                                  toast.error("Something went wrong.");
-                                  return;
-                                }
+                                if (error) { toast.error("Something went wrong. Please try again."); return; }
                                 setSubmitted(true);
+                                // Google Ads conversion + high-intent funnel event
+                                if (typeof (window as any).gtag === "function") {
+                                  const budget = budgetToNumber(updatedForm.investment_budget);
+                                  (window as any).gtag("event", "conversion", { send_to: "AW-17031338731/OAyuCMKFiP0bEOu1lrk_", value: budget, currency: "EUR" });
+                                  try {
+                                    const guideReads = JSON.parse(sessionStorage.getItem("mai_guide_reads") || "[]");
+                                    const viewedProperty = sessionStorage.getItem("mai_viewed_property") === "1";
+                                    if (guideReads.length > 0 && viewedProperty) {
+                                      (window as any).gtag("event", "high_intent_funnel_complete", {
+                                        send_to: "AW-17031338731",
+                                        value: budget,
+                                        currency: "EUR",
+                                        prior_guide_reads: guideReads.length,
+                                        last_guide_category: sessionStorage.getItem("mai_last_guide_category") ?? undefined,
+                                        viewed_property_id: sessionStorage.getItem("mai_last_property_id") ?? undefined,
+                                      });
+                                    }
+                                  } catch (_) { /* sessionStorage unavailable */ }
+                                }
                                 supabase.functions
                                   .invoke("notify-new-lead", { body: { email: updatedForm.email.trim() } })
                                   .catch(() => {});
