@@ -267,7 +267,8 @@ const LeadCaptureBot = () => {
     return map[val] || Number(val.replace(/[^0-9]/g, "")) || 250000;
   };
 
-  const handleSubmit = async () => {
+  // Called after all conversation steps — show CAPTCHA before DB insert
+  const handleSubmit = async (token: string) => {
     setLoading(true);
     const leadData = {
       full_name: form.full_name.trim(),
@@ -279,27 +280,33 @@ const LeadCaptureBot = () => {
       property_type: form.property_type,
       investment_timeline: form.investment_timeline,
     };
-    const { error } = await supabase.from("leads").insert(leadData);
+
+    const { data, error } = await supabase.functions.invoke("submit-lead", {
+      body: { lead: leadData, turnstileToken: token },
+    });
     setLoading(false);
-    if (error) {
-      toast.error("Something went wrong. Please try again.");
+
+    if (error || data?.error) {
+      toast.error(data?.error || "Something went wrong. Please try again.");
+      // Reset Turnstile so user can retry
+      setTurnstileToken(null);
+      if (widgetIdRef.current && (window as any).turnstile) {
+        (window as any).turnstile.reset(widgetIdRef.current);
+      }
       return;
     }
+
     if (form.intent === "Book a free consultation") setIsConsultation(true);
     setSubmitted(true);
+    setShowCaptcha(false);
     // Google Ads conversion tracking
     if (typeof (window as any).gtag === "function") {
       const budget = budgetToNumber(form.investment_budget);
-
-      // Standard lead submission conversion
       (window as any).gtag("event", "conversion", {
         send_to: "AW-17031338731/OAyuCMKFiP0bEOu1lrk_",
         value: budget,
         currency: "EUR",
       });
-
-      // High-intent full-funnel conversion: guide reader → property viewer → lead
-      // Only fires if sessionStorage shows the visitor completed both prior steps
       try {
         const guideReads = JSON.parse(sessionStorage.getItem("mai_guide_reads") || "[]");
         const viewedProperty = sessionStorage.getItem("mai_viewed_property") === "1";
@@ -326,6 +333,8 @@ const LeadCaptureBot = () => {
       setSubmitted(false);
       setIsConsultation(false);
       setMessages([]);
+      setShowCaptcha(false);
+      setTurnstileToken(null);
     }
   };
 
@@ -335,6 +344,8 @@ const LeadCaptureBot = () => {
     setSubmitted(false);
     setIsConsultation(false);
     setMessages([]);
+    setShowCaptcha(false);
+    setTurnstileToken(null);
     setIsOpen(true);
   };
 
