@@ -226,6 +226,7 @@ const Inner = () => {
         <meta property="og:image:alt" content="mAI Investments — Greek Golden Visa investment guides and research" />
         <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(collectionPageLd)}</script>
       </Helmet>
 
       <Navbar forceScrolled />
