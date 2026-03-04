@@ -196,7 +196,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
         {/* Scrollable Photo Gallery */}
         {hasPhotos &&
         <div className="relative h-[300px] sm:h-[520px] w-full overflow-hidden">
-            <img src={optimizeImage(allPhotos[imgIdx % allPhotos.length], { width: 900, height: 600 })} alt={property.title} className="h-full w-full object-cover" />
+            <img src={optimizeImage(allPhotos[imgIdx % allPhotos.length], { width: 900, height: 600 })} alt={`${property.title} — delivered Golden Visa property in ${property.location}, Greece`} className="h-full w-full object-cover" />
             {allPhotos.length > 1 &&
           <>
                 <button
@@ -353,11 +353,11 @@ const BeforeAfterSlider = ({ before, after }: {before: string;after: string;}) =
       onPointerUp={onPointerUp}>
 
       {/* After (full background) */}
-      <img src={optimizeImage(after, { width: 800, height: 400 })} alt="After" className="absolute inset-0 h-full w-full object-cover" />
+      <img src={optimizeImage(after, { width: 800, height: 400 })} alt="After renovation — Golden Visa property investment result" className="absolute inset-0 h-full w-full object-cover" />
 
       {/* Before (clipped) */}
       <div className="absolute inset-0 overflow-hidden" style={{ width: `${position}%` }}>
-        <img src={optimizeImage(before, { width: 800, height: 400 })} alt="Before" className="h-full w-full object-cover grayscale-[40%]" style={{ width: containerRef.current?.offsetWidth ?? '100%' }} />
+        <img src={optimizeImage(before, { width: 800, height: 400 })} alt="Before renovation — original property condition" className="h-full w-full object-cover grayscale-[40%]" style={{ width: containerRef.current?.offsetWidth ?? '100%' }} />
       </div>
 
       {/* Divider line + handle */}
