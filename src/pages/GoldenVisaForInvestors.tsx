@@ -83,6 +83,8 @@ const Inner = () => {
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Greek Golden Visa for Investors",
           url: PAGE,
+          datePublished: "2024-06-01",
+          dateModified: "2025-03-01",
           breadcrumb: { "@type": "BreadcrumbList", itemListElement: [
             { "@type": "ListItem", position: 1, name: "Home", item: `${BASE}/` },
             { "@type": "ListItem", position: 2, name: "Greek Golden Visa", item: `${BASE}/greek-golden-visa/` },

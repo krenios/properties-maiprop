@@ -88,6 +88,8 @@ const Inner = () => {
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Buy the Lifestyle, Not Just the Asset — Greek Golden Visa",
           url: PAGE,
+          datePublished: "2024-06-01",
+          dateModified: "2025-03-01",
           breadcrumb: { "@type": "BreadcrumbList", itemListElement: [
             { "@type": "ListItem", position: 1, name: "Home", item: `${BASE}/` },
             { "@type": "ListItem", position: 2, name: "Buy the Lifestyle", item: PAGE },
