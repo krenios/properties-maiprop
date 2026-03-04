@@ -199,6 +199,7 @@ const Inner = () => {
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
         <meta property="og:image:alt" content="mAI Investments — Greek Golden Visa investment guides and research" />
         <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       </Helmet>
 
       <Navbar forceScrolled />
