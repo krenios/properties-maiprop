@@ -494,6 +494,34 @@ const LeadCaptureBot = () => {
               )}
             </div>
 
+            {/* Turnstile CAPTCHA panel */}
+            {!submitted && showCaptcha && (
+              <div className="border-t border-border bg-background/50 px-4 py-4 flex flex-col items-center gap-3">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+                  <span>Quick spam check — this only takes a second</span>
+                </div>
+                <div ref={turnstileRef} className="cf-turnstile" />
+                {captchaError && (
+                  <p className="text-xs text-destructive">Verification failed. Please refresh and try again.</p>
+                )}
+                <button
+                  onClick={() => turnstileToken && handleSubmit(turnstileToken)}
+                  disabled={!turnstileToken || loading}
+                  className="w-full rounded-full bg-primary py-2.5 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 disabled:opacity-40 flex items-center justify-center gap-2"
+                >
+                  {loading ? (
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
+                  ) : (
+                    <>
+                      <Check className="h-4 w-4" />
+                      Submit Inquiry
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
+
             {/* Input area */}
             {!submitted && !showCaptcha && currentStep && (
               <div className="border-t border-border bg-background/50 px-4 py-3">
