@@ -186,6 +186,9 @@ const LeadCaptureBot = () => {
       setSubmitted(false);
       setIsConsultation(false);
       setMessages([]);
+      setShowCaptcha(false);
+      setTurnstileToken(null);
+      setCaptchaError(false);
     }
   }, [open, pendingLocation]);
 
