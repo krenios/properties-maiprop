@@ -215,7 +215,7 @@ const Inner = () => {
                       {p.bedrooms && <Badge variant="outline" className="rounded-full text-xs"><Bed className="h-3 w-3 text-muted-foreground mr-1" />{p.bedrooms} bd</Badge>}
                     </div>
                     <Button size="sm" variant="outline" className="w-full rounded-full text-xs" asChild>
-                      <Link to={`/property/${p.id}`}>View Property →</Link>
+                      <Link to={`/property/${p.id}`} aria-label={`View ${p.title} — rental income property in ${p.location}`}>View {p.title} →</Link>
                     </Button>
                   </div>
                 </article>
