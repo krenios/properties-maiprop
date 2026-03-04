@@ -42,6 +42,45 @@ const howToLd = {
   ],
 };
 
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How long does the Greek Golden Visa process take?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "The process typically takes 6–9 months end-to-end: 1–2 months for property selection and due diligence, 1–2 months for legal purchase and registration, 4–6 weeks for the entry visa, and 2–4 months for the biometrics appointment followed by permit issuance.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How many trips to Greece are required for the Golden Visa?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Only one trip to Greece is required — for the biometrics appointment where all family members apply together. Property purchase, legal processes, and application submission can all be handled remotely through a power of attorney.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What is included in mAI Investments' Golden Visa service?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "mAI Investments provides end-to-end support: eligibility assessment, pre-verified property shortlisting, legal coordination (notary, lawyer, AFM, bank account), full application document preparation, family inclusion management, and post-visa rental management and yield optimisation.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What happens after the Golden Visa is issued?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "After the 5-year Golden Visa card is issued, it is renewable indefinitely as long as the qualifying real estate investment is maintained. After 7 years of physical residence in Greece (183+ days/year), holders may apply for Greek citizenship.",
+      },
+    },
+  ],
+};
+
 const steps = [
   {
     n: "01",
