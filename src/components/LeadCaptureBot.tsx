@@ -123,7 +123,46 @@ const LeadCaptureBot = () => {
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [typing, setTyping] = useState(false);
+  const [showCaptcha, setShowCaptcha] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [captchaError, setCaptchaError] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const turnstileRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<string | null>(null);
+
+  // Load Turnstile script once
+  useEffect(() => {
+    if (document.getElementById("cf-turnstile-script")) return;
+    const script = document.createElement("script");
+    script.id = "cf-turnstile-script";
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+  }, []);
+
+  // Render Turnstile widget when captcha step is shown
+  useEffect(() => {
+    if (!showCaptcha || !turnstileRef.current) return;
+    const tryRender = () => {
+      if (!(window as any).turnstile) { setTimeout(tryRender, 200); return; }
+      if (widgetIdRef.current) return;
+      widgetIdRef.current = (window as any).turnstile.render(turnstileRef.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        theme: "auto",
+        callback: (token: string) => { setTurnstileToken(token); setCaptchaError(false); },
+        "error-callback": () => { setTurnstileToken(null); setCaptchaError(true); },
+        "expired-callback": () => { setTurnstileToken(null); },
+      });
+    };
+    tryRender();
+    return () => {
+      if (widgetIdRef.current && (window as any).turnstile) {
+        (window as any).turnstile.remove(widgetIdRef.current);
+        widgetIdRef.current = null;
+      }
+    };
+  }, [showCaptcha]);
 
   useEffect(() => {
     const shown = sessionStorage.getItem("lead_bot_shown");
