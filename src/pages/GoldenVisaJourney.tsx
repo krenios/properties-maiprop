@@ -42,6 +42,45 @@ const howToLd = {
   ],
 };
 
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How long does the Greek Golden Visa process take?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "The process typically takes 6–9 months end-to-end: 1–2 months for property selection and due diligence, 1–2 months for legal purchase and registration, 4–6 weeks for the entry visa, and 2–4 months for the biometrics appointment followed by permit issuance.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How many trips to Greece are required for the Golden Visa?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Only one trip to Greece is required — for the biometrics appointment where all family members apply together. Property purchase, legal processes, and application submission can all be handled remotely through a power of attorney.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What is included in mAI Investments' Golden Visa service?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "mAI Investments provides end-to-end support: eligibility assessment, pre-verified property shortlisting, legal coordination (notary, lawyer, AFM, bank account), full application document preparation, family inclusion management, and post-visa rental management and yield optimisation.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What happens after the Golden Visa is issued?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "After the 5-year Golden Visa card is issued, it is renewable indefinitely as long as the qualifying real estate investment is maintained. After 7 years of physical residence in Greece (183+ days/year), holders may apply for Greek citizenship.",
+      },
+    },
+  ],
+};
+
 const steps = [
   {
     n: "01",
@@ -144,6 +183,7 @@ const Inner = () => {
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
         <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
         <script type="application/ld+json">{JSON.stringify(howToLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       </Helmet>
 
       <Navbar forceScrolled />
@@ -324,6 +364,21 @@ const Inner = () => {
                 <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">{link.desc}</p>
                 <ArrowRight className="mt-3 h-4 w-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
               </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-20">
+        <div className="container mx-auto max-w-3xl px-6">
+          <h2 className="mb-10 text-3xl font-bold text-center">{t("Frequently Asked Questions")}</h2>
+          <div className="space-y-6">
+            {faqLd.mainEntity.map((q) => (
+              <div key={q.name} className="rounded-xl border border-border bg-background/40 p-6">
+                <h3 className="mb-2 font-semibold">{t(q.name)}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{t(q.acceptedAnswer.text)}</p>
+              </div>
             ))}
           </div>
         </div>
