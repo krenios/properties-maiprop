@@ -251,7 +251,10 @@ const LeadCaptureBot = () => {
       showBotMessage(`${nextStep.emoji} ${nextStep.label}`);
       setStep(step + 1);
     } else {
-      handleSubmit();
+      // All steps done — show CAPTCHA before submitting
+      showBotMessage("🛡️ Almost there! Please complete the quick verification below to send your inquiry.", () => {
+        setShowCaptcha(true);
+      });
     }
   };
 
