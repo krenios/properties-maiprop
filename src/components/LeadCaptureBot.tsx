@@ -1,14 +1,15 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Bot, Send, ChevronLeft, Check, X, Sparkles } from "lucide-react";
+import { Bot, Send, ChevronLeft, Check, X, Sparkles, ShieldCheck } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLeadBot } from "@/components/LeadBotProvider";
 
 const CALENDLY_URL = "https://calendly.com/maipropos/consultation";
+const TURNSTILE_SITE_KEY = "0x4AAAAAACmEa8xMGdIJZT2a";
 
 const STEPS = [
   {
@@ -122,7 +123,46 @@ const LeadCaptureBot = () => {
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [typing, setTyping] = useState(false);
+  const [showCaptcha, setShowCaptcha] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [captchaError, setCaptchaError] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const turnstileRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<string | null>(null);
+
+  // Load Turnstile script once
+  useEffect(() => {
+    if (document.getElementById("cf-turnstile-script")) return;
+    const script = document.createElement("script");
+    script.id = "cf-turnstile-script";
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+  }, []);
+
+  // Render Turnstile widget when captcha step is shown
+  useEffect(() => {
+    if (!showCaptcha || !turnstileRef.current) return;
+    const tryRender = () => {
+      if (!(window as any).turnstile) { setTimeout(tryRender, 200); return; }
+      if (widgetIdRef.current) return;
+      widgetIdRef.current = (window as any).turnstile.render(turnstileRef.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        theme: "auto",
+        callback: (token: string) => { setTurnstileToken(token); setCaptchaError(false); },
+        "error-callback": () => { setTurnstileToken(null); setCaptchaError(true); },
+        "expired-callback": () => { setTurnstileToken(null); },
+      });
+    };
+    tryRender();
+    return () => {
+      if (widgetIdRef.current && (window as any).turnstile) {
+        (window as any).turnstile.remove(widgetIdRef.current);
+        widgetIdRef.current = null;
+      }
+    };
+  }, [showCaptcha]);
 
   useEffect(() => {
     const shown = sessionStorage.getItem("lead_bot_shown");
@@ -146,6 +186,9 @@ const LeadCaptureBot = () => {
       setSubmitted(false);
       setIsConsultation(false);
       setMessages([]);
+      setShowCaptcha(false);
+      setTurnstileToken(null);
+      setCaptchaError(false);
     }
   }, [open, pendingLocation]);
 
@@ -208,7 +251,10 @@ const LeadCaptureBot = () => {
       showBotMessage(`${nextStep.emoji} ${nextStep.label}`);
       setStep(step + 1);
     } else {
-      handleSubmit();
+      // All steps done — show CAPTCHA before submitting
+      showBotMessage("🛡️ Almost there! Please complete the quick verification below to send your inquiry.", () => {
+        setShowCaptcha(true);
+      });
     }
   };
 
@@ -224,7 +270,8 @@ const LeadCaptureBot = () => {
     return map[val] || Number(val.replace(/[^0-9]/g, "")) || 250000;
   };
 
-  const handleSubmit = async () => {
+  // Called after all conversation steps — show CAPTCHA before DB insert
+  const handleSubmit = async (token: string) => {
     setLoading(true);
     const leadData = {
       full_name: form.full_name.trim(),
@@ -236,27 +283,33 @@ const LeadCaptureBot = () => {
       property_type: form.property_type,
       investment_timeline: form.investment_timeline,
     };
-    const { error } = await supabase.from("leads").insert(leadData);
+
+    const { data, error } = await supabase.functions.invoke("submit-lead", {
+      body: { lead: leadData, turnstileToken: token },
+    });
     setLoading(false);
-    if (error) {
-      toast.error("Something went wrong. Please try again.");
+
+    if (error || data?.error) {
+      toast.error(data?.error || "Something went wrong. Please try again.");
+      // Reset Turnstile so user can retry
+      setTurnstileToken(null);
+      if (widgetIdRef.current && (window as any).turnstile) {
+        (window as any).turnstile.reset(widgetIdRef.current);
+      }
       return;
     }
+
     if (form.intent === "Book a free consultation") setIsConsultation(true);
     setSubmitted(true);
+    setShowCaptcha(false);
     // Google Ads conversion tracking
     if (typeof (window as any).gtag === "function") {
       const budget = budgetToNumber(form.investment_budget);
-
-      // Standard lead submission conversion
       (window as any).gtag("event", "conversion", {
         send_to: "AW-17031338731/OAyuCMKFiP0bEOu1lrk_",
         value: budget,
         currency: "EUR",
       });
-
-      // High-intent full-funnel conversion: guide reader → property viewer → lead
-      // Only fires if sessionStorage shows the visitor completed both prior steps
       try {
         const guideReads = JSON.parse(sessionStorage.getItem("mai_guide_reads") || "[]");
         const viewedProperty = sessionStorage.getItem("mai_viewed_property") === "1";
@@ -283,6 +336,8 @@ const LeadCaptureBot = () => {
       setSubmitted(false);
       setIsConsultation(false);
       setMessages([]);
+      setShowCaptcha(false);
+      setTurnstileToken(null);
     }
   };
 
@@ -292,6 +347,8 @@ const LeadCaptureBot = () => {
     setSubmitted(false);
     setIsConsultation(false);
     setMessages([]);
+    setShowCaptcha(false);
+    setTurnstileToken(null);
     setIsOpen(true);
   };
 
@@ -437,8 +494,36 @@ const LeadCaptureBot = () => {
               )}
             </div>
 
+            {/* Turnstile CAPTCHA panel */}
+            {!submitted && showCaptcha && (
+              <div className="border-t border-border bg-background/50 px-4 py-4 flex flex-col items-center gap-3">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+                  <span>Quick spam check — this only takes a second</span>
+                </div>
+                <div ref={turnstileRef} className="cf-turnstile" />
+                {captchaError && (
+                  <p className="text-xs text-destructive">Verification failed. Please refresh and try again.</p>
+                )}
+                <button
+                  onClick={() => turnstileToken && handleSubmit(turnstileToken)}
+                  disabled={!turnstileToken || loading}
+                  className="w-full rounded-full bg-primary py-2.5 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 disabled:opacity-40 flex items-center justify-center gap-2"
+                >
+                  {loading ? (
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
+                  ) : (
+                    <>
+                      <Check className="h-4 w-4" />
+                      Submit Inquiry
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
+
             {/* Input area */}
-            {!submitted && currentStep && (
+            {!submitted && !showCaptcha && currentStep && (
               <div className="border-t border-border bg-background/50 px-4 py-3">
                 {currentStep.type === "select" ? (
                   <div className="flex flex-wrap gap-2">
@@ -465,47 +550,10 @@ const LeadCaptureBot = () => {
                             showBotMessage(`${nextStep.emoji} ${nextStep.label}`);
                             setStep(step + 1);
                           } else {
-                            setLoading(true);
-                            const leadData = {
-                              full_name: updatedForm.full_name.trim(),
-                              phone: updatedForm.phone.trim(),
-                              email: updatedForm.email.trim(),
-                              nationality: updatedForm.nationality.trim(),
-                              investment_budget: budgetToNumber(updatedForm.investment_budget),
-                              preferred_location: updatedForm.preferred_location.trim(),
-                              property_type: updatedForm.property_type,
-                              investment_timeline: updatedForm.investment_timeline,
-                            };
-                            supabase
-                              .from("leads")
-                              .insert(leadData)
-                              .then(({ error }) => {
-                                setLoading(false);
-                                if (error) { toast.error("Something went wrong. Please try again."); return; }
-                                setSubmitted(true);
-                                // Google Ads conversion + high-intent funnel event
-                                if (typeof (window as any).gtag === "function") {
-                                  const budget = budgetToNumber(updatedForm.investment_budget);
-                                  (window as any).gtag("event", "conversion", { send_to: "AW-17031338731/OAyuCMKFiP0bEOu1lrk_", value: budget, currency: "EUR" });
-                                  try {
-                                    const guideReads = JSON.parse(sessionStorage.getItem("mai_guide_reads") || "[]");
-                                    const viewedProperty = sessionStorage.getItem("mai_viewed_property") === "1";
-                                    if (guideReads.length > 0 && viewedProperty) {
-                                      (window as any).gtag("event", "high_intent_funnel_complete", {
-                                        send_to: "AW-17031338731",
-                                        value: budget,
-                                        currency: "EUR",
-                                        prior_guide_reads: guideReads.length,
-                                        last_guide_category: sessionStorage.getItem("mai_last_guide_category") ?? undefined,
-                                        viewed_property_id: sessionStorage.getItem("mai_last_property_id") ?? undefined,
-                                      });
-                                    }
-                                  } catch (_) { /* sessionStorage unavailable */ }
-                                }
-                                supabase.functions
-                                  .invoke("notify-new-lead", { body: { email: updatedForm.email.trim() } })
-                                  .catch(() => {});
-                              });
+                            // Show CAPTCHA before submitting
+                            showBotMessage("🛡️ Almost there! Please complete the quick verification below to send your inquiry.", () => {
+                              setShowCaptcha(true);
+                            });
                           }
                         }}
                         className={`rounded-full border px-4 py-2 text-sm font-medium transition-all ${
