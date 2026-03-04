@@ -317,9 +317,9 @@ const BeforeAfterSlider = ({ before, after }: { before: string; after: string })
       onPointerDown={(e) => { dragging.current = true; (e.target as HTMLElement).setPointerCapture(e.pointerId); updatePosition(e.clientX); }}
       onPointerMove={(e) => { if (dragging.current) updatePosition(e.clientX); }}
       onPointerUp={() => { dragging.current = false; }}>
-      <img src={optimizeImage(after, { width: 800, height: 400 })} alt={`After renovation — Golden Visa investment property`} className="absolute inset-0 h-full w-full object-cover" />
+      <img src={optimizeImage(after, { width: 800, height: 400 })} alt="After renovation — completed Golden Visa investment property in Greece" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 overflow-hidden" style={{ width: `${position}%` }}>
-        <img src={optimizeImage(before, { width: 800, height: 400 })} alt={`Before renovation — Greek real estate investment`} className="h-full w-full object-cover grayscale-[40%]" style={{ width: containerRef.current?.offsetWidth ?? "100%" }} />
+        <img src={optimizeImage(before, { width: 800, height: 400 })} alt="Before renovation — original condition of Greek real estate investment property" className="h-full w-full object-cover grayscale-[40%]" style={{ width: containerRef.current?.offsetWidth ?? "100%" }} />
       </div>
       <div className="absolute top-0 bottom-0 z-10 w-0.5 bg-primary" style={{ left: `${position}%` }}>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary bg-card shadow-lg">
