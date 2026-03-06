@@ -92,6 +92,9 @@ const Inner = () => {
         <meta property="og:title" content="Greek Golden Visa for High Net Worth Investors — €800K Athens Strategy" />
         <meta property="og:description" content="HNW Greek Golden Visa guide: premium €800K threshold zones, non-dom tax planning, off-market sourcing, and ultra-prime Athens property analysis." />
         <meta property="og:image" content={`${BASE}/og-image.png`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="en_US" />
+        <meta name="keywords" content="Greek Golden Visa 800k Athens, Athens luxury property Golden Visa, high net worth Greece residency, Kolonaki property investment, HNW Greece Golden Visa, Vouliagmeni property investment, premium Athens real estate investor" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Greek Golden Visa for High Net Worth Investors",

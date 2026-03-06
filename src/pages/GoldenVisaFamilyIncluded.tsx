@@ -94,6 +94,9 @@ const Inner = () => {
         <meta property="og:title" content="Greek Golden Visa — Full Family Included at No Extra Cost" />
         <meta property="og:description" content="One €250K investment covers your whole family: spouse, children under 21, and parents of both spouses. Full Schengen access for all." />
         <meta property="og:image" content={`${BASE}/og-image.png`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="en_US" />
+        <meta name="keywords" content="Greek Golden Visa family extension, Golden Visa spouse children parents, family EU residency Greece, Greek residency dependents Greece, multigenerational Golden Visa, include parents Greek Golden Visa, Golden Visa family coverage" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Greek Golden Visa — Full Family Included at No Extra Cost",

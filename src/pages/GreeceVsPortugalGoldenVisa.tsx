@@ -100,6 +100,9 @@ const Inner = () => {
         <meta property="og:title" content="Greece vs Portugal Golden Visa — 2025 Full Comparison" />
         <meta property="og:description" content="Side-by-side comparison: €250K Greece vs €500K Portugal. Processing times, yields, citizenship paths, and tax regimes for 2025." />
         <meta property="og:image" content={`${BASE}/og-image.png`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="en_US" />
+        <meta name="keywords" content="Greece vs Portugal Golden Visa 2025, Greece Portugal residency comparison, best Golden Visa Europe 2025, Portugal Golden Visa restrictions, Greece Golden Visa 250k vs Portugal, Golden Visa real estate 2025, EU residency comparison investors" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Greece vs Portugal Golden Visa — 2025 Full Comparison",

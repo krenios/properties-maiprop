@@ -94,6 +94,9 @@ const Inner = () => {
         <meta property="og:title" content="Greek Golden Visa Tax Benefits — Non-Dom €100K Flat Tax Guide" />
         <meta property="og:description" content="Greece's Golden Visa can unlock a €100K flat-tax non-dom regime on global income for 15 years. Full investor tax guide for 2025." />
         <meta property="og:image" content={`${BASE}/og-image.png`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="en_US" />
+        <meta name="keywords" content="Greek Golden Visa tax benefits, Greece non-dom tax regime, Greece 100k flat tax global income, Greek residency tax advantages, Greece non-domicile investor, Golden Visa tax planning Greece, Greece property tax investor 2025" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Greek Golden Visa Tax Benefits",

@@ -106,6 +106,9 @@ const Inner = () => {
         <meta property="og:title" content="Golden Visa Properties with Rental Income — 4–7% Yield Greece" />
         <meta property="og:description" content="Greek Golden Visa properties generating 4–7% net rental yield. Pre-renovated investments in Athens and the Riviera." />
         <meta property="og:image" content={`${BASE}/og-image.png`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="en_US" />
+        <meta name="keywords" content="Greek Golden Visa rental income, Greece investment property yield, Athens rental yield property, Golden Visa rental property Greece, Athens Airbnb investment, 4-7% yield Greece real estate, rental income property Greece investor" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Golden Visa Properties with Rental Income",
