@@ -89,6 +89,8 @@ Deno.serve(async (req) => {
     { path: "/guides/", changefreq: "weekly", priority: "0.8" },
     { path: "/golden-visa-journey/", changefreq: "monthly", priority: "0.85" },
     { path: "/process/", changefreq: "monthly", priority: "0.9" },
+    { path: "/properties/", changefreq: "weekly", priority: "0.85" },
+    { path: "/trackrecord/", changefreq: "monthly", priority: "0.8" },
     // SEO Landing Pages
     { path: "/buy-the-lifestyle/", changefreq: "monthly", priority: "0.8" },
     { path: "/greece-vs-portugal-golden-visa/", changefreq: "monthly", priority: "0.85" },
