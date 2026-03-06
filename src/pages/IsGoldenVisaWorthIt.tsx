@@ -119,7 +119,7 @@ const Inner = () => {
           name: "Is the Greek Golden Visa Worth It?",
           url: PAGE,
           datePublished: "2024-06-01",
-          dateModified: "2025-03-01",
+          dateModified: "2026-03-06",
           breadcrumb: { "@type": "BreadcrumbList", itemListElement: [
             { "@type": "ListItem", position: 1, name: "Home", item: `${BASE}/` },
             { "@type": "ListItem", position: 2, name: "Greek Golden Visa", item: `${BASE}/greek-golden-visa/` },
