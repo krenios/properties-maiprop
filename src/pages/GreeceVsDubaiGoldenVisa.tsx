@@ -100,6 +100,9 @@ const Inner = () => {
         <meta property="og:title" content="Greece vs Dubai Golden Visa — Security, EU Access & MENA Risk 2025" />
         <meta property="og:description" content="Greece vs Dubai: EU citizenship pathway, Schengen access, NATO security vs MENA geopolitical risk. The full comparison for 2025 investors." />
         <meta property="og:image" content={`${BASE}/og-image.png`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="en_US" />
+        <meta name="keywords" content="Greece vs Dubai Golden Visa, Greece UAE residency comparison, EU vs UAE Golden Visa 2025, Schengen access vs UAE residency, MENA investor Greece EU residency, Greece Golden Visa security, Dubai Golden Visa vs EU citizenship" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Greece vs Dubai Golden Visa",

@@ -99,6 +99,9 @@ const Inner = () => {
         <meta property="og:title" content="Buy the Lifestyle, Not Just the Asset — Greek Golden Visa" />
         <meta property="og:description" content="Greece's Golden Visa isn't just an investment — it's a lifestyle upgrade. Discover Mediterranean living and why 12,000+ investors chose Greece." />
         <meta property="og:image" content={`${BASE}/og-image.png`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="en_US" />
+        <meta name="keywords" content="Greek Golden Visa lifestyle, Mediterranean living Greece, Athens lifestyle investment, Athenian Riviera property, buy property Greece 250K, EU residency lifestyle, Greece expat living, coastal property Glyfada" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Buy the Lifestyle, Not Just the Asset — Greek Golden Visa",

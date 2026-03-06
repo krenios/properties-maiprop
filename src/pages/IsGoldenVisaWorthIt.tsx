@@ -107,6 +107,9 @@ const Inner = () => {
         <meta property="og:title" content="Is the Greek Golden Visa Worth It? Honest Analysis 2025" />
         <meta property="og:description" content="Honest pros and cons: is the Greek Golden Visa worth €250,000? Investment returns, true costs, who benefits most, and when to say no." />
         <meta property="og:image" content={`${BASE}/og-image.png`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="en_US" />
+        <meta name="keywords" content="is Greek Golden Visa worth it, Greek Golden Visa pros cons 2025, Golden Visa Greece value analysis, Greek Golden Visa total cost, Greek Golden Visa honest review, Greece Golden Visa return on investment, Golden Visa Greece 2025" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Is the Greek Golden Visa Worth It?",

@@ -94,6 +94,9 @@ const Inner = () => {
         <meta property="og:title" content="Greek Golden Visa Property Compliance — Legal Checklist & Due Diligence" />
         <meta property="og:description" content="Full legal checklist for Golden Visa property compliance in Greece: title search, notary process, AFM, qualifying property types, and buyer protections." />
         <meta property="og:image" content={`${BASE}/og-image.png`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="en_US" />
+        <meta name="keywords" content="Greek Golden Visa property compliance, Greece property legal due diligence, buy property Greece checklist, Greek AFM tax number, Greece notary property purchase, Golden Visa qualifying property types, Greek property title search" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Greek Golden Visa Property Compliance",

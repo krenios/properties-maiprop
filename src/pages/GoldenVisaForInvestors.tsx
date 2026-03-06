@@ -94,6 +94,9 @@ const Inner = () => {
         <meta property="og:title" content="Greek Golden Visa for Investors — ROI, Yields & Market Analysis 2025" />
         <meta property="og:description" content="Investment-grade analysis: Greek Golden Visa properties deliver 4–7% net yield and 10–15% annual appreciation in prime Athens." />
         <meta property="og:image" content={`${BASE}/og-image.png`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="en_US" />
+        <meta name="keywords" content="Greek Golden Visa investment ROI, Athens property investment returns 2025, Greece real estate yields, Golden Visa property appreciation Athens, invest Greece Golden Visa, Athens property market analysis, EU real estate investment Greece" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Greek Golden Visa for Investors",
