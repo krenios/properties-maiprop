@@ -108,13 +108,17 @@ const Inner = () => {
         <meta property="og:image" content={`${BASE}/og-image.png`} />
         <meta property="og:type" content="article" />
         <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="ar_AE" />
+        <meta property="og:locale:alternate" content="zh_CN" />
+        <meta property="og:locale:alternate" content="ru_RU" />
+        <meta property="og:locale:alternate" content="tr_TR" />
         <meta name="keywords" content="Greek Golden Visa rental income, Greece investment property yield, Athens rental yield property, Golden Visa rental property Greece, Athens Airbnb investment, 4-7% yield Greece real estate, rental income property Greece investor" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Golden Visa Properties with Rental Income",
           url: PAGE,
           datePublished: "2024-06-01",
-          dateModified: "2025-03-01",
+          dateModified: "2026-03-06",
           breadcrumb: { "@type": "BreadcrumbList", itemListElement: [
             { "@type": "ListItem", position: 1, name: "Home", item: `${BASE}/` },
             { "@type": "ListItem", position: 2, name: "Greek Golden Visa", item: `${BASE}/greek-golden-visa/` },

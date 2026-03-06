@@ -72,7 +72,7 @@ const articleLd = {
   "description": "Complete legal and compliance guide for buying a Greek Golden Visa property: title checks, notary process, AFM requirements, qualifying property types, and common pitfalls to avoid.",
   "url": PAGE,
   "datePublished": "2024-06-01",
-  "dateModified": "2025-03-01",
+  "dateModified": "2026-03-06",
   "author": { "@id": "https://properties.maiprop.co/#organization" },
   "publisher": { "@id": "https://properties.maiprop.co/#organization" },
   "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE },

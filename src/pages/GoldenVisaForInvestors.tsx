@@ -72,7 +72,7 @@ const articleLd = {
   "description": "A pure investment analysis of the Greek Golden Visa: 4–7% net yields, 10–15% annual appreciation, portfolio diversification into EU real estate from €250,000.",
   "url": PAGE,
   "datePublished": "2024-06-01",
-  "dateModified": "2025-03-01",
+  "dateModified": "2026-03-06",
   "author": { "@id": "https://properties.maiprop.co/#organization" },
   "publisher": { "@id": "https://properties.maiprop.co/#organization" },
   "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE },

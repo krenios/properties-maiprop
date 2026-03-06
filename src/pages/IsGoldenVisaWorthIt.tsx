@@ -85,7 +85,7 @@ const articleLd = {
   "description": "An honest, balanced assessment of whether the Greek Golden Visa is worth it in 2025 — pros, cons, total costs, who it suits, and who should look elsewhere.",
   "url": PAGE,
   "datePublished": "2024-06-01",
-  "dateModified": "2025-03-01",
+  "dateModified": "2026-03-06",
   "author": { "@id": "https://properties.maiprop.co/#organization" },
   "publisher": { "@id": "https://properties.maiprop.co/#organization" },
   "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE },

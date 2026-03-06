@@ -70,7 +70,7 @@ const articleLd = {
   "description": "The Greek Golden Visa for HNW investors: €800K premium threshold for Athens and Mykonos, non-dom €100K flat tax, off-market luxury property sourcing, and full concierge service.",
   "url": PAGE,
   "datePublished": "2024-06-01",
-  "dateModified": "2025-03-01",
+  "dateModified": "2026-03-06",
   "author": { "@id": "https://properties.maiprop.co/#organization" },
   "publisher": { "@id": "https://properties.maiprop.co/#organization" },
   "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE },

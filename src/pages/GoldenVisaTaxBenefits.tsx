@@ -72,7 +72,7 @@ const articleLd = {
   "description": "How Greece's Golden Visa unlocks the non-dom €100K flat-tax regime, zero wealth tax, suspended capital gains, and 57 double-tax treaties for international investors.",
   "url": PAGE,
   "datePublished": "2024-06-01",
-  "dateModified": "2025-03-01",
+  "dateModified": "2026-03-06",
   "author": { "@id": "https://properties.maiprop.co/#organization" },
   "publisher": { "@id": "https://properties.maiprop.co/#organization" },
   "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE },
