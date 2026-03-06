@@ -78,7 +78,7 @@ const articleLd = {
   "description": "Greece vs Dubai Golden Visa: EU citizenship path vs no path, Schengen access vs none, NATO security vs MENA exposure. Honest side-by-side comparison for MENA investors in 2025.",
   "url": PAGE,
   "datePublished": "2024-06-01",
-  "dateModified": "2025-03-01",
+  "dateModified": "2026-03-06",
   "author": { "@id": "https://properties.maiprop.co/#organization" },
   "publisher": { "@id": "https://properties.maiprop.co/#organization" },
   "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE },
@@ -102,13 +102,17 @@ const Inner = () => {
         <meta property="og:image" content={`${BASE}/og-image.png`} />
         <meta property="og:type" content="article" />
         <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="ar_AE" />
+        <meta property="og:locale:alternate" content="zh_CN" />
+        <meta property="og:locale:alternate" content="ru_RU" />
+        <meta property="og:locale:alternate" content="tr_TR" />
         <meta name="keywords" content="Greece vs Dubai Golden Visa, Greece UAE residency comparison, EU vs UAE Golden Visa 2025, Schengen access vs UAE residency, MENA investor Greece EU residency, Greece Golden Visa security, Dubai Golden Visa vs EU citizenship" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Greece vs Dubai Golden Visa",
           url: PAGE,
           datePublished: "2024-06-01",
-          dateModified: "2025-03-01",
+          dateModified: "2026-03-06",
           breadcrumb: { "@type": "BreadcrumbList", itemListElement: [
             { "@type": "ListItem", position: 1, name: "Home", item: `${BASE}/` },
             { "@type": "ListItem", position: 2, name: "Greece vs Dubai Golden Visa", item: PAGE },
