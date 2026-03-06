@@ -102,6 +102,10 @@ const Inner = () => {
         <meta property="og:image" content={`${BASE}/og-image.png`} />
         <meta property="og:type" content="article" />
         <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="ar_AE" />
+        <meta property="og:locale:alternate" content="zh_CN" />
+        <meta property="og:locale:alternate" content="ru_RU" />
+        <meta property="og:locale:alternate" content="tr_TR" />
         <meta name="keywords" content="Greece vs Dubai Golden Visa, Greece UAE residency comparison, EU vs UAE Golden Visa 2025, Schengen access vs UAE residency, MENA investor Greece EU residency, Greece Golden Visa security, Dubai Golden Visa vs EU citizenship" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",

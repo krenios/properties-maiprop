@@ -109,6 +109,10 @@ const Inner = () => {
         <meta property="og:image" content={`${BASE}/og-image.png`} />
         <meta property="og:type" content="article" />
         <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="ar_AE" />
+        <meta property="og:locale:alternate" content="zh_CN" />
+        <meta property="og:locale:alternate" content="ru_RU" />
+        <meta property="og:locale:alternate" content="tr_TR" />
         <meta name="keywords" content="is Greek Golden Visa worth it, Greek Golden Visa pros cons 2025, Golden Visa Greece value analysis, Greek Golden Visa total cost, Greek Golden Visa honest review, Greece Golden Visa return on investment, Golden Visa Greece 2025" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",

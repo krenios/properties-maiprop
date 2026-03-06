@@ -96,13 +96,17 @@ const Inner = () => {
         <meta property="og:image" content={`${BASE}/og-image.png`} />
         <meta property="og:type" content="article" />
         <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="ar_AE" />
+        <meta property="og:locale:alternate" content="zh_CN" />
+        <meta property="og:locale:alternate" content="ru_RU" />
+        <meta property="og:locale:alternate" content="tr_TR" />
         <meta name="keywords" content="Greek Golden Visa tax benefits, Greece non-dom tax regime, Greece 100k flat tax global income, Greek residency tax advantages, Greece non-domicile investor, Golden Visa tax planning Greece, Greece property tax investor 2025" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Greek Golden Visa Tax Benefits",
           url: PAGE,
           datePublished: "2024-06-01",
-          dateModified: "2025-03-01",
+          dateModified: "2026-03-06",
           breadcrumb: { "@type": "BreadcrumbList", itemListElement: [
             { "@type": "ListItem", position: 1, name: "Home", item: `${BASE}/` },
             { "@type": "ListItem", position: 2, name: "Greek Golden Visa", item: `${BASE}/greek-golden-visa/` },
