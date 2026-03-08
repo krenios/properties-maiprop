@@ -129,6 +129,11 @@ const Inner = () => {
         <link rel="alternate" hrefLang="x-default" href={PAGE_URL} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={PAGE_URL} />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="ar_AE" />
+        <meta property="og:locale:alternate" content="zh_CN" />
+        <meta property="og:locale:alternate" content="ru_RU" />
+        <meta property="og:locale:alternate" content="tr_TR" />
         <meta property="og:title" content="Greek Golden Visa — EU Residency Through Real Estate" />
         <meta property="og:description" content="Complete guide to the Greek Golden Visa. Invest €250K+ in real estate and get EU residency, Schengen access, and family coverage." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
