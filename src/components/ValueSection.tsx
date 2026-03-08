@@ -28,10 +28,10 @@ return (
       </ScrollReveal>
 
       <ScrollReveal variant="stagger">
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 items-stretch">
           {services.map((s) =>
-        <RevealItem key={s.title}>
-          <div className="group rounded-xl border border-secondary/20 bg-background/30 p-6 backdrop-blur transition-all hover:border-secondary/40 hover:shadow-[0_0_30px_hsl(263_86%_64%/0.1)]">
+        <RevealItem key={s.title} className="h-full">
+          <div className="group h-full rounded-xl border border-secondary/20 bg-background/30 p-6 backdrop-blur transition-all hover:border-secondary/40 hover:shadow-[0_0_30px_hsl(263_86%_64%/0.1)]">
               <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-secondary/15 transition-colors group-hover:bg-secondary/25">
                 <s.icon className="h-5 w-5 text-secondary" />
               </div>
