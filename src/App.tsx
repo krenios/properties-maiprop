@@ -102,6 +102,10 @@ const App = () => (
                 <Route path="/greek-golden-visa-chinese-investors/" element={<W c={<GoldenVisaForChineseInvestors />} />} />
                 <Route path="/greek-golden-visa-uae-investors" element={<W c={<GoldenVisaForUAEInvestors />} />} />
                 <Route path="/greek-golden-visa-uae-investors/" element={<W c={<GoldenVisaForUAEInvestors />} />} />
+                <Route path="/greek-golden-visa-russian-investors" element={<W c={<GoldenVisaForRussianInvestors />} />} />
+                <Route path="/greek-golden-visa-russian-investors/" element={<W c={<GoldenVisaForRussianInvestors />} />} />
+                <Route path="/greek-golden-visa-turkish-investors" element={<W c={<GoldenVisaForTurkishInvestors />} />} />
+                <Route path="/greek-golden-visa-turkish-investors/" element={<W c={<GoldenVisaForTurkishInvestors />} />} />
                 <Route path="/login" element={<W c={<Login />} />} />
                 <Route path="/admin" element={<W c={<ProtectedRoute><Admin /></ProtectedRoute>} />} />
                 <Route path="*" element={<W c={<NotFound />} />} />
