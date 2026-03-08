@@ -114,7 +114,7 @@ Deno.serve(async (req) => {
       lastmod,
       changefreq: "monthly",
       priority: "0.75",
-      withHreflang: false,
+      withHreflang: true,
     });
   });
 
@@ -126,7 +126,7 @@ Deno.serve(async (req) => {
       lastmod,
       changefreq: getChangefreq(p),
       priority: getPriority(p),
-      withHreflang: false,
+      withHreflang: true,
     });
   });
 
