@@ -58,7 +58,7 @@ Deno.serve(async (req) => {
   const today = new Date().toISOString().split("T")[0];
 
   // Fetch properties and articles in parallel
-  const [{ data: properties }, { data: articles }] = await Promise.all([
+  const [{ data: properties, error: propErr }, { data: articles, error: artErr }] = await Promise.all([
     supabase
       .from("properties")
       .select("id, updated_at, status, project_type")
@@ -70,6 +70,13 @@ Deno.serve(async (req) => {
       .order("updated_at", { ascending: false }),
   ]);
 
+  if (propErr || artErr) {
+    return new Response(JSON.stringify({ error: propErr || artErr }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   // Priority/changefreq helpers for properties
   const getPriority = (p: { status: string; project_type: string }) => {
     if (p.status === "available") return "0.9";
@@ -80,37 +87,7 @@ Deno.serve(async (req) => {
   const getChangefreq = (p: { status: string }) =>
     p.status === "available" || p.status === "booked" ? "weekly" : "monthly";
 
-  // ── Static SEO pages (with full hreflang) ──────────────────────────────
-  const staticPages = [
-    { path: "/", changefreq: "weekly", priority: "1.0" },
-    { path: "/greek-golden-visa/", changefreq: "monthly", priority: "0.9" },
-    { path: "/greek-golden-visa-requirements/", changefreq: "monthly", priority: "0.85" },
-    { path: "/250k-golden-visa-properties/", changefreq: "weekly", priority: "0.9" },
-    { path: "/guides/", changefreq: "weekly", priority: "0.8" },
-    { path: "/golden-visa-journey/", changefreq: "monthly", priority: "0.85" },
-    { path: "/process/", changefreq: "monthly", priority: "0.9" },
-    { path: "/properties/", changefreq: "weekly", priority: "0.85" },
-    { path: "/trackrecord/", changefreq: "monthly", priority: "0.8" },
-    // SEO Landing Pages
-    { path: "/buy-the-lifestyle/", changefreq: "monthly", priority: "0.8" },
-    { path: "/greece-vs-portugal-golden-visa/", changefreq: "monthly", priority: "0.85" },
-    { path: "/golden-visa-family-included/", changefreq: "monthly", priority: "0.85" },
-    { path: "/golden-visa-rental-income-properties/", changefreq: "weekly", priority: "0.85" },
-    { path: "/golden-visa-tax-benefits/", changefreq: "monthly", priority: "0.85" },
-    { path: "/golden-visa-for-investors/", changefreq: "monthly", priority: "0.85" },
-    { path: "/golden-visa-for-high-net-worth/", changefreq: "monthly", priority: "0.8" },
-    { path: "/golden-visa-property-compliance/", changefreq: "monthly", priority: "0.8" },
-    { path: "/is-golden-visa-worth-it/", changefreq: "monthly", priority: "0.85" },
-    { path: "/greece-vs-dubai-golden-visa/", changefreq: "weekly", priority: "0.85" },
-    { path: "/greek-golden-visa-chinese-investors/", changefreq: "monthly", priority: "0.85" },
-    { path: "/greek-golden-visa-uae-investors/", changefreq: "monthly", priority: "0.85" },
-    { path: "/greek-golden-visa-russian-investors/", changefreq: "monthly", priority: "0.85" },
-    { path: "/greek-golden-visa-turkish-investors/", changefreq: "monthly", priority: "0.85" },
-  ].map(({ path, changefreq, priority }) =>
-    urlEntry({ path, lastmod: today, changefreq, priority, withHreflang: true })
-  );
-
-  // ── Published guide articles ────────────────────────────────────────────
+  // ── Published guide articles (dynamic — changes with each publish) ──────
   const guideEntries = (articles || []).map((a) => {
     const lastmod = a.updated_at ? a.updated_at.split("T")[0] : today;
     return urlEntry({
@@ -122,7 +99,7 @@ Deno.serve(async (req) => {
     });
   });
 
-  // ── Property pages ──────────────────────────────────────────────────────
+  // ── Property pages (dynamic — changes with each new listing) ────────────
   const propertyEntries = (properties || []).map((p) => {
     const lastmod = p.updated_at ? p.updated_at.split("T")[0] : today;
     return urlEntry({
@@ -134,10 +111,13 @@ Deno.serve(async (req) => {
     });
   });
 
+  const totalUrls = guideEntries.length + propertyEntries.length;
+
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<!-- Dynamic sitemap: ${propertyEntries.length} properties + ${guideEntries.length} articles = ${totalUrls} URLs -->
+<!-- Static pages are in sitemap-static.xml -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
-${staticPages.join("\n")}
 ${guideEntries.join("\n")}
 ${propertyEntries.join("\n")}
 </urlset>`;
