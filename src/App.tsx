@@ -39,6 +39,7 @@ const GoldenVisaForChineseInvestors = lazy(() => import("./pages/GoldenVisaForCh
 const GoldenVisaForUAEInvestors = lazy(() => import("./pages/GoldenVisaForUAEInvestors"));
 const GoldenVisaForRussianInvestors = lazy(() => import("./pages/GoldenVisaForRussianInvestors"));
 const GoldenVisaForTurkishInvestors = lazy(() => import("./pages/GoldenVisaForTurkishInvestors"));
+const GoldenVisaByNationality = lazy(() => import("./pages/GoldenVisaByNationality"));
 
 const queryClient = new QueryClient();
 
