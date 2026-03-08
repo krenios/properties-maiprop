@@ -351,4 +351,34 @@
     <xhtml:link rel="alternate" hreflang="tr"        href="https://properties.maiprop.co/greek-golden-visa-uae-investors/?lang=tr" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://properties.maiprop.co/greek-golden-visa-uae-investors/" />
   </url>
+  <url>
+    <loc>https://properties.maiprop.co/greek-golden-visa-russian-investors/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://properties.maiprop.co/greek-golden-visa-russian-investors/" />
+    <xhtml:link rel="alternate" hreflang="en-US"     href="https://properties.maiprop.co/greek-golden-visa-russian-investors/" />
+    <xhtml:link rel="alternate" hreflang="en-GB"     href="https://properties.maiprop.co/greek-golden-visa-russian-investors/" />
+    <xhtml:link rel="alternate" hreflang="ru"        href="https://properties.maiprop.co/greek-golden-visa-russian-investors/?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="ar"        href="https://properties.maiprop.co/greek-golden-visa-russian-investors/?lang=ar" />
+    <xhtml:link rel="alternate" hreflang="ar-AE"     href="https://properties.maiprop.co/greek-golden-visa-russian-investors/?lang=ar" />
+    <xhtml:link rel="alternate" hreflang="zh"        href="https://properties.maiprop.co/greek-golden-visa-russian-investors/?lang=zh" />
+    <xhtml:link rel="alternate" hreflang="zh-CN"     href="https://properties.maiprop.co/greek-golden-visa-russian-investors/?lang=zh" />
+    <xhtml:link rel="alternate" hreflang="tr"        href="https://properties.maiprop.co/greek-golden-visa-russian-investors/?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://properties.maiprop.co/greek-golden-visa-russian-investors/" />
+  </url>
+  <url>
+    <loc>https://properties.maiprop.co/greek-golden-visa-turkish-investors/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://properties.maiprop.co/greek-golden-visa-turkish-investors/" />
+    <xhtml:link rel="alternate" hreflang="en-US"     href="https://properties.maiprop.co/greek-golden-visa-turkish-investors/" />
+    <xhtml:link rel="alternate" hreflang="en-GB"     href="https://properties.maiprop.co/greek-golden-visa-turkish-investors/" />
+    <xhtml:link rel="alternate" hreflang="tr"        href="https://properties.maiprop.co/greek-golden-visa-turkish-investors/?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR"     href="https://properties.maiprop.co/greek-golden-visa-turkish-investors/?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="ar"        href="https://properties.maiprop.co/greek-golden-visa-turkish-investors/?lang=ar" />
+    <xhtml:link rel="alternate" hreflang="ar-AE"     href="https://properties.maiprop.co/greek-golden-visa-turkish-investors/?lang=ar" />
+    <xhtml:link rel="alternate" hreflang="zh"        href="https://properties.maiprop.co/greek-golden-visa-turkish-investors/?lang=zh" />
+    <xhtml:link rel="alternate" hreflang="zh-CN"     href="https://properties.maiprop.co/greek-golden-visa-turkish-investors/?lang=zh" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://properties.maiprop.co/greek-golden-visa-turkish-investors/" />
+  </url>
 </urlset>
