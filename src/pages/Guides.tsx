@@ -219,6 +219,11 @@ const Inner = () => {
         <link rel="alternate" hrefLang="tr"        href={`${PAGE_URL}?lang=tr`} />
         <link rel="alternate" hrefLang="x-default" href={PAGE_URL} />
         <meta property="og:type" content="website" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="ar_AE" />
+        <meta property="og:locale:alternate" content="zh_CN" />
+        <meta property="og:locale:alternate" content="ru_RU" />
+        <meta property="og:locale:alternate" content="tr_TR" />
         <meta property="og:url" content={PAGE_URL} />
         <meta property="og:title" content="Greek Golden Visa Investment Guides & Research — mAI Investments" />
         <meta property="og:description" content="Expert guides on Greek Golden Visa and real estate investment strategy for non-EU investors." />

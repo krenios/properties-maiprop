@@ -23,7 +23,7 @@ const pageLd = {
   "description": "Pre-verified Greek real estate investment properties eligible for the Golden Visa program at €250,000.",
   "url": PAGE_URL,
   "datePublished": "2024-06-01",
-  "dateModified": "2025-03-01",
+  "dateModified": "2026-03-06",
   "isPartOf": { "@id": "https://properties.maiprop.co/#website" },
   "author": { "@id": "https://properties.maiprop.co/#organization" },
   "publisher": { "@id": "https://properties.maiprop.co/#organization" },
@@ -160,7 +160,7 @@ const articleLd = {
   "description": "Pre-verified Greek real estate investment properties eligible for the Golden Visa program at €250,000. Browse available properties in Athens, Piraeus, and the Riviera.",
   "url": PAGE_URL,
   "datePublished": "2024-06-01",
-  "dateModified": "2025-03-01",
+  "dateModified": "2026-03-06",
   "author": { "@id": "https://properties.maiprop.co/#organization" },
   "publisher": { "@id": "https://properties.maiprop.co/#organization" },
   "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE_URL },
@@ -214,7 +214,12 @@ const Inner = () => {
         <link rel="alternate" hrefLang="he" href={`${PAGE_URL}?lang=he`} />
         <link rel="alternate" hrefLang="tr" href={`${PAGE_URL}?lang=tr`} />
         <link rel="alternate" hrefLang="x-default" href={PAGE_URL} />
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="ar_AE" />
+        <meta property="og:locale:alternate" content="zh_CN" />
+        <meta property="og:locale:alternate" content="ru_RU" />
+        <meta property="og:locale:alternate" content="tr_TR" />
         <meta property="og:url" content={PAGE_URL} />
         <meta property="og:title" content="€250K Golden Visa Properties Greece — Pre-Verified Investments" />
         <meta property="og:description" content="Browse €250,000+ Golden Visa eligible properties in Athens and the Athenian Riviera. Rental-ready real estate for EU residency." />

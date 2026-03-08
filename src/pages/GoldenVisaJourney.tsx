@@ -177,6 +177,11 @@ const Inner = () => {
         <link rel="alternate" hrefLang="tr"        href={`${PAGE_URL}?lang=tr`} />
         <link rel="alternate" hrefLang="x-default" href={PAGE_URL} />
         <meta property="og:type" content="article" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="ar_AE" />
+        <meta property="og:locale:alternate" content="zh_CN" />
+        <meta property="og:locale:alternate" content="ru_RU" />
+        <meta property="og:locale:alternate" content="tr_TR" />
         <meta property="og:url" content={PAGE_URL} />
         <meta property="og:title" content="Your Golden Visa Journey — Step-by-Step Guide" />
         <meta property="og:description" content="The complete step-by-step Greek Golden Visa journey — from consultation to permit issuance." />
@@ -191,7 +196,7 @@ const Inner = () => {
           "description": "The complete step-by-step Greek Golden Visa journey — from consultation and property selection to biometrics and permit issuance.",
           "url": PAGE_URL,
           "datePublished": "2024-06-01",
-          "dateModified": "2025-03-01",
+          "dateModified": "2026-03-06",
           "author": { "@id": `${BASE_URL}/#organization` },
           "publisher": { "@id": `${BASE_URL}/#organization` },
           "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE_URL },
@@ -206,7 +211,7 @@ const Inner = () => {
           "description": "The complete step-by-step Greek Golden Visa journey — from consultation and property selection to biometrics and permit issuance.",
           "url": PAGE_URL,
           "datePublished": "2024-06-01",
-          "dateModified": "2025-03-01",
+          "dateModified": "2026-03-06",
           "isPartOf": { "@id": `${BASE_URL}/#website` },
           "author": { "@id": `${BASE_URL}/#organization` },
           "publisher": { "@id": `${BASE_URL}/#organization` },
