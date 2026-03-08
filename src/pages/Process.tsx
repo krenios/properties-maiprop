@@ -325,6 +325,11 @@ const Inner = () => {
         <meta property="og:title" content="How We Work — Greek Golden Visa Advisory Process | mAI Investments" />
         <meta property="og:description" content="8 advisory steps from first call to Golden Visa permit. One trip. Full family included. 6–9 months." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="ar_AE" />
+        <meta property="og:locale:alternate" content="zh_CN" />
+        <meta property="og:locale:alternate" content="ru_RU" />
+        <meta property="og:locale:alternate" content="tr_TR" />
         <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
         <script type="application/ld+json">{JSON.stringify(howToLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>

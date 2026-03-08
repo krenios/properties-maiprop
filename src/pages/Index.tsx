@@ -152,6 +152,11 @@ const Index = () => {
       {/* Open Graph */}
       <meta property="og:type" content="website" />
       <meta property="og:url" content={canonicalUrl} />
+      <meta property="og:locale" content="en_US" />
+      <meta property="og:locale:alternate" content="ar_AE" />
+      <meta property="og:locale:alternate" content="zh_CN" />
+      <meta property="og:locale:alternate" content="ru_RU" />
+      <meta property="og:locale:alternate" content="tr_TR" />
       <meta property="og:site_name" content="mAI Investments" />
       <meta property="og:title" content="Greek Golden Visa Real Estate — EU Residency from €250K | mAI Investments" />
       <meta property="og:description" content="Invest in Golden Visa eligible Greek real estate from €250,000. EU residency, Schengen access, and 5–7% net rental yields." />

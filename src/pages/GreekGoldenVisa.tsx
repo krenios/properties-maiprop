@@ -18,7 +18,7 @@ const articleLd = {
   "description": "Complete guide to the Greek Golden Visa program. Invest €250,000+ in real estate and get EU residency with access to 27 Schengen countries.",
   "url": `${BASE_URL}/greek-golden-visa/`,
   "datePublished": "2024-01-01",
-  "dateModified": "2025-02-01",
+  "dateModified": "2026-03-06",
   "author": { "@id": "https://properties.maiprop.co/#organization" },
   "publisher": { "@id": "https://properties.maiprop.co/#organization" },
   "mainEntityOfPage": { "@type": "WebPage", "@id": `${BASE_URL}/greek-golden-visa/` },
@@ -43,7 +43,7 @@ const jsonLd = {
   "description": "Complete guide to the Greek Golden Visa program. Invest €250,000+ in real estate and get EU residency with access to 27 Schengen countries.",
   "url": PAGE_URL,
   "datePublished": "2024-01-01",
-  "dateModified": "2025-03-01",
+  "dateModified": "2026-03-06",
   "breadcrumb": {
     "@type": "BreadcrumbList",
     "itemListElement": [
@@ -129,6 +129,11 @@ const Inner = () => {
         <link rel="alternate" hrefLang="x-default" href={PAGE_URL} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={PAGE_URL} />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="ar_AE" />
+        <meta property="og:locale:alternate" content="zh_CN" />
+        <meta property="og:locale:alternate" content="ru_RU" />
+        <meta property="og:locale:alternate" content="tr_TR" />
         <meta property="og:title" content="Greek Golden Visa — EU Residency Through Real Estate" />
         <meta property="og:description" content="Complete guide to the Greek Golden Visa. Invest €250K+ in real estate and get EU residency, Schengen access, and family coverage." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
