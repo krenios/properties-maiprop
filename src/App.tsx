@@ -35,6 +35,8 @@ const GoldenVisaForHighNetWorth = lazy(() => import("./pages/GoldenVisaForHighNe
 const GoldenVisaPropertyCompliance = lazy(() => import("./pages/GoldenVisaPropertyCompliance"));
 const IsGoldenVisaWorthIt = lazy(() => import("./pages/IsGoldenVisaWorthIt"));
 const GreeceVsDubaiGoldenVisa = lazy(() => import("./pages/GreeceVsDubaiGoldenVisa"));
+const GoldenVisaForChineseInvestors = lazy(() => import("./pages/GoldenVisaForChineseInvestors"));
+const GoldenVisaForUAEInvestors = lazy(() => import("./pages/GoldenVisaForUAEInvestors"));
 
 const queryClient = new QueryClient();
 
@@ -94,6 +96,10 @@ const App = () => (
                 <Route path="/is-golden-visa-worth-it/" element={<W c={<IsGoldenVisaWorthIt />} />} />
                 <Route path="/greece-vs-dubai-golden-visa" element={<W c={<GreeceVsDubaiGoldenVisa />} />} />
                 <Route path="/greece-vs-dubai-golden-visa/" element={<W c={<GreeceVsDubaiGoldenVisa />} />} />
+                <Route path="/greek-golden-visa-chinese-investors" element={<W c={<GoldenVisaForChineseInvestors />} />} />
+                <Route path="/greek-golden-visa-chinese-investors/" element={<W c={<GoldenVisaForChineseInvestors />} />} />
+                <Route path="/greek-golden-visa-uae-investors" element={<W c={<GoldenVisaForUAEInvestors />} />} />
+                <Route path="/greek-golden-visa-uae-investors/" element={<W c={<GoldenVisaForUAEInvestors />} />} />
                 <Route path="/login" element={<W c={<Login />} />} />
                 <Route path="/admin" element={<W c={<ProtectedRoute><Admin /></ProtectedRoute>} />} />
                 <Route path="*" element={<W c={<NotFound />} />} />
