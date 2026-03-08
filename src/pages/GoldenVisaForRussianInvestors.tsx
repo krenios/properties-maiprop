@@ -397,6 +397,30 @@ const Inner = () => {
         </div>
       </section>
 
+      {/* Investor nationality cluster */}
+      <section className="py-16">
+        <div className="container mx-auto max-w-4xl px-6">
+          <h2 className="mb-2 text-xl font-bold">Greek Golden Visa by Nationality</h2>
+          <p className="mb-6 text-sm text-muted-foreground">Dedicated guides for investors from each key source market.</p>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {[
+              { to: "/greek-golden-visa-chinese-investors/", label: "🇨🇳 Chinese Investors", desc: "Schengen access for Chinese nationals" },
+              { to: "/greek-golden-visa-uae-investors/", label: "🇦🇪 UAE Investors", desc: "Manage from Dubai — one trip only" },
+              { to: "/greek-golden-visa-turkish-investors/", label: "🇹🇷 Turkish Investors", desc: "EU vs. Turkish CBI compared" },
+            ].map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="flex flex-col gap-1 rounded-xl border border-border bg-background/40 px-4 py-4 text-sm hover:border-primary/30 hover:bg-primary/5 transition-all"
+              >
+                <span className="font-semibold">{link.label}</span>
+                <span className="text-xs text-muted-foreground">{link.desc}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Internal links */}
       <section className="py-16 bg-background/50">
         <div className="container mx-auto max-w-4xl px-6">
@@ -409,6 +433,7 @@ const Inner = () => {
               { to: "/golden-visa-journey/", label: "Step-by-Step Application Journey" },
               { to: "/golden-visa-tax-benefits/", label: "Tax Benefits for Golden Visa Holders" },
               { to: "/golden-visa-family-included/", label: "Family Inclusion — Spouse & Children" },
+              { to: "/golden-visa-by-nationality/", label: "Golden Visa by Nationality — All Guides" },
             ].map((link) => (
               <Link
                 key={link.to}
