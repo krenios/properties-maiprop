@@ -77,7 +77,7 @@ const articleLd = {
   "description": "Greece's Golden Visa isn't just an investment — it's a lifestyle upgrade. 300+ sunny days, coastal living, EU freedom, and 4–7% rental yields from €250,000.",
   "url": PAGE,
   "datePublished": "2024-06-01",
-  "dateModified": "2025-03-01",
+  "dateModified": "2026-03-06",
   "author": { "@id": "https://properties.maiprop.co/#organization" },
   "publisher": { "@id": "https://properties.maiprop.co/#organization" },
   "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE },
