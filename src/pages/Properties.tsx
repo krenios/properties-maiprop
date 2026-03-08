@@ -100,14 +100,19 @@ const Inner = () => {
             "name": "Greek Golden Visa Real Estate Investment"
           },
           ...(current.length > 0 ? {
-          "hasPart": current.map((p) => ({ "@id": `${BASE_URL}/property/${p.id}/#apartment` })),
+            "hasPart": current.map((p) => ({ "@id": `${BASE_URL}/property/${p.id}/#apartment` })),
             "offers": {
               "@type": "AggregateOffer",
               "priceCurrency": "EUR",
-              "lowPrice": current.length > 0 ? Math.min(...current.filter(p => p.price).map(p => p.price!)).toString() : "250000",
-              "highPrice": current.length > 0 ? Math.max(...current.filter(p => p.price).map(p => p.price!)).toString() : undefined,
-              "offerCount": current.length.toString(),
-              "availability": "https://schema.org/InStock",
+              "lowPrice": (() => {
+                const prices = current.filter(p => p.price).map(p => p.price!);
+                return prices.length > 0 ? Math.min(...prices).toString() : "250000";
+              })(),
+              ...((() => {
+                const prices = current.filter(p => p.price).map(p => p.price!);
+                return prices.length > 0 ? { "highPrice": Math.max(...prices).toString() } : {};
+              })()),
+              "offerCount": current.length,
             },
           } : {})
         })}</script>
