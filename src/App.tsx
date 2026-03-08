@@ -37,6 +37,8 @@ const IsGoldenVisaWorthIt = lazy(() => import("./pages/IsGoldenVisaWorthIt"));
 const GreeceVsDubaiGoldenVisa = lazy(() => import("./pages/GreeceVsDubaiGoldenVisa"));
 const GoldenVisaForChineseInvestors = lazy(() => import("./pages/GoldenVisaForChineseInvestors"));
 const GoldenVisaForUAEInvestors = lazy(() => import("./pages/GoldenVisaForUAEInvestors"));
+const GoldenVisaForRussianInvestors = lazy(() => import("./pages/GoldenVisaForRussianInvestors"));
+const GoldenVisaForTurkishInvestors = lazy(() => import("./pages/GoldenVisaForTurkishInvestors"));
 
 const queryClient = new QueryClient();
 
