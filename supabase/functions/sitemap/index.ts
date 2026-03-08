@@ -12,14 +12,14 @@ const corsHeaders = {
 function hreflangBlock(path: string) {
   const clean = `${BASE_URL}${path}`;
   const lines = [
-    `    <xhtml:link rel="alternate" hreflang="en"        href="${clean}"/>`,
-    `    <xhtml:link rel="alternate" hreflang="en-US"     href="${clean}"/>`,
-    `    <xhtml:link rel="alternate" hreflang="en-GB"     href="${clean}"/>`,
+    `    <xhtml:link rel="alternate" hreflang="en" href="${clean}" />`,
+    `    <xhtml:link rel="alternate" hreflang="en-US" href="${clean}" />`,
+    `    <xhtml:link rel="alternate" hreflang="en-GB" href="${clean}" />`,
     ...HREFLANG_LOCALES.map((l) => {
       const langCode = l.split("-")[0];
-      return `    <xhtml:link rel="alternate" hreflang="${l}"        href="${clean}?lang=${langCode}"/>`;
+      return `    <xhtml:link rel="alternate" hreflang="${l}" href="${clean}?lang=${langCode}" />`;
     }),
-    `    <xhtml:link rel="alternate" hreflang="x-default" href="${clean}"/>`,
+    `    <xhtml:link rel="alternate" hreflang="x-default" href="${clean}" />`,
   ];
   return lines.join("\n");
 }
