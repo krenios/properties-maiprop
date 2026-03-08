@@ -340,6 +340,54 @@ const PropertyPageInner = () => {
         <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": `Is ${property.title} eligible for the Greek Golden Visa?`,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": `Yes. ${property.title} in ${property.location}, Greece is pre-verified and fully compliant with the Greek Golden Visa program. It meets the minimum investment threshold and all legal requirements for EU residency by investment.`,
+              },
+            },
+            {
+              "@type": "Question",
+              "name": `What is the expected rental yield for ${property.title}?`,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": property.yield
+                  ? `${property.title} targets an estimated rental yield of ${property.yield} annually, based on the ${property.location} rental market. Actual yield depends on occupancy rate and management strategy.`
+                  : `${property.title} is situated in ${property.location}, a location with strong rental demand. Contact our team for current yield projections specific to this property.`,
+              },
+            },
+            {
+              "@type": "Question",
+              "name": `Where is ${property.title} located?`,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": `${property.title} is located in ${property.location}, Greece. ${property.location} is a sought-after area for Golden Visa investment, offering strong rental demand and capital appreciation potential within the Greater Athens region.`,
+              },
+            },
+            {
+              "@type": "Question",
+              "name": "How long does it take to complete a Golden Visa property purchase in Greece?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The full Golden Visa process typically takes 6–9 months: 1–2 months for property selection and due diligence, 1–2 months for the legal purchase and land registry transfer, 4–6 weeks for the entry visa, and 2–4 months for the biometrics appointment followed by residency permit issuance.",
+              },
+            },
+            {
+              "@type": "Question",
+              "name": "Can I rent out my Golden Visa property in Greece?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. There is no restriction on renting out your Golden Visa property in Greece. Many investors generate net rental yields of 5–7% annually through short-term or long-term rental arrangements.",
+              },
+            },
+          ],
+        })}</script>
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
           "@type": ["Organization", "RealEstateAgent"],
           "@id": "https://properties.maiprop.co/#organization",
           "name": "mAI Investments Properties",

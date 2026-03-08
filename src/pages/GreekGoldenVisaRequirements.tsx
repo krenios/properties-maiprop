@@ -18,7 +18,7 @@ const articleLd = {
   "description": "Full checklist of Greek Golden Visa requirements. Documents needed, eligibility criteria, investment thresholds, and step-by-step process.",
   "url": `${BASE_URL}/greek-golden-visa-requirements/`,
   "datePublished": "2024-01-01",
-  "dateModified": "2025-02-01",
+  "dateModified": "2026-03-06",
   "author": { "@id": "https://properties.maiprop.co/#organization" },
   "publisher": { "@id": "https://properties.maiprop.co/#organization" },
   "mainEntityOfPage": { "@type": "WebPage", "@id": `${BASE_URL}/greek-golden-visa-requirements/` },
@@ -43,7 +43,7 @@ const jsonLd = {
   "description": "Full checklist of Greek Golden Visa requirements. Documents needed, eligibility criteria, investment thresholds, and step-by-step process.",
   "url": PAGE_URL,
   "datePublished": "2024-01-01",
-  "dateModified": "2025-03-01",
+  "dateModified": "2026-03-06",
   "breadcrumb": {
     "@type": "BreadcrumbList",
     "itemListElement": [
@@ -183,6 +183,11 @@ const Inner = () => {
         <link rel="alternate" hrefLang="tr" href={`${PAGE_URL}?lang=tr`} />
         <link rel="alternate" hrefLang="x-default" href={PAGE_URL} />
         <meta property="og:type" content="article" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="ar_AE" />
+        <meta property="og:locale:alternate" content="zh_CN" />
+        <meta property="og:locale:alternate" content="ru_RU" />
+        <meta property="og:locale:alternate" content="tr_TR" />
         <meta property="og:url" content={PAGE_URL} />
         <meta property="og:title" content="Greek Golden Visa Requirements — Documents & Eligibility 2025" />
         <meta property="og:description" content="Complete checklist of Greek Golden Visa requirements — documents, investment thresholds, and step-by-step application guide." />

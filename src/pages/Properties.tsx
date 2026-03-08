@@ -67,6 +67,11 @@ const Inner = () => {
         <link rel="alternate" hrefLang="tr"        href={`${BASE_URL}/properties/?lang=tr`} />
         <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}/properties/`} />
         <meta property="og:type" content="website" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="ar_AE" />
+        <meta property="og:locale:alternate" content="zh_CN" />
+        <meta property="og:locale:alternate" content="ru_RU" />
+        <meta property="og:locale:alternate" content="tr_TR" />
         <meta property="og:url" content={`${BASE_URL}/properties/`} />
         <meta property="og:title" content="Golden Visa Properties in Greece — Athens, Piraeus & Riviera | mAI Investments" />
         <meta property="og:description" content="Browse all Golden Visa eligible properties in Athens, Piraeus, and the Greek Riviera. Pre-verified from €250,000." />
