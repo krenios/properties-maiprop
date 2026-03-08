@@ -104,6 +104,8 @@ Deno.serve(async (req) => {
     { path: "/greece-vs-dubai-golden-visa/", changefreq: "weekly", priority: "0.85" },
     { path: "/greek-golden-visa-chinese-investors/", changefreq: "monthly", priority: "0.85" },
     { path: "/greek-golden-visa-uae-investors/", changefreq: "monthly", priority: "0.85" },
+    { path: "/greek-golden-visa-russian-investors/", changefreq: "monthly", priority: "0.85" },
+    { path: "/greek-golden-visa-turkish-investors/", changefreq: "monthly", priority: "0.85" },
   ].map(({ path, changefreq, priority }) =>
     urlEntry({ path, lastmod: today, changefreq, priority, withHreflang: true })
   );
