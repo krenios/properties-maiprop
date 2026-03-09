@@ -59,7 +59,8 @@ const categoryColors: Record<string, string> = {
   Timeline: "text-secondary border-secondary/40 bg-secondary/10",
   Benefits: "text-primary border-primary/40 bg-primary/10",
   Returns: "text-secondary border-secondary/40 bg-secondary/10",
-  Residency: "text-primary border-primary/40 bg-primary/10"
+  Residency: "text-primary border-primary/40 bg-primary/10",
+  Citizenship: "text-secondary border-secondary/40 bg-secondary/10"
 };
 
 const FaqSection = () => {
