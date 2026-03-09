@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, Home, Clock, Globe, TrendingUp, ShieldCheck } from "lucide-react";
+import { ChevronDown, Home, Clock, Globe, TrendingUp, ShieldCheck, Star } from "lucide-react";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -43,6 +43,14 @@ const faqs = [
   a: "No. The Greek Golden Visa does not require a minimum stay in Greece. You can maintain the residency permit simply by keeping the qualifying real estate investment.",
   category: "Residency",
   highlight: "No minimum stay"
+},
+{
+  icon: Star,
+  number: "06",
+  q: "Can I become a Greek citizen through the Golden Visa?",
+  a: "Yes. After 7 years of legal residency in Greece, Golden Visa holders can apply for Greek citizenship — one of the most valuable passports in the world. Greek citizenship grants full EU citizenship rights, the ability to live, work, and study anywhere in the EU, and visa-free access to 185+ countries. The path requires a basic language test and proof of integration, but does not require continuous physical residence.",
+  category: "Citizenship",
+  highlight: "EU citizenship in 7 years"
 }];
 
 
@@ -51,7 +59,8 @@ const categoryColors: Record<string, string> = {
   Timeline: "text-secondary border-secondary/40 bg-secondary/10",
   Benefits: "text-primary border-primary/40 bg-primary/10",
   Returns: "text-secondary border-secondary/40 bg-secondary/10",
-  Residency: "text-primary border-primary/40 bg-primary/10"
+  Residency: "text-primary border-primary/40 bg-primary/10",
+  Citizenship: "text-secondary border-secondary/40 bg-secondary/10"
 };
 
 const FaqSection = () => {
