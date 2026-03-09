@@ -2,8 +2,6 @@ User-agent: Googlebot
 Allow: /
 Disallow: /admin
 Disallow: /login
-Disallow: /wp-admin/
-Allow: /wp-admin/admin-ajax.php
 Disallow: /*?lang=*
 Disallow: /*?search=*
 Disallow: /*?q=*
@@ -12,8 +10,6 @@ User-agent: Bingbot
 Allow: /
 Disallow: /admin
 Disallow: /login
-Disallow: /wp-admin/
-Allow: /wp-admin/admin-ajax.php
 Disallow: /*?lang=*
 Disallow: /*?search=*
 Disallow: /*?q=*
@@ -28,21 +24,10 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /login
-Disallow: /wp-admin/
-Allow: /wp-admin/admin-ajax.php
 Disallow: /*?lang=*
 Disallow: /*?search=*
 Disallow: /*?q=*
 
-# Pages covered: /, /greek-golden-visa/, /greek-golden-visa-requirements/,
-# /250k-golden-visa-properties/, /golden-visa-journey/, /process/,
-# /properties/, /trackrecord/, /guides/, /guides/*,
-# /buy-the-lifestyle/, /greece-vs-portugal-golden-visa/, /golden-visa-family-included/,
-# /golden-visa-rental-income-properties/, /golden-visa-tax-benefits/,
-# /golden-visa-for-investors/, /golden-visa-for-high-net-worth/,
-# /golden-visa-property-compliance/, /is-golden-visa-worth-it/,
-# /greece-vs-dubai-golden-visa/, /property/*
-
-Sitemap: https://properties.maiprop.co/sitemap.xml
-Sitemap: https://properties.maiprop.co/sitemap-static.xml
+# Single authoritative sitemap — served live from the edge function
+# (includes all static pages + dynamic properties + guide articles)
 Sitemap: https://cqxcztafhnwkhxgaylne.supabase.co/functions/v1/sitemap

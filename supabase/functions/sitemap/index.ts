@@ -1,7 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const BASE_URL = "https://properties.maiprop.co";
-
 const HREFLANG_LOCALES = ["el", "ar", "ar-AE", "zh", "zh-CN", "ru", "fr", "hi", "he", "tr"];
 
 const corsHeaders = {
@@ -9,9 +8,37 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-function hreflangBlock(path: string) {
+// All static pages — kept here so no static file dependency
+const STATIC_PAGES: Array<{ path: string; changefreq: string; priority: string; lastmod: string; hreflang: boolean }> = [
+  { path: "/",                                      changefreq: "weekly",  priority: "1.0",  lastmod: "2026-03-09", hreflang: true },
+  { path: "/greek-golden-visa/",                    changefreq: "monthly", priority: "0.9",  lastmod: "2026-03-07", hreflang: true },
+  { path: "/greek-golden-visa-requirements/",       changefreq: "monthly", priority: "0.85", lastmod: "2026-03-07", hreflang: true },
+  { path: "/250k-golden-visa-properties/",          changefreq: "weekly",  priority: "0.9",  lastmod: "2026-03-07", hreflang: true },
+  { path: "/golden-visa-journey/",                  changefreq: "monthly", priority: "0.85", lastmod: "2026-03-07", hreflang: true },
+  { path: "/process/",                              changefreq: "monthly", priority: "0.9",  lastmod: "2026-03-07", hreflang: true },
+  { path: "/properties/",                           changefreq: "weekly",  priority: "0.85", lastmod: "2026-03-09", hreflang: true },
+  { path: "/trackrecord/",                          changefreq: "monthly", priority: "0.8",  lastmod: "2026-03-07", hreflang: true },
+  { path: "/guides/",                               changefreq: "weekly",  priority: "0.8",  lastmod: "2026-03-09", hreflang: true },
+  { path: "/buy-the-lifestyle/",                    changefreq: "monthly", priority: "0.8",  lastmod: "2026-03-07", hreflang: true },
+  { path: "/greece-vs-portugal-golden-visa/",       changefreq: "monthly", priority: "0.85", lastmod: "2026-03-07", hreflang: true },
+  { path: "/golden-visa-family-included/",          changefreq: "monthly", priority: "0.85", lastmod: "2026-03-07", hreflang: true },
+  { path: "/golden-visa-rental-income-properties/", changefreq: "weekly",  priority: "0.85", lastmod: "2026-03-07", hreflang: true },
+  { path: "/golden-visa-tax-benefits/",             changefreq: "monthly", priority: "0.85", lastmod: "2026-03-07", hreflang: true },
+  { path: "/golden-visa-for-investors/",            changefreq: "monthly", priority: "0.85", lastmod: "2026-03-07", hreflang: true },
+  { path: "/golden-visa-for-high-net-worth/",       changefreq: "monthly", priority: "0.8",  lastmod: "2026-03-07", hreflang: true },
+  { path: "/golden-visa-property-compliance/",      changefreq: "monthly", priority: "0.8",  lastmod: "2026-03-07", hreflang: true },
+  { path: "/is-golden-visa-worth-it/",              changefreq: "monthly", priority: "0.85", lastmod: "2026-03-07", hreflang: true },
+  { path: "/greece-vs-dubai-golden-visa/",          changefreq: "weekly",  priority: "0.85", lastmod: "2026-03-07", hreflang: true },
+  { path: "/greek-golden-visa-chinese-investors/",  changefreq: "monthly", priority: "0.85", lastmod: "2026-03-07", hreflang: true },
+  { path: "/greek-golden-visa-uae-investors/",      changefreq: "monthly", priority: "0.85", lastmod: "2026-03-07", hreflang: true },
+  { path: "/greek-golden-visa-russian-investors/",  changefreq: "monthly", priority: "0.85", lastmod: "2026-03-07", hreflang: true },
+  { path: "/greek-golden-visa-turkish-investors/",  changefreq: "monthly", priority: "0.85", lastmod: "2026-03-07", hreflang: true },
+  { path: "/golden-visa-by-nationality/",           changefreq: "monthly", priority: "0.85", lastmod: "2026-03-07", hreflang: true },
+];
+
+function hreflangBlock(path: string): string {
   const clean = `${BASE_URL}${path}`;
-  const lines = [
+  return [
     `    <xhtml:link rel="alternate" hreflang="en" href="${clean}" />`,
     `    <xhtml:link rel="alternate" hreflang="en-US" href="${clean}" />`,
     `    <xhtml:link rel="alternate" hreflang="en-GB" href="${clean}" />`,
@@ -20,23 +47,10 @@ function hreflangBlock(path: string) {
       return `    <xhtml:link rel="alternate" hreflang="${l}" href="${clean}?lang=${langCode}" />`;
     }),
     `    <xhtml:link rel="alternate" hreflang="x-default" href="${clean}" />`,
-  ];
-  return lines.join("\n");
+  ].join("\n");
 }
 
-function urlEntry({
-  path,
-  lastmod,
-  changefreq,
-  priority,
-  withHreflang = false,
-}: {
-  path: string;
-  lastmod: string;
-  changefreq: string;
-  priority: string;
-  withHreflang?: boolean;
-}) {
+function urlEntry(path: string, lastmod: string, changefreq: string, priority: string, withHreflang = false): string {
   return `  <url>
     <loc>${BASE_URL}${path}</loc>
     <lastmod>${lastmod}</lastmod>
@@ -77,7 +91,6 @@ Deno.serve(async (req) => {
     });
   }
 
-  // Priority/changefreq helpers for properties
   const getPriority = (p: { status: string; project_type: string }) => {
     if (p.status === "available") return "0.9";
     if (p.status === "booked") return "0.8";
@@ -87,37 +100,37 @@ Deno.serve(async (req) => {
   const getChangefreq = (p: { status: string }) =>
     p.status === "available" || p.status === "booked" ? "weekly" : "monthly";
 
-  // ── Published guide articles (dynamic — changes with each publish) ──────
-  const guideEntries = (articles || []).map((a) => {
-    const lastmod = a.updated_at ? a.updated_at.split("T")[0] : today;
-    return urlEntry({
-      path: `/guides/${a.slug}/`,
-      lastmod,
-      changefreq: "monthly",
-      priority: "0.75",
-      withHreflang: true,
-    });
-  });
+  const staticEntries = STATIC_PAGES.map((p) =>
+    urlEntry(p.path, p.lastmod, p.changefreq, p.priority, p.hreflang)
+  );
 
-  // ── Property pages (dynamic — changes with each new listing) ────────────
-  const propertyEntries = (properties || []).map((p) => {
-    const lastmod = p.updated_at ? p.updated_at.split("T")[0] : today;
-    return urlEntry({
-      path: `/property/${p.id}/`,
-      lastmod,
-      changefreq: getChangefreq(p),
-      priority: getPriority(p),
-      withHreflang: true,
-    });
-  });
+  const guideEntries = (articles || []).map((a) =>
+    urlEntry(
+      `/guides/${a.slug}/`,
+      a.updated_at ? a.updated_at.split("T")[0] : today,
+      "monthly",
+      "0.75",
+      true
+    )
+  );
 
-  const totalUrls = guideEntries.length + propertyEntries.length;
+  const propertyEntries = (properties || []).map((p) =>
+    urlEntry(
+      `/property/${p.id}/`,
+      p.updated_at ? p.updated_at.split("T")[0] : today,
+      getChangefreq(p),
+      getPriority(p),
+      true
+    )
+  );
+
+  const total = staticEntries.length + guideEntries.length + propertyEntries.length;
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<!-- Dynamic sitemap: ${propertyEntries.length} properties + ${guideEntries.length} articles = ${totalUrls} URLs -->
-<!-- Static pages are in sitemap-static.xml -->
+<!-- Full sitemap: ${staticEntries.length} static + ${guideEntries.length} articles + ${propertyEntries.length} properties = ${total} URLs -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${staticEntries.join("\n")}
 ${guideEntries.join("\n")}
 ${propertyEntries.join("\n")}
 </urlset>`;

@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- This file redirects crawlers to the live edge-function sitemap.
+     The canonical sitemap is served by the edge function at:
+     https://cqxcztafhnwkhxgaylne.supabase.co/functions/v1/sitemap
+     robots.txt points directly there. -->
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-  <!-- Static pages: homepage, core, SEO landing pages (hreflang included) -->
   <sitemap>
-    <loc>https://properties.maiprop.co/sitemap-static.xml</loc>
-    <lastmod>2026-03-08</lastmod>
+    <loc>https://cqxcztafhnwkhxgaylne.supabase.co/functions/v1/sitemap</loc>
   </sitemap>
-
-  <!-- Dynamic pages: properties + guide articles (generated live from database) -->
-  <sitemap>
-    <loc>https://properties.maiprop.co/sitemap-dynamic.xml</loc>
-    <lastmod>2026-03-08</lastmod>
-  </sitemap>
-
 </sitemapindex>
