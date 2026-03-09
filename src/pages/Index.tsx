@@ -64,6 +64,14 @@ const faqJsonLd = {
         text: "No. The Greek Golden Visa does not require a minimum stay in Greece. You can maintain the residency permit simply by keeping the qualifying real estate investment.",
       },
     },
+    {
+      "@type": "Question",
+      name: "Can I become a Greek citizen through the Golden Visa?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. After 7 years of legal residency in Greece, Golden Visa holders can apply for Greek citizenship — one of the most valuable passports in the world. Greek citizenship grants full EU citizenship rights, the ability to live, work, and study anywhere in the EU, and visa-free access to 185+ countries. The path requires a basic language test and proof of integration, but does not require continuous physical residence.",
+      },
+    },
   ],
 };
 
