@@ -25,6 +25,13 @@ export default defineConfig(({ mode }) => ({
     hmr: {
       overlay: false,
     },
+    proxy: {
+      "/sitemap-dynamic.xml": {
+        target: "https://cqxcztafhnwkhxgaylne.supabase.co/functions/v1/sitemap",
+        changeOrigin: true,
+        rewrite: () => "",
+      },
+    },
   },
   plugins: [react(), mode === "development" && componentTagger(), cssNonBlockingPlugin()].filter(Boolean),
   resolve: {
