@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, Home, Clock, Globe, TrendingUp, ShieldCheck } from "lucide-react";
+import { ChevronDown, Home, Clock, Globe, TrendingUp, ShieldCheck, Star } from "lucide-react";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { motion, AnimatePresence } from "framer-motion";
 
