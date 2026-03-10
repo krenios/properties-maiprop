@@ -28,7 +28,7 @@ export const RecoveryEmail = ({ siteName, confirmationUrl }: RecoveryEmailProps)
     <Body style={main}>
       <Container style={container}>
         <Section style={header}>
-          <Img src="https://cqxcztafhnwkhxgaylne.supabase.co/storage/v1/object/public/email-assets/logo.webp?v=1" alt="mAI Prop" width="140" style={{ margin: '0 auto' }} />
+          <Img src="https://cqxcztafhnwkhxgaylne.supabase.co/storage/v1/object/public/email-assets/logo-new.png" alt="mAI Prop" width="180" style={{ margin: '0 auto' }} />
         </Section>
         <Section style={card}>
           <Heading style={h1}>Reset your password</Heading>

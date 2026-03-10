@@ -68,7 +68,7 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
             alt="mAI properties" 
             width={260}
             height={122}
-            className={`h-14 w-auto object-contain transition-all duration-300 ${scrolled ? "brightness-0 invert" : ""}`}
+            className="h-14 w-auto object-contain transition-all duration-300"
             src={maipropLogo}
             loading="eager"
           />
