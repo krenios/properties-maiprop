@@ -66,9 +66,9 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
         <a href="/" className="flex items-center gap-2">
           <img 
             alt="mAI properties" 
-            width={260}
-            height={122}
-            className="h-14 w-auto object-contain transition-all duration-300"
+            width={340}
+            height={160}
+            className="h-20 w-auto object-contain transition-all duration-300"
             src={maipropLogo}
             loading="eager"
           />
