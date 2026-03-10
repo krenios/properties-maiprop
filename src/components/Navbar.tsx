@@ -65,11 +65,11 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
       <div className="container mx-auto flex items-center justify-between px-6 py-4 text-sidebar-primary bg-transparent">
         <a href="/" className="flex items-center gap-2">
           <img 
-            alt="MaiProp" 
+            alt="mAI properties" 
             width={178}
             height={84}
-            className={`h-12 w-auto object-fill transition-all duration-300 ${scrolled ? "brightness-150" : ""}`} 
-            src={scrolled ? brandLight : "/lovable-uploads/3c02ed5d-5638-402e-b7c8-0daa01b502d0.png"} 
+            className="h-10 w-auto object-contain transition-all duration-300" 
+            src={maipropLogo}
             loading="eager"
           />
         </a>
