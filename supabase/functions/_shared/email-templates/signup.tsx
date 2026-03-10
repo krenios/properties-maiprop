@@ -36,9 +36,9 @@ export const SignupEmail = ({
       <Container style={container}>
         <Section style={header}>
           <Img
-            src="https://cqxcztafhnwkhxgaylne.supabase.co/storage/v1/object/public/email-assets/logo.webp?v=1"
+            src="https://cqxcztafhnwkhxgaylne.supabase.co/storage/v1/object/public/email-assets/logo-new.png"
             alt="mAI Prop"
-            width="140"
+            width="180"
             style={{ margin: '0 auto' }}
           />
         </Section>
