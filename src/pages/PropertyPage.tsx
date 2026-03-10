@@ -336,9 +336,9 @@ const PropertyPageInner = () => {
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
         <meta name="twitter:image:alt" content={`${property.title} — ${property.location}, Greece`} />
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
-        <script type="application/ld+json">{JSON.stringify({
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "FAQPage",
           "mainEntity": [
@@ -385,8 +385,8 @@ const PropertyPageInner = () => {
               },
             },
           ],
-        })}</script>
-        <script type="application/ld+json">{JSON.stringify({
+        }) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
           "@type": ["Organization", "RealEstateAgent"],
           "@id": "https://properties.maiprop.co/#organization",
@@ -404,7 +404,7 @@ const PropertyPageInner = () => {
             "https://www.linkedin.com/company/maiprop",
             "https://www.instagram.com/maiprop",
           ],
-        })}</script>
+        }) }} />
       </Helmet>
 
       <div className="min-h-screen bg-background">

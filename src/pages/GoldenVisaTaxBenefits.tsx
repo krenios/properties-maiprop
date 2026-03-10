@@ -101,7 +101,7 @@ const Inner = () => {
         <meta property="og:locale:alternate" content="ru_RU" />
         <meta property="og:locale:alternate" content="tr_TR" />
         <meta name="keywords" content="Greek Golden Visa tax benefits, Greece non-dom tax regime, Greece 100k flat tax global income, Greek residency tax advantages, Greece non-domicile investor, Golden Visa tax planning Greece, Greece property tax investor 2025" />
-        <script type="application/ld+json">{JSON.stringify({
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Greek Golden Visa Tax Benefits",
           url: PAGE,
@@ -112,9 +112,9 @@ const Inner = () => {
             { "@type": "ListItem", position: 2, name: "Greek Golden Visa", item: `${BASE}/greek-golden-visa/` },
             { "@type": "ListItem", position: 3, name: "Tax Benefits", item: PAGE },
           ]},
-        })}</script>
-        <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
+        }) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       </Helmet>
 
       <Navbar forceScrolled />

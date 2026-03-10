@@ -288,8 +288,8 @@ const Inner = () => {
         <meta name="twitter:description" content={displayDescription} />
         <meta name="twitter:image" content={`${BASE_URL}/og-image.png`} />
         {/* JSON-LD */}
-        <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
-        {articleLd && <script type="application/ld+json">{JSON.stringify(articleLd)}</script>}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+        {articleLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />}
       </Helmet>
 
       <Navbar forceScrolled />

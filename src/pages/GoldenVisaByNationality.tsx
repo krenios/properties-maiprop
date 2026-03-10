@@ -166,9 +166,9 @@ const Inner = () => {
         <meta property="og:description" content="EU Schengen residency from €250,000 — dedicated guides for Chinese, UAE, Russian, and Turkish investors." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
         <meta property="og:image:alt" content="Greek Golden Visa by Nationality — mAI Investments" />
-        <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(hubLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(hubLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       </Helmet>
 
       <Navbar forceScrolled />

@@ -107,7 +107,7 @@ const Inner = () => {
         <meta property="og:locale:alternate" content="ru_RU" />
         <meta property="og:locale:alternate" content="tr_TR" />
         <meta name="keywords" content="Greece vs Portugal Golden Visa 2025, Greece Portugal residency comparison, best Golden Visa Europe 2025, Portugal Golden Visa restrictions, Greece Golden Visa 250k vs Portugal, Golden Visa real estate 2025, EU residency comparison investors" />
-        <script type="application/ld+json">{JSON.stringify({
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Greece vs Portugal Golden Visa — 2025 Full Comparison",
           url: PAGE,
@@ -117,9 +117,9 @@ const Inner = () => {
             { "@type": "ListItem", position: 1, name: "Home", item: `${BASE}/` },
             { "@type": "ListItem", position: 2, name: "Greece vs Portugal Golden Visa", item: PAGE },
           ]},
-        })}</script>
-        <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
+        }) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       </Helmet>
 
       <Navbar forceScrolled />
