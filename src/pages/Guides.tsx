@@ -229,9 +229,9 @@ const Inner = () => {
         <meta property="og:description" content="Expert guides on Greek Golden Visa and real estate investment strategy for non-EU investors." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
         <meta property="og:image:alt" content="mAI Investments — Greek Golden Visa investment guides and research" />
-        <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(collectionPageLd)}</script>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageLd) }} />
       </Helmet>
 
       <Navbar forceScrolled />

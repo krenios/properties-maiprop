@@ -113,7 +113,7 @@ const Inner = () => {
         <meta property="og:locale:alternate" content="ru_RU" />
         <meta property="og:locale:alternate" content="tr_TR" />
         <meta name="keywords" content="Greek Golden Visa rental income, Greece investment property yield, Athens rental yield property, Golden Visa rental property Greece, Athens Airbnb investment, 4-7% yield Greece real estate, rental income property Greece investor" />
-        <script type="application/ld+json">{JSON.stringify({
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org", "@type": "WebPage",
           name: "Golden Visa Properties with Rental Income",
           url: PAGE,
@@ -124,9 +124,9 @@ const Inner = () => {
             { "@type": "ListItem", position: 2, name: "Greek Golden Visa", item: `${BASE}/greek-golden-visa/` },
             { "@type": "ListItem", position: 3, name: "Rental Income Properties", item: PAGE },
           ]},
-        })}</script>
-        <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
+        }) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       </Helmet>
 
       <Navbar forceScrolled />

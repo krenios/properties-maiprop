@@ -224,11 +224,11 @@ const Inner = () => {
         <meta property="og:title" content="€250K Golden Visa Properties Greece — Pre-Verified Investments" />
         <meta property="og:description" content="Browse €250,000+ Golden Visa eligible properties in Athens and the Athenian Riviera. Rental-ready real estate for EU residency." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
-        <script type="application/ld+json">{JSON.stringify(pageLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(offerLd(hasPart))}</script>
-        <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(offerLd(hasPart)) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       </Helmet>
 
       <Navbar forceScrolled />

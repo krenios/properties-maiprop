@@ -192,9 +192,9 @@ const Inner = () => {
         <meta property="og:title" content="Greek Golden Visa Requirements — Documents & Eligibility 2025" />
         <meta property="og:description" content="Complete checklist of Greek Golden Visa requirements — documents, investment thresholds, and step-by-step application guide." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       </Helmet>
 
       <Navbar forceScrolled />
