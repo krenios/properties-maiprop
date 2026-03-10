@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Bot, Send, ChevronLeft, Check, X, Sparkles, ShieldCheck } from "lucide-react";
+import { Bot, Send, ChevronLeft, Check, X, Sparkles, ShieldCheck, ExternalLink, Home } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLeadBot } from "@/components/LeadBotProvider";
+import { Property } from "@/data/properties";
 
 const CALENDLY_URL = "https://calendly.com/maipropos/consultation";
 const TURNSTILE_SITE_KEY = "0x4AAAAAACmEa8xMGdIJZT2a";
@@ -92,7 +93,9 @@ const initial: FormData = {
 // Re-export useLeadBot for backward compatibility
 export { useLeadBot } from "@/components/LeadBotProvider";
 
-type ChatMessage = { role: "bot" | "user"; text: string };
+type ChatMessage =
+  | { role: "bot" | "user"; text: string; type?: "text" }
+  | { role: "bot"; type: "properties"; properties: Property[] };
 
 const TypingIndicator = () => (
   <motion.div
@@ -114,6 +117,71 @@ const TypingIndicator = () => (
   </motion.div>
 );
 
+const budgetToNumber = (val: string): number => {
+  const map: Record<string, number> = { "€250,000": 250000, "€500,000": 500000, "€800,000": 800000, "€1M+": 1000000 };
+  return map[val] || Number(val.replace(/[^0-9]/g, "")) || 250000;
+};
+
+/** Return matching available properties within 30% above budget */
+const getMatchingProperties = (properties: Property[], budget: string): Property[] => {
+  const num = budgetToNumber(budget);
+  const ceiling = budget === "€1M+" ? Infinity : num * 1.3;
+  return properties.filter(
+    (p) =>
+      p.status === "available" &&
+      p.project_type === "new" &&
+      p.price !== null &&
+      p.price >= num * 0.5 &&
+      p.price <= ceiling,
+  ).slice(0, 3);
+};
+
+/** A compact property card rendered inside the chat bubble */
+const PropertyChatCard = ({
+  property,
+  onSelect,
+}: {
+  property: Property;
+  onSelect: (p: Property) => void;
+}) => (
+  <button
+    onClick={() => onSelect(property)}
+    className="group w-full overflow-hidden rounded-xl border border-border/60 bg-card text-left transition-all hover:border-primary/50 hover:shadow-[0_4px_20px_hsl(var(--primary)/0.15)]"
+  >
+    {property.images?.[0] && (
+      <div className="relative h-28 w-full overflow-hidden">
+        <img
+          src={property.images[0]}
+          alt={property.title}
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+        {property.status === "available" && (
+          <span className="absolute top-2 left-2 rounded-full bg-primary/90 px-2 py-0.5 text-[10px] font-semibold text-primary-foreground">
+            Available
+          </span>
+        )}
+      </div>
+    )}
+    <div className="p-3">
+      <p className="line-clamp-1 text-xs font-semibold text-foreground">{property.title}</p>
+      <p className="mt-0.5 text-[11px] text-muted-foreground">{property.location}</p>
+      <div className="mt-2 flex items-center justify-between">
+        <span className="text-xs font-bold text-primary">
+          {property.price ? `€${property.price.toLocaleString()}` : "POA"}
+        </span>
+        <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
+          <Home className="h-3 w-3" />
+          {property.size ? `${property.size} m²` : ""}
+          {property.bedrooms ? ` · ${property.bedrooms} bed` : ""}
+        </span>
+      </div>
+      {property.yield && (
+        <p className="mt-1 text-[10px] text-secondary font-medium">📈 {property.yield} yield</p>
+      )}
+    </div>
+  </button>
+);
+
 const LeadCaptureBot = () => {
   const { isOpen: open, setIsOpen, pendingLocation } = useLeadBot();
   const [step, setStep] = useState(0);
@@ -126,6 +194,8 @@ const LeadCaptureBot = () => {
   const [showCaptcha, setShowCaptcha] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [captchaError, setCaptchaError] = useState(false);
+  const [suggestedProperties, setSuggestedProperties] = useState<Property[]>([]);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const turnstileRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
@@ -189,6 +259,8 @@ const LeadCaptureBot = () => {
       setShowCaptcha(false);
       setTurnstileToken(null);
       setCaptchaError(false);
+      setSuggestedProperties([]);
+      setSelectedProperty(null);
     }
   }, [open, pendingLocation]);
 
@@ -225,6 +297,15 @@ const LeadCaptureBot = () => {
     );
   };
 
+  const showBotProperties = (props: Property[], onDone?: () => void) => {
+    setTyping(true);
+    setTimeout(() => {
+      setTyping(false);
+      setMessages((prev) => [...prev, { role: "bot", type: "properties", properties: props }]);
+      onDone?.();
+    }, 900);
+  };
+
   const currentStep = STEPS[step];
   const currentValue = form[currentStep?.key as keyof FormData] || "";
 
@@ -234,6 +315,32 @@ const LeadCaptureBot = () => {
     if (currentStep.key === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return "Please enter a valid email";
     if (currentStep.key === "phone" && !/^\+?[\d\s\-()]{7,20}$/.test(v)) return "Please enter a valid phone number";
     return null;
+  };
+
+  /** After budget selection, fetch matching properties and insert them into the chat */
+  const showMatchingProperties = useCallback(async (budget: string) => {
+    const { data } = await supabase
+      .from("properties")
+      .select("*")
+      .eq("status", "available")
+      .eq("project_type", "new")
+      .order("sort_order", { ascending: true });
+
+    if (!data || data.length === 0) return null;
+    const matched = getMatchingProperties(data as Property[], budget);
+    if (matched.length === 0) return null;
+    setSuggestedProperties(matched);
+    return matched;
+  }, []);
+
+  const handlePropertySelect = (p: Property) => {
+    setSelectedProperty(p);
+    setMessages((prev) => [...prev, { role: "user", text: `I'm interested in: ${p.title}` }]);
+    const nextStep = STEPS[step + 1];
+    showBotMessage(
+      `🏡 Great choice! "${p.title}" is a fantastic option. ${nextStep.emoji} ${nextStep.label}`,
+    );
+    setStep(step + 1);
   };
 
   const advanceStep = () => {
@@ -248,6 +355,31 @@ const LeadCaptureBot = () => {
 
     if (step < STEPS.length - 1) {
       const nextStep = STEPS[step + 1];
+
+      // After budget — show matching properties inline
+      if (currentStep.key === "investment_budget") {
+        showBotMessage(
+          "🔍 Let me check our available properties that match your budget…",
+          async () => {
+            const matched = await showMatchingProperties(currentValue);
+            if (matched && matched.length > 0) {
+              showBotMessage(
+                `✨ Here are ${matched.length} properties I found for you! Tap one to learn more, or skip to continue.`,
+                () => {
+                  showBotProperties(matched, () => {
+                    // After showing properties, also queue the next question but wait for selection or skip
+                  });
+                },
+              );
+            } else {
+              showBotMessage(`${nextStep.emoji} ${nextStep.label}`);
+              setStep(step + 1);
+            }
+          },
+        );
+        return;
+      }
+
       showBotMessage(`${nextStep.emoji} ${nextStep.label}`);
       setStep(step + 1);
     } else {
@@ -258,16 +390,19 @@ const LeadCaptureBot = () => {
     }
   };
 
+  // After budget step with properties shown, skip allows user to continue without selecting
+  const handleSkipPropertySelection = () => {
+    setSuggestedProperties([]);
+    const nextStep = STEPS[step + 1];
+    showBotMessage(`${nextStep.emoji} ${nextStep.label}`);
+    setStep(step + 1);
+  };
+
   const goBack = () => {
     if (step > 0) {
       setMessages((prev) => prev.slice(0, -2));
       setStep(step - 1);
     }
-  };
-
-  const budgetToNumber = (val: string): number => {
-    const map: Record<string, number> = { "€250,000": 250000, "€500,000": 500000, "€800,000": 800000, "€1M+": 1000000 };
-    return map[val] || Number(val.replace(/[^0-9]/g, "")) || 250000;
   };
 
   // Called after all conversation steps — show CAPTCHA before DB insert
@@ -285,7 +420,11 @@ const LeadCaptureBot = () => {
     };
 
     const { data, error } = await supabase.functions.invoke("submit-lead", {
-      body: { lead: leadData, turnstileToken: token },
+      body: {
+        lead: leadData,
+        turnstileToken: token,
+        ...(selectedProperty ? { interested_property_id: selectedProperty.id, interested_property_title: selectedProperty.title } : {}),
+      },
     });
     setLoading(false);
 
@@ -338,6 +477,8 @@ const LeadCaptureBot = () => {
       setMessages([]);
       setShowCaptcha(false);
       setTurnstileToken(null);
+      setSuggestedProperties([]);
+      setSelectedProperty(null);
     }
   };
 
@@ -349,8 +490,13 @@ const LeadCaptureBot = () => {
     setMessages([]);
     setShowCaptcha(false);
     setTurnstileToken(null);
+    setSuggestedProperties([]);
+    setSelectedProperty(null);
     setIsOpen(true);
   };
+
+  // Are we in the "showing properties" interstitial (budget answered but next step not yet advanced)
+  const isShowingProperties = suggestedProperties.length > 0 && currentStep?.key === "investment_budget" && !!form.investment_budget;
 
   const progress = ((step + 1) / STEPS.length) * 100;
 
@@ -394,7 +540,7 @@ const LeadCaptureBot = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 40, scale: 0.9 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed bottom-6 right-6 z-50 flex w-[380px] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[0_25px_60px_-12px_hsl(var(--primary)/0.25)] max-sm:bottom-0 max-sm:right-0 max-sm:left-0 max-sm:w-full max-sm:rounded-none max-sm:rounded-t-2xl max-sm:max-h-[85dvh]"
+            className="fixed bottom-6 right-6 z-50 flex w-[420px] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[0_25px_60px_-12px_hsl(var(--primary)/0.25)] max-sm:bottom-0 max-sm:right-0 max-sm:left-0 max-sm:w-full max-sm:rounded-none max-sm:rounded-t-2xl max-sm:max-h-[90dvh]"
           >
             {/* Header */}
             <div className="relative bg-gradient-to-r from-primary/15 via-primary/10 to-secondary/10 px-5 py-4">
@@ -428,7 +574,7 @@ const LeadCaptureBot = () => {
             <div
               ref={scrollRef}
               className="flex-1 overflow-y-auto px-4 py-4 space-y-3"
-              style={{ maxHeight: "360px", minHeight: "240px" }}
+              style={{ maxHeight: "420px", minHeight: "260px" }}
             >
               <AnimatePresence mode="popLayout">
                 {messages.map((msg, i) => (
@@ -439,15 +585,47 @@ const LeadCaptureBot = () => {
                     transition={{ duration: 0.25, delay: msg.role === "bot" ? 0.15 : 0 }}
                     className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                   >
-                    <div
-                      className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
-                        msg.role === "user"
-                          ? "rounded-br-md bg-primary text-primary-foreground"
-                          : "rounded-bl-md bg-muted text-foreground"
-                      }`}
-                    >
-                      {msg.text}
-                    </div>
+                    {msg.type === "properties" ? (
+                      <div className="w-full space-y-2">
+                        <div className="grid gap-2">
+                          {msg.properties.map((p) => (
+                            <PropertyChatCard
+                              key={p.id}
+                              property={p}
+                              onSelect={handlePropertySelect}
+                            />
+                          ))}
+                        </div>
+                        {isShowingProperties && (
+                          <div className="flex items-center gap-2 pt-1">
+                            <button
+                              onClick={handleSkipPropertySelection}
+                              className="text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground transition-colors"
+                            >
+                              Skip — I'll decide later
+                            </button>
+                            <a
+                              href="/properties"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1 text-xs text-primary hover:underline"
+                            >
+                              View all <ExternalLink className="h-3 w-3" />
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div
+                        className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+                          msg.role === "user"
+                            ? "rounded-br-md bg-primary text-primary-foreground"
+                            : "rounded-bl-md bg-muted text-foreground"
+                        }`}
+                      >
+                        {(msg as any).text}
+                      </div>
+                    )}
                   </motion.div>
                 ))}
               </AnimatePresence>
@@ -467,6 +645,11 @@ const LeadCaptureBot = () => {
                     <h4 className="text-base font-semibold text-foreground">
                       Thank you, {form.full_name.split(" ")[0]}!
                     </h4>
+                    {selectedProperty && (
+                      <p className="mt-1 text-xs text-primary font-medium">
+                        📌 Enquiry submitted for: {selectedProperty.title}
+                      </p>
+                    )}
                     {isConsultation ? (
                       <>
                         <p className="mt-1 text-sm text-muted-foreground">
@@ -522,8 +705,8 @@ const LeadCaptureBot = () => {
               </div>
             )}
 
-            {/* Input area */}
-            {!submitted && !showCaptcha && currentStep && (
+            {/* Input area — hidden while showing property selection interstitial */}
+            {!submitted && !showCaptcha && currentStep && !isShowingProperties && (
               <div className="border-t border-border bg-background/50 px-4 py-3">
                 {currentStep.type === "select" ? (
                   <div className="flex flex-wrap gap-2">
@@ -542,6 +725,29 @@ const LeadCaptureBot = () => {
                               `✨ Great! To personalise your session, let me gather a few quick details first. ${STEPS[1].emoji} ${STEPS[1].label}`,
                             );
                             setStep(1);
+                            return;
+                          }
+
+                          // After budget — fetch matching properties
+                          if (currentStep.key === "investment_budget") {
+                            showBotMessage(
+                              "🔍 Let me check our available properties that match your budget…",
+                              async () => {
+                                const matched = await showMatchingProperties(opt);
+                                if (matched && matched.length > 0) {
+                                  showBotMessage(
+                                    `✨ Here are ${matched.length} hand-picked properties that match your budget! Tap one to enquire, or skip to continue.`,
+                                    () => {
+                                      showBotProperties(matched);
+                                    },
+                                  );
+                                } else {
+                                  const nextStep = STEPS[step + 1];
+                                  showBotMessage(`${nextStep.emoji} ${nextStep.label}`);
+                                  setStep(step + 1);
+                                }
+                              },
+                            );
                             return;
                           }
 
