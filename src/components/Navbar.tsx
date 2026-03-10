@@ -4,8 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "@/contexts/TranslationContext";
-import brandLogo from "@/assets/brand-1.png";
-import brandLight from "@/assets/brand-light.png";
+import maipropLogo from "@/assets/maiprop-logo.png";
 
 const navLinks = [
   { label: "Benefits", href: "#overview" },
