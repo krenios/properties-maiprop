@@ -186,10 +186,10 @@ const Inner = () => {
         <meta property="og:title" content="Your Golden Visa Journey — Step-by-Step Guide" />
         <meta property="og:description" content="The complete step-by-step Greek Golden Visa journey — from consultation to permit issuance." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
-        <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(howToLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
-        <script type="application/ld+json">{JSON.stringify({
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Article",
           "headline": "Your Golden Visa Journey — Step-by-Step Guide",
@@ -202,8 +202,8 @@ const Inner = () => {
           "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE_URL },
           "about": { "@type": "Thing", "name": "Greek Golden Visa Application Process" },
           "inLanguage": "en",
-        })}</script>
-        <script type="application/ld+json">{JSON.stringify({
+        }) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebPage",
           "@id": `${PAGE_URL}#webpage`,
@@ -216,7 +216,7 @@ const Inner = () => {
           "author": { "@id": `${BASE_URL}/#organization` },
           "publisher": { "@id": `${BASE_URL}/#organization` },
           "inLanguage": "en",
-        })}</script>
+        }) }} />
       </Helmet>
 
       <Navbar forceScrolled />
