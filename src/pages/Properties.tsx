@@ -116,6 +116,52 @@ const Inner = () => {
             },
           } : {})
         }) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is the minimum investment for a Greek Golden Visa through property?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The minimum investment is €250,000 for properties in designated zones of Greece, including most of Athens, Piraeus, and the Greek Riviera. This threshold applies to properties purchased through mAI Investments."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I rent out my Greek Golden Visa property?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. All properties listed here are fully licensed for short-term rental and generate 5–7% annual rental yield. mAI Investments manages the full rental cycle so you earn passive income from day one without self-managing."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How long does the Greek Golden Visa property purchase process take?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "From property selection to visa approval typically takes 4–6 months: 1–2 months for due diligence and legal completion, then 2–4 months for the Greek government to issue the residency permit."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Do I need to live in Greece to keep my Golden Visa?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. The Greek Golden Visa has no minimum stay requirement. You can maintain your EU residency permit simply by keeping the property investment. After 7 years of holding the visa you become eligible to apply for Greek citizenship."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are these properties fully compliant with Golden Visa requirements?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Every property on this page has been independently verified by our legal team for Golden Visa compliance — including correct zoning, clear title, and meeting the €250,000 threshold. mAI Investments also handles the full visa application process."
+              }
+            }
+          ]
+        }) }} />
       </Helmet>
 
       <main className="min-h-screen bg-background">

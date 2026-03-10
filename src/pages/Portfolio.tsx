@@ -78,6 +78,52 @@ const Inner = () => {
             "name": "Greek Golden Visa Delivered Properties"
           }
         }) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How many Golden Visa properties has mAI Investments delivered?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "mAI Investments has successfully delivered 19+ Golden Visa properties in Athens, with €6.3M in total investment value closed. Every investor in our portfolio holds an active Greek Golden Visa with a 100% success rate."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is the average rental yield on delivered mAI Investments properties?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Delivered properties achieve an average rental yield of 6.4% per year through managed short-term rentals. Properties are fully renovated, furnished, and listed on platforms like Airbnb before investor handover."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Were there any delays in the delivered projects?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. Every project in the mAI Investments track record was delivered on schedule, with no renovation delays or visa rejections. Our in-house project management team oversees each property from acquisition through to rental launch."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I see documentation for delivered properties?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Verified investors can request the full documentation package for any delivered project — including before/after photos, renovation invoices, rental income statements, and Golden Visa approval letters. Contact us to arrange access."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How is the track record verified?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Every project listed in the track record has been legally completed with Greek notary-authenticated title deeds, supported by licensed architect renovation permits and verified Golden Visa approval certificates from the Greek Ministry of Migration."
+              }
+            }
+          ]
+        }) }} />
       </Helmet>
 
       <main className="min-h-screen bg-background">
