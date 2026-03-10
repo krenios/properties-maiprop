@@ -21,7 +21,7 @@ function brandWrap(innerHtml: string): string {
   <div style="max-width:520px;margin:0 auto;padding:0;">
     <!-- Header -->
     <div style="background:#000014;padding:28px 0;text-align:center;border-radius:8px 8px 0 0;">
-      <img src="https://cqxcztafhnwkhxgaylne.supabase.co/storage/v1/object/public/email-assets/logo.webp?v=1" alt="mAI Prop" width="140" style="display:block;margin:0 auto;" />
+      <img src="https://cqxcztafhnwkhxgaylne.supabase.co/storage/v1/object/public/email-assets/logo-new.png" alt="mAI Prop" width="180" style="display:block;margin:0 auto;" />
     </div>
 
     <!-- Body -->

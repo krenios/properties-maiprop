@@ -1,5 +1,4 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -18,7 +17,7 @@ function brandWrap(innerHtml: string): string {
   <div style="max-width:520px;margin:0 auto;padding:0;">
     <!-- Header -->
     <div style="background:#000014;padding:28px 0;text-align:center;border-radius:8px 8px 0 0;">
-      <img src="https://cqxcztafhnwkhxgaylne.supabase.co/storage/v1/object/public/email-assets/logo.webp?v=1" alt="mAI Prop" width="140" style="display:block;margin:0 auto;" />
+      <img src="https://cqxcztafhnwkhxgaylne.supabase.co/storage/v1/object/public/email-assets/logo-new.png" alt="mAI Prop" width="180" style="display:block;margin:0 auto;" />
     </div>
 
     <!-- Body -->
@@ -51,7 +50,7 @@ function escapeHtml(text: string): string {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
