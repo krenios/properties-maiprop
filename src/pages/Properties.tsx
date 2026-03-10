@@ -77,15 +77,15 @@ const Inner = () => {
         <meta property="og:description" content="Browse all Golden Visa eligible properties in Athens, Piraeus, and the Greek Riviera. Pre-verified from €250,000." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
         <meta property="og:image:alt" content="Golden Visa eligible properties in Athens, Greece — mAI Investments" />
-        <script type="application/ld+json">{JSON.stringify({
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           "itemListElement": [
             { "@type": "ListItem", "position": 1, "name": "Home", "item": `${BASE_URL}/` },
             { "@type": "ListItem", "position": 2, "name": "Golden Visa Properties in Greece", "item": `${BASE_URL}/properties/` },
           ]
-        })}</script>
-        <script type="application/ld+json">{JSON.stringify({
+        }) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           "@id": `${BASE_URL}/properties/#collectionpage`,
@@ -115,7 +115,7 @@ const Inner = () => {
               "offerCount": current.length,
             },
           } : {})
-        })}</script>
+        }) }} />
       </Helmet>
 
       <main className="min-h-screen bg-background">
