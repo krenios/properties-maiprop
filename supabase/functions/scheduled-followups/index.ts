@@ -13,7 +13,7 @@ const SCHEDULE = [
   { step: 3, daysAfter: 29 },
 ];
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
