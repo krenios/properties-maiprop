@@ -239,8 +239,6 @@ const Index = () => {
 
 
 
-import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
-import logoFooter from "@/assets/logo-footer.webp";
 
 const Footer = () => {
   return (
