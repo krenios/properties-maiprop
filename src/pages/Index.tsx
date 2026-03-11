@@ -236,7 +236,269 @@ const Index = () => {
       <Suspense fallback={<div className="min-h-[500px]" />}>
         <ContactSection />
       </Suspense>
-      <footer className="border-t border-border bg-background text-center py-[12px]" role="contentinfo">
+
+      import { Link } from "react-router-dom";
+import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
+import logoFooter from "@/assets/logo-footer.webp";
+
+const Footer = () => {
+  return (
+    <footer className="bg-card border-t border-border">
+      <div className="container mx-auto px-4 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-10">
+          <div>
+            <Link to="/">
+              <img src={logoFooter} alt="mAI prop OS" className="h-10 mb-4" />
+            </Link>
+            <p className="text-xs text-muted-foreground leading-relaxed mb-4">
+              <span className="font-semibold text-foreground">mAI prop OS</span> is the analytics platform — AI-powered
+              tools to discover, evaluate and manage real estate investments.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="text-primary font-display font-semibold text-sm mb-4">Modules</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>
+                <Link to="/modules#map" className="hover:text-primary transition-colors">
+                  Map
+                </Link>
+              </li>
+              <li>
+                <Link to="/modules#market" className="hover:text-primary transition-colors">
+                  Market
+                </Link>
+              </li>
+              <li>
+                <Link to="/modules#valuations" className="hover:text-primary transition-colors">
+                  Valuations
+                </Link>
+              </li>
+              <li>
+                <Link to="/modules#reports" className="hover:text-primary transition-colors">
+                  Reports
+                </Link>
+              </li>
+              <li>
+                <Link to="/modules#portfolio" className="hover:text-primary transition-colors">
+                  Portfolio
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-primary font-display font-semibold text-sm mb-4">Benefits</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>
+                <Link to="/benefits#investors" className="hover:text-primary transition-colors">
+                  Investors
+                </Link>
+              </li>
+              <li>
+                <Link to="/benefits#developers" className="hover:text-primary transition-colors">
+                  Developers
+                </Link>
+              </li>
+              <li>
+                <Link to="/benefits#agents" className="hover:text-primary transition-colors">
+                  Agents
+                </Link>
+              </li>
+              <li>
+                <Link to="/benefits#fund-managers" className="hover:text-primary transition-colors">
+                  Fund Managers
+                </Link>
+              </li>
+              <li>
+                <Link to="/benefits#servicers" className="hover:text-primary transition-colors">
+                  NPL Services
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-primary font-display font-semibold text-sm mb-4">Resources</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>
+                <Link to="/resources" className="hover:text-primary transition-colors">
+                  All Articles
+                </Link>
+              </li>
+              <li>
+                <Link to="/resources?category=AI+%26+Technology" className="hover:text-primary transition-colors">
+                  AI & Technology
+                </Link>
+              </li>
+              <li>
+                <Link to="/resources?category=Market+Insights" className="hover:text-primary transition-colors">
+                  Market Insights
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-primary font-display font-semibold text-sm mb-4">Company</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>
+                <Link to="/pricing" className="hover:text-primary transition-colors">
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link to="/faqs" className="hover:text-primary transition-colors">
+                  FAQs
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="hover:text-primary transition-colors">
+                  Contact Us
+                </Link>
+              </li>
+              <li>
+                <a
+                  href="https://maiprop.co"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors inline-flex items-center gap-1"
+                >
+                  mAI prop
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" className="opacity-50">
+                    <path
+                      d="M1 9L9 1M9 1H3M9 1V7"
+                      stroke="currentColor"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://properties.maiprop.co"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors inline-flex items-center gap-1"
+                >
+                  mAI properties
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" className="opacity-50">
+                    <path
+                      d="M1 9L9 1M9 1H3M9 1V7"
+                      stroke="currentColor"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        {/* OUR PRODUCTS bar */}
+        <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center gap-4 flex-wrap">
+          <span className="text-xs font-semibold tracking-widest text-muted-foreground uppercase whitespace-nowrap mr-2">Our Products</span>
+          <div className="flex flex-wrap gap-3">
+            {/* mAI prop OS — current site */}
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-primary/40 bg-primary/10 text-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              <div>
+                <p className="text-xs font-semibold leading-none">mAI prop OS</p>
+                <p className="text-[10px] leading-none mt-0.5 opacity-70">Operator platform</p>
+              </div>
+            </div>
+            {/* mAI properties */}
+            <a
+              href="https://properties.maiprop.co"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-card/60 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+              <div>
+                <p className="text-xs font-semibold leading-none">mAI properties</p>
+                <p className="text-[10px] leading-none mt-0.5 opacity-70">Investment &amp; Golden Visa</p>
+              </div>
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" className="opacity-40 ml-0.5"><path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </a>
+            {/* mAI prop */}
+            <a
+              href="https://maiprop.co"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-card/60 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <div>
+                <p className="text-xs font-semibold leading-none">mAI prop</p>
+                <p className="text-[10px] leading-none mt-0.5 opacity-70">Property listings portal</p>
+              </div>
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" className="opacity-40 ml-0.5"><path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div className="mt-6 pt-6 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4 flex-wrap">
+          <p className="text-xs text-muted-foreground">mAI prop OS © 2026 | All Rights Reserved</p>
+          <div className="flex items-center gap-4">
+            <a
+              href="https://www.facebook.com/maiprop"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              <Facebook size={18} />
+            </a>
+            <a
+              href="https://www.instagram.com/maipropos/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              <Instagram size={18} />
+            </a>
+            <a
+              href="https://www.linkedin.com/company/mai-prop/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              <Linkedin size={18} />
+            </a>
+            <a
+              href="https://www.youtube.com/@maipropos"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              <Youtube size={18} />
+            </a>
+          </div>
+          <div className="flex items-center gap-4 flex-wrap">
+            <Link
+              to="/terms-and-conditions"
+              className="text-xs text-muted-foreground hover:text-primary transition-colors"
+            >
+              Terms & Conditions
+            </Link>
+            <span className="text-muted-foreground/30 text-xs">|</span>
+            <Link to="/privacy-policy" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+              Privacy Policy
+            </Link>
+            <span className="text-muted-foreground/30 text-xs">|</span>
+            <Link to="/cookie-policy" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+              Cookie Policy
+            </Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+         <footer className="border-t border-border bg-background text-center py-[12px]" role="contentinfo">
         <div className="container mx-auto flex flex-col items-center gap-4 px-6">
           <div className="flex items-center gap-6">
             <a
