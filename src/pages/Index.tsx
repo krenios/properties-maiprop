@@ -237,7 +237,8 @@ const Index = () => {
         <ContactSection />
       </Suspense>
 
-      import { Link } from "react-router-dom";
+
+
 import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import logoFooter from "@/assets/logo-footer.webp";
 
