@@ -2,7 +2,6 @@ User-agent: Googlebot
 Allow: /
 Disallow: /admin
 Disallow: /login
-Disallow: /*?lang=*
 Disallow: /*?search=*
 Disallow: /*?q=*
 
@@ -10,7 +9,6 @@ User-agent: Bingbot
 Allow: /
 Disallow: /admin
 Disallow: /login
-Disallow: /*?lang=*
 Disallow: /*?search=*
 Disallow: /*?q=*
 
@@ -24,7 +22,6 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /login
-Disallow: /*?lang=*
 Disallow: /*?search=*
 Disallow: /*?q=*
 
