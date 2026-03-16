@@ -217,10 +217,6 @@ const Index = () => {
         <PlatformReference />
       </Suspense>
       <SectionDivider />
-      <Suspense fallback={<div className="min-h-[500px]" />}>
-        <ValueSection />
-      </Suspense>
-      <SectionDivider />
       <Suspense fallback={<div className="min-h-[600px]" />}>
         <JourneySection />
       </Suspense>
