@@ -12,7 +12,7 @@ const CookieConsent = lazy(() => import("@/components/CookieConsent"));
 const GoldenVisaStats = lazy(() => import("@/components/GoldenVisaStats"));
 const InvestmentOpportunities = lazy(() => import("@/components/InvestmentOpportunities"));
 const DeliveredProjects = lazy(() => import("@/components/DeliveredProjects"));
-const ValueSection = lazy(() => import("@/components/ValueSection"));
+
 const PlatformReference = lazy(() => import("@/components/PlatformReference"));
 const JourneySection = lazy(() => import("@/components/JourneySection"));
 const ContactSection = lazy(() => import("@/components/ContactSection"));
@@ -217,10 +217,6 @@ const Index = () => {
         <PlatformReference />
       </Suspense>
       <SectionDivider />
-      <Suspense fallback={<div className="min-h-[500px]" />}>
-        <ValueSection />
-      </Suspense>
-      <SectionDivider />
       <Suspense fallback={<div className="min-h-[600px]" />}>
         <JourneySection />
       </Suspense>
@@ -261,9 +257,9 @@ const Index = () => {
               href="https://app.maiprop.co"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg border border-border/50 bg-background px-3 py-1.5 text-xs font-medium text-foreground transition-all hover:border-primary/50 hover:bg-primary/5"
+              className="inline-flex items-center gap-2 rounded-lg border border-border/50 bg-background px-3 py-1.5 text-xs font-medium text-foreground transition-all hover:border-secondary/50 hover:bg-secondary/5"
             >
-              <svg className="h-3.5 w-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              <svg className="h-3.5 w-3.5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
               <span>mAI Prop OS</span>
               <span className="text-muted-foreground">Operator platform</span>
               <svg className="h-3 w-3 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M7 17L17 7M7 7h10v10"/></svg>
@@ -272,16 +268,16 @@ const Index = () => {
               href="https://preview--maiprop-listing-site.lovable.app/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg border border-border/50 bg-background px-3 py-1.5 text-xs font-medium text-foreground transition-all hover:border-secondary/50 hover:bg-secondary/5"
+              className="inline-flex items-center gap-2 rounded-lg border border-border/50 bg-background px-3 py-1.5 text-xs font-medium text-foreground transition-all hover:border-primary/50 hover:bg-primary/5"
             >
-              <svg className="h-3.5 w-3.5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-              <span>mAI Properties</span>
+              <svg className="h-3.5 w-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              <span>mAI Prop</span>
               <span className="text-muted-foreground">Investment & Golden Visa</span>
               <svg className="h-3 w-3 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M7 17L17 7M7 7h10v10"/></svg>
             </a>
             <div className="inline-flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary">
               <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-              <span>mAI Prop</span>
+              <span>mAI Properties</span>
               <span className="text-primary/70">You are here</span>
             </div>
           </div>

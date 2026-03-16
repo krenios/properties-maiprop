@@ -1,20 +1,41 @@
-import { Search, BarChart3, ShieldCheck, LineChart, Monitor, Building2, ArrowUpRight } from "lucide-react";
+import { Monitor, Building2, ArrowUpRight, Search, BarChart3, ShieldCheck, LineChart, Database, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "./ScrollReveal";
 import { useTranslation } from "@/contexts/TranslationContext";
+import platformListing from "@/assets/platform-listing.png";
+import platformOs from "@/assets/platform-os.png";
 
-const osFeatures = [
-  { icon: Search, title: "Self-Service Property Search", desc: "AI-powered platform to browse and filter Golden Visa properties" },
-  { icon: BarChart3, title: "Complete Data Transparency", desc: "Access market data, valuations, and historical trends" },
-  { icon: LineChart, title: "Instant ROI Calculators", desc: "Model rental income, appreciation, and total returns" },
-  { icon: ShieldCheck, title: "Visa Eligibility Checker", desc: "Instantly verify property Golden Visa qualification" },
-];
-
-const listingFeatures = [
-  { icon: Building2, title: "Curated Property Listings", desc: "Browse verified Golden Visa-compliant properties in Athens & Riviera" },
-  { icon: Search, title: "Smart Filters", desc: "Filter by price, location, yield and visa eligibility instantly" },
-  { icon: BarChart3, title: "Investment Analytics", desc: "Compare properties side by side with yield and appreciation data" },
-  { icon: ShieldCheck, title: "Verified Compliance", desc: "Every listing pre-checked for Golden Visa qualification" },
+const platforms = [
+  {
+    tag: "Investment & Golden Visa",
+    tagIcon: Building2,
+    tagColor: "text-primary border-primary/20 bg-primary/10",
+    name: "mAI Properties",
+    desc: "Browse and compare verified Golden Visa-compliant properties in Athens & the Riviera — with yield data, compliance checks, and instant enquiry.",
+    features: ["Curated Golden Visa listings", "Smart filters by yield, location & price", "Compliance pre-verification", "Investment analytics & comparisons"],
+    featureColor: "bg-primary/10 text-primary",
+    cta: "Browse Properties",
+    ctaClass: "bg-primary text-primary-foreground shadow-[0_0_30px_hsl(179_90%_63%/0.35)] hover:shadow-[0_0_50px_hsl(179_90%_63%/0.5)] hover:bg-primary/90",
+    href: "https://preview--maiprop-listing-site.lovable.app/",
+    image: platformListing,
+    imageAlt: "mAI Properties listing platform",
+    glowColor: "bg-primary/10",
+  },
+  {
+    tag: "Operator Platform",
+    tagIcon: Monitor,
+    tagColor: "text-secondary border-secondary/20 bg-secondary/10",
+    name: "mAI Prop OS",
+    desc: "The all-in-one operating system for real estate professionals — manage leads, listings, analytics and AI-powered due diligence in one place.",
+    features: ["Lead & CRM pipeline", "Property management & analytics", "AI-powered due diligence", "ROI forecasting & IRR models"],
+    featureColor: "bg-secondary/10 text-secondary",
+    cta: "Open mAI Prop OS",
+    ctaClass: "bg-secondary text-secondary-foreground shadow-[0_0_30px_hsl(263_86%_64%/0.35)] hover:shadow-[0_0_50px_hsl(263_86%_64%/0.5)] hover:bg-secondary/90",
+    href: "https://app.maiprop.co",
+    image: platformOs,
+    imageAlt: "mAI Prop OS operator dashboard",
+    glowColor: "bg-secondary/10",
+  },
 ];
 
 const PlatformReference = () => {
@@ -22,101 +43,74 @@ const PlatformReference = () => {
 
   return (
     <section id="platform" className="relative overflow-hidden bg-background py-16 sm:py-24">
-      <div className="pointer-events-none absolute left-1/4 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-primary/8 blur-[140px]" />
-      <div className="pointer-events-none absolute right-1/4 top-1/2 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-secondary/8 blur-[120px]" />
+      <div className="pointer-events-none absolute left-1/4 top-1/3 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-primary/6 blur-[160px]" />
+      <div className="pointer-events-none absolute right-1/4 bottom-1/3 h-[500px] w-[500px] translate-x-1/2 rounded-full bg-secondary/6 blur-[140px]" />
 
       <div className="relative container mx-auto px-6">
         <ScrollReveal>
-          <div className="mb-10 text-center">
+          <div className="mb-14 text-center">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary">
               <Monitor className="h-4 w-4" /> {t("Our Products")}
             </div>
-            <h2 className="text-3xl font-bold sm:text-4xl">
+            <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">
               {t("Two platforms,")}{" "}
               <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 {t("one ecosystem")}
               </span>
             </h2>
-            <p className="mt-3 text-muted-foreground max-w-xl mx-auto text-sm">
-              {t("Whether you're an operator or an investor, our suite of tools gives you the data and access to make the right move.")}
+            <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+              {t("Whether you're browsing as an investor or operating as a professional — our suite covers every step of the Greek Golden Visa journey.")}
             </p>
           </div>
         </ScrollReveal>
 
-        <div className="grid gap-6 md:grid-cols-2">
-          {/* mAI Prop OS */}
-          <ScrollReveal>
-            <div className="group relative flex flex-col rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-8 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_0_40px_hsl(179_90%_63%/0.08)] h-full">
-              <div className="mb-6 flex items-start justify-between">
-                <div>
-                  <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                    <Monitor className="h-3 w-3" /> Operator Platform
+        <div className="flex flex-col gap-16">
+          {platforms.map((p, i) => (
+            <ScrollReveal key={p.name}>
+              <div className={`grid gap-10 lg:gap-16 items-center lg:grid-cols-2 ${i % 2 === 1 ? "lg:[direction:rtl]" : ""}`}>
+                {/* Text side */}
+                <div className={i % 2 === 1 ? "[direction:ltr]" : ""}>
+                  <div className={`mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold ${p.tagColor}`}>
+                    <p.tagIcon className="h-3.5 w-3.5" /> {p.tag}
                   </div>
-                  <h3 className="text-2xl font-bold">mAI Prop OS</h3>
-                  <p className="text-muted-foreground text-sm mt-1">
-                    {t("The all-in-one operator platform for Golden Visa property professionals")}
-                  </p>
+                  <h3 className="text-3xl font-bold mb-3">{p.name}</h3>
+                  <p className="text-muted-foreground mb-6 leading-relaxed">{t(p.desc)}</p>
+
+                  <ul className="space-y-2.5 mb-8">
+                    {p.features.map((f) => (
+                      <li key={f} className="flex items-center gap-3 text-sm">
+                        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${p.featureColor}`}>
+                          <svg className="h-2.5 w-2.5" fill="currentColor" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3"/></svg>
+                        </span>
+                        {t(f)}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Button asChild size="lg" className={`gap-2 rounded-full px-8 font-semibold transition-all ${p.ctaClass}`}>
+                    <a href={p.href} target="_blank" rel="noopener noreferrer">
+                      {t(p.cta)} <ArrowUpRight className="h-4 w-4" />
+                    </a>
+                  </Button>
+                </div>
+
+                {/* Image side */}
+                <div className={`relative ${i % 2 === 1 ? "[direction:ltr]" : ""}`}>
+                  <div className={`pointer-events-none absolute inset-0 rounded-2xl ${p.glowColor} blur-[60px] scale-95 opacity-60`} />
+                  <div className="relative rounded-2xl overflow-hidden border border-border/40 shadow-2xl">
+                    <img
+                      src={p.image}
+                      alt={p.imageAlt}
+                      className="w-full h-auto object-cover"
+                      loading="lazy"
+                    />
+                    {/* Subtle bottom fade */}
+                    <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background/40 to-transparent" />
+                  </div>
                 </div>
               </div>
-
-              <ul className="space-y-3 flex-1 mb-8">
-                {osFeatures.map((f) => (
-                  <li key={f.title} className="flex items-start gap-3">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 mt-0.5">
-                      <f.icon className="h-4 w-4 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">{t(f.title)}</p>
-                      <p className="text-xs text-muted-foreground">{t(f.desc)}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-
-              <Button asChild variant="outline" className="w-full rounded-full border-primary/40 gap-2 group-hover:border-primary/70 group-hover:bg-primary/5 transition-all">
-                <a href="https://app.maiprop.co" target="_blank" rel="noopener noreferrer">
-                  {t("Open mAI Prop OS")} <ArrowUpRight className="h-4 w-4" />
-                </a>
-              </Button>
-            </div>
-          </ScrollReveal>
-
-          {/* mAI Properties Listing Site */}
-          <ScrollReveal>
-            <div className="group relative flex flex-col rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-8 transition-all duration-300 hover:border-secondary/40 hover:shadow-[0_0_40px_hsl(var(--secondary)/0.08)] h-full">
-              <div className="mb-6 flex items-start justify-between">
-                <div>
-                  <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-secondary/20 bg-secondary/10 px-3 py-1 text-xs font-semibold text-secondary">
-                    <Building2 className="h-3 w-3" /> Investment & Golden Visa
-                  </div>
-                  <h3 className="text-2xl font-bold">mAI Properties</h3>
-                  <p className="text-muted-foreground text-sm mt-1">
-                    {t("Browse and compare verified Golden Visa properties in Greece")}
-                  </p>
-                </div>
-              </div>
-
-              <ul className="space-y-3 flex-1 mb-8">
-                {listingFeatures.map((f) => (
-                  <li key={f.title} className="flex items-start gap-3">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-secondary/10 mt-0.5">
-                      <f.icon className="h-4 w-4 text-secondary" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">{t(f.title)}</p>
-                      <p className="text-xs text-muted-foreground">{t(f.desc)}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-
-              <Button asChild variant="outline" className="w-full rounded-full border-secondary/40 gap-2 group-hover:border-secondary/70 group-hover:bg-secondary/5 transition-all">
-                <a href="https://preview--maiprop-listing-site.lovable.app/" target="_blank" rel="noopener noreferrer">
-                  {t("Browse Properties")} <ArrowUpRight className="h-4 w-4" />
-                </a>
-              </Button>
-            </div>
-          </ScrollReveal>
+            </ScrollReveal>
+          ))}
         </div>
       </div>
     </section>
