@@ -12,7 +12,7 @@ const platforms = [
     titleLine1: "Greece's #1 AI-Powered",
     titleLine2: " Property Platform",
     titleColor: "text-primary",
-    desc: "The most intelligent real estate listing portal in Greece - transforming the day-to-day of Real Estate in Greek market.",
+    desc: "The most intelligent real estate listing portal in Greece, transforming the day-to-day of Real Estate in Greek market.",
     bullets: [
       "Mark to Market Valuation of every listing ad",
       "Automations & Accessibility",
@@ -20,7 +20,7 @@ const platforms = [
       "AI property search & side-by-side analytics",
     ],
     bulletColor: "text-primary",
-    cta: "Open mAI Prop OS",
+    cta: "Open mAI Prop",
     ctaStyle:
       "bg-primary text-primary-foreground shadow-[0_0_30px_hsl(179_90%_63%/0.4)] hover:bg-primary/90 hover:shadow-[0_0_50px_hsl(179_90%_63%/0.6)]",
     href: "https://maiprop.co",
