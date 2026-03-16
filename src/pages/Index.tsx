@@ -254,7 +254,7 @@ const Index = () => {
           <div className="flex flex-wrap items-center justify-center gap-1.5 rounded-xl border border-border/60 bg-muted/30 px-3 py-2">
             <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mr-2">Our Products</span>
             <a
-              href="https://app.maiprop.co"
+              href="https://os.maiprop.co"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg border border-border/50 bg-background px-3 py-1.5 text-xs font-medium text-foreground transition-all hover:border-secondary/50 hover:bg-secondary/5"
@@ -265,14 +265,14 @@ const Index = () => {
               <svg className="h-3 w-3 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M7 17L17 7M7 7h10v10"/></svg>
             </a>
             <a
-              href="https://preview--maiprop-listing-site.lovable.app/"
+              href="https://maiprop.co"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg border border-border/50 bg-background px-3 py-1.5 text-xs font-medium text-foreground transition-all hover:border-primary/50 hover:bg-primary/5"
             >
               <svg className="h-3.5 w-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
               <span>mAI Prop</span>
-              <span className="text-muted-foreground">Investment & Golden Visa</span>
+              <span className="text-muted-foreground">Real estate listing portal</span>
               <svg className="h-3 w-3 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M7 17L17 7M7 7h10v10"/></svg>
             </a>
             <div className="inline-flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary">
