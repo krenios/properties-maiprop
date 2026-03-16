@@ -553,7 +553,7 @@ const platforms = [
     cta: "Open mAI Prop OS",
     ctaStyle:
       "bg-secondary text-secondary-foreground shadow-[0_0_30px_hsl(263_86%_64%/0.4)] hover:bg-secondary/90 hover:shadow-[0_0_50px_hsl(263_86%_64%/0.6)]",
-    href: "https://app.maiprop.co",
+    href: "https://app.os.maiprop.co",
     MockupComponent: OSDashboardMockup,
     url: "os.maiprop.co",
     reverse: true,
@@ -579,11 +579,12 @@ const PlatformReference = () => {
               Your Ecosystem Partner
             </div>
             <h2 className="text-4xl font-bold sm:text-5xl">
-              Two platforms,{" "}
-              <span className="text-primary">one ecosystem</span>
+              Two platforms, <span className="text-primary">one ecosystem</span>
             </h2>
             <p className="mt-4 mx-auto max-w-2xl text-muted-foreground leading-relaxed">
-              {t("Powered by the same AI infrastructure that drives mAI Prop — Greece's most intelligent real estate data layer, built for investors and professionals.")}
+              {t(
+                "Powered by the same AI infrastructure that drives mAI Prop — Greece's most intelligent real estate data layer, built for investors and professionals.",
+              )}
             </p>
           </div>
         </ScrollReveal>
