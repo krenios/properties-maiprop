@@ -152,7 +152,15 @@ const PlatformReference = () => {
                 <div className="relative flex flex-col items-center justify-center py-6 sm:py-8">
                   <div className="relative flex items-center gap-4 w-full max-w-sm">
                     <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent opacity-60" />
-                    <span className="shrink-0 rounded-full border border-border/50 bg-muted/40 px-4 py-1 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
+                    <span
+                      className="shrink-0 rounded-full border border-transparent px-4 py-1 text-xs font-semibold tracking-widest uppercase"
+                      style={{
+                        background: "linear-gradient(hsl(var(--background)), hsl(var(--background))) padding-box, linear-gradient(90deg, hsl(var(--primary)/0.3), hsl(var(--secondary)/0.6), hsl(var(--primary)/0.3)) border-box",
+                        color: "hsl(var(--muted-foreground))",
+                        backgroundSize: "200% auto",
+                        animation: "shimmer 3s linear infinite",
+                      }}
+                    >
                       Also in the ecosystem
                     </span>
                     <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent opacity-60" />
