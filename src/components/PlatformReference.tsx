@@ -61,10 +61,11 @@ const PlatformReference = () => {
       <div className="pointer-events-none absolute right-0 bottom-1/4 h-[500px] w-[500px] rounded-full bg-secondary/6 blur-[160px]" />
 
       <div className="relative container mx-auto px-6">
-        <div className="flex flex-col gap-24 sm:gap-32">
-          {platforms.map((p) => (
-            <ScrollReveal key={p.url}>
-              <div className={`grid items-center gap-12 lg:gap-20 lg:grid-cols-2 ${p.reverse ? "lg:[direction:rtl]" : ""}`}>
+        <div className="flex flex-col">
+          {platforms.map((p, i) => (
+            <div key={p.url}>
+              <ScrollReveal>
+              <div className={`grid items-center gap-12 lg:gap-20 lg:grid-cols-2 py-16 sm:py-24 ${p.reverse ? "lg:[direction:rtl]" : ""}`}>
 
                 {/* Text */}
                 <div className={p.reverse ? "[direction:ltr]" : ""}>
