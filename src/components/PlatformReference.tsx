@@ -1,4 +1,4 @@
-import { Monitor, Building2, ArrowUpRight, Sparkles } from "lucide-react";
+import { Monitor, ArrowUpRight, Sparkles, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "./ScrollReveal";
 import { useTranslation } from "@/contexts/TranslationContext";
@@ -9,18 +9,18 @@ const platforms = [
   {
     badge: "POWERED BY MAI PROP · GREECE'S #1 AI-POWERED PROPERTY PLATFORM",
     badgeIcon: Sparkles,
-    titleLine1: "Greece's Golden Visa",
-    titleLine2: "Property Search",
+    titleLine1: "Secure Your European",
+    titleLine2: "Golden Visa in Greece",
     titleColor: "text-primary",
-    desc: "Every verified property on mAI Prop is powered by our curated listings platform — aggregating Golden Visa-compliant properties across Athens, Piraeus, Glyfada and the Athenian Riviera.",
+    desc: "EU residency through €250K+ Greek real estate investments. Live freely, invest wisely, and protect your global future — with AI-matched properties across Athens, Glyfada and the Athenian Riviera.",
     bullets: [
-      "Verified Golden Visa-eligible listings from €250K",
-      "Smart filters by yield, location & property type",
-      "Instant compliance pre-verification badges",
-      "Side-by-side investment analytics & comparisons",
+      "Golden Visa-eligible listings from €250K",
+      "6–9 months to visa approval",
+      "Schengen access across 27 countries",
+      "AI property search & side-by-side investment analytics",
     ],
     bulletColor: "text-primary",
-    cta: "Browse Properties",
+    cta: "Start Your Golden Visa",
     ctaStyle: "bg-primary text-primary-foreground shadow-[0_0_30px_hsl(179_90%_63%/0.4)] hover:bg-primary/90 hover:shadow-[0_0_50px_hsl(179_90%_63%/0.6)]",
     href: "https://maiprop.co",
     image: platformListing,
@@ -31,15 +31,15 @@ const platforms = [
   {
     badge: "POWERED BY MAI PROP OS",
     badgeIcon: Monitor,
-    titleLine1: "Greece's Real Estate",
-    titleLine2: "Data Gateway",
+    titleLine1: "Gain The Edge In",
+    titleLine2: "Greek Real Estate",
     titleColor: "text-secondary",
-    desc: "Every data point on mAI Prop is powered by mAI Prop OS — our proprietary data platform aggregating Greek cadastre records, judicial auctions, price indices, and predictive analytics into one live dashboard.",
+    desc: "mAI Prop OS is the professional data platform powering every insight on this site — aggregating cadastre records, judicial auctions, price indices, and predictive analytics into one live dashboard.",
     bullets: [
       "Real-time €/m² indices for every Greek region",
-      "3,200+ monthly judicial & bank auctions",
+      "3,200+ monthly judicial & bank auctions tracked",
       "AI-powered investment scoring & portfolio tools",
-      "Automated property reports in minutes",
+      "Mapped data & automated property reports",
     ],
     bulletColor: "text-secondary",
     cta: "Open mAI Prop OS",
