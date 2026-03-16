@@ -1,4 +1,4 @@
-import { Monitor, Building2, ArrowUpRight } from "lucide-react";
+import { Monitor, Building2, ArrowUpRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "./ScrollReveal";
 import { useTranslation } from "@/contexts/TranslationContext";
@@ -7,8 +7,8 @@ import platformOs from "@/assets/platform-os.png";
 
 const platforms = [
   {
-    badge: "POWERED BY MAI PROPERTIES",
-    badgeIcon: Building2,
+    badge: "POWERED BY MAI PROP · GREECE'S #1 AI-POWERED PROPERTY PLATFORM",
+    badgeIcon: Sparkles,
     titleLine1: "Greece's Golden Visa",
     titleLine2: "Property Search",
     titleColor: "text-primary",
@@ -22,10 +22,10 @@ const platforms = [
     bulletColor: "text-primary",
     cta: "Browse Properties",
     ctaStyle: "bg-primary text-primary-foreground shadow-[0_0_30px_hsl(179_90%_63%/0.4)] hover:bg-primary/90 hover:shadow-[0_0_50px_hsl(179_90%_63%/0.6)]",
-    href: "https://preview--maiprop-listing-site.lovable.app/",
+    href: "https://maiprop.co",
     image: platformListing,
-    imageAlt: "mAI Properties listing platform",
-    url: "properties.maiprop.co",
+    imageAlt: "mAI Prop listing platform",
+    url: "maiprop.co",
     reverse: false,
   },
   {
