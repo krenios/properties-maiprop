@@ -12,7 +12,7 @@ const CookieConsent = lazy(() => import("@/components/CookieConsent"));
 const GoldenVisaStats = lazy(() => import("@/components/GoldenVisaStats"));
 const InvestmentOpportunities = lazy(() => import("@/components/InvestmentOpportunities"));
 const DeliveredProjects = lazy(() => import("@/components/DeliveredProjects"));
-const ValueSection = lazy(() => import("@/components/ValueSection"));
+
 const PlatformReference = lazy(() => import("@/components/PlatformReference"));
 const JourneySection = lazy(() => import("@/components/JourneySection"));
 const ContactSection = lazy(() => import("@/components/ContactSection"));
