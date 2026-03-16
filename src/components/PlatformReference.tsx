@@ -1,10 +1,246 @@
-import { Monitor, ArrowUpRight, Sparkles, Globe } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Monitor, ArrowUpRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "./ScrollReveal";
 import { useTranslation } from "@/contexts/TranslationContext";
-import platformListing from "@/assets/platform-listing.png";
-import platformOs from "@/assets/platform-os.png";
 
+// ── OS Dashboard Mockup (faithful to os.maiprop.co) ──────────────────────────
+function OSDashboardMockup() {
+  const [flickeringIdx, setFlickeringIdx] = useState<number | null>(null);
+  const [prices, setPrices] = useState([2860, 1920, 6450, 3772, 2290, 5120, 4180]);
+
+  useEffect(() => {
+    const basePrices = [2860, 1920, 6450, 3772, 2290, 5120, 4180];
+    let timer: ReturnType<typeof setTimeout>;
+    const tick = () => {
+      const idx = Math.floor(Math.random() * basePrices.length);
+      const base = basePrices[idx];
+      const delta = Math.round(base * (0.001 + Math.random() * 0.003) * (Math.random() > 0.35 ? 1 : -1));
+      setPrices((prev) => prev.map((p, i) => i === idx ? p + delta : p));
+      setFlickeringIdx(idx);
+      setTimeout(() => setFlickeringIdx(null), 700);
+      timer = setTimeout(tick, 2800 + Math.random() * 600);
+    };
+    timer = setTimeout(tick, 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const marketData = [
+    { city: "Athens", delta: "▲1.3%" },
+    { city: "Thessaloniki", delta: "▲0.8%" },
+    { city: "Mykonos", delta: "▲2.3%" },
+    { city: "Glyfada", delta: "▲1.7%" },
+    { city: "Rhodes", delta: "▲3.1%" },
+    { city: "Santorini", delta: "▲1.9%" },
+    { city: "Kifisia", delta: "▲0.6%" },
+  ];
+
+  const sparklines = [
+    "M0,10 C5,8 10,6 15,4 C20,2 25,5 30,2",
+    "M0,8 C5,10 10,7 15,9 C20,5 25,3 30,4",
+    "M0,10 C5,9 10,6 15,7 C20,4 25,2 30,1",
+    "M0,9 C5,7 10,8 15,5 C20,6 25,4 30,3",
+    "M0,10 C5,8 10,11 15,7 C20,5 25,6 30,3",
+    "M0,9 C5,6 10,7 15,5 C20,8 25,4 30,2",
+    "M0,10 C5,9 10,8 15,9 C20,7 25,8 30,9",
+  ];
+
+  return (
+    <div className="w-full h-full overflow-hidden select-none font-sans" style={{ background: "hsl(220 30% 7%)" }}>
+      {/* Navbar */}
+      <div
+        className="flex items-center justify-between px-4 py-2 border-b"
+        style={{ borderColor: "rgba(255,255,255,0.08)", background: "hsl(220 30% 5%)" }}
+      >
+        <div className="flex items-center gap-3">
+          <div className="text-[10px] font-black tracking-tight flex items-center gap-1" style={{ color: "hsl(183 100% 50%)" }}>
+            mAI Prop
+            <span className="text-[7px] font-black ml-0.5 px-1 rounded-sm" style={{ background: "hsl(183 100% 50% / 0.15)", color: "hsl(183 100% 70%)" }}>
+              OS
+            </span>
+          </div>
+          <div className="flex gap-1.5">
+            {["Modules", "Benefits", "Pricing", "Resources"].map((t) => (
+              <span key={t} className="text-[7px] px-1.5 py-0.5 rounded" style={{ color: "rgba(255,255,255,0.4)" }}>{t}</span>
+            ))}
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="text-[7px] px-2 py-1 rounded-full font-bold" style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.5)" }}>
+            START FOR FREE
+          </div>
+          <div className="text-[7px] px-2 py-1 rounded-full font-bold" style={{ background: "hsl(183 100% 50% / 0.15)", color: "hsl(183 100% 50%)", border: "1px solid hsl(183 100% 50% / 0.3)" }}>
+            SIGN IN
+          </div>
+        </div>
+      </div>
+      {/* Hero + Market Widget */}
+      <div className="flex h-[calc(100%-36px)]">
+        {/* Left: Hero text */}
+        <div className="flex-1 px-5 pt-5 pb-3 flex flex-col justify-center">
+          <div className="text-[13px] font-black leading-snug mb-2" style={{ color: "rgba(255,255,255,0.9)" }}>
+            Real Estate<br />
+            <span style={{ color: "hsl(183 100% 50%)" }}>Investment Platform</span>
+          </div>
+          <p className="text-[7px] mb-2.5" style={{ color: "hsl(183 100% 70%)" }}>
+            Gain The Edge In Greek Real Estate Market With:
+          </p>
+          <div className="space-y-1.5 mb-4">
+            {["Data Accessibility", "Predictive Analytics", "Mapped Data & Automated Reports", "Portfolio & Asset Management", "Auctions Analysis & Automations"].map((f) => (
+              <div key={f} className="flex items-center gap-1.5 text-[7px]" style={{ color: "rgba(255,255,255,0.7)" }}>
+                <div className="w-2.5 h-2.5 rounded-full border flex items-center justify-center shrink-0" style={{ borderColor: "hsl(183 100% 50% / 0.5)" }}>
+                  <div className="w-1 h-1 rounded-full" style={{ background: "hsl(183 100% 50%)" }} />
+                </div>
+                {f}
+              </div>
+            ))}
+          </div>
+          <div
+            className="inline-flex items-center gap-1.5 text-[7px] font-bold px-3 py-1.5 rounded-full w-fit"
+            style={{ background: "hsl(183 100% 50% / 0.12)", border: "1px solid hsl(183 100% 50% / 0.35)", color: "hsl(183 100% 60%)" }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "hsl(183 100% 50%)" }} />
+            SEE IT IN ACTION
+          </div>
+        </div>
+        {/* Right: Live Market widget */}
+        <div
+          className="w-44 shrink-0 mr-4 mt-4 mb-4 rounded-xl overflow-hidden border flex flex-col"
+          style={{ background: "hsl(220 30% 10%)", borderColor: "rgba(255,255,255,0.1)" }}
+        >
+          <div className="flex items-center justify-between px-2.5 py-1.5 border-b" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+            <div className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full" style={{ background: "hsl(183 100% 50%)" }} />
+              <span className="text-[7px] font-bold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.6)" }}>Live Market</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "hsl(183 100% 50%)" }} />
+              <span className="text-[6px] font-bold" style={{ color: "hsl(183 100% 60%)" }}>LIVE</span>
+            </div>
+          </div>
+          <div className="flex-1 overflow-hidden">
+            {marketData.map((row, i) => {
+              const isFlick = flickeringIdx === i;
+              return (
+                <div
+                  key={row.city}
+                  className="flex items-center gap-1 px-2.5 py-[3px] border-b last:border-0 transition-all duration-300"
+                  style={{ borderColor: "rgba(255,255,255,0.04)", background: isFlick ? "rgba(0,255,240,0.07)" : "transparent" }}
+                >
+                  <span className="text-[7px] w-16 truncate transition-colors duration-300" style={{ color: isFlick ? "hsl(183 100% 75%)" : "rgba(255,255,255,0.7)" }}>
+                    {row.city}
+                  </span>
+                  <svg viewBox="0 0 30 12" className="w-7 h-2.5 shrink-0" preserveAspectRatio="none">
+                    <path d={sparklines[i]} fill="none" stroke="hsl(183 100% 50%)" strokeWidth="1.2" strokeLinecap="round" />
+                  </svg>
+                  <span className="text-[7px] font-bold ml-auto transition-colors duration-300" style={{ color: isFlick ? "hsl(183 100% 70%)" : "rgba(255,255,255,0.9)" }}>
+                    {prices[i].toLocaleString()}
+                  </span>
+                  <span className="text-[6px] font-bold w-8 text-right" style={{ color: "hsl(142 70% 55%)" }}>{row.delta}</span>
+                </div>
+              );
+            })}
+          </div>
+          <div className="mx-2 my-1.5 rounded-lg px-2 py-1.5 border" style={{ background: "hsl(183 100% 50% / 0.06)", borderColor: "hsl(183 100% 50% / 0.15)" }}>
+            <div className="flex items-center justify-between mb-0.5">
+              <div className="flex items-center gap-1">
+                <span className="text-[8px]">⚡</span>
+                <span className="text-[6px] font-bold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.4)" }}>New Auctions Today</span>
+              </div>
+              <span className="text-[11px] font-black" style={{ color: "hsl(183 100% 60%)" }}>47</span>
+            </div>
+            <div className="text-[6px]" style={{ color: "rgba(255,255,255,0.35)" }}>
+              Latest: <span style={{ color: "rgba(255,255,255,0.6)" }}>Apartment · Athens</span>
+            </div>
+            <div className="text-[7px] font-bold mt-0.5" style={{ color: "hsl(183 100% 50%)" }}>€128,000</div>
+          </div>
+          <div className="text-center pb-1.5">
+            <span className="text-[5.5px] uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.2)" }}>€/m² · Greek Real Estate Index</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Properties Portal Mockup (faithful to maiprop.co) ────────────────────────
+function PropertiesMockup() {
+  const stats = [
+    { value: "€250K", label: "Minimum Investment" },
+    { value: "6-9 Months", label: "To Visa Approval" },
+    { value: "27 Countries", label: "Schengen Access" },
+  ];
+
+  return (
+    <div className="w-full h-full overflow-hidden select-none font-sans relative" style={{ background: "hsl(210 30% 8%)" }}>
+      {/* Hero bg: Acropolis */}
+      <div className="absolute inset-0">
+        <img
+          src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=600&q=50&fm=webp"
+          alt=""
+          className="w-full h-full object-cover opacity-30"
+        />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, hsl(200 40% 12% / 0.75) 0%, hsl(200 40% 6% / 0.95) 100%)" }} />
+      </div>
+      {/* Navbar */}
+      <div className="relative z-10 flex items-center justify-between px-4 py-2">
+        <div className="flex items-center gap-1.5">
+          <div className="w-5 h-5 rounded overflow-hidden flex items-center justify-center" style={{ background: "rgba(255,255,255,0.08)" }}>
+            <span className="text-[6px] font-black" style={{ color: "hsl(183 100% 60%)" }}>mP</span>
+          </div>
+          <span className="text-[9px] font-black text-white">mAI prop</span>
+        </div>
+        <div className="flex items-center gap-2">
+          {["Benefits", "Opportunities", "Track Record", "mAI Prop OS"].map((l) => (
+            <span key={l} className="text-[6px]" style={{ color: "rgba(255,255,255,0.5)" }}>{l}</span>
+          ))}
+        </div>
+        <div className="text-[7px] font-bold px-2.5 py-1 rounded-full" style={{ background: "hsl(183 100% 50%)", color: "hsl(220 30% 8%)" }}>
+          Get Started
+        </div>
+      </div>
+      {/* Hero content */}
+      <div className="relative z-10 px-5 pt-3">
+        <div
+          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full mb-3 border text-[5.5px] font-bold uppercase tracking-wider"
+          style={{ borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.55)", background: "rgba(255,255,255,0.06)" }}
+        >
+          Greek Golden Visa Program | EU Residency Through Real Estate
+        </div>
+        <h2 className="text-[14px] font-black leading-snug mb-2">
+          <span className="text-white">Secure Your European</span><br />
+          <span style={{ color: "hsl(183 100% 60%)" }}>Golden </span>
+          <span style={{ color: "hsl(265 80% 72%)" }}>Visa in Greece</span>
+        </h2>
+        <p className="text-[7.5px] mb-1" style={{ color: "rgba(255,255,255,0.65)" }}>
+          EU residency through €250K+ Greek real estate investments.
+        </p>
+        <p className="text-[7px] italic mb-3.5" style={{ color: "rgba(255,255,255,0.4)" }}>
+          Live freely, invest wisely, and protect your global future.
+        </p>
+        <div className="flex items-center gap-2.5 mb-5">
+          <div
+            className="inline-flex items-center gap-1 text-[7.5px] font-bold px-3 py-1.5 rounded-full"
+            style={{ background: "hsl(183 100% 50%)", color: "hsl(220 30% 8%)" }}
+          >
+            Start Your Golden Visa →
+          </div>
+          <div className="text-[7px] font-semibold" style={{ color: "rgba(255,255,255,0.55)" }}>View Properties</div>
+        </div>
+        <div className="flex gap-6">
+          {stats.map((s) => (
+            <div key={s.value}>
+              <div className="text-[12px] font-black text-white">{s.value}</div>
+              <div className="text-[6px]" style={{ color: "rgba(255,255,255,0.4)" }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Platform data ─────────────────────────────────────────────────────────────
 const platforms = [
   {
     badge: "POWERED BY MAI PROP · GREECE'S #1 AI-POWERED PROPERTY PLATFORM",
@@ -23,9 +259,9 @@ const platforms = [
     cta: "Start Your Golden Visa",
     ctaStyle: "bg-primary text-primary-foreground shadow-[0_0_30px_hsl(179_90%_63%/0.4)] hover:bg-primary/90 hover:shadow-[0_0_50px_hsl(179_90%_63%/0.6)]",
     href: "https://maiprop.co",
-    image: platformListing,
-    imageAlt: "mAI Prop listing platform",
+    MockupComponent: PropertiesMockup,
     url: "maiprop.co",
+    glowColor: "bg-primary",
     reverse: false,
   },
   {
@@ -45,9 +281,9 @@ const platforms = [
     cta: "Open mAI Prop OS",
     ctaStyle: "bg-secondary text-secondary-foreground shadow-[0_0_30px_hsl(263_86%_64%/0.4)] hover:bg-secondary/90 hover:shadow-[0_0_50px_hsl(263_86%_64%/0.6)]",
     href: "https://app.maiprop.co",
-    image: platformOs,
-    imageAlt: "mAI Prop OS operator dashboard",
+    MockupComponent: OSDashboardMockup,
     url: "os.maiprop.co",
+    glowColor: "bg-secondary",
     reverse: true,
   },
 ];
@@ -107,7 +343,7 @@ const PlatformReference = () => {
                   {/* Browser mockup */}
                   <div className={`relative ${p.reverse ? "[direction:ltr]" : ""}`}>
                     {/* Glow behind browser */}
-                    <div className={`pointer-events-none absolute -inset-6 rounded-3xl blur-[60px] opacity-20 ${p.reverse ? "bg-secondary" : "bg-primary"}`} />
+                    <div className={`pointer-events-none absolute -inset-6 rounded-3xl blur-[60px] opacity-20 ${p.glowColor}`} />
 
                     {/* Browser chrome */}
                     <div className="relative rounded-xl overflow-hidden border border-border/50 shadow-2xl bg-[hsl(var(--card))]">
@@ -132,14 +368,9 @@ const PlatformReference = () => {
                         <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground/60" />
                       </div>
 
-                      {/* Screenshot */}
-                      <div className="overflow-hidden">
-                        <img
-                          src={p.image}
-                          alt={p.imageAlt}
-                          className="w-full h-auto block"
-                          loading="lazy"
-                        />
+                      {/* Live animated mockup */}
+                      <div className="aspect-[16/10] overflow-hidden">
+                        <p.MockupComponent />
                       </div>
                     </div>
                   </div>
