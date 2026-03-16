@@ -571,6 +571,23 @@ const PlatformReference = () => {
       <div className="pointer-events-none absolute right-0 bottom-1/4 h-[500px] w-[500px] rounded-full bg-secondary/6 blur-[160px]" />
 
       <div className="relative container mx-auto px-6">
+        {/* Section header */}
+        <ScrollReveal>
+          <div className="mb-4 text-center">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-4 py-1.5 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
+              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              Your Ecosystem Partner
+            </div>
+            <h2 className="text-4xl font-bold sm:text-5xl">
+              Two platforms,{" "}
+              <span className="text-primary">one ecosystem</span>
+            </h2>
+            <p className="mt-4 mx-auto max-w-2xl text-muted-foreground leading-relaxed">
+              {t("Powered by the same AI infrastructure that drives mAI Prop — Greece's most intelligent real estate data layer, built for investors and professionals.")}
+            </p>
+          </div>
+        </ScrollReveal>
+
         <div className="flex flex-col">
           {platforms.map((p, i) => (
             <div key={p.url}>

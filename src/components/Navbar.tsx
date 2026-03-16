@@ -11,6 +11,7 @@ const navLinks = [
   { label: "Opportunities", href: "#opportunities" },
   { label: "Track Record", href: "#delivered" },
   { label: "Process", href: "#journey" },
+  { label: "Platform", href: "#platform" },
   { label: "FAQ", href: "#faq" },
   { label: "Resources", href: "#resources" },
 ];
