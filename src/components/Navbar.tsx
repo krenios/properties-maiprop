@@ -10,12 +10,10 @@ const navLinks = [
   { label: "Benefits", href: "#overview" },
   { label: "Opportunities", href: "#opportunities" },
   { label: "Track Record", href: "#delivered" },
-  { label: "mAI Prop OS", href: "#platform" },
   { label: "Process", href: "#journey" },
   { label: "FAQ", href: "#faq" },
   { label: "Resources", href: "#resources" },
 ];
-
 
 const whatsappMessage = [
   "Hello! I would like to explore investment opportunities under the Greek Golden Visa program.",
@@ -59,13 +57,15 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
   return (
     <header
       className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
-      scrolled ? "border-b border-border/30 bg-background/40 backdrop-blur-xl shadow-lg" : "bg-transparent backdrop-blur-none"}`
-      }>
-
+        scrolled
+          ? "border-b border-border/30 bg-background/40 backdrop-blur-xl shadow-lg"
+          : "bg-transparent backdrop-blur-none"
+      }`}
+    >
       <div className="container mx-auto flex items-center justify-between px-6 py-4 text-sidebar-primary bg-transparent">
         <a href="/" className="flex items-center gap-2">
-          <img 
-            alt="mAI properties" 
+          <img
+            alt="mAI properties"
             width={340}
             height={160}
             className="h-20 w-auto object-contain transition-all duration-300"
@@ -81,34 +81,45 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
               <Link
                 key={l.href}
                 to={l.href}
-                className="text-sm font-medium transition-colors text-secondary-foreground hover:text-foreground">
+                className="text-sm font-medium transition-colors text-secondary-foreground hover:text-foreground"
+              >
                 {t(l.label)}
               </Link>
             ) : (l as any).isExternal ? (
-              <a
-                key={l.href}
-                href={l.href}
-                className="text-sm font-medium transition-colors text-secondary-foreground">
+              <a key={l.href} href={l.href} className="text-sm font-medium transition-colors text-secondary-foreground">
                 {t(l.label)}
               </a>
             ) : isHome ? (
               <button
                 key={l.href}
                 onClick={() => handleClick(l.href)}
-                className="text-sm font-medium transition-colors text-secondary-foreground">
+                className="text-sm font-medium transition-colors text-secondary-foreground"
+              >
                 {t(l.label)}
               </button>
             ) : (
               <a
                 key={l.href}
                 href={`/${l.href}`}
-                className="text-sm font-medium transition-colors text-secondary-foreground">
+                className="text-sm font-medium transition-colors text-secondary-foreground"
+              >
                 {t(l.label)}
               </a>
-            )
+            ),
           )}
           <LanguageSwitcher />
-          <Button size="sm" className="rounded-full px-6" onClick={() => { if (isHome) { const el = document.querySelector("#contact"); el?.scrollIntoView({ behavior: "smooth" }); } else { window.location.href = "/#contact"; } }}>
+          <Button
+            size="sm"
+            className="rounded-full px-6"
+            onClick={() => {
+              if (isHome) {
+                const el = document.querySelector("#contact");
+                el?.scrollIntoView({ behavior: "smooth" });
+              } else {
+                window.location.href = "/#contact";
+              }
+            }}
+          >
             {t("Get Started")}
           </Button>
         </nav>
@@ -120,8 +131,8 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
       </div>
 
       {/* Mobile menu */}
-      {mobileOpen &&
-      <div className="border-t border-border bg-background/95 backdrop-blur-xl md:hidden">
+      {mobileOpen && (
+        <div className="border-t border-border bg-background/95 backdrop-blur-xl md:hidden">
           <nav className="container mx-auto flex flex-col gap-1 px-6 py-4">
             {navLinks.map((l) =>
               (l as any).isPage ? (
@@ -129,7 +140,8 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
                   key={l.href}
                   to={l.href}
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+                  className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                >
                   {t(l.label)}
                 </Link>
               ) : (l as any).isExternal ? (
@@ -137,14 +149,16 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
                   key={l.href}
                   href={l.href}
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+                  className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                >
                   {t(l.label)}
                 </a>
               ) : isHome ? (
                 <button
                   key={l.href}
                   onClick={() => handleClick(l.href)}
-                  className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+                  className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                >
                   {t(l.label)}
                 </button>
               ) : (
@@ -152,20 +166,33 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
                   key={l.href}
                   href={`/${l.href}`}
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+                  className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                >
                   {t(l.label)}
                 </a>
-              )
+              ),
             )}
             <LanguageSwitcher />
-            <Button size="sm" className="mt-2 rounded-full" onClick={() => { setMobileOpen(false); if (isHome) { const el = document.querySelector("#contact"); el?.scrollIntoView({ behavior: "smooth" }); } else { window.location.href = "/#contact"; } }}>
+            <Button
+              size="sm"
+              className="mt-2 rounded-full"
+              onClick={() => {
+                setMobileOpen(false);
+                if (isHome) {
+                  const el = document.querySelector("#contact");
+                  el?.scrollIntoView({ behavior: "smooth" });
+                } else {
+                  window.location.href = "/#contact";
+                }
+              }}
+            >
               {t("Get Started")}
             </Button>
           </nav>
         </div>
-      }
-    </header>);
-
+      )}
+    </header>
+  );
 };
 
 export default Navbar;
