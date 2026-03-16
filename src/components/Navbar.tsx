@@ -10,8 +10,8 @@ const navLinks = [
   { label: "Benefits", href: "#overview" },
   { label: "Opportunities", href: "#opportunities" },
   { label: "Track Record", href: "#delivered" },
-  { label: "Process", href: "#journey" },
   { label: "Platform", href: "#platform" },
+  { label: "Process", href: "#journey" },
   { label: "FAQ", href: "#faq" },
   { label: "Resources", href: "#resources" },
 ];
