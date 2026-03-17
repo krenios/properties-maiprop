@@ -373,7 +373,7 @@ const Inner = () => {
               {t("Start My Journey")} <ArrowRight className="h-4 w-4" />
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full px-8">
-              <Link to="/greek-golden-visa-requirements/">{t("View Requirements Checklist")}</Link>
+              <Link to="/guides">{t("View Guides & Requirements")}</Link>
             </Button>
           </div>
 
@@ -466,9 +466,9 @@ const Inner = () => {
           <h2 className="text-2xl font-bold mb-6">{t("Related Guides")}</h2>
           <div className="grid gap-4 sm:grid-cols-3">
             {[
-            { href: "/greek-golden-visa-requirements/", label: "Requirements & Documents Checklist", desc: "Investment thresholds, eligibility criteria, and full document list." },
-            { href: "/250k-golden-visa-properties/", label: "€250K Compliant Properties", desc: "Pre-verified properties qualifying at the entry threshold." },
-            { href: "/golden-visa-family-included/", label: "Family Coverage Explained", desc: "Who is included — spouse, children, and parents." }].
+            { href: "/guides", label: "Guides & Requirements", desc: "Investment thresholds, eligibility criteria, and documentation." },
+            { href: "/properties", label: "Investment Properties", desc: "Pre-verified properties qualifying at the entry threshold." },
+            { href: "/portfolio", label: "Portfolio & Track Record", desc: "Delivered properties and investment results." }].
             map((l) =>
             <Link key={l.href} to={l.href} className="group rounded-xl border border-border bg-background/40 p-5 hover:border-primary/40 transition-colors">
                 <p className="font-semibold text-sm mb-1 group-hover:text-primary transition-colors">{t(l.label)}</p>
