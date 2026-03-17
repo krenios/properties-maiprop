@@ -94,10 +94,7 @@ const Inner = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (!slug) return;
-    loadOrGenerate(false);
-  }, [slug, loadOrGenerate]);
+  // NOTE: this effect is intentionally placed after loadOrGenerate definition below
 
   // Google Ads remarketing — fires once article data is resolved
   // Also flags this session so property pages can fire the high_intent_investor event
