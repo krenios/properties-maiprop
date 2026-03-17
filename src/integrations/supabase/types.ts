@@ -202,29 +202,7 @@ export type Database = {
       }
     }
     Views: {
-      firesale_requests_investor_feed: {
-        Row: {
-          address: string
-          ai_estimate: number | null
-          asking_price: number | null
-          bedrooms: number | null
-          city: string
-          condition: string | null
-          contact_email: string
-          contact_phone: string | null
-          created_at: string
-          id: string
-          notes: string | null
-          offer_price: number | null
-          property_type: Database["public"]["Enums"]["property_type"] | null
-          sqm: number
-          status: string
-          updated_at: string
-          user_id: string | null
-        }
-        Insert: never
-        Update: never
-      }
+      [_ in never]: never
     }
     Functions: {
       has_role: {
