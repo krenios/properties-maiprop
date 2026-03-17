@@ -52,7 +52,9 @@ const queryClient = new QueryClient({
   },
 });
 
-const W = ({ c }: { c: React.ReactNode }) => <Suspense fallback={null}>{c}</Suspense>;
+// Stable-height skeleton prevents CLS while lazy chunks load
+const PageFallback = () => <div className="min-h-screen" aria-hidden="true" />;
+const W = ({ c }: { c: React.ReactNode }) => <Suspense fallback={<PageFallback />}>{c}</Suspense>;
 
 const App = () => (
   <HelmetProvider>
