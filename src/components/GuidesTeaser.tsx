@@ -4,6 +4,7 @@ import { ArrowRight, BookOpen, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Article {
   id: string;
@@ -24,6 +25,7 @@ const categoryColors: Record<string, string> = {
 
 export default function GuidesTeaser() {
   const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     supabase
@@ -34,10 +36,9 @@ export default function GuidesTeaser() {
       .limit(3)
       .then(({ data }) => {
         if (data) setArticles(data);
+        setLoading(false);
       });
   }, []);
-
-  if (articles.length === 0) return null;
 
   return (
     <section id="resources" className="py-20 bg-background" aria-labelledby="guides-teaser-heading">
@@ -58,38 +59,51 @@ export default function GuidesTeaser() {
 
         <ScrollReveal variant="stagger">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {articles.map((article) => {
-              const colorClass = categoryColors[article.category] ?? categoryColors.default;
-              return (
-                <RevealItem key={article.id}>
-                  <Link
-                    to={`/guides/${article.slug}`}
-                    className="group flex flex-col h-full rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-lg transition-all duration-300 overflow-hidden"
-                  >
-                    <div className="p-6 flex flex-col flex-1 gap-4">
-                      <div className="flex items-center justify-between">
-                        <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${colorClass}`}>
-                          {article.category || "Guide"}
-                        </span>
-                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Clock className="h-3.5 w-3.5" />
-                          {article.read_time || "5 min read"}
-                        </span>
+            {loading
+              ? [1, 2, 3].map((i) => (
+                  <RevealItem key={i}>
+                    <div className="flex flex-col h-full rounded-xl border border-border bg-card overflow-hidden">
+                      <div className="p-6 flex flex-col gap-4">
+                        <Skeleton className="h-5 w-24 rounded-full" />
+                        <Skeleton className="h-12 w-full" />
+                        <Skeleton className="h-16 w-full" />
+                        <Skeleton className="h-4 w-20" />
                       </div>
-                      <h3 className="text-base font-semibold text-foreground leading-snug group-hover:text-primary transition-colors line-clamp-2">
-                        {article.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 flex-1">
-                        {article.meta_description}
-                      </p>
-                      <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary mt-auto">
-                        Read: {article.title} <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
-                      </span>
                     </div>
-                  </Link>
-                </RevealItem>
-              );
-            })}
+                  </RevealItem>
+                ))
+              : articles.map((article) => {
+                  const colorClass = categoryColors[article.category] ?? categoryColors.default;
+                  return (
+                    <RevealItem key={article.id}>
+                      <Link
+                        to={`/guides/${article.slug}`}
+                        className="group flex flex-col h-full rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-lg transition-all duration-300 overflow-hidden"
+                      >
+                        <div className="p-6 flex flex-col flex-1 gap-4">
+                          <div className="flex items-center justify-between">
+                            <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${colorClass}`}>
+                              {article.category || "Guide"}
+                            </span>
+                            <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                              <Clock className="h-3.5 w-3.5" />
+                              {article.read_time || "5 min read"}
+                            </span>
+                          </div>
+                          <h3 className="text-base font-semibold text-foreground leading-snug group-hover:text-primary transition-colors line-clamp-2">
+                            {article.title}
+                          </h3>
+                          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 flex-1">
+                            {article.meta_description}
+                          </p>
+                          <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary mt-auto">
+                            Read: {article.title} <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                          </span>
+                        </div>
+                      </Link>
+                    </RevealItem>
+                  );
+                })}
           </div>
         </ScrollReveal>
 
