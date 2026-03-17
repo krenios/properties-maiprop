@@ -41,14 +41,14 @@ CREATE POLICY "Users can update their own profile"
 
 
 -- ── 2. Firesale: investor feed view (excludes admin_notes) ────────────────────
--- Investors should not see internal admin notes. Use view instead of direct table access.
--- security_invoker=on ensures RLS on firesale_requests applies (only published deals).
+-- Uses only base columns (published_to_investors may not exist in all deployments).
+-- security_invoker=on ensures RLS on firesale_requests applies.
 CREATE OR REPLACE VIEW public.firesale_requests_investor_feed
 WITH (security_invoker = on) AS
 SELECT
   id, address, ai_estimate, asking_price, bedrooms, city, condition,
   contact_email, contact_phone, created_at, notes, offer_price, property_type,
-  published_to_investors, sqm, status, updated_at, user_id
+  sqm, status, updated_at, user_id
 FROM public.firesale_requests;
 
 COMMENT ON VIEW public.firesale_requests_investor_feed IS
@@ -58,21 +58,25 @@ GRANT SELECT ON public.firesale_requests_investor_feed TO authenticated;
 
 
 -- ── 3. RLS: replace WITH CHECK (true) with explicit conditions ────────────────
--- listing_view_events: only anon or authenticated can insert (explicit)
-DROP POLICY IF EXISTS "Anyone can insert listing view" ON public.listing_view_events;
-CREATE POLICY "Anyone can insert listing view"
-  ON public.listing_view_events FOR INSERT
-  WITH CHECK (auth.role() IN ('anon', 'authenticated'));
-
--- project_views: same
-DROP POLICY IF EXISTS "Anyone can insert project view" ON public.project_views;
-CREATE POLICY "Anyone can insert project view"
-  ON public.project_views FOR INSERT
-  WITH CHECK (auth.role() IN ('anon', 'authenticated'));
-
--- consultation_requests: anyone can submit (guests have requester_id NULL)
--- Explicit: allow anon or authenticated; guest submissions are valid
-DROP POLICY IF EXISTS "Anyone can create consultation requests" ON public.consultation_requests;
-CREATE POLICY "Anyone can create consultation requests"
-  ON public.consultation_requests FOR INSERT
-  WITH CHECK (auth.role() IN ('anon', 'authenticated'));
+-- Only apply if tables exist (schema may vary by deployment).
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'listing_view_events') THEN
+    DROP POLICY IF EXISTS "Anyone can insert listing view" ON public.listing_view_events;
+    CREATE POLICY "Anyone can insert listing view"
+      ON public.listing_view_events FOR INSERT
+      WITH CHECK (auth.role() IN ('anon', 'authenticated'));
+  END IF;
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'project_views') THEN
+    DROP POLICY IF EXISTS "Anyone can insert project view" ON public.project_views;
+    CREATE POLICY "Anyone can insert project view"
+      ON public.project_views FOR INSERT
+      WITH CHECK (auth.role() IN ('anon', 'authenticated'));
+  END IF;
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'consultation_requests') THEN
+    DROP POLICY IF EXISTS "Anyone can create consultation requests" ON public.consultation_requests;
+    CREATE POLICY "Anyone can create consultation requests"
+      ON public.consultation_requests FOR INSERT
+      WITH CHECK (auth.role() IN ('anon', 'authenticated'));
+  END IF;
+END $$;
