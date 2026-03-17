@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { ChevronDown, Home, Clock, Globe, TrendingUp, ShieldCheck, Star } from "lucide-react";
 import { ScrollReveal } from "@/components/ScrollReveal";
-import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const faqs = [
@@ -132,28 +131,19 @@ const FaqSection = () => {
                     </button>
 
                     {/* Expandable answer */}
-                    <AnimatePresence initial={false}>
-                      {isOpen && (
-                        <motion.div
-                          key="content"
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.28, ease: "easeInOut" }}
-                          className="overflow-hidden"
-                        >
-                          <div className="px-4 pb-5 pt-1 border-t border-border/50">
-                            <p className="text-sm leading-relaxed text-muted-foreground mb-4">
-                              {faq.a}
-                            </p>
-                            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5">
-                              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                              <span className="text-xs font-semibold text-primary">{faq.highlight}</span>
-                            </div>
+                    {isOpen && (
+                      <div className="overflow-hidden">
+                        <div className="px-4 pb-5 pt-1 border-t border-border/50">
+                          <p className="text-sm leading-relaxed text-muted-foreground mb-4">
+                            {faq.a}
+                          </p>
+                          <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5">
+                            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                            <span className="text-xs font-semibold text-primary">{faq.highlight}</span>
                           </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </ScrollReveal>
               );
@@ -203,16 +193,11 @@ const FaqSection = () => {
             {/* Right: answer panel */}
             <ScrollReveal>
               <div className="relative min-h-[320px]">
-                <AnimatePresence mode="wait">
-                  {open !== null && (
-                    <motion.div
-                      key={open}
-                      initial={{ opacity: 0, y: 16 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -16 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className="rounded-3xl border border-primary/20 bg-card p-8 shadow-xl shadow-primary/5"
-                    >
+                {open !== null && (
+                  <div
+                    key={open}
+                    className="rounded-3xl border border-primary/20 bg-card p-8 shadow-xl shadow-primary/5"
+                  >
                       <div className="mb-6 flex items-center gap-4">
                         <span className="text-5xl font-black text-primary/20 leading-none">
                           {faqs[open].number}
@@ -231,9 +216,8 @@ const FaqSection = () => {
                         <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                         <span className="text-sm font-semibold text-primary">{faqs[open].highlight}</span>
                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                  </div>
+                )}
                 <div className="pointer-events-none absolute -inset-4 rounded-3xl bg-primary/5 blur-2xl -z-10" />
               </div>
             </ScrollReveal>

@@ -97,11 +97,31 @@ const PropertyPageInner = () => {
   const navigate = useNavigate();
   const { openWithLocation } = useLeadBot();
   const { t } = useTranslation();
+  const { search } = useLocation();
+  const [showLeadBot, setShowLeadBot] = useState(false);
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [imgIdx, setImgIdx] = useState(0);
   const [poiEntries, setPoiEntries] = useState<PoiEntry[] | null>(null);
   const [poiLoading, setPoiLoading] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    const show = () => { if (!cancelled) setShowLeadBot(true); };
+    const onInteract = () => show();
+    window.addEventListener("pointerdown", onInteract, { once: true, passive: true });
+    window.addEventListener("keydown", onInteract, { once: true });
+    if ("requestIdleCallback" in window) {
+      (window as any).requestIdleCallback(show, { timeout: 2500 });
+    } else {
+      setTimeout(show, 2500);
+    }
+    return () => {
+      cancelled = true;
+      window.removeEventListener("pointerdown", onInteract);
+      window.removeEventListener("keydown", onInteract);
+    };
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -177,7 +197,6 @@ const PropertyPageInner = () => {
   const currentImg = images[imgIdx % images.length];
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
   const pageUrl = `${BASE_URL}/property/${property.id}/`;
-  const { search } = useLocation();
   const isLangVariant = new URLSearchParams(search).has("lang");
   const SUPABASE_PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID;
   const ogShareUrl = `https://${SUPABASE_PROJECT_ID}.supabase.co/functions/v1/og-meta?id=${property.id}`;
@@ -426,6 +445,10 @@ const PropertyPageInner = () => {
               className="h-full w-full object-cover"
               loading="eager"
               decoding="async"
+              fetchPriority="high"
+              width="1200"
+              height="675"
+              sizes="(max-width: 1024px) 100vw, 896px"
             />
             {property.status && (
               <Badge className={`absolute left-4 top-4 border ${statusColors[property.status] || ""}`}>
@@ -608,7 +631,7 @@ const PropertyPageInner = () => {
         </main>
 
         <Suspense fallback={null}>
-          <LeadCaptureBot />
+          {showLeadBot && <LeadCaptureBot />}
         </Suspense>
       </div>
     </>
