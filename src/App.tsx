@@ -41,9 +41,20 @@ const GoldenVisaForRussianInvestors = lazy(() => import("./pages/GoldenVisaForRu
 const GoldenVisaForTurkishInvestors = lazy(() => import("./pages/GoldenVisaForTurkishInvestors"));
 const GoldenVisaByNationality = lazy(() => import("./pages/GoldenVisaByNationality"));
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes — prevents refetch on every focus/mount
+      gcTime: 10 * 60 * 1000,   // 10 minutes garbage collection
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+    },
+  },
+});
 
-const W = ({ c }: { c: React.ReactNode }) => <Suspense fallback={null}>{c}</Suspense>;
+// Stable-height skeleton prevents CLS while lazy chunks load
+const PageFallback = () => <div className="min-h-screen" aria-hidden="true" />;
+const W = ({ c }: { c: React.ReactNode }) => <Suspense fallback={<PageFallback />}>{c}</Suspense>;
 
 const App = () => (
   <HelmetProvider>
