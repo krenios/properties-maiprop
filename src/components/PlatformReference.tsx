@@ -566,11 +566,11 @@ const PlatformReference = () => {
   const { t } = useTranslation();
 
   return (
-    <section id="platform" className="relative overflow-hidden bg-background py-16 sm:py-24">
+    <section id="platform" className="relative overflow-hidden bg-background py-12 sm:py-24">
       <div className="pointer-events-none absolute left-0 top-1/4 h-[600px] w-[600px] rounded-full bg-primary/6 blur-[180px]" />
       <div className="pointer-events-none absolute right-0 bottom-1/4 h-[500px] w-[500px] rounded-full bg-secondary/6 blur-[160px]" />
 
-      <div className="relative container mx-auto px-6">
+      <div className="relative container mx-auto px-4 sm:px-6">
         {/* Section header */}
         <ScrollReveal>
           <div className="mb-4 text-center">
@@ -578,10 +578,10 @@ const PlatformReference = () => {
               <Sparkles className="h-3.5 w-3.5 text-primary" />
               Your Ecosystem Partner
             </div>
-            <h2 className="text-4xl font-bold sm:text-5xl">
+            <h2 className="text-2xl font-bold sm:text-4xl lg:text-5xl">
               Two platforms, <span className="text-primary">one ecosystem</span>
             </h2>
-            <p className="mt-4 mx-auto max-w-2xl text-muted-foreground leading-relaxed">
+            <p className="mt-3 mx-auto max-w-2xl text-sm sm:text-base text-muted-foreground leading-relaxed">
               {t(
                 "Powered by the same AI infrastructure that drives mAI Prop — Greece's most intelligent real estate data layer, built for investors and professionals.",
               )}
@@ -594,24 +594,24 @@ const PlatformReference = () => {
             <div key={p.url}>
               <ScrollReveal>
                 <div
-                  className={`grid items-center gap-12 lg:gap-20 lg:grid-cols-2 py-16 sm:py-24 ${p.reverse ? "lg:[direction:rtl]" : ""}`}
+                  className={`flex flex-col gap-8 py-12 sm:py-20 lg:grid lg:items-center lg:gap-20 lg:grid-cols-2 lg:py-24 ${p.reverse ? "lg:[direction:rtl]" : ""}`}
                 >
                   {/* Text */}
-                  <div className={p.reverse ? "[direction:ltr]" : ""}>
-                    <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-4 py-1.5 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
-                      <p.badgeIcon className="h-3.5 w-3.5" />
+                  <div className={p.reverse ? "lg:[direction:ltr]" : ""}>
+                    <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-[10px] sm:px-4 sm:py-1.5 sm:text-xs font-semibold tracking-widest text-muted-foreground uppercase">
+                      <p.badgeIcon className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                       {p.badge}
                     </div>
 
-                    <h3 className="text-4xl font-bold leading-tight sm:text-5xl">
+                    <h3 className="text-2xl font-bold leading-tight sm:text-4xl lg:text-5xl">
                       {p.titleLine1}
                       <br />
                       <span className={p.titleColor}>{p.titleLine2}</span>
                     </h3>
 
-                    <p className="mt-4 mb-7 text-muted-foreground leading-relaxed max-w-lg">{t(p.desc)}</p>
+                    <p className="mt-3 mb-6 text-sm sm:text-base text-muted-foreground leading-relaxed max-w-lg">{t(p.desc)}</p>
 
-                    <ul className="space-y-2.5 mb-10">
+                    <ul className="space-y-2 mb-8">
                       {p.bullets.map((b) => (
                         <li key={b} className="flex items-center gap-3 text-sm text-foreground">
                           <span
@@ -626,7 +626,7 @@ const PlatformReference = () => {
                     <Button
                       asChild
                       size="lg"
-                      className={`gap-2 rounded-full px-8 font-semibold transition-all ${p.ctaStyle}`}
+                      className={`gap-2 rounded-full px-6 sm:px-8 font-semibold transition-all ${p.ctaStyle}`}
                     >
                       <a href={p.href} target="_blank" rel="noopener noreferrer">
                         {t(p.cta)} <ArrowUpRight className="h-4 w-4" />
@@ -635,21 +635,21 @@ const PlatformReference = () => {
                   </div>
 
                   {/* Browser mockup */}
-                  <div className={`relative ${p.reverse ? "[direction:ltr]" : ""}`}>
+                  <div className={`relative ${p.reverse ? "lg:[direction:ltr]" : ""}`}>
                     <div
-                      className={`pointer-events-none absolute -inset-6 rounded-3xl blur-[60px] opacity-20 ${p.glowClass}`}
+                      className={`pointer-events-none absolute -inset-4 sm:-inset-6 rounded-3xl blur-[60px] opacity-20 ${p.glowClass}`}
                     />
 
                     <div className="relative rounded-xl overflow-hidden border border-border/50 shadow-2xl bg-card">
                       {/* Title bar */}
-                      <div className="flex items-center gap-3 border-b border-border/40 bg-muted/60 px-4 py-3">
-                        <div className="flex items-center gap-1.5">
-                          <span className="h-3 w-3 rounded-full bg-[#FF5F57]" />
-                          <span className="h-3 w-3 rounded-full bg-[#FEBC2E]" />
-                          <span className="h-3 w-3 rounded-full bg-[#28C840]" />
+                      <div className="flex items-center gap-2 sm:gap-3 border-b border-border/40 bg-muted/60 px-3 py-2 sm:px-4 sm:py-3">
+                        <div className="flex items-center gap-1 sm:gap-1.5">
+                          <span className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-[#FF5F57]" />
+                          <span className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-[#FEBC2E]" />
+                          <span className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-[#28C840]" />
                         </div>
                         <div className="flex flex-1 items-center justify-center">
-                          <div className="flex items-center gap-2 rounded-md bg-background/60 border border-border/40 px-3 py-1 text-xs text-muted-foreground max-w-[220px] w-full">
+                          <div className="flex items-center gap-1.5 sm:gap-2 rounded-md bg-background/60 border border-border/40 px-2 sm:px-3 py-1 text-[10px] sm:text-xs text-muted-foreground w-full max-w-[180px] sm:max-w-[220px]">
                             <svg
                               className="h-3 w-3 shrink-0"
                               fill="none"
@@ -663,7 +663,7 @@ const PlatformReference = () => {
                             {p.url}
                           </div>
                         </div>
-                        <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground/60" />
+                        <ArrowUpRight className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-muted-foreground/60" />
                       </div>
 
                       {/* Live mockup */}
