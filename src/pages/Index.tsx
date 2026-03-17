@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -117,7 +117,6 @@ const Index = () => {
   // Noindex ?lang= parameter variants to protect crawl budget
   const isLangVariant = !!lang;
   const canonicalUrl = `${BASE_URL}/`;
-  const [showLeadBot, setShowLeadBot] = useState(false);
   useEffect(() => {
     const hash = window.location.hash;
     if (!hash) return;
@@ -127,24 +126,6 @@ const Index = () => {
       el?.scrollIntoView({ behavior: "smooth" });
     }, 1500);
     return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-    const show = () => { if (!cancelled) setShowLeadBot(true); };
-    const onInteract = () => show();
-    window.addEventListener("pointerdown", onInteract, { once: true, passive: true });
-    window.addEventListener("keydown", onInteract, { once: true });
-    if ("requestIdleCallback" in window) {
-      (window as any).requestIdleCallback(show, { timeout: 2500 });
-    } else {
-      setTimeout(show, 2500);
-    }
-    return () => {
-      cancelled = true;
-      window.removeEventListener("pointerdown", onInteract);
-      window.removeEventListener("keydown", onInteract);
-    };
   }, []);
 
   return (
@@ -304,11 +285,9 @@ const Index = () => {
           <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. All rights reserved.</p>
         </div>
       </footer>
-      {showLeadBot && (
-        <Suspense fallback={null}>
-          <LeadCaptureBot />
-        </Suspense>
-      )}
+      <Suspense fallback={null}>
+        <LeadCaptureBot />
+      </Suspense>
       <Suspense fallback={null}>
         <CookieConsent />
       </Suspense>

@@ -10,11 +10,6 @@
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     <link rel="dns-prefetch" href="https://www.googleadservices.com" />
     <link rel="dns-prefetch" href="https://googleads.g.doubleclick.net" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" />
     <!-- Preload LCP hero image — fetchpriority ensures browser fetches immediately -->
     <link
       rel="preload"
@@ -24,31 +19,13 @@
       imagesrcset="https://images.unsplash.com/photo-1555993539-1732b0258235?w=480&amp;q=40&amp;fm=webp 480w, https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&amp;q=40&amp;fm=webp 800w, https://images.unsplash.com/photo-1555993539-1732b0258235?w=1440&amp;q=45&amp;fm=webp 1440w"
       imagesizes="100vw"
     />
-    <!-- Google tag (gtag.js) — defer until after initial paint -->
+    <!-- Google tag (gtag.js) — async per Google's recommendation -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17031338731"></script>
     <script>
-      (function () {
-        var loaded = false;
-        function loadGtag() {
-          if (loaded) return;
-          loaded = true;
-          var s = document.createElement("script");
-          s.async = true;
-          s.src = "https://www.googletagmanager.com/gtag/js?id=AW-17031338731";
-          document.head.appendChild(s);
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          window.gtag = window.gtag || gtag;
-          gtag("js", new Date());
-          gtag("config", "AW-17031338731");
-        }
-        if ("requestIdleCallback" in window) {
-          requestIdleCallback(loadGtag, { timeout: 2000 });
-        } else {
-          setTimeout(loadGtag, 2000);
-        }
-        window.addEventListener("pointerdown", loadGtag, { once: true, passive: true });
-        window.addEventListener("keydown", loadGtag, { once: true });
-      })();
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-17031338731');
     </script>
 
     <meta charset="UTF-8" />

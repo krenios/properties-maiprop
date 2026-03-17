@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
-import { lazy, Suspense, useCallback, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowLeft, Clock, CheckCircle2, RefreshCw, MapPin } from "lucide-react";
@@ -60,7 +60,6 @@ const Inner = () => {
   const navigate = useNavigate();
   const { openWithLocation } = useLeadBot();
   const { toast } = useToast();
-  const { search } = useLocation();
 
   // meta is used as fallback for hardcoded articles; DB-created articles don't need it
   const meta = slug ? ARTICLE_META[slug] : null;
@@ -70,31 +69,11 @@ const Inner = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [relatedProperties, setRelatedProperties] = useState<{ id: string; title: string; location: string; price: number | null; images: string[]; status: string }[]>([]);
-  const [showLeadBot, setShowLeadBot] = useState(false);
 
   useEffect(() => {
-    if (!slug) navigate("/guides");
-  }, [slug, navigate]);
-
-  useEffect(() => {
-    let cancelled = false;
-    const show = () => { if (!cancelled) setShowLeadBot(true); };
-    const onInteract = () => show();
-    window.addEventListener("pointerdown", onInteract, { once: true, passive: true });
-    window.addEventListener("keydown", onInteract, { once: true });
-    if ("requestIdleCallback" in window) {
-      (window as any).requestIdleCallback(show, { timeout: 2500 });
-    } else {
-      setTimeout(show, 2500);
-    }
-    return () => {
-      cancelled = true;
-      window.removeEventListener("pointerdown", onInteract);
-      window.removeEventListener("keydown", onInteract);
-    };
-  }, []);
-
-  // NOTE: this effect is intentionally placed after loadOrGenerate definition below
+    if (!slug) return;
+    loadOrGenerate(false);
+  }, [slug]);
 
   // Google Ads remarketing — fires once article data is resolved
   // Also flags this session so property pages can fire the high_intent_investor event
@@ -138,7 +117,7 @@ const Inner = () => {
       .then(({ data }) => { if (data) setRelatedProperties(data); });
   }, []);
 
-  const loadOrGenerate = useCallback(async (forceRegenerate: boolean) => {
+  const loadOrGenerate = async (forceRegenerate: boolean) => {
     if (!slug) return;
     setLoading(true);
     setError(null);
@@ -191,14 +170,13 @@ const Inner = () => {
     } finally {
       setLoading(false);
     }
-  }, [meta, slug, toast]);
+  };
 
-  useEffect(() => {
-    if (!slug) return;
-    loadOrGenerate(false);
-  }, [slug, loadOrGenerate]);
 
-  if (!slug) return null;
+  if (!slug) {
+    navigate("/guides");
+    return null;
+  }
 
   // Derive display values — prefer live article/record data, fallback to hardcoded meta
   const displayTitle = article?.title ?? articleRecord?.title ?? meta?.title ?? slug;
@@ -206,6 +184,7 @@ const Inner = () => {
   const displayCategory = articleRecord?.category ?? meta?.category ?? "Golden Visa";
 
   const pageUrl = `${BASE_URL}/guides/${slug}/`;
+  const { search } = useLocation();
   const isLangVariant = new URLSearchParams(search).has("lang");
 
   const datePublished = articleRecord?.updated_at
@@ -493,9 +472,7 @@ const Inner = () => {
       <footer className="border-t border-border bg-background text-center py-4">
         <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. All rights reserved.</p>
       </footer>
-      {showLeadBot && (
-        <Suspense fallback={null}><LeadCaptureBot /></Suspense>
-      )}
+      <Suspense fallback={null}><LeadCaptureBot /></Suspense>
     </main>
   );
 };

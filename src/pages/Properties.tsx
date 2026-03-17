@@ -20,7 +20,6 @@ const Inner = () => {
   const { properties } = useProperties();
   const [selected, setSelected] = useState<Property | null>(null);
   const { setIsOpen } = useLeadBot();
-  const [showLeadBot, setShowLeadBot] = useState(false);
   const current = properties.filter((p) => p.project_type === "new");
 
   // Google Ads remarketing — properties listing page
@@ -46,24 +45,6 @@ const Inner = () => {
     window.addEventListener("hashchange", openFromHash);
     return () => window.removeEventListener("hashchange", openFromHash);
   }, [current]);
-
-  useEffect(() => {
-    let cancelled = false;
-    const show = () => { if (!cancelled) setShowLeadBot(true); };
-    const onInteract = () => show();
-    window.addEventListener("pointerdown", onInteract, { once: true, passive: true });
-    window.addEventListener("keydown", onInteract, { once: true });
-    if ("requestIdleCallback" in window) {
-      (window as any).requestIdleCallback(show, { timeout: 2500 });
-    } else {
-      setTimeout(show, 2500);
-    }
-    return () => {
-      cancelled = true;
-      window.removeEventListener("pointerdown", onInteract);
-      window.removeEventListener("keydown", onInteract);
-    };
-  }, []);
 
   return (
     <>
@@ -258,11 +239,9 @@ const Inner = () => {
       </main>
 
       <PropertyModal property={selected} open={!!selected} onClose={() => setSelected(null)} />
-      {showLeadBot && (
-        <Suspense fallback={null}>
-          <LeadCaptureBot />
-        </Suspense>
-      )}
+      <Suspense fallback={null}>
+        <LeadCaptureBot />
+      </Suspense>
     </>
   );
 };

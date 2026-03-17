@@ -25,7 +25,7 @@ const HeroSection = () => {
           className="h-full w-full object-cover"
           fetchPriority="high"
           loading="eager"
-          decoding="async"
+          decoding="sync"
           width="1440"
           height="960" />
 
