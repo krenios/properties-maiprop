@@ -566,11 +566,11 @@ const PlatformReference = () => {
   const { t } = useTranslation();
 
   return (
-    <section id="platform" className="relative overflow-hidden bg-background py-16 sm:py-24">
+    <section id="platform" className="relative overflow-hidden bg-background py-12 sm:py-24">
       <div className="pointer-events-none absolute left-0 top-1/4 h-[600px] w-[600px] rounded-full bg-primary/6 blur-[180px]" />
       <div className="pointer-events-none absolute right-0 bottom-1/4 h-[500px] w-[500px] rounded-full bg-secondary/6 blur-[160px]" />
 
-      <div className="relative container mx-auto px-6">
+      <div className="relative container mx-auto px-4 sm:px-6">
         {/* Section header */}
         <ScrollReveal>
           <div className="mb-4 text-center">
@@ -578,10 +578,10 @@ const PlatformReference = () => {
               <Sparkles className="h-3.5 w-3.5 text-primary" />
               Your Ecosystem Partner
             </div>
-            <h2 className="text-4xl font-bold sm:text-5xl">
+            <h2 className="text-2xl font-bold sm:text-4xl lg:text-5xl">
               Two platforms, <span className="text-primary">one ecosystem</span>
             </h2>
-            <p className="mt-4 mx-auto max-w-2xl text-muted-foreground leading-relaxed">
+            <p className="mt-3 mx-auto max-w-2xl text-sm sm:text-base text-muted-foreground leading-relaxed">
               {t(
                 "Powered by the same AI infrastructure that drives mAI Prop — Greece's most intelligent real estate data layer, built for investors and professionals.",
               )}
