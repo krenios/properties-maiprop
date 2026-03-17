@@ -193,6 +193,10 @@ const Inner = () => {
     }
   }, [meta, slug, toast]);
 
+  useEffect(() => {
+    if (!slug) return;
+    loadOrGenerate(false);
+  }, [slug, loadOrGenerate]);
 
   if (!slug) return null;
 
