@@ -47,7 +47,18 @@ const PropertyCard = ({ property, onClick }: Props) => {
   return (
     <div className="group relative overflow-hidden rounded-xl border border-border/60 bg-card text-left transition-all duration-500 hover:border-primary/50 hover:shadow-[0_0_40px_hsl(179_90%_63%/0.15),0_0_80px_hsl(179_90%_63%/0.05)] hover:-translate-y-1">
       <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-      <button onClick={onClick} className="w-full text-left">
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={onClick}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onClick();
+          }
+        }}
+        className="w-full text-left"
+      >
         <div className="relative aspect-[4/3] overflow-hidden">
           <img
             src={optimizeImage(images[0], { width: 600, height: 450 })}
@@ -102,7 +113,7 @@ const PropertyCard = ({ property, onClick }: Props) => {
             </p>
           </div>
         </div>
-      </button>
+      </div>
       <div className="flex gap-2 px-5 pb-4">
         <Button
           size="sm"

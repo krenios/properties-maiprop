@@ -50,7 +50,11 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
     setMobileOpen(false);
     if (isHome) {
       const el = document.querySelector(href);
-      el?.scrollIntoView({ behavior: "smooth" });
+      if (!el) return;
+      const header = document.querySelector("header");
+      const offset = (header?.getBoundingClientRect().height ?? 72) + 8;
+      const y = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top: y, behavior: "smooth" });
     }
     // if not home, the <a href> handles navigation natively
   };

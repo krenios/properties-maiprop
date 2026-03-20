@@ -1,6 +1,7 @@
 import { lazy, Suspense, useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { createPortal } from "react-dom";
 import Navbar from "@/components/Navbar";
 import { useProperties } from "@/contexts/PropertyContext";
 import {
@@ -17,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
+import ImageLightbox from "@/components/ImageLightbox";
 
 const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
@@ -166,7 +168,7 @@ const Inner = () => {
         </section>
 
         {/* Full grid */}
-        <section className="py-20">
+        <section id="delivered" className="py-20">
           <div className="container mx-auto px-6">
             {delivered.length === 0 ? (
               <p className="text-center text-muted-foreground">No delivered projects yet.</p>
@@ -262,6 +264,18 @@ interface ModalProps { property: Property | null; open: boolean; onClose: () => 
 
 const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
   const [imgIdx, setImgIdx] = useState(0);
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const scrollTopBeforeLightbox = useRef(0);
+
+  const saveScrollTop = useCallback(() => {
+    scrollTopBeforeLightbox.current = scrollRef.current?.scrollTop ?? 0;
+  }, []);
+
+  const restoreScrollTop = useCallback(() => {
+    if (!scrollRef.current) return;
+    scrollRef.current.scrollTop = scrollTopBeforeLightbox.current;
+  }, []);
 
   const handleShare = async () => {
     if (!property) return;
@@ -279,10 +293,12 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
   const allPhotos = [...property.images, ...(property.after_image ? [property.after_image] : [])].filter(Boolean);
   const hasPhotos = allPhotos.length > 0;
+  const len = allPhotos.length;
 
   return (
+    <>
     <Dialog open={open} onOpenChange={() => { onClose(); setImgIdx(0); }}>
-      <DialogContent className="max-h-[95vh] max-w-5xl overflow-y-auto border-border bg-card p-0 w-[95vw] sm:w-auto">
+      <DialogContent ref={scrollRef} className="max-h-[95vh] max-w-5xl overflow-y-auto border-border bg-card p-0 w-[95vw] sm:w-auto">
         {hasPhotos && (
           <div className="relative h-[300px] sm:h-[520px] w-full overflow-hidden">
             <img src={optimizeImage(allPhotos[imgIdx % allPhotos.length], { width: 900, height: 600 })} alt={`${property.title} — delivered Golden Visa property in ${property.location}, Athens Greece`} className="h-full w-full object-cover" />
@@ -306,6 +322,19 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
                 </div>
               </>
             )}
+
+            {/* Enlarge button (bottom-left, opposite the modal X) */}
+            <button
+              onClick={() => {
+                saveScrollTop();
+                setLightboxIdx(imgIdx % len);
+              }}
+              className="absolute bottom-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100"
+              aria-label="Enlarge photo"
+              title="Enlarge photo"
+            >
+              <Maximize className="h-4 w-4" />
+            </button>
           </div>
         )}
         <div className="space-y-3 p-4">
@@ -346,6 +375,42 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
         </div>
       </DialogContent>
     </Dialog>
+
+    {lightboxIdx !== null &&
+      createPortal(
+        <ImageLightbox
+          images={allPhotos}
+          index={lightboxIdx}
+          onClose={() => {
+            restoreScrollTop();
+            setLightboxIdx(null);
+          }}
+          onPrev={
+            len > 1
+              ? () => {
+                  setLightboxIdx((i) => {
+                    const next = ((i ?? 0) - 1 + len) % len;
+                    setImgIdx(next);
+                    return next;
+                  });
+                }
+              : undefined
+          }
+          onNext={
+            len > 1
+              ? () => {
+                  setLightboxIdx((i) => {
+                    const next = ((i ?? 0) + 1) % len;
+                    setImgIdx(next);
+                    return next;
+                  });
+                }
+              : undefined
+          }
+        />,
+        document.body
+      )}
+    </>
   );
 };
 

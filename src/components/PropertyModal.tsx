@@ -83,6 +83,17 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
 
   const touchStartY = useRef(0);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollTopBeforeLightbox = useRef(0);
+  const saveScrollTop = useCallback(() => {
+    const el = scrollRef.current;
+    scrollTopBeforeLightbox.current = el?.scrollTop ?? 0;
+  }, []);
+
+  const restoreScrollTop = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTop = scrollTopBeforeLightbox.current;
+  }, []);
 
   // Fetch POI with distances when modal opens
   useEffect(() => {
@@ -149,8 +160,6 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
       <Dialog open={open} onOpenChange={onClose}>
         <DialogContent
           onClick={(e) => e.stopPropagation()}
-          onPointerDownOutside={(e) => e.preventDefault()}
-          onInteractOutside={(e) => e.preventDefault()}
           className="max-h-[100dvh] max-w-4xl overflow-hidden border-border bg-card p-0 max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[90vh]"
           style={{
             transform: swipeY > 0 ? `translateY(${swipeY}px)` : undefined,
@@ -187,8 +196,11 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
               )}
               {/* Enlarge button — bottom-right, clear of status badge */}
               <button
-                onClick={() => setLightboxIdx(imgIdx)}
-                className="absolute bottom-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-0 group-hover/gallery:opacity-100 transition-opacity hover:bg-background"
+                onClick={() => {
+                  saveScrollTop();
+                  setLightboxIdx(imgIdx);
+                }}
+                className="absolute bottom-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-0 group-hover/gallery:opacity-100 transition-opacity hover:bg-background"
                 aria-label="Enlarge image"
                 title="Enlarge image"
               >
@@ -380,11 +392,17 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                         className="max-h-[200px] w-full cursor-zoom-in rounded-lg border border-border bg-background object-contain transition-opacity hover:opacity-90"
                         loading="lazy"
                         decoding="async"
-                        onClick={() => setFloorPlanOpen(true)}
+                        onClick={() => {
+                          saveScrollTop();
+                          setFloorPlanOpen(true);
+                        }}
                       />
                       {/* Enlarge button — bottom-left, away from modal X */}
                       <button
-                        onClick={() => setFloorPlanOpen(true)}
+                        onClick={() => {
+                          saveScrollTop();
+                          setFloorPlanOpen(true);
+                        }}
                         className="absolute bottom-2 left-2 flex items-center gap-1.5 rounded-full border border-primary/30 bg-background/80 px-2.5 py-1 text-xs text-primary backdrop-blur hover:bg-background transition-colors"
                         aria-label="Enlarge floor plan"
                       >
@@ -426,7 +444,10 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
         <ImageLightbox
           images={images}
           index={lightboxIdx}
-          onClose={() => setLightboxIdx(null)}
+          onClose={() => {
+            restoreScrollTop();
+            setLightboxIdx(null);
+          }}
           onPrev={images.length > 1 ? () => setLightboxIdx((i) => ((i ?? 0) - 1 + images.length) % images.length) : undefined}
           onNext={images.length > 1 ? () => setLightboxIdx((i) => ((i ?? 0) + 1) % images.length) : undefined}
         />,
@@ -438,7 +459,10 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
         <ImageLightbox
           images={[property.floor_plan]}
           index={0}
-          onClose={() => setFloorPlanOpen(false)}
+          onClose={() => {
+            restoreScrollTop();
+            setFloorPlanOpen(false);
+          }}
         />,
         document.body
       )}

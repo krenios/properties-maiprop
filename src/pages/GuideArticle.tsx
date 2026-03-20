@@ -7,6 +7,7 @@ import { ArrowRight, ArrowLeft, Clock, CheckCircle2, RefreshCw, MapPin } from "l
 import { optimizeImage } from "@/lib/optimizeImage";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
 import { supabase } from "@/integrations/supabase/client";
+import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast";
 const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
@@ -203,6 +204,8 @@ const Inner = () => {
     }
   };
 
+  const { search } = useLocation();
+
 
   if (!slug) {
     navigate("/guides");
@@ -215,7 +218,6 @@ const Inner = () => {
   const displayCategory = articleRecord?.category ?? meta?.category ?? "Golden Visa";
 
   const pageUrl = `${BASE_URL}/guides/${slug}/`;
-  const { search } = useLocation();
   const isLangVariant = new URLSearchParams(search).has("lang");
 
   const datePublished = articleRecord?.updated_at
@@ -323,6 +325,7 @@ const Inner = () => {
         {articleLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />}
       </Helmet>
 
+      <Toaster />
       <Navbar forceScrolled />
 
       <article className="pt-32 pb-20">

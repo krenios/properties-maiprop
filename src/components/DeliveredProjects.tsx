@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { useProperties } from "@/contexts/PropertyContext";
 import { CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag, ExternalLink, ChevronLeft, ChevronRight, Building, Calendar, Share2 } from "lucide-react";
@@ -10,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { useTranslation } from "@/contexts/TranslationContext";
+import ImageLightbox from "@/components/ImageLightbox";
 
 const whatsappMessage = [
   "Hello! I would like to explore investment opportunities under the Greek Golden Visa program.",
@@ -159,6 +161,18 @@ interface ModalProps {
 
 const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
   const [imgIdx, setImgIdx] = useState(0);
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const scrollTopBeforeLightbox = useRef(0);
+
+  const saveScrollTop = useCallback(() => {
+    scrollTopBeforeLightbox.current = scrollRef.current?.scrollTop ?? 0;
+  }, []);
+
+  const restoreScrollTop = useCallback(() => {
+    if (!scrollRef.current) return;
+    scrollRef.current.scrollTop = scrollTopBeforeLightbox.current;
+  }, []);
 
   const handleShare = async () => {
     if (!property) return;
@@ -189,10 +203,15 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
   ...(property.after_image ? [property.after_image] : [])].
   filter(Boolean);
   const hasPhotos = allPhotos.length > 0;
+  const len = allPhotos.length;
 
   return (
+    <>
     <Dialog open={open} onOpenChange={() => {onClose();setImgIdx(0);}}>
-      <DialogContent className="max-h-[95vh] max-w-5xl overflow-y-auto border-border bg-card p-0 w-[95vw] sm:w-auto">
+      <DialogContent
+        ref={scrollRef}
+        className="max-h-[95vh] max-w-5xl overflow-y-auto border-border bg-card p-0 w-[95vw] sm:w-auto"
+      >
         {/* Scrollable Photo Gallery */}
         {hasPhotos &&
         <div className="relative h-[300px] sm:h-[520px] w-full overflow-hidden">
@@ -230,6 +249,21 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
             )}
               </div>
           }
+
+            {/* Enlarge button (bottom-left, opposite the modal X) */}
+            {hasPhotos && (
+              <button
+                onClick={() => {
+                  saveScrollTop();
+                  setLightboxIdx(imgIdx % len);
+                }}
+                className="absolute bottom-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100"
+                aria-label="Enlarge photo"
+                title="Enlarge photo"
+              >
+                <Maximize className="h-4 w-4" />
+              </button>
+            )}
           </div>
         }
 
@@ -312,7 +346,35 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
 
         </div>
       </DialogContent>
-    </Dialog>);
+    </Dialog>
+
+    {lightboxIdx !== null && createPortal(
+      <ImageLightbox
+        images={allPhotos}
+        index={lightboxIdx}
+        onClose={() => {
+          restoreScrollTop();
+          setLightboxIdx(null);
+        }}
+        onPrev={len > 1 ? () => {
+          setLightboxIdx((i) => {
+            const next = ((i ?? 0) - 1 + len) % len;
+            setImgIdx(next);
+            return next;
+          });
+        } : undefined}
+        onNext={len > 1 ? () => {
+          setLightboxIdx((i) => {
+            const next = ((i ?? 0) + 1) % len;
+            setImgIdx(next);
+            return next;
+          });
+        } : undefined}
+      />,
+      document.body
+    )}
+    </>
+  );
 
 };
 

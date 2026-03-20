@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { createPortal } from "react-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Property } from "@/data/properties";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +20,7 @@ import Navbar from "@/components/Navbar";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
 import { lazy, Suspense } from "react";
+import ImageLightbox from "@/components/ImageLightbox";
 const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const statusColors: Record<string, string> = {
@@ -100,6 +102,8 @@ const PropertyPageInner = () => {
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [imgIdx, setImgIdx] = useState(0);
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const scrollYBeforeLightbox = useRef(0);
   const [poiEntries, setPoiEntries] = useState<PoiEntry[] | null>(null);
   const [poiLoading, setPoiLoading] = useState(false);
 
@@ -121,6 +125,15 @@ const PropertyPageInner = () => {
       setPoiEntries(error ? null : data?.poi || []);
     }).finally(() => setPoiLoading(false));
   }, [property?.id, property?.location]);
+
+  const saveScrollYBeforeLightbox = useCallback(() => {
+    scrollYBeforeLightbox.current = typeof window !== "undefined" ? window.scrollY : 0;
+  }, []);
+
+  const restoreScrollYAfterLightbox = useCallback(() => {
+    if (typeof window === "undefined") return;
+    window.scrollTo({ top: scrollYBeforeLightbox.current });
+  }, []);
 
   // Google Ads remarketing — fires once property data is loaded
   useEffect(() => {
@@ -163,6 +176,9 @@ const PropertyPageInner = () => {
     }
   }, [property]);
 
+  const { search } = useLocation();
+  const isLangVariant = new URLSearchParams(search).has("lang");
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -174,11 +190,10 @@ const PropertyPageInner = () => {
   if (!property) return null;
 
   const images = property.images.length > 0 ? property.images : ["/placeholder.svg"];
+  const imagesLen = images.length;
   const currentImg = images[imgIdx % images.length];
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
   const pageUrl = `${BASE_URL}/property/${property.id}/`;
-  const { search } = useLocation();
-  const isLangVariant = new URLSearchParams(search).has("lang");
   const SUPABASE_PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID;
   const ogShareUrl = `https://${SUPABASE_PROJECT_ID}.supabase.co/functions/v1/og-meta?id=${property.id}`;
   const ogImage = images[0] ? optimizeImage(images[0], { width: 1200, height: 630 }) : `${BASE_URL}/og-image.png`;
@@ -450,6 +465,21 @@ const PropertyPageInner = () => {
                 </div>
               </>
             )}
+
+            {/* Enlarge button (bottom-left, opposite the lightbox close X) */}
+            {imagesLen > 0 && (
+              <button
+                onClick={() => {
+                  saveScrollYBeforeLightbox();
+                  setLightboxIdx(imgIdx % imagesLen);
+                }}
+                className="absolute bottom-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100"
+                aria-label="Enlarge photo"
+                title="Enlarge photo"
+              >
+                <Maximize className="h-4 w-4" />
+              </button>
+            )}
           </div>
 
           {/* Header */}
@@ -606,6 +636,41 @@ const PropertyPageInner = () => {
             </a>
           )}
         </main>
+
+        {lightboxIdx !== null &&
+          createPortal(
+            <ImageLightbox
+              images={images}
+              index={lightboxIdx}
+              onClose={() => {
+                restoreScrollYAfterLightbox();
+                setLightboxIdx(null);
+              }}
+              onPrev={
+                imagesLen > 1
+                  ? () => {
+                      setLightboxIdx((i) => {
+                        const next = ((i ?? 0) - 1 + imagesLen) % imagesLen;
+                        setImgIdx(next);
+                        return next;
+                      });
+                    }
+                  : undefined
+              }
+              onNext={
+                imagesLen > 1
+                  ? () => {
+                      setLightboxIdx((i) => {
+                        const next = ((i ?? 0) + 1) % imagesLen;
+                        setImgIdx(next);
+                        return next;
+                      });
+                    }
+                  : undefined
+              }
+            />,
+            document.body
+          )}
 
         <Suspense fallback={null}>
           <LeadCaptureBot />
