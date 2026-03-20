@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import logoImg from "@/assets/logo.png";
-import logoDarkImg from "@/assets/logo-dark.png";
+import logoImg from "@/assets/maiprop-logo.png";
+import logoDarkImg from "@/assets/maiprop-logo-dark.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Bell, MessageSquare, User, Menu, X, ChevronDown, Plus, LogOut, LayoutDashboard, Building2, Sun, Moon, Home, List, Gavel, Flame, Zap, Sparkles, DoorOpen, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
