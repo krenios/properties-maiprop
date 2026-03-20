@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useRef } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Props {
@@ -10,6 +10,39 @@ interface Props {
 }
 
 const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
+  const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchStartX.current = t?.clientX ?? null;
+    touchStartY.current = t?.clientY ?? null;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const t = e.changedTouches[0];
+    const endX = t?.clientX ?? null;
+    const endY = t?.clientY ?? null;
+    if (endX === null || endY === null) return;
+
+    const dx = endX - touchStartX.current;
+    const dy = endY - touchStartY.current;
+    touchStartX.current = null;
+    touchStartY.current = null;
+
+    // Horizontal swipe -> previous/next
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
+    const SWIPE_THRESHOLD = 45;
+    if (absDx < SWIPE_THRESHOLD || absDx < absDy) return;
+
+    if (dx < 0) onNext?.();
+    if (dx > 0) onPrev?.();
+  };
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -33,6 +66,8 @@ const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
     <div
       className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-sm"
       onClick={onClose}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       {/* Close */}
       <button
@@ -59,7 +94,11 @@ const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
         src={images[index]}
         alt={`Image ${index + 1} of ${images.length}`}
         className="max-h-[90vh] max-w-[90vw] rounded-lg object-contain shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          // Prevent "tap image to close" on desktop; enable it on mobile for easier exit.
+          e.stopPropagation();
+          if (isMobile) onClose();
+        }}
         draggable={false}
       />
 
