@@ -162,6 +162,7 @@ interface ModalProps {
 const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
   const [imgIdx, setImgIdx] = useState(0);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const [floorPlanLightboxOpen, setFloorPlanLightboxOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const scrollTopBeforeLightbox = useRef(0);
 
@@ -197,6 +198,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
   if (!property) return null;
 
   const hasBeforeAfter = property.before_image && property.after_image;
+  const hasFloorPlan = !!property.floor_plan;
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
   const allPhotos = [
   ...property.images,
@@ -215,55 +217,60 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
         {/* Scrollable Photo Gallery */}
         {hasPhotos &&
         <div className="relative h-[300px] sm:h-[520px] w-full overflow-hidden">
-            <img src={optimizeImage(allPhotos[imgIdx % allPhotos.length], { width: 900, height: 600 })} alt={`${property.title} — delivered Golden Visa property in ${property.location}, Greece`} className="h-full w-full object-cover" />
-            {allPhotos.length > 1 &&
-          <>
+            <img
+              src={optimizeImage(allPhotos[imgIdx % allPhotos.length], { width: 900, height: 600 })}
+              alt={`${property.title} — delivered Golden Visa property in ${property.location}, Greece`}
+              className="h-full w-full object-cover"
+            />
+            {allPhotos.length > 1 && (
+              <>
                 <button
-              onClick={() => setImgIdx((i) => (i - 1 + allPhotos.length) % allPhotos.length)}
-              className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur transition-colors hover:bg-background">
-
+                  onClick={() => setImgIdx((i) => (i - 1 + allPhotos.length) % allPhotos.length)}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background transition-colors"
+                >
                   <ChevronLeft className="h-5 w-5" />
                 </button>
                 <button
-              onClick={() => setImgIdx((i) => (i + 1) % allPhotos.length)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur transition-colors hover:bg-background">
-
+                  onClick={() => setImgIdx((i) => (i + 1) % allPhotos.length)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background transition-colors"
+                >
                   <ChevronRight className="h-5 w-5" />
                 </button>
                 <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-background/70 px-3 py-1 text-xs backdrop-blur">
                   {imgIdx % allPhotos.length + 1} / {allPhotos.length}
                 </div>
+                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-1.5">
+                  {allPhotos.map((src, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setImgIdx(i)}
+                      className={`h-10 w-14 overflow-hidden rounded border-2 transition-all ${
+                        i === imgIdx % allPhotos.length ? "border-primary shadow-lg" : "border-transparent opacity-60 hover:opacity-100"
+                      }`}
+                    >
+                      <img
+                        src={optimizeImage(src, { width: 120, height: 80 })}
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
               </>
-          }
-            {/* Thumbnail strip */}
-            {allPhotos.length > 1 &&
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-1.5">
-                {allPhotos.map((src, i) =>
-            <button
-              key={i}
-              onClick={() => setImgIdx(i)}
-              className={`h-10 w-14 overflow-hidden rounded border-2 transition-all ${i === imgIdx % allPhotos.length ? "border-primary shadow-lg" : "border-transparent opacity-60 hover:opacity-100"}`}>
-
-                    <img src={optimizeImage(src, { width: 120, height: 80 })} alt="" className="h-full w-full object-cover" />
-                  </button>
             )}
-              </div>
-          }
 
             {/* Enlarge button (bottom-left, opposite the modal X) */}
-            {hasPhotos && (
-              <button
-                onClick={() => {
-                  saveScrollTop();
-                  setLightboxIdx(imgIdx % len);
-                }}
-                className="absolute bottom-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100"
-                aria-label="Enlarge photo"
-                title="Enlarge photo"
-              >
-                <Maximize className="h-4 w-4" />
-              </button>
-            )}
+            <button
+              onClick={() => {
+                saveScrollTop();
+                setLightboxIdx(imgIdx % len);
+              }}
+              className="absolute bottom-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100"
+              aria-label="Enlarge photo"
+              title="Enlarge photo"
+            >
+              <Maximize className="h-4 w-4" />
+            </button>
           </div>
         }
 
@@ -344,6 +351,37 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
             </div>
           }
 
+          {/* Floor Plan (with enlarge/lightbox) */}
+          {hasFloorPlan && (
+            <div>
+              <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Floor Plan</h4>
+              <div className="relative">
+                <img
+                  src={property.floor_plan}
+                  alt={`Floor plan of ${property.title}`}
+                  className="max-h-[240px] w-full rounded-lg border border-border bg-background object-contain cursor-zoom-in transition-opacity hover:opacity-90"
+                  loading="lazy"
+                  decoding="async"
+                  onClick={() => {
+                    saveScrollTop();
+                    setFloorPlanLightboxOpen(true);
+                  }}
+                />
+                <button
+                  onClick={() => {
+                    saveScrollTop();
+                    setFloorPlanLightboxOpen(true);
+                  }}
+                  className="absolute bottom-2 left-2 z-20 flex items-center justify-center rounded-full border border-primary/30 bg-background/80 px-2.5 py-1 text-xs text-primary backdrop-blur hover:bg-background transition-colors"
+                  aria-label="Enlarge floor plan"
+                  title="Enlarge floor plan"
+                >
+                  <Maximize className="h-3 w-3" /> <span className="ml-1">Enlarge</span>
+                </button>
+              </div>
+            </div>
+          )}
+
         </div>
       </DialogContent>
     </Dialog>
@@ -370,6 +408,18 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
             return next;
           });
         } : undefined}
+      />,
+      document.body
+    )}
+
+    {floorPlanLightboxOpen && hasFloorPlan && createPortal(
+      <ImageLightbox
+        images={[property.floor_plan]}
+        index={0}
+        onClose={() => {
+          restoreScrollTop();
+          setFloorPlanLightboxOpen(false);
+        }}
       />,
       document.body
     )}
