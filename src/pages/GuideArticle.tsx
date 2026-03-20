@@ -375,7 +375,7 @@ const Inner = () => {
                   <h2 className="text-2xl font-bold mb-4">{section.heading}</h2>
                   <div className="text-muted-foreground leading-relaxed space-y-3">
                     {section.content.split("\n\n").map((para, j) => (
-                      <p key={j}>{para}</p>
+                      <p key={j}>{linkifyText(para)}</p>
                     ))}
                   </div>
                 </section>
