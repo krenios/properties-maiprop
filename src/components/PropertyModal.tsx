@@ -200,7 +200,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                   saveScrollTop();
                   setLightboxIdx(imgIdx);
                 }}
-                className="absolute bottom-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100 sm:opacity-0 sm:group-hover/gallery:opacity-100 transition-opacity hover:bg-background"
+                className="absolute bottom-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100 transition-opacity hover:bg-background"
                 aria-label="Enlarge image"
                 title="Enlarge image"
               >
