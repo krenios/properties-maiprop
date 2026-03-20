@@ -400,14 +400,17 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
         />
       )}
 
-      {/* Floor plan lightbox */}
-      {floorPlanOpen && property?.floor_plan && (
-        <ImageLightbox
-          images={[property.floor_plan]}
-          index={0}
-          onClose={() => setFloorPlanOpen(false)}
-        />
-      )}
+      {/* Floor plan lightbox — portal to escape Dialog stacking context */}
+      {floorPlanOpen && property?.floor_plan &&
+        createPortal(
+          <ImageLightbox
+            images={[property.floor_plan]}
+            index={0}
+            onClose={() => setFloorPlanOpen(false)}
+          />,
+          document.body
+        )
+      }
     </>
   );
 };
