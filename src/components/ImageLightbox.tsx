@@ -12,6 +12,7 @@ interface Props {
 const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
+  const didSwipe = useRef(false);
 
   const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches;
 
@@ -19,6 +20,7 @@ const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
     const t = e.touches[0];
     touchStartX.current = t?.clientX ?? null;
     touchStartY.current = t?.clientY ?? null;
+    didSwipe.current = false;
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
@@ -39,8 +41,14 @@ const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
     const SWIPE_THRESHOLD = 45;
     if (absDx < SWIPE_THRESHOLD || absDx < absDy) return;
 
-    if (dx < 0) onNext?.();
-    if (dx > 0) onPrev?.();
+    if (dx < 0) {
+      didSwipe.current = true;
+      onNext?.();
+    }
+    if (dx > 0) {
+      didSwipe.current = true;
+      onPrev?.();
+    }
   };
 
   const handleKeyDown = useCallback(
@@ -97,7 +105,13 @@ const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
         onClick={(e) => {
           // Prevent "tap image to close" on desktop; enable it on mobile for easier exit.
           e.stopPropagation();
-          if (isMobile) onClose();
+          if (!isMobile) return;
+          // If the user just swiped to navigate, suppress the "tap to close".
+          if (didSwipe.current) {
+            didSwipe.current = false;
+            return;
+          }
+          onClose();
         }}
         draggable={false}
       />
