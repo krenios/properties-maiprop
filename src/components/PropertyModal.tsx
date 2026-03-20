@@ -333,35 +333,31 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
             {property.floor_plan && (
               <>
                 <Separator className="bg-border" />
-                <div className="group/fp rounded-xl border-2 border-primary/20 bg-primary/5 p-4">
-                  <div className="mb-2 flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/15">
-                        <LayoutGrid className="h-3.5 w-3.5 text-primary" />
-                      </div>
-                      <h4 className="text-xs font-semibold uppercase tracking-wider text-primary">Floor Plan</h4>
+                <div className="rounded-xl border-2 border-primary/20 bg-primary/5 p-4">
+                  <div className="mb-2 flex items-center gap-2">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/15">
+                      <LayoutGrid className="h-3.5 w-3.5 text-primary" />
                     </div>
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-primary">Floor Plan</h4>
+                  </div>
+                  <div className="relative">
+                    <img
+                      src={property.floor_plan}
+                      alt={`Floor plan of ${property.title} — property layout`}
+                      className="max-h-[200px] w-full cursor-zoom-in rounded-lg border border-border bg-background object-contain transition-opacity hover:opacity-90"
+                      loading="lazy"
+                      decoding="async"
+                      onClick={() => setFloorPlanOpen(true)}
+                    />
+                    {/* Enlarge button — bottom-left, away from modal X */}
                     <button
                       onClick={() => setFloorPlanOpen(true)}
-                      className="flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-xs text-primary hover:bg-primary/20 transition-colors"
+                      className="absolute bottom-2 left-2 flex items-center gap-1.5 rounded-full border border-primary/30 bg-background/80 px-2.5 py-1 text-xs text-primary backdrop-blur hover:bg-background transition-colors"
                       aria-label="Enlarge floor plan"
                     >
                       <Expand className="h-3 w-3" /> Enlarge
                     </button>
                   </div>
-                  <button
-                    onClick={() => setFloorPlanOpen(true)}
-                    className="w-full cursor-zoom-in"
-                    aria-label="View floor plan fullscreen"
-                  >
-                    <img
-                      src={property.floor_plan}
-                      alt={`Floor plan of ${property.title} — property layout`}
-                      className="max-h-[200px] w-full rounded-lg border border-border bg-background object-contain transition-opacity hover:opacity-90"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </button>
                 </div>
               </>
             )}
