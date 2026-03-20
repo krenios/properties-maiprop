@@ -13,18 +13,32 @@ const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
   const didSwipe = useRef(false);
+  const ignoreSwipe = useRef(false);
 
   const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches;
+
+  const isControlTarget = (target: EventTarget | null) => {
+    const el = target as HTMLElement | null;
+    if (!el) return false;
+    return !!el.closest('button[aria-label="Close"], button[aria-label="Next"], button[aria-label="Previous"]');
+  };
 
   const handleTouchStart = (e: React.TouchEvent) => {
     const t = e.touches[0];
     touchStartX.current = t?.clientX ?? null;
     touchStartY.current = t?.clientY ?? null;
     didSwipe.current = false;
+    ignoreSwipe.current = isControlTarget(e.target);
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null || touchStartY.current === null) return;
+    if (ignoreSwipe.current) {
+      touchStartX.current = null;
+      touchStartY.current = null;
+      ignoreSwipe.current = false;
+      return;
+    }
     const t = e.changedTouches[0];
     const endX = t?.clientX ?? null;
     const endY = t?.clientY ?? null;
@@ -80,7 +94,12 @@ const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
       {/* Close */}
       <button
         className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-background/20 text-white backdrop-blur hover:bg-background/40 transition-colors"
-        onClick={onClose}
+        onClick={(e) => {
+          e.stopPropagation();
+          ignoreSwipe.current = true;
+          didSwipe.current = false;
+          onClose();
+        }}
         aria-label="Close"
       >
         <X className="h-5 w-5" />
