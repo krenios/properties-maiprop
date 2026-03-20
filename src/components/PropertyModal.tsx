@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { optimizeImage } from "@/lib/optimizeImage";
