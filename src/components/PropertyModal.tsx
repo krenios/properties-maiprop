@@ -144,8 +144,10 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
 
   if (!property) return null;
 
-  const images = property.images.length > 0 ? property.images : ["/placeholder.svg"];
-  const currentImg = images[imgIdx % images.length];
+  // Filter out empty/invalid image URLs so lightbox navigation always cycles real images.
+  const images = property.images.filter(Boolean);
+  const safeImages = images.length > 0 ? images : ["/placeholder.svg"];
+  const currentImg = safeImages[imgIdx % safeImages.length];
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
 
   const DEFAULT_POI: PoiEntry[] = [
@@ -206,16 +208,16 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
               >
                 <Expand className="h-4 w-4" />
               </button>
-              {images.length > 1 && (
+              {safeImages.length > 1 && (
                 <>
                   <button
-                    onClick={() => setImgIdx((i) => (i - 1 + images.length) % images.length)}
+                    onClick={() => setImgIdx((i) => (i - 1 + safeImages.length) % safeImages.length)}
                     className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-1.5 backdrop-blur"
                   >
                     <ChevronLeft className="h-4 w-4" />
                   </button>
                   <button
-                    onClick={() => setImgIdx((i) => (i + 1) % images.length)}
+                    onClick={() => setImgIdx((i) => (i + 1) % safeImages.length)}
                     className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-1.5 backdrop-blur"
                   >
                     <ChevronRight className="h-4 w-4" />
@@ -225,9 +227,9 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
             </div>
 
             {/* Thumbnail strip */}
-            {images.length > 1 && (
+            {safeImages.length > 1 && (
               <div className="flex gap-1.5 overflow-x-auto px-4 py-2 scrollbar-none">
-                {images.map((img, i) => (
+                {safeImages.map((img, i) => (
                   <button
                     key={i}
                     onClick={() => setImgIdx(i)}
@@ -442,14 +444,14 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
       {/* Gallery lightbox — portal to body to escape Dialog stacking context */}
       {lightboxIdx !== null && createPortal(
         <ImageLightbox
-          images={images}
+          images={safeImages}
           index={lightboxIdx}
           onClose={() => {
             restoreScrollTop();
             setLightboxIdx(null);
           }}
-          onPrev={images.length > 1 ? () => setLightboxIdx((i) => ((i ?? 0) - 1 + images.length) % images.length) : undefined}
-          onNext={images.length > 1 ? () => setLightboxIdx((i) => ((i ?? 0) + 1) % images.length) : undefined}
+          onPrev={safeImages.length > 1 ? () => setLightboxIdx((i) => ((i ?? 0) - 1 + safeImages.length) % safeImages.length) : undefined}
+          onNext={safeImages.length > 1 ? () => setLightboxIdx((i) => ((i ?? 0) + 1) % safeImages.length) : undefined}
         />,
         document.body
       )}
