@@ -55,6 +55,37 @@ interface ArticleRecord {
   updated_at: string;
 }
 
+// Detect URLs in text and render them as anchor tags
+const URL_REGEX = /https?:\/\/[^\s)>\]"']+|(?<!\w)(www\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(?:\/[^\s)>\]"']*)?)/g;
+
+const linkifyText = (text: string): React.ReactNode[] => {
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  URL_REGEX.lastIndex = 0;
+  while ((match = URL_REGEX.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    const url = match[0];
+    const href = url.startsWith("http") ? url : `https://${url}`;
+    parts.push(
+      <a
+        key={match.index}
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-primary underline underline-offset-2 hover:text-primary/80 transition-colors"
+      >
+        {url}
+      </a>
+    );
+    lastIndex = match.index + url.length;
+  }
+  if (lastIndex < text.length) parts.push(text.slice(lastIndex));
+  return parts;
+};
+
 const Inner = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -375,7 +406,7 @@ const Inner = () => {
                   <h2 className="text-2xl font-bold mb-4">{section.heading}</h2>
                   <div className="text-muted-foreground leading-relaxed space-y-3">
                     {section.content.split("\n\n").map((para, j) => (
-                      <p key={j}>{para}</p>
+                      <p key={j}>{linkifyText(para)}</p>
                     ))}
                   </div>
                 </section>
