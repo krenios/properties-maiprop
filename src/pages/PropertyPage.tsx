@@ -104,6 +104,7 @@ const PropertyPageInner = () => {
   const [imgIdx, setImgIdx] = useState(0);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const scrollYBeforeLightbox = useRef(0);
+  const [floorPlanLightboxOpen, setFloorPlanLightboxOpen] = useState(false);
   const [poiEntries, setPoiEntries] = useState<PoiEntry[] | null>(null);
   const [poiLoading, setPoiLoading] = useState(false);
 
@@ -612,9 +613,27 @@ const PropertyPageInner = () => {
                     </div>
                     <h2 className="text-xs font-semibold uppercase tracking-wider text-primary">Floor Plan</h2>
                   </div>
-                  <img src={property.floor_plan} alt={`Floor plan of ${property.title}`}
-                    className="max-h-[300px] w-full rounded-lg border border-border bg-background object-contain"
-                    loading="lazy" decoding="async" />
+                  <div className="relative">
+                    <img
+                      src={property.floor_plan}
+                      alt={`Floor plan of ${property.title}`}
+                      className="max-h-[300px] w-full rounded-lg border border-border bg-background object-contain"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    {/* Enlarge floorplan (bottom-left, opposite the lightbox close X) */}
+                    <button
+                      onClick={() => {
+                        saveScrollYBeforeLightbox();
+                        setFloorPlanLightboxOpen(true);
+                      }}
+                      className="absolute bottom-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100"
+                      aria-label="Enlarge floor plan"
+                      title="Enlarge floor plan"
+                    >
+                      <Maximize className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
               </section>
               <Separator className="my-8 bg-border" />
@@ -668,6 +687,20 @@ const PropertyPageInner = () => {
                     }
                   : undefined
               }
+            />,
+            document.body
+          )}
+
+        {floorPlanLightboxOpen &&
+          property?.floor_plan &&
+          createPortal(
+            <ImageLightbox
+              images={[property.floor_plan]}
+              index={0}
+              onClose={() => {
+                restoreScrollYAfterLightbox();
+                setFloorPlanLightboxOpen(false);
+              }}
             />,
             document.body
           )}

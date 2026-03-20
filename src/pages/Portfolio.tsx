@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, useRef, useCallback } from "react";
+import { lazy, Suspense, useState, useRef, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { createPortal } from "react-dom";
@@ -19,6 +19,7 @@ import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
 import ImageLightbox from "@/components/ImageLightbox";
+import { Separator } from "@/components/ui/separator";
 
 const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
@@ -34,7 +35,7 @@ const Inner = () => {
   return (
     <>
       <Helmet>
-        <title>Golden Visa Portfolio & Track Record — 19+ Delivered Properties | mAI Investments</title>
+        <title>Successfully Delivered — 19+ Delivered Properties | mAI Investments</title>
         <meta name="description" content="19+ successfully delivered Golden Visa properties in Athens. €6.3M invested, 100% visa success rate, 6.4% average ROI. Browse our full track record." />
         <meta name="keywords" content="Golden Visa track record, Greece property portfolio, mAI Investments delivered properties, Athens Golden Visa investment results, Greek real estate ROI, Golden Visa success rate" />
         <meta name="robots" content="index, follow" />
@@ -53,7 +54,7 @@ const Inner = () => {
         <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}/trackrecord/`} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`${BASE_URL}/trackrecord/`} />
-        <meta property="og:title" content="Golden Visa Portfolio & Track Record — 19+ Delivered Properties | mAI Investments" />
+        <meta property="og:title" content="Successfully Delivered — 19+ Delivered Properties | mAI Investments" />
         <meta property="og:description" content="19+ successfully delivered Golden Visa properties in Athens. €6.3M closed, 100% visa success rate, 6.4% average ROI." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
         <meta property="og:image:alt" content="mAI Investments delivered Golden Visa property portfolio in Athens, Greece" />
@@ -62,14 +63,14 @@ const Inner = () => {
           "@type": "BreadcrumbList",
           "itemListElement": [
             { "@type": "ListItem", "position": 1, "name": "Home", "item": `${BASE_URL}/` },
-            { "@type": "ListItem", "position": 2, "name": "Golden Visa Portfolio & Track Record", "item": `${BASE_URL}/trackrecord/` },
+            { "@type": "ListItem", "position": 2, "name": "Successfully Delivered", "item": `${BASE_URL}/trackrecord/` },
           ]
         }) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           "@id": `${BASE_URL}/trackrecord/#collectionpage`,
-          "name": "Golden Visa Portfolio & Track Record",
+          "name": "Successfully Delivered",
           "description": "19+ successfully delivered Golden Visa properties in Athens. €6.3M invested, 100% visa success rate, 6.4% average ROI.",
           "url": `${BASE_URL}/trackrecord/`,
           "isPartOf": { "@id": `${BASE_URL}/#website` },
@@ -158,7 +159,7 @@ const Inner = () => {
                 <CheckCircle className="mr-1 h-3 w-3" /> Track Record
               </Badge>
               <h1 className="mb-4 text-4xl font-bold md:text-5xl">
-                {t("Golden Visa Portfolio & Track Record")}
+                Successfully Delivered
               </h1>
               <p className="mx-auto max-w-2xl text-muted-foreground text-lg">
                 {t("Every project below has been sourced, renovated, tenanted, and delivered to investors who hold an active Greek Golden Visa. No delays, no surprises.")}
@@ -179,12 +180,15 @@ const Inner = () => {
                     <RevealItem key={p.id}>
                       <div className="group overflow-hidden rounded-xl border border-border bg-card transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5">
                         <button onClick={() => setSelected(p)} className="w-full text-left">
-                          <div className="relative aspect-video overflow-hidden">
+                          <div className="relative aspect-[4/3] overflow-hidden">
                             <img
-                              src={optimizeImage(p.images[0] || p.after_image || "/placeholder.svg", { width: 600, height: 400 })}
+                              src={optimizeImage(
+                                (Array.isArray(p.images) ? p.images[0] : undefined) || p.after_image || "/placeholder.svg",
+                                { width: 600, height: 400 }
+                              )}
                               alt={`${p.title} — delivered Golden Visa property in ${p.location}`}
                               loading="lazy"
-                              className="h-full w-full object-cover transition-transform group-hover:scale-105 rounded-t-xl"
+                              className="h-full w-full object-cover transition-transform group-hover:scale-105 rounded-2xl"
                             />
                             <Badge className="absolute right-3 top-3 border-none bg-primary/90 text-primary-foreground">
                               Delivered
@@ -265,6 +269,7 @@ interface ModalProps { property: Property | null; open: boolean; onClose: () => 
 const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
   const [imgIdx, setImgIdx] = useState(0);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const [floorPlanLightboxOpen, setFloorPlanLightboxOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const scrollTopBeforeLightbox = useRef(0);
 
@@ -288,26 +293,82 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
     }
   };
 
+  useEffect(() => {
+    setLightboxIdx(null);
+    setFloorPlanLightboxOpen(false);
+    setImgIdx(0);
+  }, [open]);
+
+  // Prevent Radix dialog from intercepting pointer/ESC while the lightbox is open.
+  useEffect(() => {
+    if (lightboxIdx === null && !floorPlanLightboxOpen) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      e.preventDefault();
+
+      setLightboxIdx(null);
+      setFloorPlanLightboxOpen(false);
+    };
+
+    document.addEventListener("keydown", onKeyDown, true);
+    return () => document.removeEventListener("keydown", onKeyDown, true);
+  }, [lightboxIdx, floorPlanLightboxOpen]);
+
   if (!property) return null;
   const hasBeforeAfter = property.before_image && property.after_image;
+  const hasFloorPlan = !!property.floor_plan;
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
-  const allPhotos = [...property.images, ...(property.after_image ? [property.after_image] : [])].filter(Boolean);
+  const allPhotos = [
+    ...(Array.isArray(property.images) ? property.images : []),
+    ...(property.after_image ? [property.after_image] : []),
+  ].filter(Boolean);
   const hasPhotos = allPhotos.length > 0;
   const len = allPhotos.length;
 
   return (
     <>
-    <Dialog open={open} onOpenChange={() => { onClose(); setImgIdx(0); }}>
-      <DialogContent ref={scrollRef} className="max-h-[95vh] max-w-5xl overflow-y-auto border-border bg-card p-0 w-[95vw] sm:w-auto">
+    <Dialog
+      open={open}
+      onOpenChange={() => {
+        onClose();
+        setLightboxIdx(null);
+        setFloorPlanLightboxOpen(false);
+        setImgIdx(0);
+      }}
+    >
+      <DialogContent
+        className={`max-h-[100dvh] max-w-3xl overflow-hidden border-border bg-card p-0 max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[90vh] ${
+          lightboxIdx !== null || floorPlanLightboxOpen ? "pointer-events-none" : ""
+        }`}
+        onPointerDownOutside={(e) => {
+          if (lightboxIdx !== null || floorPlanLightboxOpen) e.preventDefault();
+        }}
+        onInteractOutside={(e) => {
+          if (lightboxIdx !== null || floorPlanLightboxOpen) e.preventDefault();
+        }}
+      >
+        <div
+          ref={scrollRef}
+          className="h-full max-h-[100dvh] overflow-y-auto [-webkit-overflow-scrolling:touch] sm:max-h-[90vh]"
+        >
         {hasPhotos && (
           <div className="relative h-[300px] sm:h-[520px] w-full overflow-hidden">
             <img src={optimizeImage(allPhotos[imgIdx % allPhotos.length], { width: 900, height: 600 })} alt={`${property.title} — delivered Golden Visa property in ${property.location}, Athens Greece`} className="h-full w-full object-cover" />
             {allPhotos.length > 1 && (
               <>
-                <button onClick={() => setImgIdx((i) => (i - 1 + allPhotos.length) % allPhotos.length)} className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background">
+                <button
+                  onClick={() => setImgIdx((i) => (i - 1 + allPhotos.length) % allPhotos.length)}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background transition-colors"
+                >
                   <ChevronLeft className="h-5 w-5" />
                 </button>
-                <button onClick={() => setImgIdx((i) => (i + 1) % allPhotos.length)} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background">
+                <button
+                  onClick={() => setImgIdx((i) => (i + 1) % allPhotos.length)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background transition-colors"
+                >
                   <ChevronRight className="h-5 w-5" />
                 </button>
                 <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-background/70 px-3 py-1 text-xs backdrop-blur">
@@ -337,7 +398,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
             </button>
           </div>
         )}
-        <div className="space-y-3 p-4">
+        <div className="space-y-4 p-4">
           <DialogHeader>
             <div className="flex items-center justify-between gap-2">
               <DialogTitle className="text-xl">{property.title}</DialogTitle>
@@ -349,6 +410,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
               <MapPin className="h-4 w-4" /> {property.location} <ExternalLink className="h-3 w-3" />
             </button>
           </DialogHeader>
+          <Separator className="bg-border" />
           {property.tags?.length > 0 && (
             <div className="flex flex-wrap items-center gap-2">
               <Tag className="h-4 w-4 text-secondary" />
@@ -372,6 +434,38 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
               <BeforeAfterSlider before={property.before_image!} after={property.after_image!} />
             </div>
           )}
+
+          {/* Floor Plan (modal) */}
+          {hasFloorPlan && (
+            <div>
+              <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Floor Plan</h4>
+              <div className="relative">
+                <img
+                  src={property.floor_plan}
+                  alt={`Floor plan of ${property.title}`}
+                  className="max-h-[300px] w-full rounded-lg border border-border bg-background object-contain cursor-zoom-in transition-opacity hover:opacity-90"
+                  loading="lazy"
+                  decoding="async"
+                  onClick={() => {
+                    saveScrollTop();
+                    setFloorPlanLightboxOpen(true);
+                  }}
+                />
+                <button
+                  onClick={() => {
+                    saveScrollTop();
+                    setFloorPlanLightboxOpen(true);
+                  }}
+                  className="absolute bottom-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-background/80 text-foreground backdrop-blur border border-primary/30 hover:bg-background"
+                  aria-label="Enlarge floor plan"
+                  title="Enlarge floor plan"
+                >
+                  <Maximize className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
         </div>
       </DialogContent>
     </Dialog>
@@ -407,6 +501,19 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
                 }
               : undefined
           }
+        />,
+        document.body
+      )}
+
+    {floorPlanLightboxOpen &&
+      createPortal(
+        <ImageLightbox
+          images={[property.floor_plan]}
+          index={0}
+          onClose={() => {
+            restoreScrollTop();
+            setFloorPlanLightboxOpen(false);
+          }}
         />,
         document.body
       )}

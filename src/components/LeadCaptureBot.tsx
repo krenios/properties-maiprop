@@ -705,11 +705,44 @@ const LeadCaptureBot = () => {
               </div>
             )}
 
+            {/* Resources quick links */}
+            {!submitted && (
+              <div className="border-t border-border bg-background/50 px-4 py-3">
+                <div className="flex items-center justify-between gap-3 text-[11px] text-muted-foreground whitespace-nowrap overflow-x-auto">
+                  <span className="shrink-0">Want to research first?</span>
+                  <div className="flex items-center gap-3 flex-nowrap">
+                    <a
+                      href="/guides"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-primary hover:underline underline-offset-2"
+                    >
+                      Investor Guides <ExternalLink className="h-3 w-3" />
+                    </a>
+                    <a
+                      href="/process"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-primary hover:underline underline-offset-2"
+                    >
+                      How it works <ExternalLink className="h-3 w-3" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Input area — hidden while showing property selection interstitial */}
             {!submitted && !showCaptcha && currentStep && !isShowingProperties && (
               <div className="border-t border-border bg-background/50 px-4 py-3">
                 {currentStep.type === "select" ? (
-                  <div className="flex flex-wrap gap-2">
+                  <div
+                    className={`flex gap-2 items-center ${
+                      currentStep.key === "intent"
+                        ? "flex-nowrap gap-1"
+                        : "flex-wrap"
+                    }`}
+                  >
                     {currentStep.options.map((opt) => (
                       <button
                         key={opt}
@@ -766,7 +799,7 @@ const LeadCaptureBot = () => {
                           currentValue === opt
                             ? "border-primary bg-primary/10 text-primary"
                             : "border-border bg-muted/50 text-foreground hover:border-primary/50 hover:bg-primary/5"
-                        }`}
+                        } ${currentStep.key === "intent" ? "flex-1 min-w-0 px-2 py-1 text-[10px] leading-tight whitespace-normal text-center" : ""}`}
                       >
                         {opt}
                       </button>

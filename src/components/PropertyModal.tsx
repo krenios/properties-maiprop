@@ -118,6 +118,37 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
       .finally(() => setPoiLoading(false));
   }, [open, property?.id, property?.location]);
 
+  // If the modal closes while the lightbox is open, reset lightbox state.
+  // Otherwise the lightbox can re-render instantly when opening another modal.
+  useEffect(() => {
+    if (!open) {
+      setLightboxIdx(null);
+      setFloorPlanOpen(false);
+      setImgIdx(0);
+      setSwipeY(0);
+      setIsSwiping(false);
+    }
+  }, [open]);
+
+  // Ensure ESC closes only the lightbox (photo OR floor plan) and doesn't close the Radix dialog.
+  useEffect(() => {
+    if (lightboxIdx === null && !floorPlanOpen) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      e.preventDefault();
+
+      restoreScrollTop();
+      if (lightboxIdx !== null) setLightboxIdx(null);
+      if (floorPlanOpen) setFloorPlanOpen(false);
+    };
+
+    document.addEventListener("keydown", onKeyDown, true);
+    return () => document.removeEventListener("keydown", onKeyDown, true);
+  }, [lightboxIdx, floorPlanOpen, restoreScrollTop]);
+
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     const el = scrollRef.current;
     if (el && el.scrollTop <= 0) {
@@ -162,7 +193,17 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
       <Dialog open={open} onOpenChange={onClose}>
         <DialogContent
           onClick={(e) => e.stopPropagation()}
-          className="max-h-[100dvh] max-w-4xl overflow-hidden border-border bg-card p-0 max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[90vh]"
+          onPointerDownOutside={(e) => {
+            // While the lightbox is open, prevent the Radix dialog from closing
+            // due to pointer interactions that land outside the modal content.
+            if (lightboxIdx !== null || floorPlanOpen) e.preventDefault();
+          }}
+          onInteractOutside={(e) => {
+            if (lightboxIdx !== null || floorPlanOpen) e.preventDefault();
+          }}
+          className={`max-h-[100dvh] max-w-3xl overflow-hidden border-border bg-card p-0 max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[90vh] ${
+            lightboxIdx !== null || floorPlanOpen ? "pointer-events-none" : ""
+          }`}
           style={{
             transform: swipeY > 0 ? `translateY(${swipeY}px)` : undefined,
             opacity: swipeY > 0 ? Math.max(1 - swipeY / 300, 0.5) : undefined,
@@ -183,9 +224,9 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
             </div>
 
             {/* Gallery */}
-            <div className="group/gallery relative h-[200px] w-full shrink-0 overflow-hidden sm:h-[420px]">
+            <div className="relative h-[300px] sm:h-[520px] w-full overflow-hidden">
               <img
-                src={optimizeImage(currentImg, { width: 800, height: 600 })}
+                src={optimizeImage(currentImg, { width: 900, height: 600 })}
                 alt={`${property.title} — Golden Visa property in ${property.location}, Greece`}
                 className="h-full w-full object-cover"
                 loading="lazy"
@@ -200,57 +241,55 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
               <button
                 onClick={() => {
                   saveScrollTop();
-                  setLightboxIdx(imgIdx);
+                  setLightboxIdx(imgIdx % safeImages.length);
                 }}
-                className="absolute bottom-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100 transition-opacity hover:bg-background"
+                className="absolute bottom-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100"
                 aria-label="Enlarge image"
                 title="Enlarge image"
               >
-                <Expand className="h-4 w-4" />
+                <Maximize className="h-4 w-4" />
               </button>
               {safeImages.length > 1 && (
                 <>
                   <button
                     onClick={() => setImgIdx((i) => (i - 1 + safeImages.length) % safeImages.length)}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-1.5 backdrop-blur"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background transition-colors"
                   >
-                    <ChevronLeft className="h-4 w-4" />
+                    <ChevronLeft className="h-5 w-5" />
                   </button>
                   <button
                     onClick={() => setImgIdx((i) => (i + 1) % safeImages.length)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-1.5 backdrop-blur"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background transition-colors"
                   >
-                    <ChevronRight className="h-4 w-4" />
+                    <ChevronRight className="h-5 w-5" />
                   </button>
+
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-background/70 px-3 py-1 text-xs backdrop-blur">
+                    {imgIdx % safeImages.length + 1} / {safeImages.length}
+                  </div>
+
+                  <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-1.5 z-30">
+                    {safeImages.map((img, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setImgIdx(i)}
+                        className={`h-10 w-14 overflow-hidden rounded border-2 transition-all ${
+                          i === imgIdx % safeImages.length
+                            ? "border-primary shadow-lg"
+                            : "border-transparent opacity-60 hover:opacity-100"
+                        }`}
+                      >
+                        <img
+                          src={optimizeImage(img, { width: 120, height: 80 })}
+                          alt=""
+                          className="h-full w-full object-cover"
+                        />
+                      </button>
+                    ))}
+                  </div>
                 </>
               )}
             </div>
-
-            {/* Thumbnail strip */}
-            {safeImages.length > 1 && (
-              <div className="flex gap-1.5 overflow-x-auto px-4 py-2 scrollbar-none">
-                {safeImages.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setImgIdx(i)}
-                    className={`relative h-14 w-20 shrink-0 overflow-hidden rounded-md border-2 transition-all ${
-                      i === imgIdx
-                        ? "border-primary opacity-100"
-                        : "border-transparent opacity-50 hover:opacity-80"
-                    }`}
-                    aria-label={`View image ${i + 1}`}
-                  >
-                    <img
-                      src={optimizeImage(img, { width: 160, height: 112 })}
-                      alt={`Thumbnail ${i + 1}`}
-                      className="h-full w-full object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
 
             <div className="space-y-4 p-4">
               <DialogHeader>
@@ -450,8 +489,26 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
             restoreScrollTop();
             setLightboxIdx(null);
           }}
-          onPrev={safeImages.length > 1 ? () => setLightboxIdx((i) => ((i ?? 0) - 1 + safeImages.length) % safeImages.length) : undefined}
-          onNext={safeImages.length > 1 ? () => setLightboxIdx((i) => ((i ?? 0) + 1) % safeImages.length) : undefined}
+          onPrev={
+            safeImages.length > 1
+              ? () =>
+                  setLightboxIdx((i) => {
+                    const next = ((i ?? 0) - 1 + safeImages.length) % safeImages.length;
+                    setImgIdx(next);
+                    return next;
+                  })
+              : undefined
+          }
+          onNext={
+            safeImages.length > 1
+              ? () =>
+                  setLightboxIdx((i) => {
+                    const next = ((i ?? 0) + 1) % safeImages.length;
+                    setImgIdx(next);
+                    return next;
+                  })
+              : undefined
+          }
         />,
         document.body
       )}

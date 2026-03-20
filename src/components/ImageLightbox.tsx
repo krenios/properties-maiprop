@@ -14,6 +14,7 @@ const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
   const touchStartY = useRef<number | null>(null);
   const didSwipe = useRef(false);
   const ignoreSwipe = useRef(false);
+  const closeOnce = useRef(false);
 
   const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches;
 
@@ -67,7 +68,13 @@ const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        onClose();
+        return;
+      }
       if (e.key === "ArrowLeft" && onPrev) onPrev();
       if (e.key === "ArrowRight" && onNext) onNext();
     },
@@ -75,30 +82,55 @@ const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
   );
 
   useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
+    closeOnce.current = false;
+    // Capture phase so ESC can't also be handled by Radix Dialog underneath.
+    document.addEventListener("keydown", handleKeyDown, true);
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown, true);
       document.body.style.overflow = prevOverflow;
     };
   }, [handleKeyDown]);
 
+  const doClose = () => {
+    if (closeOnce.current) return;
+    closeOnce.current = true;
+    onClose();
+  };
+
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-sm"
-      onClick={onClose}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
+      className="fixed inset-0 flex items-center justify-center bg-black/90 backdrop-blur-sm"
+      style={{ zIndex: 2147483647, pointerEvents: "auto" }}
+      onPointerDown={(e) => e.stopPropagation()}
+      onClick={(e) => {
+        e.stopPropagation();
+        doClose();
+      }}
+      onTouchStart={(e) => {
+        e.stopPropagation();
+        handleTouchStart(e);
+      }}
+      onTouchEnd={(e) => {
+        e.stopPropagation();
+        handleTouchEnd(e);
+      }}
     >
       {/* Close */}
       <button
         className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-background/20 text-white backdrop-blur hover:bg-background/40 transition-colors"
+        onPointerUp={(e) => {
+          e.stopPropagation();
+          ignoreSwipe.current = true;
+          didSwipe.current = false;
+          doClose();
+        }}
         onClick={(e) => {
           e.stopPropagation();
           ignoreSwipe.current = true;
           didSwipe.current = false;
-          onClose();
+          doClose();
         }}
         aria-label="Close"
       >
@@ -109,7 +141,16 @@ const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
       {onPrev && images.length > 1 && (
         <button
           className="absolute left-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-background/20 text-white backdrop-blur hover:bg-background/40 transition-colors"
-          onClick={(e) => { e.stopPropagation(); onPrev(); }}
+          onPointerUp={(e) => {
+            e.stopPropagation();
+            ignoreSwipe.current = true;
+            onPrev();
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            ignoreSwipe.current = true;
+            onPrev();
+          }}
           aria-label="Previous"
         >
           <ChevronLeft className="h-5 w-5" />
@@ -139,7 +180,16 @@ const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
       {onNext && images.length > 1 && (
         <button
           className="absolute right-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-background/20 text-white backdrop-blur hover:bg-background/40 transition-colors"
-          onClick={(e) => { e.stopPropagation(); onNext(); }}
+          onPointerUp={(e) => {
+            e.stopPropagation();
+            ignoreSwipe.current = true;
+            onNext();
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            ignoreSwipe.current = true;
+            onNext();
+          }}
           aria-label="Next"
         >
           <ChevronRight className="h-5 w-5" />
@@ -148,7 +198,8 @@ const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
 
       {/* Counter */}
       {images.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-background/20 px-3 py-1 text-xs text-white backdrop-blur">
+        // Allow taps/clicks to pass through the counter so "tap image to close" works reliably on mobile.
+        <div className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-background/20 px-3 py-1 text-xs text-white backdrop-blur">
           {index + 1} / {images.length}
         </div>
       )}

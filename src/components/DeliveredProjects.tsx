@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { useProperties } from "@/contexts/PropertyContext";
@@ -9,6 +9,7 @@ import { Property } from "@/data/properties";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { useTranslation } from "@/contexts/TranslationContext";
 import ImageLightbox from "@/components/ImageLightbox";
@@ -71,9 +72,12 @@ const DeliveredProjects = () => {
                 <button
                   onClick={() => setSelected(p)}
                   className="w-full text-left">
-                  <div className="relative aspect-video overflow-hidden">
+                  <div className="relative aspect-[4/3] overflow-hidden">
                     <img
-                      src={optimizeImage(p.images[0] || p.after_image || "/placeholder.svg", { width: 600, height: 400 })}
+                      src={optimizeImage(
+                        (Array.isArray(p.images) ? p.images[0] : undefined) || p.after_image || "/placeholder.svg",
+                        { width: 600, height: 400 }
+                      )}
                       alt={`${p.title} — delivered Golden Visa property in ${p.location}`}
                       loading="lazy"
                       className="h-full w-full object-cover transition-transform group-hover:scale-105 rounded-2xl" />
@@ -195,13 +199,37 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
     }
   };
 
+  useEffect(() => {
+    setLightboxIdx(null);
+    setFloorPlanLightboxOpen(false);
+    setImgIdx(0);
+  }, [open]);
+
+  // Prevent Radix dialog from intercepting pointer/ESC while the lightbox is open.
+  useEffect(() => {
+    if (lightboxIdx === null && !floorPlanLightboxOpen) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      e.preventDefault();
+
+      setLightboxIdx(null);
+      setFloorPlanLightboxOpen(false);
+    };
+
+    document.addEventListener("keydown", onKeyDown, true);
+    return () => document.removeEventListener("keydown", onKeyDown, true);
+  }, [lightboxIdx, floorPlanLightboxOpen]);
+
   if (!property) return null;
 
   const hasBeforeAfter = property.before_image && property.after_image;
   const hasFloorPlan = !!property.floor_plan;
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
   const allPhotos = [
-  ...property.images,
+  ...(Array.isArray(property.images) ? property.images : []),
   ...(property.after_image ? [property.after_image] : [])].
   filter(Boolean);
   const hasPhotos = allPhotos.length > 0;
@@ -209,11 +237,30 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
 
   return (
     <>
-    <Dialog open={open} onOpenChange={() => {onClose();setImgIdx(0);}}>
+    <Dialog
+      open={open}
+      onOpenChange={() => {
+        onClose();
+        setLightboxIdx(null);
+        setFloorPlanLightboxOpen(false);
+        setImgIdx(0);
+      }}
+    >
       <DialogContent
-        ref={scrollRef}
-        className="max-h-[95vh] max-w-5xl overflow-y-auto border-border bg-card p-0 w-[95vw] sm:w-auto"
+        className={`max-h-[100dvh] max-w-3xl overflow-hidden border-border bg-card p-0 max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[90vh] ${
+          lightboxIdx !== null || floorPlanLightboxOpen ? "pointer-events-none" : ""
+        }`}
+        onPointerDownOutside={(e) => {
+          if (lightboxIdx !== null || floorPlanLightboxOpen) e.preventDefault();
+        }}
+        onInteractOutside={(e) => {
+          if (lightboxIdx !== null || floorPlanLightboxOpen) e.preventDefault();
+        }}
       >
+        <div
+          ref={scrollRef}
+          className="h-full max-h-[100dvh] overflow-y-auto [-webkit-overflow-scrolling:touch] sm:max-h-[90vh]"
+        >
         {/* Scrollable Photo Gallery */}
         {hasPhotos &&
         <div className="relative h-[300px] sm:h-[520px] w-full overflow-hidden">
@@ -274,7 +321,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
           </div>
         }
 
-        <div className="space-y-3 p-4">
+        <div className="space-y-4 p-4">
           <DialogHeader>
             <div className="flex items-center justify-between gap-2">
               <DialogTitle className="text-xl">{property.title}</DialogTitle>
@@ -294,6 +341,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
               <ExternalLink className="h-3 w-3" />
             </button>
           </DialogHeader>
+          <Separator className="bg-border" />
 
           {/* Tags */}
           {property.tags && property.tags.length > 0 &&
@@ -382,6 +430,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
             </div>
           )}
 
+        </div>
         </div>
       </DialogContent>
     </Dialog>
