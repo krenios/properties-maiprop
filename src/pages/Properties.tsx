@@ -21,6 +21,7 @@ const Inner = () => {
   const { properties } = useProperties();
   const [selected, setSelected] = useState<Property | null>(null);
   const { setIsOpen } = useLeadBot();
+  const { t } = useTranslation();
   const current = properties.filter((p) => p.project_type === "new");
 
   // Google Ads remarketing — properties listing page
