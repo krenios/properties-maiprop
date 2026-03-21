@@ -719,7 +719,7 @@ const LeadCaptureBot = () => {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-primary hover:underline underline-offset-2"
                     >
-                      Investor Guides <ExternalLink className="h-3 w-3" />
+                      {t("Investor Guides")} <ExternalLink className="h-3 w-3" />
                     </a>
                     <a
                       href="/process"
