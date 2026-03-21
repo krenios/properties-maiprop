@@ -336,23 +336,23 @@ const Inner = () => {
           {/* Breadcrumb */}
           <nav className="mb-6 text-xs text-muted-foreground" aria-label="Breadcrumb">
             <ol className="flex items-center gap-1.5">
-              <li><Link to="/" className="hover:text-primary transition-colors">Home</Link></li>
+              <li><Link to="/" className="hover:text-primary transition-colors">{t("Home")}</Link></li>
               <span>/</span>
-              <li><Link to="/guides" className="hover:text-primary transition-colors">Guides</Link></li>
+              <li><Link to="/guides" className="hover:text-primary transition-colors">{t("Guides")}</Link></li>
               <span>/</span>
-              <li className="text-foreground truncate max-w-[200px]">{displayTitle}</li>
+              <li className="text-foreground truncate max-w-[200px]">{t(displayTitle)}</li>
             </ol>
           </nav>
 
           {/* Category + read time */}
           <div className="mb-4 flex items-center gap-3">
             <span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-              {displayCategory}
+              {t(displayCategory)}
             </span>
             {article && (
               <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <Clock className="h-3.5 w-3.5" />
-                {article.readTime}
+                {t(article.readTime)}
               </span>
             )}
           </div>
