@@ -30,8 +30,12 @@ const TranslationContext = createContext<TranslationContextType>({
 
 export const useTranslation = () => useContext(TranslationContext);
 
+const STORAGE_KEY = "mai_prop_language";
+
 export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState("en");
+  const [language, setLanguageState] = useState(() => {
+    try { return localStorage.getItem(STORAGE_KEY) || "en"; } catch { return "en"; }
+  });
   const [isTranslating, setIsTranslating] = useState(false);
   // Cache: { [lang]: { [originalText]: translatedText } }
   const cache = useRef<Record<string, Record<string, string>>>({});

@@ -400,7 +400,7 @@ const Inner = () => {
           {/* Back link */}
           <div className="mt-16 flex items-center gap-2">
             <Link to="/guides" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-              <ArrowLeft className="h-4 w-4" /> Back to all guides
+              <ArrowLeft className="h-4 w-4" /> {t("Back to all guides")}
             </Link>
           </div>
         </div>
@@ -409,7 +409,7 @@ const Inner = () => {
       {/* More guides */}
       <section className="py-16 bg-background/50">
         <div className="container mx-auto px-6 max-w-3xl">
-          <h2 className="text-2xl font-bold mb-8">More Guides</h2>
+          <h2 className="text-2xl font-bold mb-8">{t("More Guides")}</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {Object.entries(ARTICLE_META)
               .filter(([s]) => s !== slug)
