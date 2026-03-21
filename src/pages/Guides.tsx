@@ -302,10 +302,10 @@ const Inner = () => {
 
                       <div className="mb-5 flex items-center justify-between">
                         <span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                          {guide.category}
+                          {t(guide.category)}
                         </span>
                         <span className="rounded-full bg-secondary/60 px-3 py-1 text-xs font-medium text-secondary-foreground">
-                          {isNew ? "New" : tag}
+                          {isNew ? t("New") : t(tag)}
                         </span>
                       </div>
 

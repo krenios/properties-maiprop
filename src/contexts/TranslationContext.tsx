@@ -132,6 +132,19 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
   return (
     <TranslationContext.Provider value={{ language, setLanguage, t, isTranslating }}>
       {children}
+      {isTranslating && (
+        <div
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-2.5 rounded-full border border-primary/30 bg-background/90 backdrop-blur-md px-5 py-2.5 shadow-lg shadow-black/20"
+          aria-live="polite"
+          aria-label="Translating page content"
+        >
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+          </span>
+          <span className="text-xs font-medium text-foreground">Translating…</span>
+        </div>
+      )}
     </TranslationContext.Provider>
   );
 };
