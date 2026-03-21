@@ -44,6 +44,13 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const batchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [, forceRender] = useState(0);
 
+  // Apply persisted language settings on mount
+  React.useEffect(() => {
+    document.documentElement.dir = (language === "ar" || language === "he") ? "rtl" : "ltr";
+    document.documentElement.lang = language;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const translateBatch = useCallback(async (lang: string, texts: string[]) => {
     if (texts.length === 0) return;
     setIsTranslating(true);
