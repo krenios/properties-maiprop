@@ -711,7 +711,7 @@ const LeadCaptureBot = () => {
             {!submitted && (
               <div className="border-t border-border bg-background/50 px-4 py-3">
                 <div className="flex items-center justify-between gap-3 text-[11px] text-muted-foreground whitespace-nowrap overflow-x-auto">
-                  <span className="shrink-0">Want to research first?</span>
+                  <span className="shrink-0">{t("Want to research first?")}</span>
                   <div className="flex items-center gap-3 flex-nowrap">
                     <a
                       href="/guides"
