@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Home, ChevronRight, MessageCircle } from "lucide-react";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
@@ -20,6 +21,7 @@ const Inner = () => {
   const { properties } = useProperties();
   const [selected, setSelected] = useState<Property | null>(null);
   const { setIsOpen } = useLeadBot();
+  const { t } = useTranslation();
   const current = properties.filter((p) => p.project_type === "new");
 
   // Google Ads remarketing — properties listing page
@@ -173,13 +175,13 @@ const Inner = () => {
             <ol className="flex items-center gap-2 text-xs text-muted-foreground" itemScope itemType="https://schema.org/BreadcrumbList">
               <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
                 <Link to="/" className="hover:text-primary transition-colors" itemProp="item">
-                  <span itemProp="name">Home</span>
+                  <span itemProp="name">{t("Home")}</span>
                 </Link>
                 <meta itemProp="position" content="1" />
               </li>
               <li className="text-muted-foreground/50 select-none">›</li>
               <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                <span className="text-foreground font-medium" itemProp="name">Properties</span>
+                <span className="text-foreground font-medium" itemProp="name">{t("Properties")}</span>
                 <meta itemProp="position" content="2" />
               </li>
             </ol>
@@ -191,14 +193,13 @@ const Inner = () => {
           <div className="container mx-auto px-6 text-center">
             <ScrollReveal>
               <Badge className="mb-4 border-primary/30 bg-primary/10 text-primary">
-                <Home className="mr-1 h-3 w-3" /> Golden Visa Eligible Properties
+                <Home className="mr-1 h-3 w-3" /> {t("Golden Visa Eligible Properties")}
               </Badge>
               <h1 className="mb-4 text-4xl font-bold md:text-5xl">
-                Golden Visa Properties in Greece
+                {t("Golden Visa Properties in Greece")}
               </h1>
               <p className="mx-auto max-w-2xl text-muted-foreground text-lg">
-                Pre-verified Golden Visa properties with full compliance — analyze and compare
-                independently. All properties qualify for the Greek Golden Visa program.
+                {t("Pre-verified Golden Visa properties with full compliance — analyze and compare independently. All properties qualify for the Greek Golden Visa program.")}
               </p>
             </ScrollReveal>
           </div>
@@ -208,7 +209,7 @@ const Inner = () => {
         <section className="pb-24">
           <div className="container mx-auto px-6">
             {current.length === 0 ? (
-              <p className="text-center text-muted-foreground">No properties available at the moment.</p>
+              <p className="text-center text-muted-foreground">{t("No properties available at the moment.")}</p>
             ) : (
               <ScrollReveal variant="stagger">
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -224,13 +225,13 @@ const Inner = () => {
             {/* CTA */}
             <ScrollReveal>
               <div className="mt-16 rounded-2xl border border-primary/20 bg-primary/5 p-8 text-center">
-                <h2 className="mb-2 text-2xl font-bold">Looking for something specific?</h2>
+                <h2 className="mb-2 text-2xl font-bold">{t("Looking for something specific?")}</h2>
                 <p className="mb-6 text-muted-foreground">
-                  Our team sources off-market opportunities tailored to your budget and timeline.
+                  {t("Our team sources off-market opportunities tailored to your budget and timeline.")}
                 </p>
                 <Button size="lg" className="gap-2" onClick={() => setIsOpen(true)}>
                   <MessageCircle className="h-4 w-4" />
-                  Contact Us
+                  {t("Contact Us")}
                 </Button>
               </div>
             </ScrollReveal>

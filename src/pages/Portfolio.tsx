@@ -138,13 +138,13 @@ const Inner = () => {
             <ol className="flex items-center gap-2 text-xs text-muted-foreground" itemScope itemType="https://schema.org/BreadcrumbList">
               <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
                 <Link to="/" className="hover:text-primary transition-colors" itemProp="item">
-                  <span itemProp="name">Home</span>
+                  <span itemProp="name">{t("Home")}</span>
                 </Link>
                 <meta itemProp="position" content="1" />
               </li>
               <li className="text-muted-foreground/50 select-none">›</li>
               <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                <span className="text-foreground font-medium" itemProp="name">Track Record</span>
+                <span className="text-foreground font-medium" itemProp="name">{t("Track Record")}</span>
                 <meta itemProp="position" content="2" />
               </li>
             </ol>
@@ -156,10 +156,10 @@ const Inner = () => {
           <div className="container mx-auto px-6 text-center">
             <ScrollReveal>
               <Badge className="mb-4 border-primary/30 bg-primary/10 text-primary">
-                <CheckCircle className="mr-1 h-3 w-3" /> Track Record
+                <CheckCircle className="mr-1 h-3 w-3" /> {t("Track Record")}
               </Badge>
               <h1 className="mb-4 text-4xl font-bold md:text-5xl">
-                Successfully Delivered
+                {t("Successfully Delivered")}
               </h1>
               <p className="mx-auto max-w-2xl text-muted-foreground text-lg">
                 {t("Every project below has been sourced, renovated, tenanted, and delivered to investors who hold an active Greek Golden Visa. No delays, no surprises.")}
@@ -172,7 +172,7 @@ const Inner = () => {
         <section id="delivered" className="py-20">
           <div className="container mx-auto px-6">
             {delivered.length === 0 ? (
-              <p className="text-center text-muted-foreground">No delivered projects yet.</p>
+              <p className="text-center text-muted-foreground">{t("No delivered projects yet.")}</p>
             ) : (
               <ScrollReveal variant="stagger">
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -190,9 +190,9 @@ const Inner = () => {
                               loading="lazy"
                               className="h-full w-full object-cover transition-transform group-hover:scale-105 rounded-2xl"
                             />
-                            <Badge className="absolute right-3 top-3 border-none bg-primary/90 text-primary-foreground">
-                              Delivered
-                            </Badge>
+                              <Badge className="absolute right-3 top-3 border-none bg-primary/90 text-primary-foreground">
+                                {t("Delivered")}
+                              </Badge>
                           </div>
                           <div className="p-4 pb-3">
                             <div className="flex items-start justify-between gap-2">
@@ -272,6 +272,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
   const [floorPlanLightboxOpen, setFloorPlanLightboxOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const scrollTopBeforeLightbox = useRef(0);
+  const { t } = useTranslation();
 
   const saveScrollTop = useCallback(() => {
     scrollTopBeforeLightbox.current = scrollRef.current?.scrollTop ?? 0;
@@ -424,13 +425,13 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
             {property.price && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><span className="text-primary font-semibold">€{property.price.toLocaleString()}</span></Badge>}
             {property.size && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><Maximize className="h-3.5 w-3.5 text-muted-foreground" /> {property.size} m²</Badge>}
             {property.bedrooms && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><Bed className="h-3.5 w-3.5 text-muted-foreground" /> {property.bedrooms} BR</Badge>}
-            {property.floor && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><Building className="h-3.5 w-3.5 text-muted-foreground" /> Floor {property.floor}</Badge>}
-            {property.construction_year && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><Calendar className="h-3.5 w-3.5 text-muted-foreground" /> Built {property.construction_year}</Badge>}
+            {property.floor && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><Building className="h-3.5 w-3.5 text-muted-foreground" /> {t("Floor")} {property.floor}</Badge>}
+            {property.construction_year && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><Calendar className="h-3.5 w-3.5 text-muted-foreground" /> {t("Built")} {property.construction_year}</Badge>}
             {property.yield && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><TrendingUp className="h-3.5 w-3.5 text-muted-foreground" /> {property.yield}</Badge>}
           </div>
           {hasBeforeAfter && (
             <div>
-              <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Before & After</h4>
+              <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">{t("Before & After")}</h4>
               <BeforeAfterSlider before={property.before_image!} after={property.after_image!} />
             </div>
           )}
@@ -438,7 +439,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
           {/* Floor Plan (modal) */}
           {hasFloorPlan && (
             <div>
-              <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Floor Plan</h4>
+              <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">{t("Floor Plan")}</h4>
               <div className="relative">
                 <img
                   src={property.floor_plan}
