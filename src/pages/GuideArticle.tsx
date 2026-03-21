@@ -93,6 +93,7 @@ const Inner = () => {
   const navigate = useNavigate();
   const { openWithLocation } = useLeadBot();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   // meta is used as fallback for hardcoded articles; DB-created articles don't need it
   const meta = slug ? ARTICLE_META[slug] : null;
