@@ -273,7 +273,7 @@ const LeadCaptureBot = () => {
       const timer = setTimeout(() => {
         setTyping(false);
         setMessages([
-          { role: "bot", text: `${STEPS[0].emoji} Hello! I'm your investment assistant. ${STEPS[0].label}` },
+          { role: "bot", text: `${STEPS[0].emoji} ${t("Hello! I'm your investment assistant.")} ${t(STEPS[0].label)}` },
         ]);
       }, 800);
       return () => clearTimeout(timer);
