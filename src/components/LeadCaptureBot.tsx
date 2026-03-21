@@ -771,7 +771,7 @@ const LeadCaptureBot = () => {
                                 const matched = await showMatchingProperties(opt);
                                 if (matched && matched.length > 0) {
                                   showBotMessage(
-                                    `✨ Here are ${matched.length} hand-picked properties that match your budget! Tap one to enquire, or skip to continue.`,
+                                    `✨ ${t("Here are")} ${matched.length} ${t("hand-picked properties that match your budget! Tap one to enquire, or skip to continue.")}`,
                                     () => {
                                       showBotProperties(matched);
                                     },
