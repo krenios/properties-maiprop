@@ -439,7 +439,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
           {/* Floor Plan (modal) */}
           {hasFloorPlan && (
             <div>
-              <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Floor Plan</h4>
+              <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">{t("Floor Plan")}</h4>
               <div className="relative">
                 <img
                   src={property.floor_plan}
