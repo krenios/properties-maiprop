@@ -727,7 +727,7 @@ const LeadCaptureBot = () => {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-primary hover:underline underline-offset-2"
                     >
-                      How it works <ExternalLink className="h-3 w-3" />
+                      {t("How it works")} <ExternalLink className="h-3 w-3" />
                     </a>
                   </div>
                 </div>
