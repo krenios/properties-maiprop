@@ -3,6 +3,7 @@ import { ChevronDown, Home, Clock, Globe, TrendingUp, ShieldCheck, Star } from "
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 const faqs = [
   {
