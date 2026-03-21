@@ -172,7 +172,7 @@ const Inner = () => {
         <section id="delivered" className="py-20">
           <div className="container mx-auto px-6">
             {delivered.length === 0 ? (
-              <p className="text-center text-muted-foreground">No delivered projects yet.</p>
+              <p className="text-center text-muted-foreground">{t("No delivered projects yet.")}</p>
             ) : (
               <ScrollReveal variant="stagger">
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
