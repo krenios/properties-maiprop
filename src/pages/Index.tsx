@@ -207,10 +207,6 @@ const Index = () => {
         <InvestmentOpportunities />
       </Suspense>
       <SectionDivider />
-      <Suspense fallback={null}>
-        <Testimonials />
-      </Suspense>
-      <SectionDivider />
       <Suspense fallback={<div className="min-h-[600px]" />}>
         <DeliveredProjects />
       </Suspense>
