@@ -688,7 +688,7 @@ const LeadCaptureBot = () => {
                 </div>
                 <div ref={turnstileRef} className="cf-turnstile" />
                 {captchaError && (
-                  <p className="text-xs text-destructive">Verification failed. Please refresh and try again.</p>
+                  <p className="text-xs text-destructive">{t("Verification failed. Please refresh and try again.")}</p>
                 )}
                 <button
                   onClick={() => turnstileToken && handleSubmit(turnstileToken)}
