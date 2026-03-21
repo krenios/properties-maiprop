@@ -431,7 +431,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
           </div>
           {hasBeforeAfter && (
             <div>
-              <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Before & After</h4>
+              <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">{t("Before & After")}</h4>
               <BeforeAfterSlider before={property.before_image!} after={property.after_image!} />
             </div>
           )}
