@@ -19,6 +19,7 @@ interface TranslationContextType {
   setLanguage: (lang: string) => void;
   t: (text: string) => string;
   isTranslating: boolean;
+  clearCache: () => void;
 }
 
 const TranslationContext = createContext<TranslationContextType>({
