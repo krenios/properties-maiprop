@@ -698,10 +698,10 @@ const LeadCaptureBot = () => {
                   {loading ? (
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
                   ) : (
-                    <>
-                      <Check className="h-4 w-4" />
-                      Submit Inquiry
-                    </>
+                      <>
+                        <Check className="h-4 w-4" />
+                        {t("Submit Inquiry")}
+                      </>
                   )}
                 </button>
               </div>
