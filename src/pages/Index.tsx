@@ -10,7 +10,7 @@ const CookieConsent = lazy(() => import("@/components/CookieConsent"));
 // Lazy-load below-the-fold sections
 const GoldenVisaStats = lazy(() => import("@/components/GoldenVisaStats"));
 const InvestmentOpportunities = lazy(() => import("@/components/InvestmentOpportunities"));
-const Testimonials = lazy(() => import("@/components/Testimonials"));
+
 const DeliveredProjects = lazy(() => import("@/components/DeliveredProjects"));
 
 const PlatformReference = lazy(() => import("@/components/PlatformReference"));
