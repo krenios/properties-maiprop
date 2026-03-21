@@ -684,7 +684,7 @@ const LeadCaptureBot = () => {
               <div className="border-t border-border bg-background/50 px-4 py-4 flex flex-col items-center gap-3">
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-                  <span>Quick spam check — this only takes a second</span>
+                  <span>{t("Quick spam check — this only takes a second")}</span>
                 </div>
                 <div ref={turnstileRef} className="cf-turnstile" />
                 {captchaError && (
