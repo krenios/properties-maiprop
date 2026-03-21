@@ -557,8 +557,8 @@ const LeadCaptureBot = () => {
                   <Sparkles className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-foreground">Investment Assistant</h3>
-                  <p className="text-[11px] text-muted-foreground">Typically replies instantly</p>
+                  <h3 className="text-sm font-semibold text-foreground">{t("Investment Assistant")}</h3>
+                  <p className="text-[11px] text-muted-foreground">{t("Typically replies instantly")}</p>
                 </div>
               </div>
               {!submitted && (
