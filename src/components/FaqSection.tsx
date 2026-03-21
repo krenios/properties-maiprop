@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTranslation } from "@/contexts/TranslationContext";
 
-const faqs = [
+const faqData = [
   {
     icon: Home,
     number: "01",
@@ -68,6 +68,16 @@ const categoryColors: Record<string, string> = {
 const FaqSection = () => {
   const [open, setOpen] = useState<number | null>(0);
   const isMobile = useIsMobile();
+  const { t } = useTranslation();
+
+  // Translate all FAQ entries through the translation system
+  const faqs = faqData.map((faq) => ({
+    ...faq,
+    q: t(faq.q),
+    a: t(faq.a),
+    category: t(faq.category),
+    highlight: t(faq.highlight),
+  }));
 
   return (
     <section id="faq" className="relative bg-background py-20 overflow-hidden">
@@ -82,16 +92,16 @@ const FaqSection = () => {
         <ScrollReveal>
           <div className="mb-12 flex flex-col items-center text-center">
             <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
-              FAQ
+              {t("FAQ")}
             </span>
             <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-              Your questions,{" "}
+              {t("Your questions,")}{" "}
               <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                answered
+                {t("answered")}
               </span>
             </h2>
             <p className="max-w-xl text-muted-foreground text-sm">
-              Everything you need to know about the Greek Golden Visa and investing with mAI.
+              {t("Everything you need to know about the Greek Golden Visa and investing with mAI.")}
             </p>
           </div>
         </ScrollReveal>
@@ -218,7 +228,7 @@ const FaqSection = () => {
                         <span className="text-5xl font-black text-primary/20 leading-none">
                           {faqs[open].number}
                         </span>
-                        <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${categoryColors[faqs[open].category]}`}>
+                        <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${categoryColors[faqData[open].category]}`}>
                           {faqs[open].category}
                         </span>
                       </div>

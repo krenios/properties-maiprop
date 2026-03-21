@@ -85,6 +85,8 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
           cache.current[lang][original] = translated[j] || original;
         });
       }
+      // Persist updated cache to sessionStorage so navigating pages doesn't re-call AI
+      saveCache(cache.current);
       forceRender((n) => n + 1);
     } catch (err) {
       console.error("Translation error:", err);
