@@ -75,6 +75,7 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const setLanguage = useCallback(
     (lang: string) => {
       setLanguageState(lang);
+      try { localStorage.setItem(STORAGE_KEY, lang); } catch { /* ignore */ }
 
       // Set RTL direction for Arabic
       document.documentElement.dir = (lang === "ar" || lang === "he") ? "rtl" : "ltr";
