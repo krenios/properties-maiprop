@@ -190,9 +190,9 @@ const Inner = () => {
                               loading="lazy"
                               className="h-full w-full object-cover transition-transform group-hover:scale-105 rounded-2xl"
                             />
-                            <Badge className="absolute right-3 top-3 border-none bg-primary/90 text-primary-foreground">
-                              Delivered
-                            </Badge>
+                              <Badge className="absolute right-3 top-3 border-none bg-primary/90 text-primary-foreground">
+                                {t("Delivered")}
+                              </Badge>
                           </div>
                           <div className="p-4 pb-3">
                             <div className="flex items-start justify-between gap-2">
