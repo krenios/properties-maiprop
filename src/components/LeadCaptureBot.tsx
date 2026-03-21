@@ -185,6 +185,7 @@ const PropertyChatCard = ({
 
 const LeadCaptureBot = () => {
   const { isOpen: open, setIsOpen, pendingLocation } = useLeadBot();
+  const { t } = useTranslation();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormData>(initial);
   const [submitted, setSubmitted] = useState(false);
