@@ -340,7 +340,7 @@ const LeadCaptureBot = () => {
     setMessages((prev) => [...prev, { role: "user", text: `I'm interested in: ${p.title}` }]);
     const nextStep = STEPS[step + 1];
     showBotMessage(
-      `🏡 Great choice! "${p.title}" is a fantastic option. ${nextStep.emoji} ${nextStep.label}`,
+      `🏡 ${t("Great choice!")} "${p.title}" ${t("is a fantastic option.")} ${nextStep.emoji} ${t(nextStep.label)}`,
     );
     setStep(step + 1);
   };
