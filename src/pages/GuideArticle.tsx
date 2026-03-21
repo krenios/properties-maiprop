@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
+import { useTranslation } from "@/contexts/TranslationContext";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowLeft, Clock, CheckCircle2, RefreshCw, MapPin } from "lucide-react";
