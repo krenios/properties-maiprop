@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { lazy, Suspense, useState } from "react";
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,9 +10,8 @@ import {
   ShieldCheck, Headphones, ChevronRight, ChevronDown,
   CheckCircle2, FileText, AlertCircle } from
 "lucide-react";
-import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
-const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const BASE_URL = "https://properties.maiprop.co";
 const PAGE_URL = `${BASE_URL}/process/`;
@@ -521,17 +520,10 @@ const Inner = () => {
         </div>
       </section>
 
-      <Suspense fallback={null}>
-        <LeadCaptureBot />
-      </Suspense>
     </main>);
 
 };
 
 export default function ProcessPage() {
-  return (
-    <LeadBotProvider>
-      <Inner />
-    </LeadBotProvider>);
-
+  return <Inner />;
 }

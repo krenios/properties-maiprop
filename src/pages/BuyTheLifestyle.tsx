@@ -1,15 +1,13 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight, Wine, Utensils, Waves, Sun, Building,
   HeartHandshake, CheckCircle2, MapPin,
 } from "lucide-react";
-import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
-const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const BASE = "https://properties.maiprop.co";
 const PAGE = `${BASE}/buy-the-lifestyle/`;
@@ -281,10 +279,9 @@ const Inner = () => {
       <footer className="border-t border-border bg-background text-center py-4">
         <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. All rights reserved.</p>
       </footer>
-      <Suspense fallback={null}><LeadCaptureBot /></Suspense>
     </main>
   );
 };
 
-const BuyTheLifestyle = () => <LeadBotProvider><Inner /></LeadBotProvider>;
+const BuyTheLifestyle = () => <Inner />;
 export default BuyTheLifestyle;

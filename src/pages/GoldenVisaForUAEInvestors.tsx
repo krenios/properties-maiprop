@@ -1,15 +1,13 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight, CheckCircle2, Globe, Shield, TrendingUp,
   Home, Users, Plane, DollarSign, AlertCircle, ChevronRight, Building,
 } from "lucide-react";
-import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
-const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const BASE_URL = "https://properties.maiprop.co";
 const PAGE_URL = `${BASE_URL}/greek-golden-visa-uae-investors/`;
@@ -419,15 +417,10 @@ const Inner = () => {
       <footer className="border-t border-border bg-background text-center py-4">
         <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. All rights reserved.</p>
       </footer>
-      <Suspense fallback={null}><LeadCaptureBot /></Suspense>
     </main>
   );
 };
 
-const GoldenVisaForUAEInvestors = () => (
-  <LeadBotProvider>
-    <Inner />
-  </LeadBotProvider>
-);
+const GoldenVisaForUAEInvestors = () => <Inner />;
 
 export default GoldenVisaForUAEInvestors;

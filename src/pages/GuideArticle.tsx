@@ -1,16 +1,15 @@
 import { Helmet } from "react-helmet-async";
 import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "@/contexts/TranslationContext";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowLeft, Clock, CheckCircle2, RefreshCw, MapPin } from "lucide-react";
 import { optimizeImage } from "@/lib/optimizeImage";
-import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useLeadBot } from "@/components/LeadBotProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast";
-const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const BASE_URL = "https://properties.maiprop.co";
 
@@ -472,15 +471,10 @@ const Inner = () => {
       <footer className="border-t border-border bg-background text-center py-4">
         <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. All rights reserved.</p>
       </footer>
-      <Suspense fallback={null}><LeadCaptureBot /></Suspense>
     </main>
   );
 };
 
-const GuideArticle = () => (
-  <LeadBotProvider>
-    <Inner />
-  </LeadBotProvider>
-);
+const GuideArticle = () => <Inner />;
 
 export default GuideArticle;

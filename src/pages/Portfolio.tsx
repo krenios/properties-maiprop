@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { createPortal } from "react-dom";
@@ -16,12 +16,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
-import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
 import ImageLightbox from "@/components/ImageLightbox";
 import { Separator } from "@/components/ui/separator";
-
-const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const BASE_URL = "https://properties.maiprop.co";
 
@@ -256,9 +254,6 @@ const Inner = () => {
       </main>
 
       <DeliveredModal property={selected} open={!!selected} onClose={() => setSelected(null)} />
-      <Suspense fallback={null}>
-        <LeadCaptureBot />
-      </Suspense>
     </>
   );
 };
@@ -553,10 +548,6 @@ const BeforeAfterSlider = ({ before, after }: { before: string; after: string })
   );
 };
 
-const Portfolio = () => (
-  <LeadBotProvider>
-    <Inner />
-  </LeadBotProvider>
-);
+const Portfolio = () => <Inner />;
 
 export default Portfolio;

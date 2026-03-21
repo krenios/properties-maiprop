@@ -1,12 +1,11 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Globe, Users, Home, TrendingUp, Sun, Zap, ArrowRight, CheckCircle2, MapPin, Gavel, BadgeCheck } from "lucide-react";
-import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
-const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
+import Footer from "@/components/Footer";
 
 const BASE_URL = "https://properties.maiprop.co";
 const PAGE_URL = `${BASE_URL}/greek-golden-visa/`;
@@ -303,18 +302,36 @@ const Inner = () => {
         </div>
       </section>
 
-      <footer className="border-t border-border bg-background text-center py-4">
-        <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. All rights reserved.</p>
-      </footer>
-      <Suspense fallback={null}><LeadCaptureBot /></Suspense>
+      {/* Related Guides */}
+      <section className="py-16 bg-background/50">
+        <div className="container mx-auto max-w-4xl px-6">
+          <h2 className="mb-8 text-2xl font-bold">{t("Related Guides")}</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Link to="/golden-visa-tax-benefits" className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all">
+              <h3 className="font-semibold group-hover:text-primary transition-colors">{t("Golden Visa Tax Benefits")}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{t("Understand the tax advantages available to Golden Visa holders in Greece.")}</p>
+            </Link>
+            <Link to="/golden-visa-rental-income-properties" className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all">
+              <h3 className="font-semibold group-hover:text-primary transition-colors">{t("Rental Income Properties")}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{t("Properties selected for their rental income potential and net yields.")}</p>
+            </Link>
+            <Link to="/greek-golden-visa-requirements" className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all">
+              <h3 className="font-semibold group-hover:text-primary transition-colors">{t("Requirements & Eligibility")}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{t("Full documentation checklist and eligibility criteria for the Greek Golden Visa.")}</p>
+            </Link>
+            <Link to="/properties" className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all">
+              <h3 className="font-semibold group-hover:text-primary transition-colors">{t("Browse Properties")}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{t("Explore the full portfolio of Golden Visa eligible properties in Athens and the Riviera.")}</p>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
     </main>
   );
 };
 
-const GreekGoldenVisa = () => (
-  <LeadBotProvider>
-    <Inner />
-  </LeadBotProvider>
-);
+const GreekGoldenVisa = () => <Inner />;
 
 export default GreekGoldenVisa;

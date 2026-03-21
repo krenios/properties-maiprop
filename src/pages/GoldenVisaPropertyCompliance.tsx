@@ -1,12 +1,10 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2, FileCheck, Scale, AlertTriangle, ClipboardList } from "lucide-react";
-import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
-const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const BASE = "https://properties.maiprop.co";
 const PAGE = `${BASE}/golden-visa-property-compliance/`;
@@ -257,10 +255,9 @@ const Inner = () => {
       <footer className="border-t border-border bg-background text-center py-4">
         <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. All rights reserved.</p>
       </footer>
-      <Suspense fallback={null}><LeadCaptureBot /></Suspense>
     </main>
   );
 };
 
-const GoldenVisaPropertyCompliance = () => <LeadBotProvider><Inner /></LeadBotProvider>;
+const GoldenVisaPropertyCompliance = () => <Inner />;
 export default GoldenVisaPropertyCompliance;

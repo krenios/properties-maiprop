@@ -1,16 +1,15 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, MapPin, Maximize, Bed, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { optimizeImage } from "@/lib/optimizeImage";
-import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useLeadBot } from "@/components/LeadBotProvider";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "@/contexts/TranslationContext";
-const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const BASE_URL = "https://properties.maiprop.co";
 const PAGE_URL = `${BASE_URL}/250k-golden-visa-properties/`;
@@ -423,15 +422,10 @@ const Inner = () => {
       <footer className="border-t border-border bg-background text-center py-4">
         <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. All rights reserved.</p>
       </footer>
-      <Suspense fallback={null}><LeadCaptureBot /></Suspense>
     </main>
   );
 };
 
-const GoldenVisa250k = () => (
-  <LeadBotProvider>
-    <Inner />
-  </LeadBotProvider>
-);
+const GoldenVisa250k = () => <Inner />;
 
 export default GoldenVisa250k;

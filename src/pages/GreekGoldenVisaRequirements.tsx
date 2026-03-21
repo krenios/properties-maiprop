@@ -1,12 +1,11 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, FileText, ArrowRight, AlertCircle, ChevronRight } from "lucide-react";
-import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
-const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
+import Footer from "@/components/Footer";
 
 const BASE_URL = "https://properties.maiprop.co";
 const PAGE_URL = `${BASE_URL}/greek-golden-visa-requirements/`;
@@ -349,18 +348,11 @@ const Inner = () => {
         </div>
       </section>
 
-      <footer className="border-t border-border bg-background text-center py-4">
-        <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. All rights reserved.</p>
-      </footer>
-      <Suspense fallback={null}><LeadCaptureBot /></Suspense>
+      <Footer />
     </main>
   );
 };
 
-const GreekGoldenVisaRequirements = () => (
-  <LeadBotProvider>
-    <Inner />
-  </LeadBotProvider>
-);
+const GreekGoldenVisaRequirements = () => <Inner />;
 
 export default GreekGoldenVisaRequirements;

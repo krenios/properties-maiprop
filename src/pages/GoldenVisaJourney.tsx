@@ -1,15 +1,13 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import {
   CheckCircle2, FileText, ArrowRight, AlertCircle,
   MessageCircle, Home, Gavel, CreditCard, Fingerprint, BadgeCheck,
 } from "lucide-react";
-import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
-const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const BASE_URL = "https://properties.maiprop.co";
 const PAGE_URL = `${BASE_URL}/golden-visa-journey/`;
@@ -433,17 +431,10 @@ const Inner = () => {
         </div>
       </section>
 
-      <Suspense fallback={null}>
-        <LeadCaptureBot />
-      </Suspense>
     </main>
   );
 };
 
-const GoldenVisaJourney = () => (
-  <LeadBotProvider>
-    <Inner />
-  </LeadBotProvider>
-);
+const GoldenVisaJourney = () => <Inner />;
 
 export default GoldenVisaJourney;

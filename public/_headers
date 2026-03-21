@@ -1,0 +1,20 @@
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+
+# Long-term cache for hashed JS/CSS assets
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Short cache for HTML — always revalidate
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Medium cache for images
+/images/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/lovable-uploads/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400

@@ -1,1 +1,11 @@
 /sitemap-dynamic.xml https://cqxcztafhnwkhxgaylne.supabase.co/functions/v1/sitemap 200
+
+# Trailing-slash normalisation — redirect bare paths to canonical slash form
+/greek-golden-visa          /greek-golden-visa/         301
+/properties                 /properties/                301
+/portfolio                  /portfolio/                 301
+/trackrecord                /trackrecord/               301
+/guides                     /guides/                    301
+/process                    /process/                   301
+/golden-visa-journey        /golden-visa-journey/       301
+/250k-golden-visa-properties /250k-golden-visa-properties/ 301
