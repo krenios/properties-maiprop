@@ -19,6 +19,7 @@ interface TranslationContextType {
   setLanguage: (lang: string) => void;
   t: (text: string) => string;
   isTranslating: boolean;
+  clearCache: () => void;
 }
 
 const TranslationContext = createContext<TranslationContextType>({
@@ -26,6 +27,7 @@ const TranslationContext = createContext<TranslationContextType>({
   setLanguage: () => {},
   t: (text) => text,
   isTranslating: false,
+  clearCache: () => {},
 });
 
 export const useTranslation = () => useContext(TranslationContext);
@@ -150,8 +152,19 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
     [language, scheduleBatch]
   );
 
+  const clearCache = useCallback(() => {
+    cache.current = {};
+    pendingTexts.current = new Set();
+    try {
+      Object.keys(localStorage)
+        .filter((k) => k.startsWith("mai_prop_translation_cache_"))
+        .forEach((k) => localStorage.removeItem(k));
+    } catch { /* ignore */ }
+    forceRender((n) => n + 1);
+  }, []);
+
   return (
-    <TranslationContext.Provider value={{ language, setLanguage, t, isTranslating }}>
+    <TranslationContext.Provider value={{ language, setLanguage, t, isTranslating, clearCache }}>
       {children}
       {isTranslating && (
         <div

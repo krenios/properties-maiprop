@@ -19,7 +19,7 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Pencil, Trash2, AlertTriangle, Home, ArrowRightCircle, CheckCircle, LogOut, GripVertical, Users, RefreshCw, Sparkles, BookOpen, Eye, EyeOff } from "lucide-react";
+import { Plus, Pencil, Trash2, AlertTriangle, Home, ArrowRightCircle, CheckCircle, LogOut, GripVertical, Users, RefreshCw, Sparkles, BookOpen, Eye, EyeOff, Languages } from "lucide-react";
 import ImageUpload from "@/components/ImageUpload";
 import FileUpload from "@/components/FileUpload";
 import CrmTab from "@/components/CrmTab";
@@ -27,6 +27,7 @@ import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 const propertySchema = z.object({
   title: z.string().min(1, "Title is required").max(200, "Title too long"),
@@ -299,6 +300,7 @@ const ArticlesTab = () => {
 const Admin = () => {
   const { properties, addProperty, updateProperty, deleteProperty, bulkUpdateStatus, reorderProperties } = useProperties();
   const { signOut } = useAuth();
+  const { clearCache } = useTranslation();
   const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingType, setEditingType] = useState<"new" | "delivered">("new");
@@ -450,7 +452,21 @@ const Admin = () => {
             <h1 className="text-2xl font-bold">Property Admin</h1>
           </div>
           <Button onClick={openNew} className="gap-2 rounded-full"><Plus className="h-4 w-4" /> Add Property</Button>
-          <Button variant="outline" onClick={signOut} className="gap-2 rounded-full"><LogOut className="h-4 w-4" /> Sign Out</Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-2 rounded-full text-muted-foreground hover:text-destructive hover:border-destructive/50"
+              onClick={() => {
+                clearCache();
+                toast.success("Translation cache cleared — users will see fresh translations on next language switch.");
+              }}
+            >
+              <Languages className="h-4 w-4" />
+              Clear Translation Cache
+            </Button>
+            <Button variant="outline" onClick={signOut} className="gap-2 rounded-full"><LogOut className="h-4 w-4" /> Sign Out</Button>
+          </div>
         </div>
 
         <Tabs defaultValue="properties" className="w-full">
