@@ -272,6 +272,7 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
   const [floorPlanLightboxOpen, setFloorPlanLightboxOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const scrollTopBeforeLightbox = useRef(0);
+  const { t } = useTranslation();
 
   const saveScrollTop = useCallback(() => {
     scrollTopBeforeLightbox.current = scrollRef.current?.scrollTop ?? 0;
