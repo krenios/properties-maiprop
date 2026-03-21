@@ -386,7 +386,7 @@ const LeadCaptureBot = () => {
       setStep(step + 1);
     } else {
       // All steps done — show CAPTCHA before submitting
-      showBotMessage("🛡️ Almost there! Please complete the quick verification below to send your inquiry.", () => {
+      showBotMessage(t("🛡️ Almost there! Please complete the quick verification below to send your inquiry."), () => {
         setShowCaptcha(true);
       });
     }
