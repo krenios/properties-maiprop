@@ -673,7 +673,7 @@ const LeadCaptureBot = () => {
                     )}
                   </div>
                   <Button onClick={handleClose} size="sm" variant="outline" className="mt-1 rounded-full">
-                    Close
+                    {t("Close")}
                   </Button>
                 </motion.div>
               )}
