@@ -530,7 +530,7 @@ const LeadCaptureBot = () => {
                 </motion.button>
               </TooltipTrigger>
               <TooltipContent side="left" className="border-border bg-card text-foreground">
-                Start an inquiry
+                {t("Start an inquiry")}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
