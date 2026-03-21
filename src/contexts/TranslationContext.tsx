@@ -39,12 +39,13 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const [isTranslating, setIsTranslating] = useState(false);
   // Cache: { [lang]: { [originalText]: translatedText } }
   const cache = useRef<Record<string, Record<string, string>>>({});
-  // Queue for batching
+  // All registered texts across the lifetime of the app
   const pendingTexts = useRef<Set<string>>(new Set());
+  // Debounce timer for batching newly-encountered texts
   const batchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [, forceRender] = useState(0);
 
-  // Apply persisted language settings on mount
+  // Apply persisted RTL/lang direction on initial mount
   React.useEffect(() => {
     document.documentElement.dir = (language === "ar" || language === "he") ? "rtl" : "ltr";
     document.documentElement.lang = language;
@@ -79,55 +80,47 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
     }
   }, []);
 
+  const scheduleBatch = useCallback((lang: string) => {
+    if (batchTimeout.current) clearTimeout(batchTimeout.current);
+    batchTimeout.current = setTimeout(() => {
+      const uncached = Array.from(pendingTexts.current).filter(
+        (text) => !cache.current[lang]?.[text]
+      );
+      if (uncached.length > 0) translateBatch(lang, uncached);
+    }, 120);
+  }, [translateBatch]);
+
   const setLanguage = useCallback(
     (lang: string) => {
       setLanguageState(lang);
       try { localStorage.setItem(STORAGE_KEY, lang); } catch { /* ignore */ }
 
-      // Set RTL direction for Arabic
       document.documentElement.dir = (lang === "ar" || lang === "he") ? "rtl" : "ltr";
       document.documentElement.lang = lang;
 
-      if (lang === "en") return;
-
-      // Collect all registered texts that aren't cached yet
-      const uncached = Array.from(pendingTexts.current).filter(
-        (text) => !cache.current[lang]?.[text]
-      );
-      if (uncached.length > 0) {
-        translateBatch(lang, uncached);
-      } else {
+      if (lang === "en") {
         forceRender((n) => n + 1);
+        return;
       }
+      scheduleBatch(lang);
     },
-    [translateBatch]
+    [scheduleBatch]
   );
 
+  // KEY FIX: t() schedules a batch whenever it encounters a text not yet in cache.
+  // This fires on every route/page change so new texts are always translated.
   const t = useCallback(
     (text: string): string => {
       if (language === "en") return text;
-      // Register text for future batch translation
       pendingTexts.current.add(text);
-      // Return cached translation or original
+      if (!cache.current[language]?.[text]) {
+        // Debounce — group all texts that render in the same frame into one request
+        scheduleBatch(language);
+      }
       return cache.current[language]?.[text] || text;
     },
-    [language]
+    [language, scheduleBatch]
   );
-
-  // When language changes and we encounter un-cached texts via t(), batch them
-  // We use an effect-like approach: after render, check for uncached texts
-  React.useEffect(() => {
-    if (language === "en") return;
-    const uncached = Array.from(pendingTexts.current).filter(
-      (text) => !cache.current[language]?.[text]
-    );
-    if (uncached.length > 0) {
-      if (batchTimeout.current) clearTimeout(batchTimeout.current);
-      batchTimeout.current = setTimeout(() => {
-        translateBatch(language, uncached);
-      }, 100);
-    }
-  }, [language, translateBatch]);
 
   return (
     <TranslationContext.Provider value={{ language, setLanguage, t, isTranslating }}>

@@ -8,6 +8,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { motion, AnimatePresence } from "framer-motion";
 import { useLeadBot } from "@/components/LeadBotProvider";
 import { Property } from "@/data/properties";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 const CALENDLY_URL = "https://calendly.com/maipropos/consultation";
 const TURNSTILE_SITE_KEY = "0x4AAAAAACmEa8xMGdIJZT2a";
@@ -143,7 +144,9 @@ const PropertyChatCard = ({
 }: {
   property: Property;
   onSelect: (p: Property) => void;
-}) => (
+}) => {
+  const { t } = useTranslation();
+  return (
   <button
     onClick={() => onSelect(property)}
     className="group w-full overflow-hidden rounded-xl border border-border/60 bg-card text-left transition-all hover:border-primary/50 hover:shadow-[0_4px_20px_hsl(var(--primary)/0.15)]"
@@ -157,7 +160,7 @@ const PropertyChatCard = ({
         />
         {property.status === "available" && (
           <span className="absolute top-2 left-2 rounded-full bg-primary/90 px-2 py-0.5 text-[10px] font-semibold text-primary-foreground">
-            Available
+            {t("Available")}
           </span>
         )}
       </div>
@@ -180,10 +183,12 @@ const PropertyChatCard = ({
       )}
     </div>
   </button>
-);
+  );
+};
 
 const LeadCaptureBot = () => {
   const { isOpen: open, setIsOpen, pendingLocation } = useLeadBot();
+  const { t } = useTranslation();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormData>(initial);
   const [submitted, setSubmitted] = useState(false);
@@ -271,7 +276,7 @@ const LeadCaptureBot = () => {
       const timer = setTimeout(() => {
         setTyping(false);
         setMessages([
-          { role: "bot", text: `${STEPS[0].emoji} Hello! I'm your investment assistant. ${STEPS[0].label}` },
+          { role: "bot", text: `${STEPS[0].emoji} ${t("Hello! I'm your investment assistant.")} ${t(STEPS[0].label)}` },
         ]);
       }, 800);
       return () => clearTimeout(timer);
@@ -338,7 +343,7 @@ const LeadCaptureBot = () => {
     setMessages((prev) => [...prev, { role: "user", text: `I'm interested in: ${p.title}` }]);
     const nextStep = STEPS[step + 1];
     showBotMessage(
-      `🏡 Great choice! "${p.title}" is a fantastic option. ${nextStep.emoji} ${nextStep.label}`,
+      `🏡 ${t("Great choice!")} "${p.title}" ${t("is a fantastic option.")} ${nextStep.emoji} ${t(nextStep.label)}`,
     );
     setStep(step + 1);
   };
@@ -359,12 +364,12 @@ const LeadCaptureBot = () => {
       // After budget — show matching properties inline
       if (currentStep.key === "investment_budget") {
         showBotMessage(
-          "🔍 Let me check our available properties that match your budget…",
+          t("🔍 Let me check our available properties that match your budget…"),
           async () => {
             const matched = await showMatchingProperties(currentValue);
             if (matched && matched.length > 0) {
               showBotMessage(
-                `✨ Here are ${matched.length} properties I found for you! Tap one to learn more, or skip to continue.`,
+                `✨ ${t("Here are")} ${matched.length} ${t("properties I found for you! Tap one to learn more, or skip to continue.")}`,
                 () => {
                   showBotProperties(matched, () => {
                     // After showing properties, also queue the next question but wait for selection or skip
@@ -384,7 +389,7 @@ const LeadCaptureBot = () => {
       setStep(step + 1);
     } else {
       // All steps done — show CAPTCHA before submitting
-      showBotMessage("🛡️ Almost there! Please complete the quick verification below to send your inquiry.", () => {
+      showBotMessage(t("🛡️ Almost there! Please complete the quick verification below to send your inquiry."), () => {
         setShowCaptcha(true);
       });
     }
@@ -525,7 +530,7 @@ const LeadCaptureBot = () => {
                 </motion.button>
               </TooltipTrigger>
               <TooltipContent side="left" className="border-border bg-card text-foreground">
-                Start an inquiry
+                {t("Start an inquiry")}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -555,8 +560,8 @@ const LeadCaptureBot = () => {
                   <Sparkles className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-foreground">Investment Assistant</h3>
-                  <p className="text-[11px] text-muted-foreground">Typically replies instantly</p>
+                  <h3 className="text-sm font-semibold text-foreground">{t("Investment Assistant")}</h3>
+                  <p className="text-[11px] text-muted-foreground">{t("Typically replies instantly")}</p>
                 </div>
               </div>
               {!submitted && (
@@ -602,7 +607,7 @@ const LeadCaptureBot = () => {
                               onClick={handleSkipPropertySelection}
                               className="text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground transition-colors"
                             >
-                              Skip — I'll decide later
+                              {t("Skip — I'll decide later")}
                             </button>
                             <a
                               href="/properties"
@@ -610,7 +615,7 @@ const LeadCaptureBot = () => {
                               rel="noopener noreferrer"
                               className="flex items-center gap-1 text-xs text-primary hover:underline"
                             >
-                              View all <ExternalLink className="h-3 w-3" />
+                              {t("View all")} <ExternalLink className="h-3 w-3" />
                             </a>
                           </div>
                         )}
@@ -642,9 +647,9 @@ const LeadCaptureBot = () => {
                     <Check className="h-7 w-7 text-primary" />
                   </div>
                   <div>
-                    <h4 className="text-base font-semibold text-foreground">
-                      Thank you, {form.full_name.split(" ")[0]}!
-                    </h4>
+                      <h4 className="text-base font-semibold text-foreground">
+                        {t("Thank you,")} {form.full_name.split(" ")[0]}!
+                      </h4>
                     {selectedProperty && (
                       <p className="mt-1 text-xs text-primary font-medium">
                         📌 Enquiry submitted for: {selectedProperty.title}
@@ -652,26 +657,26 @@ const LeadCaptureBot = () => {
                     )}
                     {isConsultation ? (
                       <>
-                        <p className="mt-1 text-sm text-muted-foreground">
-                          Book your free consultation slot below — pick a time that works for you.
-                        </p>
-                        <a
-                          href={CALENDLY_URL}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_hsl(var(--primary)/0.4)] transition-all hover:bg-primary/90 hover:shadow-[0_0_50px_hsl(var(--primary)/0.6)]"
-                        >
-                          📅 Book a Consultation
-                        </a>
+                          <p className="mt-1 text-sm text-muted-foreground">
+                            {t("Book your free consultation slot below — pick a time that works for you.")}
+                          </p>
+                          <a
+                            href={CALENDLY_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_hsl(var(--primary)/0.4)] transition-all hover:bg-primary/90 hover:shadow-[0_0_50px_hsl(var(--primary)/0.6)]"
+                          >
+                            📅 {t("Book a Consultation")}
+                          </a>
                       </>
                     ) : (
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        We'll reach out within 24 hours with tailored options.
-                      </p>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {t("We'll reach out within 24 hours with tailored options.")}
+                        </p>
                     )}
                   </div>
                   <Button onClick={handleClose} size="sm" variant="outline" className="mt-1 rounded-full">
-                    Close
+                    {t("Close")}
                   </Button>
                 </motion.div>
               )}
@@ -682,11 +687,11 @@ const LeadCaptureBot = () => {
               <div className="border-t border-border bg-background/50 px-4 py-4 flex flex-col items-center gap-3">
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-                  <span>Quick spam check — this only takes a second</span>
+                  <span>{t("Quick spam check — this only takes a second")}</span>
                 </div>
                 <div ref={turnstileRef} className="cf-turnstile" />
                 {captchaError && (
-                  <p className="text-xs text-destructive">Verification failed. Please refresh and try again.</p>
+                  <p className="text-xs text-destructive">{t("Verification failed. Please refresh and try again.")}</p>
                 )}
                 <button
                   onClick={() => turnstileToken && handleSubmit(turnstileToken)}
@@ -696,10 +701,10 @@ const LeadCaptureBot = () => {
                   {loading ? (
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
                   ) : (
-                    <>
-                      <Check className="h-4 w-4" />
-                      Submit Inquiry
-                    </>
+                      <>
+                        <Check className="h-4 w-4" />
+                        {t("Submit Inquiry")}
+                      </>
                   )}
                 </button>
               </div>
@@ -709,7 +714,7 @@ const LeadCaptureBot = () => {
             {!submitted && (
               <div className="border-t border-border bg-background/50 px-4 py-3">
                 <div className="flex items-center justify-between gap-3 text-[11px] text-muted-foreground whitespace-nowrap overflow-x-auto">
-                  <span className="shrink-0">Want to research first?</span>
+                  <span className="shrink-0">{t("Want to research first?")}</span>
                   <div className="flex items-center gap-3 flex-nowrap">
                     <a
                       href="/guides"
@@ -717,7 +722,7 @@ const LeadCaptureBot = () => {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-primary hover:underline underline-offset-2"
                     >
-                      Investor Guides <ExternalLink className="h-3 w-3" />
+                      {t("Investor Guides")} <ExternalLink className="h-3 w-3" />
                     </a>
                     <a
                       href="/process"
@@ -725,7 +730,7 @@ const LeadCaptureBot = () => {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-primary hover:underline underline-offset-2"
                     >
-                      How it works <ExternalLink className="h-3 w-3" />
+                      {t("How it works")} <ExternalLink className="h-3 w-3" />
                     </a>
                   </div>
                 </div>
@@ -755,7 +760,7 @@ const LeadCaptureBot = () => {
                           if (currentStep.key === "intent" && opt === "Book a free consultation") {
                             setIsConsultation(true);
                             showBotMessage(
-                              `✨ Great! To personalise your session, let me gather a few quick details first. ${STEPS[1].emoji} ${STEPS[1].label}`,
+                              `✨ ${t("Great! To personalise your session, let me gather a few quick details first.")} ${STEPS[1].emoji} ${t(STEPS[1].label)}`,
                             );
                             setStep(1);
                             return;
@@ -764,12 +769,12 @@ const LeadCaptureBot = () => {
                           // After budget — fetch matching properties
                           if (currentStep.key === "investment_budget") {
                             showBotMessage(
-                              "🔍 Let me check our available properties that match your budget…",
+                              t("🔍 Let me check our available properties that match your budget…"),
                               async () => {
                                 const matched = await showMatchingProperties(opt);
                                 if (matched && matched.length > 0) {
                                   showBotMessage(
-                                    `✨ Here are ${matched.length} hand-picked properties that match your budget! Tap one to enquire, or skip to continue.`,
+                                    `✨ ${t("Here are")} ${matched.length} ${t("hand-picked properties that match your budget! Tap one to enquire, or skip to continue.")}`,
                                     () => {
                                       showBotProperties(matched);
                                     },
@@ -790,7 +795,7 @@ const LeadCaptureBot = () => {
                             setStep(step + 1);
                           } else {
                             // Show CAPTCHA before submitting
-                            showBotMessage("🛡️ Almost there! Please complete the quick verification below to send your inquiry.", () => {
+                            showBotMessage(t("🛡️ Almost there! Please complete the quick verification below to send your inquiry."), () => {
                               setShowCaptcha(true);
                             });
                           }
@@ -801,7 +806,7 @@ const LeadCaptureBot = () => {
                             : "border-border bg-muted/50 text-foreground hover:border-primary/50 hover:bg-primary/5"
                         } ${currentStep.key === "intent" ? "flex-1 min-w-0 px-2 py-1 text-[10px] leading-tight whitespace-normal text-center" : ""}`}
                       >
-                        {opt}
+                        {t(opt)}
                       </button>
                     ))}
                   </div>
