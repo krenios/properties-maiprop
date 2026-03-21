@@ -425,8 +425,8 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
             {property.price && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><span className="text-primary font-semibold">€{property.price.toLocaleString()}</span></Badge>}
             {property.size && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><Maximize className="h-3.5 w-3.5 text-muted-foreground" /> {property.size} m²</Badge>}
             {property.bedrooms && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><Bed className="h-3.5 w-3.5 text-muted-foreground" /> {property.bedrooms} BR</Badge>}
-            {property.floor && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><Building className="h-3.5 w-3.5 text-muted-foreground" /> Floor {property.floor}</Badge>}
-            {property.construction_year && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><Calendar className="h-3.5 w-3.5 text-muted-foreground" /> Built {property.construction_year}</Badge>}
+            {property.floor && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><Building className="h-3.5 w-3.5 text-muted-foreground" /> {t("Floor")} {property.floor}</Badge>}
+            {property.construction_year && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><Calendar className="h-3.5 w-3.5 text-muted-foreground" /> {t("Built")} {property.construction_year}</Badge>}
             {property.yield && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><TrendingUp className="h-3.5 w-3.5 text-muted-foreground" /> {property.yield}</Badge>}
           </div>
           {hasBeforeAfter && (
