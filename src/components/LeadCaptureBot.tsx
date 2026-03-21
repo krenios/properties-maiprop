@@ -144,7 +144,9 @@ const PropertyChatCard = ({
 }: {
   property: Property;
   onSelect: (p: Property) => void;
-}) => (
+}) => {
+  const { t } = useTranslation();
+  return (
   <button
     onClick={() => onSelect(property)}
     className="group w-full overflow-hidden rounded-xl border border-border/60 bg-card text-left transition-all hover:border-primary/50 hover:shadow-[0_4px_20px_hsl(var(--primary)/0.15)]"
@@ -158,7 +160,7 @@ const PropertyChatCard = ({
         />
         {property.status === "available" && (
           <span className="absolute top-2 left-2 rounded-full bg-primary/90 px-2 py-0.5 text-[10px] font-semibold text-primary-foreground">
-            Available
+            {t("Available")}
           </span>
         )}
       </div>
@@ -181,7 +183,8 @@ const PropertyChatCard = ({
       )}
     </div>
   </button>
-);
+  );
+};
 
 const LeadCaptureBot = () => {
   const { isOpen: open, setIsOpen, pendingLocation } = useLeadBot();
