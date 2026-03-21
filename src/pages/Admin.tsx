@@ -452,7 +452,21 @@ const Admin = () => {
             <h1 className="text-2xl font-bold">Property Admin</h1>
           </div>
           <Button onClick={openNew} className="gap-2 rounded-full"><Plus className="h-4 w-4" /> Add Property</Button>
-          <Button variant="outline" onClick={signOut} className="gap-2 rounded-full"><LogOut className="h-4 w-4" /> Sign Out</Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-2 rounded-full text-muted-foreground hover:text-destructive hover:border-destructive/50"
+              onClick={() => {
+                clearCache();
+                toast.success("Translation cache cleared — users will see fresh translations on next language switch.");
+              }}
+            >
+              <Languages className="h-4 w-4" />
+              Clear Translation Cache
+            </Button>
+            <Button variant="outline" onClick={signOut} className="gap-2 rounded-full"><LogOut className="h-4 w-4" /> Sign Out</Button>
+          </div>
         </div>
 
         <Tabs defaultValue="properties" className="w-full">
