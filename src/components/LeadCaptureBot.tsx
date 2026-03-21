@@ -604,7 +604,7 @@ const LeadCaptureBot = () => {
                               onClick={handleSkipPropertySelection}
                               className="text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground transition-colors"
                             >
-                              Skip — I'll decide later
+                              {t("Skip — I'll decide later")}
                             </button>
                             <a
                               href="/properties"
