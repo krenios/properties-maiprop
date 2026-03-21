@@ -27,6 +27,7 @@ const TranslationContext = createContext<TranslationContextType>({
   setLanguage: () => {},
   t: (text) => text,
   isTranslating: false,
+  clearCache: () => {},
 });
 
 export const useTranslation = () => useContext(TranslationContext);
