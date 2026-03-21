@@ -667,9 +667,9 @@ const LeadCaptureBot = () => {
                           </a>
                       </>
                     ) : (
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        We'll reach out within 24 hours with tailored options.
-                      </p>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {t("We'll reach out within 24 hours with tailored options.")}
+                        </p>
                     )}
                   </div>
                   <Button onClick={handleClose} size="sm" variant="outline" className="mt-1 rounded-full">
