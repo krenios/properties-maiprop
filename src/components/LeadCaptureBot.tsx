@@ -366,7 +366,7 @@ const LeadCaptureBot = () => {
             const matched = await showMatchingProperties(currentValue);
             if (matched && matched.length > 0) {
               showBotMessage(
-                `✨ Here are ${matched.length} properties I found for you! Tap one to learn more, or skip to continue.`,
+                `✨ ${t("Here are")} ${matched.length} ${t("properties I found for you! Tap one to learn more, or skip to continue.")}`,
                 () => {
                   showBotProperties(matched, () => {
                     // After showing properties, also queue the next question but wait for selection or skip
