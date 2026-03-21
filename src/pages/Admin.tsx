@@ -300,6 +300,7 @@ const ArticlesTab = () => {
 const Admin = () => {
   const { properties, addProperty, updateProperty, deleteProperty, bulkUpdateStatus, reorderProperties } = useProperties();
   const { signOut } = useAuth();
+  const { clearCache } = useTranslation();
   const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingType, setEditingType] = useState<"new" | "delivered">("new");
