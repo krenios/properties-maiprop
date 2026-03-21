@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Home, ChevronRight, MessageCircle } from "lucide-react";
 import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 

@@ -156,10 +156,10 @@ const Inner = () => {
           <div className="container mx-auto px-6 text-center">
             <ScrollReveal>
               <Badge className="mb-4 border-primary/30 bg-primary/10 text-primary">
-                <CheckCircle className="mr-1 h-3 w-3" /> Track Record
+                <CheckCircle className="mr-1 h-3 w-3" /> {t("Track Record")}
               </Badge>
               <h1 className="mb-4 text-4xl font-bold md:text-5xl">
-                Successfully Delivered
+                {t("Successfully Delivered")}
               </h1>
               <p className="mx-auto max-w-2xl text-muted-foreground text-lg">
                 {t("Every project below has been sourced, renovated, tenanted, and delivered to investors who hold an active Greek Golden Visa. No delays, no surprises.")}
