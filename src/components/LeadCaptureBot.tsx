@@ -361,7 +361,7 @@ const LeadCaptureBot = () => {
       // After budget — show matching properties inline
       if (currentStep.key === "investment_budget") {
         showBotMessage(
-          "🔍 Let me check our available properties that match your budget…",
+          t("🔍 Let me check our available properties that match your budget…"),
           async () => {
             const matched = await showMatchingProperties(currentValue);
             if (matched && matched.length > 0) {
