@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { useTranslation } from "@/contexts/TranslationContext";
 import { useLeadBot } from "@/components/LeadBotProvider";
+import { trackConversion, CONVERSION_LABELS } from "@/lib/analytics";
 
 const bullets = [
 "Pre-verified properties with full compliance",
@@ -47,26 +48,12 @@ return (
 
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
             <Button asChild size="lg" className="gap-2 rounded-full bg-primary px-8 sm:px-12 text-base sm:text-lg font-semibold text-primary-foreground shadow-[0_0_40px_hsl(179_90%_63%/0.4)] transition-all hover:bg-primary/90 hover:shadow-[0_0_60px_hsl(179_90%_63%/0.6)] w-full sm:w-auto">
-              <a href="mailto:kr@maiprop.co" onClick={() => {
-                if (typeof window.gtag === "function") {
-                  window.gtag("event", "conversion", {
-                    send_to: "AW-17031338731/OAyuCMKFiP0bEOu1lrk_",
-                    event_category: "contact",
-                    event_label: "mail_us_click",
-                  });
-                }
-              }}>
+              <a href="mailto:kr@maiprop.co" onClick={() => trackConversion(CONVERSION_LABELS.CONTACT)}>
                 <Mail className="h-5 w-5" /> {t("Mail Us")}
               </a>
             </Button>
             <Button size="lg" variant="outline" className="gap-2 rounded-full border-primary/50 px-8 sm:px-12 text-base sm:text-lg font-semibold w-full sm:w-auto" onClick={() => {
-              if (typeof window.gtag === "function") {
-                window.gtag("event", "conversion", {
-                  send_to: "AW-17031338731/OAyuCMKFiP0bEOu1lrk_",
-                  event_category: "contact",
-                  event_label: "talk_to_us_click",
-                });
-              }
+              trackConversion(CONVERSION_LABELS.CONTACT);
               openWithLocation("");
             }}>
               <MessageCircle className="h-5 w-5" /> {t("Talk to Us")}

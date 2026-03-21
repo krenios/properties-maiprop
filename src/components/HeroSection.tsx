@@ -66,11 +66,6 @@ const HeroSection = () => {
               {t("View Properties")}
             </a>
           </Button>
-          <Button
-            asChild
-            size="lg"
-            className="gap-2 rounded-full bg-[hsl(210,80%,60%)] px-8 text-white hover:bg-[hsl(210,80%,70%)] w-full sm:w-auto"
-          ></Button>
         </div>
 
         {/* Stats bar */}

@@ -51,6 +51,9 @@ interface Props {
 
 const SWIPE_THRESHOLD = 120;
 
+// Module-level cache for POI results keyed by property id
+const poiCache: Record<string, PoiEntry[]> = {};
+
 const PropertyModal = ({ property, open, onClose }: Props) => {
   const [imgIdx, setImgIdx] = useState(0);
   const [swipeY, setSwipeY] = useState(0);
@@ -102,6 +105,12 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
       return;
     }
 
+    // Check module-level cache first
+    if (poiCache[property.id]) {
+      setPoiEntries(poiCache[property.id]);
+      return;
+    }
+
     setPoiLoading(true);
     supabase.functions
       .invoke("location-poi", {
@@ -112,7 +121,9 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
           console.error("POI fetch error:", error);
           setPoiEntries(null);
         } else {
-          setPoiEntries(data?.poi || []);
+          const entries: PoiEntry[] = data?.poi || [];
+          poiCache[property.id] = entries;
+          setPoiEntries(entries);
         }
       })
       .finally(() => setPoiLoading(false));

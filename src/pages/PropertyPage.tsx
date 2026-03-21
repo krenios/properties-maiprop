@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useProperties } from "@/contexts/PropertyContext";
+import { CONVERSION_ID } from "@/lib/analytics";
 import { Helmet } from "react-helmet-async";
 import { createPortal } from "react-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,11 +19,10 @@ import {
 import { toast } from "sonner";
 import type { LucideIcon } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
 import { lazy, Suspense } from "react";
 import ImageLightbox from "@/components/ImageLightbox";
-const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const statusColors: Record<string, string> = {
   available: "bg-primary/20 text-primary border-primary/30",
@@ -99,6 +100,7 @@ const PropertyPageInner = () => {
   const navigate = useNavigate();
   const { openWithLocation } = useLeadBot();
   const { t } = useTranslation();
+  const { properties: contextProperties } = useProperties();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [imgIdx, setImgIdx] = useState(0);
@@ -110,12 +112,19 @@ const PropertyPageInner = () => {
 
   useEffect(() => {
     if (!id) return;
+    // Check if property is already available in context to avoid a network call
+    const cached = contextProperties.find((p) => p.id === id);
+    if (cached) {
+      setProperty(cached);
+      setLoading(false);
+      return;
+    }
     supabase.from("properties").select("*").eq("id", id).single().then(({ data, error }) => {
       if (error || !data) { navigate("/", { replace: true }); return; }
       setProperty(data as Property);
       setLoading(false);
     });
-  }, [id, navigate]);
+  }, [id, navigate, contextProperties]);
 
   useEffect(() => {
     if (!property?.location) return;
@@ -139,10 +148,10 @@ const PropertyPageInner = () => {
   // Google Ads remarketing — fires once property data is loaded
   useEffect(() => {
     if (!property) return;
-    if (typeof window !== "undefined" && (window as any).gtag) {
+    if (typeof window !== "undefined" && typeof window.gtag === "function") {
       // Standard property remarketing
-      (window as any).gtag("event", "page_view", {
-        send_to: "AW-17031338731",
+      window.gtag("event", "page_view", {
+        send_to: CONVERSION_ID,
         value: property.price ?? undefined,
         currency: "EUR",
         items: [{
@@ -164,8 +173,8 @@ const PropertyPageInner = () => {
         const guideReads = JSON.parse(sessionStorage.getItem("mai_guide_reads") || "[]");
         const lastGuideCategory = sessionStorage.getItem("mai_last_guide_category") ?? undefined;
         if (guideReads.length > 0) {
-          (window as any).gtag("event", "high_intent_investor", {
-            send_to: "AW-17031338731",
+          window.gtag("event", "high_intent_investor", {
+            send_to: CONVERSION_ID,
             property_id: property.id,
             property_location: property.location,
             property_price: property.price ?? undefined,
@@ -704,19 +713,11 @@ const PropertyPageInner = () => {
             />,
             document.body
           )}
-
-        <Suspense fallback={null}>
-          <LeadCaptureBot />
-        </Suspense>
       </div>
     </>
   );
 };
 
-const PropertyPage = () => (
-  <LeadBotProvider>
-    <PropertyPageInner />
-  </LeadBotProvider>
-);
+const PropertyPage = () => <PropertyPageInner />;
 
 export default PropertyPage;

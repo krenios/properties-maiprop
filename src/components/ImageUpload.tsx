@@ -3,6 +3,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Upload, X, Loader2, GripVertical } from "lucide-react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
+import { toast } from "sonner";
+
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
 interface ImageUploadProps {
   value: string[];
@@ -25,6 +29,14 @@ const ImageUpload = ({ value, onChange, max, label, folder = "gallery" }: ImageU
     const newUrls: string[] = [];
 
     for (const file of Array.from(files)) {
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        toast.error(`"${file.name}" is not a supported format. Use JPEG, PNG, or WebP.`);
+        continue;
+      }
+      if (file.size > MAX_FILE_SIZE) {
+        toast.error(`"${file.name}" exceeds the 10 MB size limit.`);
+        continue;
+      }
       const ext = file.name.split(".").pop() || "jpg";
       const path = `${folder}/${crypto.randomUUID()}.${ext}`;
 
@@ -127,7 +139,7 @@ const ImageUpload = ({ value, onChange, max, label, folder = "gallery" }: ImageU
       <input
         ref={inputRef}
         type="file"
-        accept="image/*"
+        accept="image/jpeg,image/png,image/webp"
         multiple={max !== 1}
         className="hidden"
         onChange={(e) => upload(e.target.files)}

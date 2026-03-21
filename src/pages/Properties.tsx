@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -10,10 +10,9 @@ import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Home, ChevronRight, MessageCircle } from "lucide-react";
-import { LeadBotProvider, useLeadBot } from "@/components/LeadBotProvider";
+import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
-
-const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
+import { CONVERSION_ID } from "@/lib/analytics";
 
 const BASE_URL = "https://properties.maiprop.co";
 
@@ -26,9 +25,9 @@ const Inner = () => {
 
   // Google Ads remarketing — properties listing page
   useEffect(() => {
-    if (typeof window !== "undefined" && (window as any).gtag) {
-      (window as any).gtag("event", "page_view", {
-        send_to: "AW-17031338731",
+    if (typeof window !== "undefined" && typeof window.gtag === "function") {
+      window.gtag("event", "page_view", {
+        send_to: CONVERSION_ID,
         content_type: "property_listing",
         content_id: "properties",
       });
@@ -240,17 +239,10 @@ const Inner = () => {
       </main>
 
       <PropertyModal property={selected} open={!!selected} onClose={() => setSelected(null)} />
-      <Suspense fallback={null}>
-        <LeadCaptureBot />
-      </Suspense>
     </>
   );
 };
 
-const Properties = () => (
-  <LeadBotProvider>
-    <Inner />
-  </LeadBotProvider>
-);
+const Properties = () => <Inner />;
 
 export default Properties;

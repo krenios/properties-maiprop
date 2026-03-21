@@ -7,6 +7,9 @@ import { PropertyProvider } from "@/contexts/PropertyContext";
 import { TranslationProvider } from "@/contexts/TranslationContext";
 import { AuthProvider } from "@/hooks/useAuth";
 import { HelmetProvider } from "react-helmet-async";
+import { LeadBotProvider } from "@/components/LeadBotProvider";
+
+const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const Index = lazy(() => import("./pages/Index"));
 const Admin = lazy(() => import("./pages/Admin"));
@@ -62,6 +65,7 @@ const App = () => (
         <AuthProvider>
           <TranslationProvider>
           <PropertyProvider>
+          <LeadBotProvider>
             <Sonner />
             <BrowserRouter>
               <Routes>
@@ -123,6 +127,10 @@ const App = () => (
                 <Route path="*" element={<W c={<NotFound />} />} />
               </Routes>
             </BrowserRouter>
+            <Suspense fallback={null}>
+              <LeadCaptureBot />
+            </Suspense>
+          </LeadBotProvider>
           </PropertyProvider>
           </TranslationProvider>
         </AuthProvider>

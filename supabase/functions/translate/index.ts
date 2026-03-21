@@ -13,7 +13,7 @@ Deno.serve(async (req) => {
   try {
     const { texts, targetLang } = await req.json();
 
-    const VALID_LANGS = ["English", "Ελληνικά", "العربية", "中文", "Русский", "Français", "हिन्दी", "עברית"];
+    const VALID_LANGS = ["English", "Ελληνικά", "العربية", "中文", "Русский", "Français", "हिन्दी", "עברית", "Türkçe"];
 
     if (!texts || !Array.isArray(texts) || !targetLang) {
       return new Response(

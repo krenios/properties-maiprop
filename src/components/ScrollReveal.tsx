@@ -11,7 +11,6 @@ const baseStyle: CSSProperties = {
   opacity: 0,
   transform: "translateY(28px)",
   transition: "opacity 0.55s cubic-bezier(0.25,0.1,0.25,1), transform 0.55s cubic-bezier(0.25,0.1,0.25,1)",
-  willChange: "opacity, transform",
 };
 
 const visibleStyle: CSSProperties = {

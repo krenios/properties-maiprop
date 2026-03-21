@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, useNavigate, Link, NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -35,6 +35,7 @@ const WHATSAPP_URL = `https://wa.me/306971853470?text=${encodeURIComponent(whats
 const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
   const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
   const isHome = location.pathname === "/";
   const [scrolled, setScrolled] = useState(forceScrolled);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -83,13 +84,15 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
         <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((l) =>
             (l as any).isPage ? (
-              <Link
+              <NavLink
                 key={l.href}
                 to={l.href}
-                className="text-sm font-medium transition-colors text-secondary-foreground hover:text-foreground"
+                className={({ isActive }) =>
+                  `text-sm font-medium transition-colors ${isActive ? "text-foreground" : "text-secondary-foreground hover:text-foreground"}`
+                }
               >
                 {t(l.label)}
-              </Link>
+              </NavLink>
             ) : (l as any).isExternal ? (
               <a key={l.href} href={l.href} className="text-sm font-medium transition-colors text-secondary-foreground">
                 {t(l.label)}
@@ -121,7 +124,7 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
                 const el = document.querySelector("#contact");
                 el?.scrollIntoView({ behavior: "smooth" });
               } else {
-                window.location.href = "/#contact";
+                navigate("/#contact");
               }
             }}
           >
@@ -141,14 +144,16 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
           <nav className="container mx-auto flex flex-col gap-1 px-6 py-4">
             {navLinks.map((l) =>
               (l as any).isPage ? (
-                <Link
+                <NavLink
                   key={l.href}
                   to={l.href}
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  className={({ isActive }) =>
+                    `rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${isActive ? "text-foreground bg-muted" : "text-muted-foreground"}`
+                  }
                 >
                   {t(l.label)}
-                </Link>
+                </NavLink>
               ) : (l as any).isExternal ? (
                 <a
                   key={l.href}
@@ -187,7 +192,7 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
                   const el = document.querySelector("#contact");
                   el?.scrollIntoView({ behavior: "smooth" });
                 } else {
-                  window.location.href = "/#contact";
+                  navigate("/#contact");
                 }
               }}
             >

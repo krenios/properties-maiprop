@@ -4,8 +4,6 @@ import { useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import SectionDivider from "@/components/SectionDivider";
-import { LeadBotProvider } from "@/components/LeadBotProvider";
-
 const CookieConsent = lazy(() => import("@/components/CookieConsent"));
 
 // Lazy-load below-the-fold sections
@@ -18,7 +16,6 @@ const JourneySection = lazy(() => import("@/components/JourneySection"));
 const ContactSection = lazy(() => import("@/components/ContactSection"));
 const FaqSection = lazy(() => import("@/components/FaqSection"));
 const GuidesTeaser = lazy(() => import("@/components/GuidesTeaser"));
-const LeadCaptureBot = lazy(() => import("@/components/LeadCaptureBot"));
 
 const faqJsonLd = {
   "@context": "https://schema.org",
@@ -197,7 +194,6 @@ const Index = () => {
       },
       "inLanguage": ["en", "el", "ar", "zh", "ru", "fr", "hi", "he", "tr"]
     }) }} />
-    <LeadBotProvider>
       <Navbar />
       <HeroSection />
       <SectionDivider />
@@ -286,12 +282,8 @@ const Index = () => {
         </div>
       </footer>
       <Suspense fallback={null}>
-        <LeadCaptureBot />
-      </Suspense>
-      <Suspense fallback={null}>
         <CookieConsent />
       </Suspense>
-    </LeadBotProvider>
   </main>
   );
 };
