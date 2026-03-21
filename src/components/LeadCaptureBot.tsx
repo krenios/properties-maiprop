@@ -757,7 +757,7 @@ const LeadCaptureBot = () => {
                           if (currentStep.key === "intent" && opt === "Book a free consultation") {
                             setIsConsultation(true);
                             showBotMessage(
-                              `✨ Great! To personalise your session, let me gather a few quick details first. ${STEPS[1].emoji} ${STEPS[1].label}`,
+                              `✨ ${t("Great! To personalise your session, let me gather a few quick details first.")} ${STEPS[1].emoji} ${t(STEPS[1].label)}`,
                             );
                             setStep(1);
                             return;
