@@ -30,8 +30,12 @@ const TranslationContext = createContext<TranslationContextType>({
 
 export const useTranslation = () => useContext(TranslationContext);
 
+const STORAGE_KEY = "mai_prop_language";
+
 export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState("en");
+  const [language, setLanguageState] = useState(() => {
+    try { return localStorage.getItem(STORAGE_KEY) || "en"; } catch { return "en"; }
+  });
   const [isTranslating, setIsTranslating] = useState(false);
   // Cache: { [lang]: { [originalText]: translatedText } }
   const cache = useRef<Record<string, Record<string, string>>>({});
@@ -39,6 +43,13 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const pendingTexts = useRef<Set<string>>(new Set());
   const batchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [, forceRender] = useState(0);
+
+  // Apply persisted language settings on mount
+  React.useEffect(() => {
+    document.documentElement.dir = (language === "ar" || language === "he") ? "rtl" : "ltr";
+    document.documentElement.lang = language;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const translateBatch = useCallback(async (lang: string, texts: string[]) => {
     if (texts.length === 0) return;
@@ -71,6 +82,7 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const setLanguage = useCallback(
     (lang: string) => {
       setLanguageState(lang);
+      try { localStorage.setItem(STORAGE_KEY, lang); } catch { /* ignore */ }
 
       // Set RTL direction for Arabic
       document.documentElement.dir = (lang === "ar" || lang === "he") ? "rtl" : "ltr";

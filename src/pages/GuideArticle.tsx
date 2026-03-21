@@ -336,23 +336,23 @@ const Inner = () => {
           {/* Breadcrumb */}
           <nav className="mb-6 text-xs text-muted-foreground" aria-label="Breadcrumb">
             <ol className="flex items-center gap-1.5">
-              <li><Link to="/" className="hover:text-primary transition-colors">Home</Link></li>
+              <li><Link to="/" className="hover:text-primary transition-colors">{t("Home")}</Link></li>
               <span>/</span>
-              <li><Link to="/guides" className="hover:text-primary transition-colors">Guides</Link></li>
+              <li><Link to="/guides" className="hover:text-primary transition-colors">{t("Guides")}</Link></li>
               <span>/</span>
-              <li className="text-foreground truncate max-w-[200px]">{displayTitle}</li>
+              <li className="text-foreground truncate max-w-[200px]">{t(displayTitle)}</li>
             </ol>
           </nav>
 
           {/* Category + read time */}
           <div className="mb-4 flex items-center gap-3">
             <span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-              {displayCategory}
+              {t(displayCategory)}
             </span>
             {article && (
               <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <Clock className="h-3.5 w-3.5" />
-                {article.readTime}
+                {t(article.readTime)}
               </span>
             )}
           </div>
@@ -400,7 +400,7 @@ const Inner = () => {
           {/* Back link */}
           <div className="mt-16 flex items-center gap-2">
             <Link to="/guides" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-              <ArrowLeft className="h-4 w-4" /> Back to all guides
+              <ArrowLeft className="h-4 w-4" /> {t("Back to all guides")}
             </Link>
           </div>
         </div>
@@ -409,7 +409,7 @@ const Inner = () => {
       {/* More guides */}
       <section className="py-16 bg-background/50">
         <div className="container mx-auto px-6 max-w-3xl">
-          <h2 className="text-2xl font-bold mb-8">More Guides</h2>
+          <h2 className="text-2xl font-bold mb-8">{t("More Guides")}</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {Object.entries(ARTICLE_META)
               .filter(([s]) => s !== slug)
