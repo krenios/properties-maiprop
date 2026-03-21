@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link, NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, MessageCircle, X } from "lucide-react";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "@/contexts/TranslationContext";
 import maipropLogo from "@/assets/maiprop-logo-dark.png";
@@ -115,6 +115,15 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
               </a>
             ),
           )}
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 rounded-full border border-green-500/40 bg-green-500/10 px-3 py-1.5 text-xs font-medium text-green-400 hover:bg-green-500/20 transition-colors"
+          >
+            <MessageCircle className="h-3.5 w-3.5" />
+            WhatsApp
+          </a>
           <LanguageSwitcher />
           <Button
             size="sm"
@@ -182,6 +191,16 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
                 </a>
               ),
             )}
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-green-400 transition-colors hover:bg-green-500/10"
+            >
+              <MessageCircle className="h-4 w-4" />
+              WhatsApp
+            </a>
             <LanguageSwitcher />
             <Button
               size="sm"

@@ -7,6 +7,7 @@ import { createPortal } from "react-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Property } from "@/data/properties";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { optimizeImage } from "@/lib/optimizeImage";
 import {
@@ -14,7 +15,7 @@ import {
   ExternalLink, Building, Calendar, LayoutGrid, FileText,
   Plane, Waves, Anchor, TrainFront, Car, GraduationCap,
   ShoppingCart, Cross, Heart, Landmark, TreePine, Loader2,
-  ArrowLeft, Share2,
+  ArrowLeft, Share2, MessageCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import type { LucideIcon } from "lucide-react";
@@ -198,6 +199,8 @@ const PropertyPageInner = () => {
   }
 
   if (!property) return null;
+
+  const WHATSAPP_URL = `https://wa.me/306971853470?text=${encodeURIComponent("Hello! I'm interested in this Golden Visa property: " + (typeof window !== "undefined" ? window.location.href : ""))}`;
 
   const images = property.images.length > 0 ? property.images : ["/placeholder.svg"];
   const imagesLen = images.length;
@@ -548,6 +551,28 @@ const PropertyPageInner = () => {
             )}
           </div>
 
+          {/* CTA Row */}
+          <div className="mt-6 flex flex-col sm:flex-row gap-3">
+            <Button
+              className="flex-1 gap-2 rounded-full"
+              onClick={() => openWithLocation(property.location)}
+            >
+              <MessageCircle className="h-4 w-4" />
+              {t("Inquire About This Property")}
+            </Button>
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-1 items-center justify-center gap-2 rounded-full border border-green-500/40 bg-green-500/10 px-4 py-2 text-sm font-medium text-green-400 hover:bg-green-500/20 transition-colors"
+            >
+              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+              </svg>
+              {t("WhatsApp Us")}
+            </a>
+          </div>
+
           {/* Description */}
           {property.description && (
             <>
@@ -555,6 +580,29 @@ const PropertyPageInner = () => {
               <p className="leading-relaxed text-muted-foreground">{property.description}</p>
             </>
           )}
+
+          {/* Golden Visa Process Timeline */}
+          <div className="mt-8 rounded-2xl border border-border/60 bg-muted/20 p-6">
+            <h2 className="text-base font-semibold mb-4">{t("Your Golden Visa Journey")}</h2>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {[
+                { month: t("Month 1–2"), step: t("Property Selection & Due Diligence") },
+                { month: t("Month 2–3"), step: t("Legal Purchase & Land Registry") },
+                { month: t("Month 3–4"), step: t("Entry Visa Issuance") },
+                { month: t("Month 4–8"), step: t("Biometrics & Residency Permit") },
+              ].map((item, i) => (
+                <div key={i} className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/20 text-xs font-bold text-primary">
+                      {i + 1}
+                    </div>
+                    <p className="text-xs font-semibold text-primary">{item.month}</p>
+                  </div>
+                  <p className="text-xs text-muted-foreground pl-8">{item.step}</p>
+                </div>
+              ))}
+            </div>
+          </div>
 
           <Separator className="my-8 bg-border" />
 
@@ -663,6 +711,44 @@ const PropertyPageInner = () => {
               <ExternalLink className="h-4 w-4 text-muted-foreground" />
             </a>
           )}
+
+          {/* Similar Properties */}
+          {(() => {
+            const similar = contextProperties
+              .filter((p) => p.id !== property.id && p.status === "available")
+              .slice(0, 3);
+            if (similar.length === 0) return null;
+            return (
+              <section className="mt-12 border-t border-border pt-10">
+                <h2 className="text-xl font-bold mb-6">{t("Similar Properties")}</h2>
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {similar.map((p) => (
+                    <a
+                      key={p.id}
+                      href={`/property/${p.id}`}
+                      className="group flex gap-3 rounded-xl border border-border/60 bg-card p-3 hover:border-primary/40 transition-colors"
+                    >
+                      {p.images?.[0] && (
+                        <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-lg">
+                          <img
+                            src={optimizeImage(p.images[0], { width: 200, height: 150 })}
+                            alt={p.title}
+                            className="h-full w-full object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold leading-snug line-clamp-2 group-hover:text-primary transition-colors">{p.title}</p>
+                        <p className="mt-1 text-xs text-muted-foreground">{p.location}</p>
+                        {p.price && <p className="mt-1 text-sm font-bold text-primary">€{p.price.toLocaleString()}</p>}
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </section>
+            );
+          })()}
         </main>
 
         {lightboxIdx !== null &&

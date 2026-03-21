@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -9,19 +9,32 @@ import { Property } from "@/data/properties";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Home, ChevronRight, MessageCircle } from "lucide-react";
+import { Home, ChevronRight, MessageCircle, Map, LayoutGrid } from "lucide-react";
 import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
 import { CONVERSION_ID } from "@/lib/analytics";
+import CompareBar from "@/components/CompareBar";
+
+const PropertyMap = lazy(() => import("@/components/PropertyMap"));
 
 const BASE_URL = "https://properties.maiprop.co";
 
 const Inner = () => {
   const { properties } = useProperties();
   const [selected, setSelected] = useState<Property | null>(null);
+  const [compareList, setCompareList] = useState<Property[]>([]);
+  const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
   const { setIsOpen } = useLeadBot();
   const { t } = useTranslation();
   const current = properties.filter((p) => p.project_type === "new");
+
+  const toggleCompare = (p: Property) => {
+    setCompareList((prev) =>
+      prev.find((x) => x.id === p.id)
+        ? prev.filter((x) => x.id !== p.id)
+        : prev.length < 3 ? [...prev, p] : prev
+    );
+  };
 
   // Google Ads remarketing — properties listing page
   useEffect(() => {
@@ -207,18 +220,50 @@ const Inner = () => {
         {/* Full grid */}
         <section className="pb-24">
           <div className="container mx-auto px-6">
+            {/* View toggle */}
+            <div className="mb-6 flex items-center gap-2">
+              <button
+                onClick={() => setViewMode("grid")}
+                className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm transition-colors ${viewMode === "grid" ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:text-foreground"}`}
+              >
+                <LayoutGrid className="h-4 w-4" /> Grid
+              </button>
+              <button
+                onClick={() => setViewMode("map")}
+                className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm transition-colors ${viewMode === "map" ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:text-foreground"}`}
+              >
+                <Map className="h-4 w-4" /> Map
+              </button>
+            </div>
+
             {current.length === 0 ? (
               <p className="text-center text-muted-foreground">{t("No properties available at the moment.")}</p>
-            ) : (
+            ) : viewMode === "grid" ? (
               <ScrollReveal variant="stagger">
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {current.map((p) => (
                     <RevealItem key={p.id}>
-                      <PropertyCard property={p} onClick={() => setSelected(p)} />
+                      <div className="relative">
+                        <PropertyCard property={p} onClick={() => setSelected(p)} />
+                        <button
+                          onClick={() => toggleCompare(p)}
+                          className={`absolute top-3 left-3 z-10 flex items-center gap-1 rounded-full border px-2 py-1 text-xs font-medium transition-colors backdrop-blur-sm ${
+                            compareList.find((x) => x.id === p.id)
+                              ? "border-primary bg-primary text-primary-foreground"
+                              : "border-border/60 bg-background/70 text-muted-foreground hover:border-primary/40 hover:text-primary"
+                          }`}
+                        >
+                          {compareList.find((x) => x.id === p.id) ? "✓ Comparing" : "+ Compare"}
+                        </button>
+                      </div>
                     </RevealItem>
                   ))}
                 </div>
               </ScrollReveal>
+            ) : (
+              <Suspense fallback={<div className="h-[600px] animate-pulse rounded-2xl bg-muted" />}>
+                <PropertyMap properties={current} />
+              </Suspense>
             )}
 
             {/* CTA */}
@@ -239,6 +284,11 @@ const Inner = () => {
       </main>
 
       <PropertyModal property={selected} open={!!selected} onClose={() => setSelected(null)} />
+      <CompareBar
+        selected={compareList}
+        onRemove={(id) => setCompareList((prev) => prev.filter((p) => p.id !== id))}
+        onClear={() => setCompareList([])}
+      />
     </>
   );
 };

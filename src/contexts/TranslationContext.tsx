@@ -77,8 +77,7 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
   React.useEffect(() => {
     document.documentElement.dir = (language === "ar" || language === "he") ? "rtl" : "ltr";
     document.documentElement.lang = language;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [language]);
 
   const translateBatch = useCallback(async (lang: string, texts: string[]) => {
     if (texts.length === 0) return;
