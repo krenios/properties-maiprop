@@ -644,9 +644,9 @@ const LeadCaptureBot = () => {
                     <Check className="h-7 w-7 text-primary" />
                   </div>
                   <div>
-                    <h4 className="text-base font-semibold text-foreground">
-                      Thank you, {form.full_name.split(" ")[0]}!
-                    </h4>
+                      <h4 className="text-base font-semibold text-foreground">
+                        {t("Thank you,")} {form.full_name.split(" ")[0]}!
+                      </h4>
                     {selectedProperty && (
                       <p className="mt-1 text-xs text-primary font-medium">
                         📌 Enquiry submitted for: {selectedProperty.title}
