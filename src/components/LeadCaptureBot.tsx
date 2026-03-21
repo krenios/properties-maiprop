@@ -806,7 +806,7 @@ const LeadCaptureBot = () => {
                             : "border-border bg-muted/50 text-foreground hover:border-primary/50 hover:bg-primary/5"
                         } ${currentStep.key === "intent" ? "flex-1 min-w-0 px-2 py-1 text-[10px] leading-tight whitespace-normal text-center" : ""}`}
                       >
-                        {opt}
+                        {t(opt)}
                       </button>
                     ))}
                   </div>
