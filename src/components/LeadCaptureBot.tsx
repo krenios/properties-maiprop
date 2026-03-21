@@ -8,6 +8,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { motion, AnimatePresence } from "framer-motion";
 import { useLeadBot } from "@/components/LeadBotProvider";
 import { Property } from "@/data/properties";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 const CALENDLY_URL = "https://calendly.com/maipropos/consultation";
 const TURNSTILE_SITE_KEY = "0x4AAAAAACmEa8xMGdIJZT2a";
