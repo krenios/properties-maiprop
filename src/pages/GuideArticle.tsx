@@ -358,73 +358,17 @@ const Inner = () => {
           </div>
 
           <h1 className="text-4xl font-bold leading-tight sm:text-5xl mb-6">
-            {displayTitle}
+            {t(displayTitle)}
           </h1>
-
-          {/* Loading state — skeleton for fast perceived render */}
-          {loading && (
-            <div className="space-y-6 animate-pulse" aria-hidden="true">
-              <div className="h-5 w-24 rounded-full bg-muted" />
-              <div className="h-12 w-3/4 rounded-lg bg-muted" />
-              <div className="space-y-3">
-                <div className="h-4 w-full rounded bg-muted" />
-                <div className="h-4 w-5/6 rounded bg-muted" />
-                <div className="h-4 w-4/6 rounded bg-muted" />
-              </div>
-              <div className="space-y-3 pt-4">
-                <div className="h-7 w-48 rounded bg-muted" />
-                <div className="h-4 w-full rounded bg-muted" />
-                <div className="h-4 w-full rounded bg-muted" />
-                <div className="h-4 w-5/6 rounded bg-muted" />
-              </div>
-              <div className="space-y-3 pt-4">
-                <div className="h-7 w-56 rounded bg-muted" />
-                <div className="h-4 w-full rounded bg-muted" />
-                <div className="h-4 w-full rounded bg-muted" />
-                <div className="h-4 w-4/6 rounded bg-muted" />
-              </div>
-              <p className="text-center text-xs text-muted-foreground pt-2">Generating article…</p>
-            </div>
-          )}
-
-          {/* Error state */}
-          {error && !loading && (
-            <div className="flex flex-col items-center gap-4 py-16 text-center">
-              <p className="text-muted-foreground">{error}</p>
-              <Button onClick={() => loadOrGenerate(false)} variant="outline" className="gap-2">
-                <RefreshCw className="h-4 w-4" /> Try Again
-              </Button>
-            </div>
-          )}
-
-          {/* Article content */}
-          {article && !loading && (
-            <div className="space-y-10">
-              {/* Intro */}
-              <p className="text-xl text-muted-foreground leading-relaxed border-l-4 border-primary/40 pl-5">
-                {article.intro}
-              </p>
-
-              {/* Sections */}
-              {article.sections.map((section, i) => (
-                <section key={i}>
-                  <h2 className="text-2xl font-bold mb-4">{section.heading}</h2>
-                  <div className="text-muted-foreground leading-relaxed space-y-3">
-                    {section.content.split("\n\n").map((para, j) => (
-                      <p key={j}>{linkifyText(para)}</p>
-                    ))}
-                  </div>
-                </section>
-              ))}
-
+...
               {/* Key Takeaways */}
               <div className="rounded-2xl border border-primary/20 bg-primary/5 p-8">
-                <h2 className="text-xl font-bold mb-5">Key Takeaways</h2>
+                <h2 className="text-xl font-bold mb-5">{t("Key Takeaways")}</h2>
                 <ul className="space-y-3">
                   {article.keyTakeaways.map((point, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                      <span className="text-sm text-muted-foreground">{point}</span>
+                      <span className="text-sm text-muted-foreground">{t(point)}</span>
                     </li>
                   ))}
                 </ul>
