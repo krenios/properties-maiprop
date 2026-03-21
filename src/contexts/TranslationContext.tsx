@@ -31,19 +31,31 @@ const TranslationContext = createContext<TranslationContextType>({
 export const useTranslation = () => useContext(TranslationContext);
 
 const STORAGE_KEY = "mai_prop_language";
-const CACHE_KEY = "mai_prop_translation_cache";
+// Bump this version string whenever the site copy changes significantly to bust stale caches.
+const CACHE_VERSION = "v1";
+const CACHE_KEY = `mai_prop_translation_cache_${CACHE_VERSION}`;
 
-/** Load persisted cache from sessionStorage (survives navigation, cleared on tab close) */
+/** Load persisted cache from localStorage (survives page reloads AND browser restarts) */
 function loadCache(): Record<string, Record<string, string>> {
   try {
-    const raw = sessionStorage.getItem(CACHE_KEY);
+    const raw = localStorage.getItem(CACHE_KEY);
     return raw ? JSON.parse(raw) : {};
   } catch { return {}; }
 }
 
-/** Persist cache to sessionStorage */
+/** Persist cache to localStorage — only translations for this page-visit are stored */
 function saveCache(cache: Record<string, Record<string, string>>) {
-  try { sessionStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch { /* quota exceeded – ignore */ }
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+  } catch {
+    // Quota exceeded: clear only old translation caches and retry
+    try {
+      Object.keys(localStorage)
+        .filter((k) => k.startsWith("mai_prop_translation_cache_") && k !== CACHE_KEY)
+        .forEach((k) => localStorage.removeItem(k));
+      localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+    } catch { /* give up silently */ }
+  }
 }
 
 export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
