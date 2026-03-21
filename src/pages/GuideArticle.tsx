@@ -360,7 +360,27 @@ const Inner = () => {
           <h1 className="text-4xl font-bold leading-tight sm:text-5xl mb-6">
             {t(displayTitle)}
           </h1>
-...
+
+          {/* Article content */}
+          {article && !loading && (
+            <div className="space-y-10">
+              {/* Intro */}
+              <p className="text-xl text-muted-foreground leading-relaxed border-l-4 border-primary/40 pl-5">
+                {t(article.intro)}
+              </p>
+
+              {/* Sections */}
+              {article.sections.map((section, i) => (
+                <section key={i}>
+                  <h2 className="text-2xl font-bold mb-4">{t(section.heading)}</h2>
+                  <div className="text-muted-foreground leading-relaxed space-y-3">
+                    {section.content.split("\n\n").map((para, j) => (
+                      <p key={j}>{linkifyText(t(para))}</p>
+                    ))}
+                  </div>
+                </section>
+              ))}
+
               {/* Key Takeaways */}
               <div className="rounded-2xl border border-primary/20 bg-primary/5 p-8">
                 <h2 className="text-xl font-bold mb-5">{t("Key Takeaways")}</h2>
