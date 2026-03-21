@@ -4,6 +4,7 @@ import { ArrowRight, BookOpen, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { Badge } from "@/components/ui/badge";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 interface Article {
   id: string;
@@ -24,6 +25,7 @@ const categoryColors: Record<string, string> = {
 
 export default function GuidesTeaser() {
   const [articles, setArticles] = useState<Article[]>([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     supabase
@@ -45,13 +47,13 @@ export default function GuidesTeaser() {
         <ScrollReveal>
           <div className="mb-12 text-center">
             <Badge className="mb-4 border-primary/30 bg-primary/10 text-primary">
-              <BookOpen className="mr-1 h-3 w-3" /> Resources
+              <BookOpen className="mr-1 h-3 w-3" /> {t("Resources")}
             </Badge>
             <h2 id="guides-teaser-heading" className="mb-4 text-3xl font-bold md:text-4xl">
-              Investor Guides &amp; Insights
+              {t("Investor Guides & Insights")}
             </h2>
             <p className="mx-auto max-w-2xl text-muted-foreground">
-              Expert analysis on Greek Golden Visa rules, investment strategies, and market opportunities.
+              {t("Expert analysis on Greek Golden Visa rules, investment strategies, and market opportunities.")}
             </p>
           </div>
         </ScrollReveal>
@@ -69,21 +71,21 @@ export default function GuidesTeaser() {
                     <div className="p-6 flex flex-col flex-1 gap-4">
                       <div className="flex items-center justify-between">
                         <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${colorClass}`}>
-                          {article.category || "Guide"}
+                          {t(article.category || "Guide")}
                         </span>
                         <span className="flex items-center gap-1 text-xs text-muted-foreground">
                           <Clock className="h-3.5 w-3.5" />
-                          {article.read_time || "5 min read"}
+                          {t(article.read_time || "5 min read")}
                         </span>
                       </div>
                       <h3 className="text-base font-semibold text-foreground leading-snug group-hover:text-primary transition-colors line-clamp-2">
-                        {article.title}
+                        {t(article.title)}
                       </h3>
                       <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 flex-1">
-                        {article.meta_description}
+                        {t(article.meta_description)}
                       </p>
                       <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary mt-auto">
-                        Read: {article.title} <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                        {t("Read")} {t(article.title)} <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
                       </span>
                     </div>
                   </Link>
@@ -99,7 +101,7 @@ export default function GuidesTeaser() {
               to="/guides"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-primary text-primary font-semibold text-sm hover:bg-primary hover:text-primary-foreground transition-colors"
             >
-              Explore all investor guides <ArrowRight className="h-4 w-4" />
+              {t("Explore all investor guides")} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </ScrollReveal>
