@@ -1,6 +1,6 @@
 import "leaflet/dist/leaflet.css";
+import { useEffect, useRef } from "react";
 import L from "leaflet";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Property } from "@/data/properties";
 import { optimizeImage } from "@/lib/optimizeImage";
 
@@ -12,7 +12,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-// Property coordinates by location name
 const LOCATION_COORDS: Record<string, [number, number]> = {
   "Athens": [37.9838, 23.7275],
   "Piraeus": [37.9482, 23.6479],
@@ -29,13 +28,10 @@ const LOCATION_COORDS: Record<string, [number, number]> = {
 };
 
 function getCoords(location: string): [number, number] {
-  // Try exact match first
   if (LOCATION_COORDS[location]) return LOCATION_COORDS[location];
-  // Try partial match
   for (const [key, coords] of Object.entries(LOCATION_COORDS)) {
-    if (location.toLowerCase().includes(key.toLowerCase())) return coords;
+    if (location?.toLowerCase().includes(key.toLowerCase())) return coords;
   }
-  // Default to Athens centre
   return [37.9838, 23.7275];
 }
 
@@ -44,39 +40,52 @@ interface Props {
 }
 
 const PropertyMap = ({ properties }: Props) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<L.Map | null>(null);
+
+  useEffect(() => {
+    if (!containerRef.current || mapRef.current) return;
+
+    const map = L.map(containerRef.current, {
+      center: [37.9838, 23.7275],
+      zoom: 11,
+      scrollWheelZoom: false,
+    });
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+
+    properties.forEach((p) => {
+      const coords = getCoords(p.location);
+      const imgHtml = p.images?.[0]
+        ? `<img src="${optimizeImage(p.images[0], { width: 200, height: 130 })}" style="width:100%;height:90px;object-fit:cover;border-radius:6px;margin-bottom:6px;display:block;" />`
+        : "";
+      const popup = L.popup({ maxWidth: 200 }).setContent(`
+        <div style="min-width:170px;font-family:sans-serif;">
+          ${imgHtml}
+          <p style="margin:0 0 2px;font-weight:600;font-size:13px;line-height:1.3;">${p.title}</p>
+          <p style="margin:0 0 3px;font-size:11px;color:#666;">${p.location}</p>
+          ${p.price ? `<p style="margin:0 0 4px;font-size:13px;font-weight:700;color:#2563eb;">€${p.price.toLocaleString()}</p>` : ""}
+          <a href="/property/${p.id}" style="font-size:11px;color:#3b82f6;text-decoration:none;">View property →</a>
+        </div>
+      `);
+      L.marker(coords).bindPopup(popup).addTo(map);
+    });
+
+    mapRef.current = map;
+
+    return () => {
+      map.remove();
+      mapRef.current = null;
+    };
+  }, []);
+
   return (
-    <div style={{ height: 600, width: "100%" }} className="rounded-2xl overflow-hidden">
-    <MapContainer
-      center={[37.9838, 23.7275]}
-      zoom={11}
-      style={{ height: "100%", width: "100%" }}
-      scrollWheelZoom={false}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      {properties.map((p) => (
-        <Marker key={p.id} position={getCoords(p.location)}>
-          <Popup>
-            <div className="min-w-[180px]">
-              {p.images?.[0] && (
-                <img
-                  src={optimizeImage(p.images[0], { width: 200, height: 130 })}
-                  alt={p.title}
-                  className="mb-2 h-24 w-full rounded-lg object-cover"
-                />
-              )}
-              <p className="font-semibold text-sm leading-snug">{p.title}</p>
-              <p className="text-xs text-gray-500 mt-0.5">{p.location}</p>
-              {p.price && <p className="text-sm font-bold text-blue-600 mt-1">€{p.price.toLocaleString()}</p>}
-              <a href={`/property/${p.id}`} className="mt-2 block text-xs text-blue-500 hover:underline">View property →</a>
-            </div>
-          </Popup>
-        </Marker>
-      ))}
-    </MapContainer>
-    </div>
+    <div
+      ref={containerRef}
+      style={{ height: 600, width: "100%", borderRadius: 16, overflow: "hidden" }}
+    />
   );
 };
 
