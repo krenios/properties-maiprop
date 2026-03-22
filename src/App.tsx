@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { PropertyProvider } from "@/contexts/PropertyContext";
 import { TranslationProvider } from "@/contexts/TranslationContext";
 import { AuthProvider } from "@/hooks/useAuth";
@@ -45,6 +45,20 @@ const GoldenVisaByNationality = lazy(() => import("./pages/GoldenVisaByNationali
 const Compare = lazy(() => import("./pages/Compare"));
 
 const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      gcTime: 10 * 60 * 1000,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+    },
+  },
+});
+
+const PageFallback = () => <div className="min-h-screen" aria-hidden="true" />;
+const W = ({ c }: { c: React.ReactNode }) => <Suspense fallback={<PageFallback />}>{c}</Suspense>;
+
+const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -116,7 +130,6 @@ const queryClient = new QueryClient({
               <Suspense fallback={null}>
                 <LeadCaptureBot />
               </Suspense>
-              <WhatsAppButton />
             </BrowserRouter>
           </LeadBotProvider>
           </PropertyProvider>
@@ -128,3 +141,4 @@ const queryClient = new QueryClient({
 );
 
 export default App;
+
