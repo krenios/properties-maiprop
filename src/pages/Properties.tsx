@@ -9,13 +9,12 @@ import { Property } from "@/data/properties";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Home, ChevronRight, MessageCircle, Map, LayoutGrid } from "lucide-react";
+import { Home, ChevronRight, MessageCircle } from "lucide-react";
 import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
 import { CONVERSION_ID } from "@/lib/analytics";
 import CompareBar from "@/components/CompareBar";
 
-const PropertyMap = lazy(() => import("@/components/PropertyMap"));
 
 const BASE_URL = "https://properties.maiprop.co";
 
@@ -23,7 +22,6 @@ const Inner = () => {
   const { properties } = useProperties();
   const [selected, setSelected] = useState<Property | null>(null);
   const [compareList, setCompareList] = useState<Property[]>([]);
-  const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
   const { setIsOpen } = useLeadBot();
   const { t } = useTranslation();
   const current = properties.filter((p) => p.project_type === "new");
@@ -220,25 +218,9 @@ const Inner = () => {
         {/* Full grid */}
         <section className="pb-24">
           <div className="container mx-auto px-6">
-            {/* View toggle */}
-            <div className="mb-6 flex items-center gap-2">
-              <button
-                onClick={() => setViewMode("grid")}
-                className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm transition-colors ${viewMode === "grid" ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:text-foreground"}`}
-              >
-                <LayoutGrid className="h-4 w-4" /> Grid
-              </button>
-              <button
-                onClick={() => setViewMode("map")}
-                className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm transition-colors ${viewMode === "map" ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:text-foreground"}`}
-              >
-                <Map className="h-4 w-4" /> Map
-              </button>
-            </div>
-
             {current.length === 0 ? (
               <p className="text-center text-muted-foreground">{t("No properties available at the moment.")}</p>
-            ) : viewMode === "grid" ? (
+            ) : (
               <ScrollReveal variant="stagger">
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {current.map((p) => (
@@ -260,10 +242,6 @@ const Inner = () => {
                   ))}
                 </div>
               </ScrollReveal>
-            ) : (
-              <Suspense fallback={<div className="h-[600px] animate-pulse rounded-2xl bg-muted" />}>
-                <PropertyMap properties={current} />
-              </Suspense>
             )}
 
             {/* CTA */}
