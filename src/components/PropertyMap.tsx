@@ -12,7 +12,7 @@ function saveCache(c: Record<string, { lat: number; lng: number }>) {
 }
 
 // Dark map style matching site palette (navy/black background, cyan accents)
-const DARK_STYLE: google.maps.MapTypeStyle[] = [
+const DARK_STYLE = [
   { elementType: "geometry", stylers: [{ color: "#0a0e2a" }] },
   { elementType: "labels.text.stroke", stylers: [{ color: "#000014" }] },
   { elementType: "labels.text.fill", stylers: [{ color: "#5a6a8a" }] },
@@ -30,7 +30,7 @@ const DARK_STYLE: google.maps.MapTypeStyle[] = [
   { featureType: "administrative.land_parcel", elementType: "labels.text.fill", stylers: [{ color: "#4a5a7a" }] },
   { featureType: "transit", elementType: "geometry", stylers: [{ color: "#0d1235" }] },
   { featureType: "transit.station", elementType: "labels.text.fill", stylers: [{ color: "#4a5a7a" }] },
-];
+] as google.maps.MapTypeStyle[];
 
 const loader = new Loader({
   apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
@@ -50,9 +50,9 @@ const PropertyMap = ({ properties }: Props) => {
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
 
-    loader.load().then((google) => {
+    loader.importLibrary("maps").then(({ Map }) => {
       if (!containerRef.current) return;
-      mapRef.current = new google.maps.Map(containerRef.current, {
+      mapRef.current = new Map(containerRef.current, {
         center: { lat: 37.9838, lng: 23.7275 },
         zoom: 11,
         styles: DARK_STYLE,
