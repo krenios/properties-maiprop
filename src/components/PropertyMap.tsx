@@ -22,115 +22,118 @@ const cyanMarker = L.divIcon({
 });
 
 const CACHE_KEY = "maiprop_geocache_v1";
-
 function loadCache(): Record<string, [number, number]> {
   try { return JSON.parse(localStorage.getItem(CACHE_KEY) || "{}"); } catch { return {}; }
 }
-function saveCache(cache: Record<string, [number, number]>) {
-  try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch {}
+function saveCache(c: Record<string, [number, number]>) {
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify(c)); } catch {}
 }
-
 async function geocode(location: string): Promise<[number, number] | null> {
-  const query = encodeURIComponent(`${location}, Greece`);
   try {
+    const q = encodeURIComponent(`${location}, Greece`);
     const res = await fetch(
-      `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1&countrycodes=gr`,
+      `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1&countrycodes=gr`,
       { headers: { "Accept-Language": "en" } }
     );
     const data = await res.json();
-    if (data[0]) return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+    if (data?.[0]) return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
   } catch {}
   return null;
 }
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-function sleep(ms: number) { return new Promise((r) => setTimeout(r, ms)); }
-
-interface Props {
-  properties: Property[];
-}
+interface Props { properties: Property[]; }
 
 const PropertyMap = ({ properties }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
-  const [loading, setLoading] = useState(true);
+  const layerRef = useRef<L.LayerGroup | null>(null);
+  const [loading, setLoading] = useState(false);
   const [resolved, setResolved] = useState(0);
 
+  // ── Init map once ──────────────────────────────────────────────────────────
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
-
     const map = L.map(containerRef.current, {
       center: [37.9838, 23.7275],
       zoom: 11,
       scrollWheelZoom: false,
       zoomControl: false,
     });
-
     L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains: "abcd",
       maxZoom: 19,
     }).addTo(map);
-
     L.control.zoom({ position: "bottomright" }).addTo(map);
+    layerRef.current = L.layerGroup().addTo(map);
     mapRef.current = map;
+    return () => { map.remove(); mapRef.current = null; layerRef.current = null; };
+  }, []);
 
-    const addMarker = (p: Property, coords: [number, number]) => {
-      const img = p.images?.[0]
-        ? `<img src="${optimizeImage(p.images[0], { width: 220, height: 130 })}" style="width:100%;height:120px;object-fit:cover;display:block;" />`
-        : "";
-      const price = p.price
-        ? `<span style="color:#4ef5f1;font-size:15px;font-weight:700;">€${p.price.toLocaleString()}</span>`
-        : "";
-      const html = `
-        <div style="width:220px;background:#0a0e2a;font-family:'Inter',sans-serif;">
-          ${img}
-          <div style="padding:12px 14px 14px;">
-            <p style="margin:0 0 3px;color:#e8f0ff;font-size:13px;font-weight:600;line-height:1.3;">${p.title}</p>
-            <p style="margin:0 0 8px;color:#5a6a8a;font-size:11px;">${p.location}</p>
-            <div style="display:flex;align-items:center;justify-content:space-between;">
-              ${price}
-              <a href="/property/${p.id}" style="background:#4ef5f1;color:#000014;font-size:11px;font-weight:700;padding:5px 10px;border-radius:5px;text-decoration:none;">View →</a>
-            </div>
-          </div>
-        </div>`;
-      L.marker(coords, { icon: cyanMarker })
-        .bindPopup(html, { maxWidth: 220, minWidth: 220, className: "maiprop-popup" })
-        .addTo(map);
-    };
+  // ── Add markers whenever properties array is populated ─────────────────────
+  useEffect(() => {
+    if (!properties.length || !mapRef.current || !layerRef.current) return;
 
-    // Geocode all properties: use cache, then Nominatim with 1s rate limit
+    const layer = layerRef.current;
+    layer.clearLayers();
+    setResolved(0);
+    setLoading(true);
+
+    let cancelled = false;
+
     (async () => {
       const cache = loadCache();
-      let count = 0;
+      let apiCalls = 0;
 
       for (const p of properties) {
-        if (!mapRef.current) break;
+        if (cancelled) break;
         const key = p.location?.trim().toLowerCase();
         if (!key) continue;
 
         let coords: [number, number] | null = cache[key] ?? null;
 
         if (!coords) {
-          if (count > 0) await sleep(1100); // Nominatim: max 1 req/s
+          if (apiCalls > 0) await sleep(1100); // Nominatim: 1 req/s
           coords = await geocode(p.location);
-          if (coords) {
-            cache[key] = coords;
-            saveCache(cache);
-          }
-          count++;
+          apiCalls++;
+          if (coords) { cache[key] = coords; saveCache(cache); }
         }
 
-        if (coords && mapRef.current) {
-          addMarker(p, coords);
-          setResolved((n) => n + 1);
-        }
+        if (!coords || cancelled) continue;
+
+        const img = p.images?.[0]
+          ? `<img src="${optimizeImage(p.images[0], { width: 220, height: 130 })}" style="width:100%;height:120px;object-fit:cover;display:block;" />`
+          : "";
+        const price = p.price
+          ? `<span style="color:#4ef5f1;font-size:15px;font-weight:700;">€${p.price.toLocaleString()}</span>`
+          : "";
+
+        L.marker(coords, { icon: cyanMarker })
+          .bindPopup(
+            `<div style="width:220px;background:#0a0e2a;font-family:'Inter',sans-serif;">
+              ${img}
+              <div style="padding:12px 14px 14px;">
+                <p style="margin:0 0 3px;color:#e8f0ff;font-size:13px;font-weight:600;line-height:1.3;">${p.title}</p>
+                <p style="margin:0 0 8px;color:#5a6a8a;font-size:11px;">${p.location}</p>
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  ${price}
+                  <a href="/property/${p.id}" style="background:#4ef5f1;color:#000014;font-size:11px;font-weight:700;padding:5px 10px;border-radius:5px;text-decoration:none;">View →</a>
+                </div>
+              </div>
+            </div>`,
+            { maxWidth: 220, minWidth: 220, className: "maiprop-popup" }
+          )
+          .addTo(layer);
+
+        setResolved((n) => n + 1);
       }
 
-      setLoading(false);
+      if (!cancelled) setLoading(false);
     })();
 
-    return () => { map.remove(); mapRef.current = null; };
-  }, []);
+    return () => { cancelled = true; };
+  }, [properties]); // re-runs whenever properties array reference changes
 
   return (
     <div style={{ position: "relative", zIndex: 0, isolation: "isolate" }}>
@@ -138,21 +141,21 @@ const PropertyMap = ({ properties }: Props) => {
       {loading && (
         <div style={{
           position: "absolute", inset: 0, borderRadius: 16,
-          background: "rgba(10,14,42,0.75)", backdropFilter: "blur(4px)",
+          background: "rgba(10,14,42,0.7)", backdropFilter: "blur(4px)",
           display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
           gap: 12, pointerEvents: "none",
         }}>
           <div style={{
-            width: 36, height: 36, border: "3px solid #1a2060",
-            borderTop: "3px solid #4ef5f1", borderRadius: "50%",
-            animation: "spin 0.8s linear infinite",
+            width: 36, height: 36,
+            border: "3px solid #1a2060", borderTop: "3px solid #4ef5f1",
+            borderRadius: "50%", animation: "mapspin 0.8s linear infinite",
           }} />
           <p style={{ color: "#4ef5f1", fontSize: 13, margin: 0 }}>
-            Locating properties{resolved > 0 ? ` · ${resolved} / ${properties.length}` : "…"}
+            {resolved > 0 ? `Placing pins… ${resolved} / ${properties.length}` : "Loading map…"}
           </p>
         </div>
       )}
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      <style>{`@keyframes mapspin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 };
