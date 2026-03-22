@@ -9,10 +9,8 @@ delete (L.Icon.Default.prototype as any)._getIconUrl;
 const cyanMarker = L.divIcon({
   className: "",
   html: `<div style="
-    width:28px;height:28px;
-    background:#4ef5f1;
-    border:3px solid #000014;
-    border-radius:50% 50% 50% 0;
+    width:28px;height:28px;background:#4ef5f1;
+    border:3px solid #000014;border-radius:50% 50% 50% 0;
     transform:rotate(-45deg);
     box-shadow:0 0 0 3px rgba(78,245,241,0.25),0 4px 12px rgba(0,0,0,0.5);
   "></div>`,
@@ -40,7 +38,7 @@ async function geocode(location: string): Promise<[number, number] | null> {
   } catch {}
   return null;
 }
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
 interface Props { properties: Property[]; }
 
@@ -48,6 +46,8 @@ const PropertyMap = ({ properties }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const layerRef = useRef<L.LayerGroup | null>(null);
+  // Track which IDs have already been geocoded so re-renders don't restart the loop
+  const geocodedIdsRef = useRef<string>("");
   const [loading, setLoading] = useState(false);
   const [resolved, setResolved] = useState(0);
 
@@ -71,69 +71,78 @@ const PropertyMap = ({ properties }: Props) => {
     return () => { map.remove(); mapRef.current = null; layerRef.current = null; };
   }, []);
 
-  // ── Add markers whenever properties array is populated ─────────────────────
+  // ── Geocode & place markers — only when the set of property IDs changes ────
   useEffect(() => {
     if (!properties.length || !mapRef.current || !layerRef.current) return;
+
+    // Stable ID fingerprint — skip if properties didn't actually change
+    const ids = properties.map((p) => p.id).join(",");
+    if (ids === geocodedIdsRef.current) return;
+    geocodedIdsRef.current = ids;
 
     const layer = layerRef.current;
     layer.clearLayers();
     setResolved(0);
     setLoading(true);
 
-    let cancelled = false;
+    // snapshot so closure is stable
+    const snapshot = [...properties];
+    let active = true;
 
     (async () => {
       const cache = loadCache();
       let apiCalls = 0;
 
-      for (const p of properties) {
-        if (cancelled) break;
+      for (const p of snapshot) {
+        if (!active) break;
         const key = p.location?.trim().toLowerCase();
-        if (!key) continue;
+        if (!key) { setResolved((n) => n + 1); continue; }
 
         let coords: [number, number] | null = cache[key] ?? null;
 
         if (!coords) {
-          if (apiCalls > 0) await sleep(1100); // Nominatim: 1 req/s
+          if (apiCalls > 0) await sleep(1100);
           coords = await geocode(p.location);
           apiCalls++;
           if (coords) { cache[key] = coords; saveCache(cache); }
         }
 
-        if (!coords || cancelled) continue;
+        if (!active) break;
 
-        const img = p.images?.[0]
-          ? `<img src="${optimizeImage(p.images[0], { width: 220, height: 130 })}" style="width:100%;height:120px;object-fit:cover;display:block;" />`
-          : "";
-        const price = p.price
-          ? `<span style="color:#4ef5f1;font-size:15px;font-weight:700;">€${p.price.toLocaleString()}</span>`
-          : "";
+        if (coords) {
+          const img = p.images?.[0]
+            ? `<img src="${optimizeImage(p.images[0], { width: 220, height: 130 })}" style="width:100%;height:120px;object-fit:cover;display:block;"/>`
+            : "";
+          const price = p.price
+            ? `<span style="color:#4ef5f1;font-size:15px;font-weight:700;">€${p.price.toLocaleString()}</span>`
+            : "";
 
-        L.marker(coords, { icon: cyanMarker })
-          .bindPopup(
-            `<div style="width:220px;background:#0a0e2a;font-family:'Inter',sans-serif;">
-              ${img}
-              <div style="padding:12px 14px 14px;">
-                <p style="margin:0 0 3px;color:#e8f0ff;font-size:13px;font-weight:600;line-height:1.3;">${p.title}</p>
-                <p style="margin:0 0 8px;color:#5a6a8a;font-size:11px;">${p.location}</p>
-                <div style="display:flex;align-items:center;justify-content:space-between;">
-                  ${price}
-                  <a href="/property/${p.id}" style="background:#4ef5f1;color:#000014;font-size:11px;font-weight:700;padding:5px 10px;border-radius:5px;text-decoration:none;">View →</a>
+          L.marker(coords, { icon: cyanMarker })
+            .bindPopup(
+              `<div style="width:220px;background:#0a0e2a;font-family:'Inter',sans-serif;">
+                ${img}
+                <div style="padding:12px 14px 14px;">
+                  <p style="margin:0 0 3px;color:#e8f0ff;font-size:13px;font-weight:600;line-height:1.3;">${p.title}</p>
+                  <p style="margin:0 0 8px;color:#5a6a8a;font-size:11px;">${p.location}</p>
+                  <div style="display:flex;align-items:center;justify-content:space-between;">
+                    ${price}
+                    <a href="/property/${p.id}" style="background:#4ef5f1;color:#000014;font-size:11px;font-weight:700;padding:5px 10px;border-radius:5px;text-decoration:none;">View →</a>
+                  </div>
                 </div>
-              </div>
-            </div>`,
-            { maxWidth: 220, minWidth: 220, className: "maiprop-popup" }
-          )
-          .addTo(layer);
+              </div>`,
+              { maxWidth: 220, minWidth: 220, className: "maiprop-popup" }
+            )
+            .addTo(layer);
+        }
 
         setResolved((n) => n + 1);
       }
 
-      if (!cancelled) setLoading(false);
+      if (active) setLoading(false);
     })();
 
-    return () => { cancelled = true; };
-  }, [properties]); // re-runs whenever properties array reference changes
+    return () => { active = false; };
+  }, [properties]);
 
   return (
     <div style={{ position: "relative", zIndex: 0, isolation: "isolate" }}>
