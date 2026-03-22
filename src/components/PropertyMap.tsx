@@ -45,10 +45,11 @@ interface Props {
 
 const PropertyMap = ({ properties }: Props) => {
   return (
+    <div style={{ height: 600, width: "100%" }} className="rounded-2xl overflow-hidden">
     <MapContainer
       center={[37.9838, 23.7275]}
       zoom={11}
-      className="h-[600px] w-full rounded-2xl"
+      style={{ height: "100%", width: "100%" }}
       scrollWheelZoom={false}
     >
       <TileLayer
@@ -75,6 +76,7 @@ const PropertyMap = ({ properties }: Props) => {
         </Marker>
       ))}
     </MapContainer>
+    </div>
   );
 };
 

@@ -8,6 +8,12 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Restore Leaflet tile images broken by Tailwind preflight (max-width:100% / display:block) */
+.leaflet-container img {
+  max-width: none;
+  display: inline;
+}
+
 @layer base {
   :root {
     --background: 235 100% 4%;
