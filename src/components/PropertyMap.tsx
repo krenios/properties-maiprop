@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Loader } from "@googlemaps/js-api-loader";
+import { importLibrary, setOptions } from "@googlemaps/js-api-loader";
 import { Property } from "@/data/properties";
 import { optimizeImage } from "@/lib/optimizeImage";
 
@@ -11,7 +11,7 @@ function saveCache(c: Record<string, { lat: number; lng: number }>) {
   try { localStorage.setItem(CACHE_KEY, JSON.stringify(c)); } catch {}
 }
 
-// Dark map style matching site palette (navy/black background, cyan accents)
+// Dark map style matching site palette
 const DARK_STYLE = [
   { elementType: "geometry", stylers: [{ color: "#0a0e2a" }] },
   { elementType: "labels.text.stroke", stylers: [{ color: "#000014" }] },
@@ -30,9 +30,10 @@ const DARK_STYLE = [
   { featureType: "administrative.land_parcel", elementType: "labels.text.fill", stylers: [{ color: "#4a5a7a" }] },
   { featureType: "transit", elementType: "geometry", stylers: [{ color: "#0d1235" }] },
   { featureType: "transit.station", elementType: "labels.text.fill", stylers: [{ color: "#4a5a7a" }] },
-] as google.maps.MapTypeStyle[];
+];
 
-const loader = new Loader({
+// Configure the loader once
+setOptions({
   apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
   version: "weekly",
 });
@@ -41,7 +42,8 @@ interface Props { properties: Property[]; }
 
 const PropertyMap = ({ properties }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<google.maps.Map | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const mapRef = useRef<any>(null);
   const geocodedIdsRef = useRef<string>("");
   const [loading, setLoading] = useState(false);
   const [resolved, setResolved] = useState(0);
@@ -50,15 +52,16 @@ const PropertyMap = ({ properties }: Props) => {
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
 
-    loader.importLibrary("maps").then(({ Map }) => {
+    importLibrary("maps").then(({ Map }) => {
       if (!containerRef.current) return;
+      const g = (window as any).google;
       mapRef.current = new Map(containerRef.current, {
         center: { lat: 37.9838, lng: 23.7275 },
         zoom: 11,
         styles: DARK_STYLE,
         disableDefaultUI: true,
         zoomControl: true,
-        zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_BOTTOM },
+        zoomControlOptions: { position: g?.maps?.ControlPosition?.RIGHT_BOTTOM },
         gestureHandling: "cooperative",
       });
     }).catch(() => setError(true));
@@ -86,14 +89,14 @@ const PropertyMap = ({ properties }: Props) => {
       if (!mapRef.current || !active) return;
 
       const map = mapRef.current;
-      const google = (window as any).google;
-      if (!google) return;
+      const g = (window as any).google;
+      if (!g) return;
 
       setLoading(true);
       setResolved(0);
 
       const cache = loadCache();
-      const geocoder = new google.maps.Geocoder();
+      const geocoder = new g.maps.Geocoder();
 
       for (const p of snapshot) {
         if (!active) break;
@@ -104,10 +107,10 @@ const PropertyMap = ({ properties }: Props) => {
 
         if (!pos) {
           try {
-            const result = await new Promise<google.maps.GeocoderResult[] | null>((resolve) => {
+            const result = await new Promise<any[] | null>((resolve) => {
               geocoder.geocode(
                 { address: `${p.location}, Greece` },
-                (results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus) => {
+                (results: any[], status: string) => {
                   resolve(status === "OK" ? results : null);
                 }
               );
@@ -133,12 +136,12 @@ const PropertyMap = ({ properties }: Props) => {
             ? `<span style="color:#4ef5f1;font-size:15px;font-weight:700;">€${p.price.toLocaleString()}</span>`
             : "";
 
-          const marker = new google.maps.Marker({
+          const marker = new g.maps.Marker({
             map,
             position: pos,
             title: p.title,
             icon: {
-              path: google.maps.SymbolPath.CIRCLE,
+              path: g.maps.SymbolPath.CIRCLE,
               scale: 10,
               fillColor: "#4ef5f1",
               fillOpacity: 1,
@@ -147,7 +150,7 @@ const PropertyMap = ({ properties }: Props) => {
             },
           });
 
-          const infoWindow = new google.maps.InfoWindow({
+          const infoWindow = new g.maps.InfoWindow({
             content: `<div style="width:220px;background:#0a0e2a;border-radius:8px;overflow:hidden;font-family:'Inter',sans-serif;">
               ${img}
               <div style="padding:12px 14px 14px;">
