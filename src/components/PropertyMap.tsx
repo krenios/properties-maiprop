@@ -1,148 +1,187 @@
-import "leaflet/dist/leaflet.css";
 import { useEffect, useRef, useState } from "react";
-import L from "leaflet";
+import { Loader } from "@googlemaps/js-api-loader";
 import { Property } from "@/data/properties";
 import { optimizeImage } from "@/lib/optimizeImage";
 
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-
-const cyanMarker = L.divIcon({
-  className: "",
-  html: `<div style="
-    width:28px;height:28px;background:#4ef5f1;
-    border:3px solid #000014;border-radius:50% 50% 50% 0;
-    transform:rotate(-45deg);
-    box-shadow:0 0 0 3px rgba(78,245,241,0.25),0 4px 12px rgba(0,0,0,0.5);
-  "></div>`,
-  iconSize: [28, 28],
-  iconAnchor: [14, 28],
-  popupAnchor: [0, -32],
-});
-
-const CACHE_KEY = "maiprop_geocache_v1";
-function loadCache(): Record<string, [number, number]> {
+const CACHE_KEY = "maiprop_geocache_v2";
+function loadCache(): Record<string, { lat: number; lng: number }> {
   try { return JSON.parse(localStorage.getItem(CACHE_KEY) || "{}"); } catch { return {}; }
 }
-function saveCache(c: Record<string, [number, number]>) {
+function saveCache(c: Record<string, { lat: number; lng: number }>) {
   try { localStorage.setItem(CACHE_KEY, JSON.stringify(c)); } catch {}
 }
-async function geocode(location: string): Promise<[number, number] | null> {
-  try {
-    const q = encodeURIComponent(`${location}, Greece`);
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1&countrycodes=gr`,
-      { headers: { "Accept-Language": "en" } }
-    );
-    const data = await res.json();
-    if (data?.[0]) return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-  } catch {}
-  return null;
-}
-const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
+// Dark map style matching site palette (navy/black background, cyan accents)
+const DARK_STYLE: google.maps.MapTypeStyle[] = [
+  { elementType: "geometry", stylers: [{ color: "#0a0e2a" }] },
+  { elementType: "labels.text.stroke", stylers: [{ color: "#000014" }] },
+  { elementType: "labels.text.fill", stylers: [{ color: "#5a6a8a" }] },
+  { featureType: "road", elementType: "geometry", stylers: [{ color: "#131840" }] },
+  { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#0a0e2a" }] },
+  { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#6a7a9a" }] },
+  { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#1a2060" }] },
+  { featureType: "road.highway", elementType: "labels.text.fill", stylers: [{ color: "#8090b0" }] },
+  { featureType: "water", elementType: "geometry", stylers: [{ color: "#050a1a" }] },
+  { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#3a4a6a" }] },
+  { featureType: "poi", elementType: "geometry", stylers: [{ color: "#0d1235" }] },
+  { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#4a5a7a" }] },
+  { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#0a1030" }] },
+  { featureType: "administrative", elementType: "geometry.stroke", stylers: [{ color: "#1a2060" }] },
+  { featureType: "administrative.land_parcel", elementType: "labels.text.fill", stylers: [{ color: "#4a5a7a" }] },
+  { featureType: "transit", elementType: "geometry", stylers: [{ color: "#0d1235" }] },
+  { featureType: "transit.station", elementType: "labels.text.fill", stylers: [{ color: "#4a5a7a" }] },
+];
+
+const loader = new Loader({
+  apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
+  version: "weekly",
+});
 
 interface Props { properties: Property[]; }
 
 const PropertyMap = ({ properties }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<L.Map | null>(null);
-  const layerRef = useRef<L.LayerGroup | null>(null);
-  // Track which IDs have already been geocoded so re-renders don't restart the loop
+  const mapRef = useRef<google.maps.Map | null>(null);
   const geocodedIdsRef = useRef<string>("");
   const [loading, setLoading] = useState(false);
   const [resolved, setResolved] = useState(0);
+  const [error, setError] = useState(false);
 
-  // ── Init map once ──────────────────────────────────────────────────────────
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
-    const map = L.map(containerRef.current, {
-      center: [37.9838, 23.7275],
-      zoom: 11,
-      scrollWheelZoom: false,
-      zoomControl: false,
-    });
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: "abcd",
-      maxZoom: 19,
-    }).addTo(map);
-    L.control.zoom({ position: "bottomright" }).addTo(map);
-    layerRef.current = L.layerGroup().addTo(map);
-    mapRef.current = map;
-    return () => { map.remove(); mapRef.current = null; layerRef.current = null; };
+
+    loader.load().then((google) => {
+      if (!containerRef.current) return;
+      mapRef.current = new google.maps.Map(containerRef.current, {
+        center: { lat: 37.9838, lng: 23.7275 },
+        zoom: 11,
+        styles: DARK_STYLE,
+        disableDefaultUI: true,
+        zoomControl: true,
+        zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_BOTTOM },
+        gestureHandling: "cooperative",
+      });
+    }).catch(() => setError(true));
+
+    return () => { mapRef.current = null; };
   }, []);
 
-  // ── Geocode & place markers — only when the set of property IDs changes ────
   useEffect(() => {
-    if (!properties.length || !mapRef.current || !layerRef.current) return;
+    if (!properties.length) return;
 
-    // Stable ID fingerprint — skip if properties didn't actually change
     const ids = properties.map((p) => p.id).join(",");
     if (ids === geocodedIdsRef.current) return;
     geocodedIdsRef.current = ids;
 
-    const layer = layerRef.current;
-    layer.clearLayers();
-    setResolved(0);
-    setLoading(true);
-
-    // snapshot so closure is stable
     const snapshot = [...properties];
     let active = true;
 
-    (async () => {
+    const run = async () => {
+      // Wait for map to be ready
+      let attempts = 0;
+      while (!mapRef.current && attempts < 30) {
+        await new Promise((r) => setTimeout(r, 200));
+        attempts++;
+      }
+      if (!mapRef.current || !active) return;
+
+      const map = mapRef.current;
+      const google = (window as any).google;
+      if (!google) return;
+
+      setLoading(true);
+      setResolved(0);
+
       const cache = loadCache();
-      let apiCalls = 0;
+      const geocoder = new google.maps.Geocoder();
 
       for (const p of snapshot) {
         if (!active) break;
         const key = p.location?.trim().toLowerCase();
         if (!key) { setResolved((n) => n + 1); continue; }
 
-        let coords: [number, number] | null = cache[key] ?? null;
+        let pos: { lat: number; lng: number } | null = cache[key] ?? null;
 
-        if (!coords) {
-          if (apiCalls > 0) await sleep(1100);
-          coords = await geocode(p.location);
-          apiCalls++;
-          if (coords) { cache[key] = coords; saveCache(cache); }
+        if (!pos) {
+          try {
+            const result = await new Promise<google.maps.GeocoderResult[] | null>((resolve) => {
+              geocoder.geocode(
+                { address: `${p.location}, Greece` },
+                (results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus) => {
+                  resolve(status === "OK" ? results : null);
+                }
+              );
+            });
+            if (result?.[0]) {
+              pos = {
+                lat: result[0].geometry.location.lat(),
+                lng: result[0].geometry.location.lng(),
+              };
+              cache[key] = pos;
+              saveCache(cache);
+            }
+          } catch {}
         }
 
         if (!active) break;
 
-        if (coords) {
+        if (pos) {
           const img = p.images?.[0]
-            ? `<img src="${optimizeImage(p.images[0], { width: 220, height: 130 })}" style="width:100%;height:120px;object-fit:cover;display:block;"/>`
+            ? `<img src="${optimizeImage(p.images[0], { width: 220, height: 130 })}" style="width:100%;height:120px;object-fit:cover;display:block;border-radius:8px 8px 0 0;"/>`
             : "";
           const price = p.price
             ? `<span style="color:#4ef5f1;font-size:15px;font-weight:700;">€${p.price.toLocaleString()}</span>`
             : "";
 
-          L.marker(coords, { icon: cyanMarker })
-            .bindPopup(
-              `<div style="width:220px;background:#0a0e2a;font-family:'Inter',sans-serif;">
-                ${img}
-                <div style="padding:12px 14px 14px;">
-                  <p style="margin:0 0 3px;color:#e8f0ff;font-size:13px;font-weight:600;line-height:1.3;">${p.title}</p>
-                  <p style="margin:0 0 8px;color:#5a6a8a;font-size:11px;">${p.location}</p>
-                  <div style="display:flex;align-items:center;justify-content:space-between;">
-                    ${price}
-                    <a href="/property/${p.id}" style="background:#4ef5f1;color:#000014;font-size:11px;font-weight:700;padding:5px 10px;border-radius:5px;text-decoration:none;">View →</a>
-                  </div>
+          const marker = new google.maps.Marker({
+            map,
+            position: pos,
+            title: p.title,
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: 10,
+              fillColor: "#4ef5f1",
+              fillOpacity: 1,
+              strokeColor: "#000014",
+              strokeWeight: 2,
+            },
+          });
+
+          const infoWindow = new google.maps.InfoWindow({
+            content: `<div style="width:220px;background:#0a0e2a;border-radius:8px;overflow:hidden;font-family:'Inter',sans-serif;">
+              ${img}
+              <div style="padding:12px 14px 14px;">
+                <p style="margin:0 0 3px;color:#e8f0ff;font-size:13px;font-weight:600;line-height:1.3;">${p.title}</p>
+                <p style="margin:0 0 8px;color:#5a6a8a;font-size:11px;">${p.location}</p>
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  ${price}
+                  <a href="/property/${p.id}" style="background:#4ef5f1;color:#000014;font-size:11px;font-weight:700;padding:5px 10px;border-radius:5px;text-decoration:none;">View →</a>
                 </div>
-              </div>`,
-              { maxWidth: 220, minWidth: 220, className: "maiprop-popup" }
-            )
-            .addTo(layer);
+              </div>
+            </div>`,
+            disableAutoPan: false,
+          });
+
+          marker.addListener("click", () => infoWindow.open(map, marker));
         }
 
         setResolved((n) => n + 1);
       }
 
       if (active) setLoading(false);
-    })();
+    };
 
+    run();
     return () => { active = false; };
   }, [properties]);
+
+  if (error) {
+    return (
+      <div style={{ height: 600, width: "100%", borderRadius: 16, background: "#0a0e2a", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <p style={{ color: "#5a6a8a", fontSize: 14 }}>Map unavailable — add VITE_GOOGLE_MAPS_API_KEY to your environment</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ position: "relative", zIndex: 0, isolation: "isolate" }}>
