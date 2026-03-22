@@ -34,8 +34,8 @@ const DARK_STYLE = [
 
 // Configure the loader once
 setOptions({
-  apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
-  version: "weekly",
+  key: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
+  v: "weekly",
 });
 
 interface Props { properties: Property[]; }
