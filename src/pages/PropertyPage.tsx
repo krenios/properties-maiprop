@@ -517,13 +517,25 @@ const PropertyPageInner = () => {
 
           <Separator className="my-6 bg-border" />
 
-          {/* Specs */}
+          {/* Specs — priority-ordered pills */}
           <div className="flex flex-wrap gap-2">
+            {/* Tier 1: high-signal investment metrics */}
             {property.price && (
-              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-4 py-2 text-sm">
-                <span className="font-bold text-primary">€{property.price.toLocaleString()}</span>
+              <Badge className="gap-1.5 rounded-full bg-primary/15 border border-primary/40 text-primary px-4 py-2 text-sm font-bold hover:bg-primary/20 transition-colors">
+                €{property.price.toLocaleString()}
               </Badge>
             )}
+            {property.yield && (
+              <Badge className="gap-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 px-4 py-2 text-sm font-semibold hover:bg-emerald-500/20 transition-colors">
+                <TrendingUp className="h-3.5 w-3.5" /> {property.yield} yield
+              </Badge>
+            )}
+            {property.project_type && (
+              <Badge className="gap-1.5 rounded-full bg-secondary/15 border border-secondary/40 text-secondary px-4 py-2 text-sm font-semibold capitalize hover:bg-secondary/20 transition-colors">
+                {property.project_type}
+              </Badge>
+            )}
+            {/* Tier 2: property specs */}
             {property.size && (
               <Badge variant="outline" className="gap-1.5 rounded-full border-border px-4 py-2 text-sm">
                 <Maximize className="h-3.5 w-3.5 text-muted-foreground" /> {property.size} m²
@@ -542,11 +554,6 @@ const PropertyPageInner = () => {
             {property.construction_year && (
               <Badge variant="outline" className="gap-1.5 rounded-full border-border px-4 py-2 text-sm">
                 <Calendar className="h-3.5 w-3.5 text-muted-foreground" /> Built {property.construction_year}
-              </Badge>
-            )}
-            {property.yield && (
-              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-4 py-2 text-sm">
-                <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" /> {property.yield}
               </Badge>
             )}
           </div>
@@ -645,6 +652,35 @@ const PropertyPageInner = () => {
               </section>
             </>
           )}
+
+          <Separator className="my-8 bg-border" />
+
+          {/* Location Map */}
+          <section aria-label="Property location map">
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Location</h2>
+            <div className="overflow-hidden rounded-lg border border-border">
+              <iframe
+                title={`Map of ${property.location}`}
+                src={`https://www.google.com/maps?q=${encodeURIComponent(property.location + ", Greece")}&output=embed`}
+                className="h-[320px] w-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center justify-between bg-muted/30 p-3 transition-colors hover:bg-muted/50"
+              >
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-primary" />
+                  <p className="text-sm font-medium">{property.location}, Greece</p>
+                </div>
+                <ExternalLink className="h-3.5 w-3.5 text-muted-foreground transition-colors group-hover:text-primary" />
+              </a>
+            </div>
+          </section>
 
           <Separator className="my-8 bg-border" />
 

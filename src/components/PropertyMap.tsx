@@ -38,9 +38,9 @@ setOptions({
   v: "weekly",
 });
 
-interface Props { properties: Property[]; }
+interface Props { properties: Property[]; height?: number; }
 
-const PropertyMap = ({ properties }: Props) => {
+const PropertyMap = ({ properties, height = 400 }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mapRef = useRef<any>(null);
@@ -180,7 +180,7 @@ const PropertyMap = ({ properties }: Props) => {
 
   if (error) {
     return (
-      <div style={{ height: 600, width: "100%", borderRadius: 16, background: "#0a0e2a", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ height, width: "100%", borderRadius: 16, background: "#0a0e2a", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <p style={{ color: "#5a6a8a", fontSize: 14 }}>Map unavailable — add VITE_GOOGLE_MAPS_API_KEY to your environment</p>
       </div>
     );
@@ -188,10 +188,10 @@ const PropertyMap = ({ properties }: Props) => {
 
   return (
     <div style={{ position: "relative", zIndex: 0, isolation: "isolate" }}>
-      <div ref={containerRef} style={{ height: 600, width: "100%", borderRadius: 16, overflow: "hidden" }} />
+      <div ref={containerRef} style={{ height, width: "100%", borderRadius: 16, overflow: "hidden" }} />
       {loading && (
         <div style={{
-          position: "absolute", inset: 0, borderRadius: 16,
+          position: "absolute", inset: 0, borderRadius: 16, height,
           background: "rgba(10,14,42,0.7)", backdropFilter: "blur(4px)",
           display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
           gap: 12, pointerEvents: "none",

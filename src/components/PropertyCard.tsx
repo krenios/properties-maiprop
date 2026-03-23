@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { Property } from "@/data/properties";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, MessageCircle, ExternalLink, Share2 } from "lucide-react";
+import { MapPin, MessageCircle, ExternalLink, Share2, ImageIcon } from "lucide-react";
 import { useLeadBot } from "@/components/LeadBotProvider";
 import { optimizeImage } from "@/lib/optimizeImage";
 import { Link } from "react-router-dom";
@@ -21,8 +22,10 @@ const statusColors: Record<string, string> = {
 
 const PropertyCard = ({ property, onClick }: Props) => {
   const { openWithLocation } = useLeadBot();
+  const [showMap, setShowMap] = useState(false);
 
   const images = property.images.length > 0 ? property.images : ["/placeholder.svg"];
+  const mapEmbedSrc = `https://www.google.com/maps?q=${encodeURIComponent(property.location + ", Greece")}&output=embed`;
 
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -60,41 +63,65 @@ const PropertyCard = ({ property, onClick }: Props) => {
         className="w-full text-left"
       >
         <div className="relative aspect-[4/3] overflow-hidden">
-          <img
-            src={optimizeImage(images[0], { width: 600, height: 450 })}
-            alt={`${property.title} — Golden Visa property in ${property.location}`}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
-            decoding="async"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          />
-          {property.status && (
+          {showMap ? (
+            <div className="h-full w-full overflow-hidden rounded-t-xl border-b border-border">
+              <iframe
+                title={`Map of ${property.location}`}
+                src={mapEmbedSrc}
+                className="h-full w-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+            </div>
+          ) : (
+            <img
+              src={optimizeImage(images[0], { width: 600, height: 450 })}
+              alt={`${property.title} — Golden Visa property in ${property.location}`}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+              decoding="async"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+          )}
+          {property.status && !showMap && (
             <Badge className={`absolute right-3 top-3 border ${statusColors[property.status] || ""}`}>
               {property.status.replace("-", " ")}
             </Badge>
           )}
-          <div className="absolute bottom-2 left-2 flex flex-wrap gap-1.5">
-            {property.size && (
-              <Badge variant="outline" className="border-background/30 bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
-                {property.size} m²
-              </Badge>
-            )}
-            {property.bedrooms && (
-              <Badge variant="outline" className="border-background/30 bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
-                {property.bedrooms} BR
-              </Badge>
-            )}
-            {property.floor && (
-              <Badge variant="outline" className="border-background/30 bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
-                Floor {property.floor}
-              </Badge>
-            )}
-            {property.construction_year && (
-              <Badge variant="outline" className="border-background/30 bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
-                {property.construction_year}
-              </Badge>
-            )}
-          </div>
+          {/* Photo / Map toggle */}
+          <button
+            onClick={(e) => { e.stopPropagation(); setShowMap((v) => !v); }}
+            className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-background/80 px-2.5 py-1 text-[11px] font-medium text-foreground backdrop-blur hover:text-primary transition-colors"
+            title={showMap ? "Show photo" : "Show map"}
+          >
+            {showMap ? <ImageIcon className="h-3 w-3" /> : <MapPin className="h-3 w-3" />}
+            {showMap ? "Photo" : "Map"}
+          </button>
+          {!showMap && (
+            <div className="absolute bottom-2 left-2 flex flex-wrap gap-1.5">
+              {property.size && (
+                <Badge variant="outline" className="border-background/30 bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
+                  {property.size} m²
+                </Badge>
+              )}
+              {property.bedrooms && (
+                <Badge variant="outline" className="border-background/30 bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
+                  {property.bedrooms} BR
+                </Badge>
+              )}
+              {property.floor && (
+                <Badge variant="outline" className="border-background/30 bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
+                  Floor {property.floor}
+                </Badge>
+              )}
+              {property.construction_year && (
+                <Badge variant="outline" className="border-background/30 bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
+                  {property.construction_year}
+                </Badge>
+              )}
+            </div>
+          )}
         </div>
         <div className="p-5">
           <Link
