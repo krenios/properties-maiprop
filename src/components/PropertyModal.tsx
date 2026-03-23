@@ -16,6 +16,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { LucideIcon } from "lucide-react";
 import ImageLightbox from "@/components/ImageLightbox";
+import MiniMap from "@/components/MiniMap";
 
 const statusColors: Record<string, string> = {
   available: "bg-primary/20 text-primary border-primary/30",
@@ -403,28 +404,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
               <Separator className="bg-border" />
 
               {/* Embedded Google Map */}
-              <div className="overflow-hidden rounded-lg border border-border">
-                <iframe
-                  title={`Map of ${property.location}`}
-                  src={`https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(property.location + ", Greece")}`}
-                  className="h-[180px] w-full border-0"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  allowFullScreen
-                />
-                <a
-                  href={mapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center justify-between bg-muted/30 p-3 transition-colors hover:bg-muted/50"
-                >
-                  <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-primary" />
-                    <p className="text-sm font-medium">{property.location}, Greece</p>
-                  </div>
-                  <ExternalLink className="h-3.5 w-3.5 text-muted-foreground transition-colors group-hover:text-primary" />
-                </a>
-              </div>
+              <MiniMap location={property.location} height={180} />
 
               {/* Floor Plan */}
               {property.floor_plan && (

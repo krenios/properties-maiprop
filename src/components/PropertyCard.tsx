@@ -7,6 +7,7 @@ import { useLeadBot } from "@/components/LeadBotProvider";
 import { optimizeImage } from "@/lib/optimizeImage";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import MiniMap from "@/components/MiniMap";
 
 interface Props {
   property: Property;
@@ -25,7 +26,6 @@ const PropertyCard = ({ property, onClick }: Props) => {
   const [showMap, setShowMap] = useState(false);
 
   const images = property.images.length > 0 ? property.images : ["/placeholder.svg"];
-  const mapEmbedSrc = `https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(property.location + ", Greece")}`;
 
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -64,15 +64,8 @@ const PropertyCard = ({ property, onClick }: Props) => {
       >
         <div className="relative aspect-[4/3] overflow-hidden">
           {showMap ? (
-            <div className="h-full w-full overflow-hidden rounded-t-xl border-b border-border">
-              <iframe
-                title={`Map of ${property.location}`}
-                src={mapEmbedSrc}
-                className="h-full w-full border-0"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                allowFullScreen
-              />
+            <div className="h-full w-full">
+              <MiniMap location={property.location} height={300} showFooter={false} />
             </div>
           ) : (
             <img
