@@ -117,7 +117,7 @@ const PropertyMap = ({ properties, height = 400, onPropertyClick }: Props) => {
           try {
             const result = await new Promise<any[] | null>((resolve) => {
               geocoder.geocode(
-                { address: `${p.location}, Athens, Greece` },
+                { address: `${p.location}, Greece` },
                 (results: any[], status: string) => {
                   resolve(status === "OK" ? results : null);
                 }
