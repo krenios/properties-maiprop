@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { importLibrary } from "@/lib/googleMapsLoader";
 import { MapPin, ExternalLink } from "lucide-react";
 
-const CACHE_KEY = "maiprop_geocache_v2";
+const CACHE_KEY = "maiprop_geocache_v3";
 function loadCache(): Record<string, { lat: number; lng: number }> {
   try { return JSON.parse(localStorage.getItem(CACHE_KEY) || "{}"); } catch { return {}; }
 }
@@ -82,7 +82,7 @@ const MiniMap = ({ location, height = 200, showFooter = true }: Props) => {
         } else {
           const geocoder = new g.maps.Geocoder();
           geocoder.geocode(
-            { address: `${location}, Greece` },
+            { address: `${location}, Athens, Greece` },
             (results: any[], status: string) => {
               if (cancelled) return;
               if (status === "OK" && results?.[0]) {
