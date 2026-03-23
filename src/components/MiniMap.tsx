@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { importLibrary } from "@/lib/googleMapsLoader";
 import { MapPin, ExternalLink } from "lucide-react";
 
-const CACHE_KEY = "maiprop_geocache_v2";
+const CACHE_KEY = "maiprop_geocache_v3";
 function loadCache(): Record<string, { lat: number; lng: number }> {
   try { return JSON.parse(localStorage.getItem(CACHE_KEY) || "{}"); } catch { return {}; }
 }
