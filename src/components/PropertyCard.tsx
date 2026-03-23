@@ -25,7 +25,7 @@ const PropertyCard = ({ property, onClick }: Props) => {
   const [showMap, setShowMap] = useState(false);
 
   const images = property.images.length > 0 ? property.images : ["/placeholder.svg"];
-  const mapEmbedSrc = `https://www.google.com/maps?q=${encodeURIComponent(property.location + ", Greece")}&output=embed`;
+  const mapEmbedSrc = `https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(property.location + ", Greece")}`;
 
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();

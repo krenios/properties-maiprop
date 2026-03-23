@@ -406,7 +406,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
               <div className="overflow-hidden rounded-lg border border-border">
                 <iframe
                   title={`Map of ${property.location}`}
-                  src={`https://www.google.com/maps?q=${encodeURIComponent(property.location + ", Greece")}&output=embed`}
+                  src={`https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(property.location + ", Greece")}`}
                   className="h-[180px] w-full border-0"
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
