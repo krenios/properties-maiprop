@@ -38,13 +38,19 @@ setOptions({
   v: "weekly",
 });
 
-interface Props { properties: Property[]; height?: number; }
+interface Props {
+  properties: Property[];
+  height?: number;
+  onPropertyClick?: (property: Property) => void;
+}
 
-const PropertyMap = ({ properties, height = 400 }: Props) => {
+const PropertyMap = ({ properties, height = 400, onPropertyClick }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mapRef = useRef<any>(null);
   const geocodedIdsRef = useRef<string>("");
+  const onPropertyClickRef = useRef(onPropertyClick);
+  onPropertyClickRef.current = onPropertyClick;
   const [loading, setLoading] = useState(false);
   const [resolved, setResolved] = useState(0);
   const [error, setError] = useState(false);
@@ -97,6 +103,9 @@ const PropertyMap = ({ properties, height = 400 }: Props) => {
 
       const cache = loadCache();
       const geocoder = new g.maps.Geocoder();
+      const bounds = new g.maps.LatLngBounds();
+      let pinCount = 0;
+      let openInfoWindow: any = null;
 
       for (const p of snapshot) {
         if (!active) break;
@@ -129,11 +138,17 @@ const PropertyMap = ({ properties, height = 400 }: Props) => {
         if (!active) break;
 
         if (pos) {
+          bounds.extend(pos);
+          pinCount++;
+
           const img = p.images?.[0]
             ? `<img src="${optimizeImage(p.images[0], { width: 220, height: 130 })}" style="width:100%;height:120px;object-fit:cover;display:block;border-radius:8px 8px 0 0;"/>`
             : "";
           const price = p.price
             ? `<span style="color:#4ef5f1;font-size:15px;font-weight:700;">€${p.price.toLocaleString()}</span>`
+            : "";
+          const yieldBadge = p.yield
+            ? `<span style="background:rgba(16,185,129,0.15);color:#34d399;font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;border:1px solid rgba(16,185,129,0.3);">${p.yield} yield</span>`
             : "";
 
           const marker = new g.maps.Marker({
@@ -151,24 +166,50 @@ const PropertyMap = ({ properties, height = 400 }: Props) => {
           });
 
           const infoWindow = new g.maps.InfoWindow({
-            content: `<div style="width:220px;background:#0a0e2a;border-radius:8px;overflow:hidden;font-family:'Inter',sans-serif;">
+            content: `<div style="width:230px;background:#0a0e2a;border-radius:10px;overflow:hidden;font-family:'Inter',sans-serif;box-shadow:0 8px 32px rgba(0,0,0,0.6);">
               ${img}
               <div style="padding:12px 14px 14px;">
-                <p style="margin:0 0 3px;color:#e8f0ff;font-size:13px;font-weight:600;line-height:1.3;">${p.title}</p>
-                <p style="margin:0 0 8px;color:#5a6a8a;font-size:11px;">${p.location}</p>
-                <div style="display:flex;align-items:center;justify-content:space-between;">
+                <p style="margin:0 0 2px;color:#e8f0ff;font-size:13px;font-weight:600;line-height:1.3;">${p.title}</p>
+                <p style="margin:0 0 8px;color:#5a6a8a;font-size:11px;">${p.location}, Greece</p>
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
                   ${price}
-                  <a href="/property/${p.id}" style="background:#4ef5f1;color:#000014;font-size:11px;font-weight:700;padding:5px 10px;border-radius:5px;text-decoration:none;">View →</a>
+                  ${yieldBadge}
+                </div>
+                <div style="display:flex;gap:6px;">
+                  <a href="/property/${p.id}" style="flex:1;background:#4ef5f1;color:#000014;font-size:11px;font-weight:700;padding:6px 10px;border-radius:6px;text-decoration:none;text-align:center;">View →</a>
+                  ${onPropertyClickRef.current ? `<button data-pid="${p.id}" style="flex:1;background:rgba(78,245,241,0.12);color:#4ef5f1;border:1px solid rgba(78,245,241,0.3);font-size:11px;font-weight:600;padding:6px 10px;border-radius:6px;cursor:pointer;">Quick view</button>` : ""}
                 </div>
               </div>
             </div>`,
             disableAutoPan: false,
           });
 
-          marker.addListener("click", () => infoWindow.open(map, marker));
+          marker.addListener("click", () => {
+            if (openInfoWindow) openInfoWindow.close();
+            openInfoWindow = infoWindow;
+            infoWindow.open(map, marker);
+          });
+
+          // "Quick view" button inside info window fires a custom DOM event
+          infoWindow.addListener("domready", () => {
+            const btn = document.querySelector<HTMLButtonElement>(`[data-pid="${p.id}"]`);
+            if (btn) {
+              btn.onclick = () => {
+                infoWindow.close();
+                onPropertyClickRef.current?.(p);
+              };
+            }
+          });
         }
 
         setResolved((n) => n + 1);
+      }
+
+      // Fit map to show all markers
+      if (active && pinCount > 1) {
+        map.fitBounds(bounds, 60);
+      } else if (active && pinCount === 1) {
+        map.setZoom(14);
       }
 
       if (active) setLoading(false);
