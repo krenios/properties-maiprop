@@ -54,7 +54,7 @@ const PropertyMap = ({ properties, height = 400, onPropertyClick }: Props) => {
     if (!containerRef.current || mapRef.current) return;
     let cancelled = false;
 
-    importLibrary("maps").then(({ Map }: any) => {
+    Promise.all([importLibrary("maps"), importLibrary("places")]).then(([{ Map }]: any) => {
       if (cancelled || !containerRef.current) return;
       const g = (window as any).google;
       mapRef.current = new Map(containerRef.current, {
