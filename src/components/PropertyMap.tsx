@@ -101,7 +101,7 @@ const PropertyMap = ({ properties, height = 400, onPropertyClick }: Props) => {
       setResolved(0);
 
       const cache = loadCache();
-      const geocoder = new g.maps.Geocoder();
+      
       const bounds = new g.maps.LatLngBounds();
       let pinCount = 0;
       let openInfoWindow: any = null;
