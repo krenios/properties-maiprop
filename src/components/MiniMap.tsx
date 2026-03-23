@@ -82,7 +82,7 @@ const MiniMap = ({ location, height = 200, showFooter = true }: Props) => {
         } else {
           const geocoder = new g.maps.Geocoder();
           geocoder.geocode(
-            { address: `${location}, Greece` },
+            { address: `${location}, Athens, Greece` },
             (results: any[], status: string) => {
               if (cancelled) return;
               if (status === "OK" && results?.[0]) {
