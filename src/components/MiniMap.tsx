@@ -38,63 +38,72 @@ const MiniMap = ({ location, height = 200, showFooter = true }: Props) => {
 
   useEffect(() => {
     if (!containerRef.current || !location) return;
-    let map: any = null;
+    let cancelled = false;
 
-    importLibrary("maps").then(({ Map }) => {
-      if (!containerRef.current) return;
-      const g = (window as any).google;
+    const init = async () => {
+      try {
+        const { Map } = await importLibrary("maps") as any;
+        if (cancelled || !containerRef.current) return;
 
-      map = new Map(containerRef.current, {
-        center: { lat: 37.9838, lng: 23.7275 },
-        zoom: 13,
-        styles: DARK_STYLE,
-        disableDefaultUI: true,
-        zoomControl: false,
-        gestureHandling: "none",
-        clickableIcons: false,
-      });
-
-      const cache = loadCache();
-      const key = location.trim().toLowerCase();
-      const cached = cache[key];
-
-      const placeMarker = (pos: { lat: number; lng: number }) => {
-        map.setCenter(pos);
-        new g.maps.Marker({
-          map,
-          position: pos,
-          title: location,
-          icon: {
-            path: g.maps.SymbolPath.CIRCLE,
-            scale: 9,
-            fillColor: "#4ef5f1",
-            fillOpacity: 1,
-            strokeColor: "#000014",
-            strokeWeight: 2,
-          },
+        const g = (window as any).google;
+        const map = new Map(containerRef.current, {
+          center: { lat: 37.9838, lng: 23.7275 },
+          zoom: 13,
+          styles: DARK_STYLE,
+          disableDefaultUI: true,
+          zoomControl: false,
+          gestureHandling: "none",
+          clickableIcons: false,
         });
-      };
 
-      if (cached) {
-        placeMarker(cached);
-      } else {
-        const geocoder = new g.maps.Geocoder();
-        geocoder.geocode(
-          { address: `${location}, Greece` },
-          (results: any[], status: string) => {
-            if (status === "OK" && results?.[0]) {
-              const pos = {
-                lat: results[0].geometry.location.lat(),
-                lng: results[0].geometry.location.lng(),
-              };
-              cache[key] = pos;
-              saveCache(cache);
-              placeMarker(pos);
+        const cache = loadCache();
+        const key = location.trim().toLowerCase();
+        const cached = cache[key];
+
+        const placeMarker = (pos: { lat: number; lng: number }) => {
+          map.setCenter(pos);
+          new g.maps.Marker({
+            map,
+            position: pos,
+            title: location,
+            icon: {
+              path: g.maps.SymbolPath.CIRCLE,
+              scale: 9,
+              fillColor: "#4ef5f1",
+              fillOpacity: 1,
+              strokeColor: "#000014",
+              strokeWeight: 2,
+            },
+          });
+        };
+
+        if (cached) {
+          placeMarker(cached);
+        } else {
+          const geocoder = new g.maps.Geocoder();
+          geocoder.geocode(
+            { address: `${location}, Greece` },
+            (results: any[], status: string) => {
+              if (cancelled) return;
+              if (status === "OK" && results?.[0]) {
+                const pos = {
+                  lat: results[0].geometry.location.lat(),
+                  lng: results[0].geometry.location.lng(),
+                };
+                cache[key] = pos;
+                saveCache(cache);
+                placeMarker(pos);
+              }
             }
-          }
-        );
+          );
+        }
+      } catch {
+        if (!cancelled) setError(true);
       }
-    }).catch(() => setError(true));
+    };
+
+    init();
+    return () => { cancelled = true; };
   }, [location]);
 
   if (error) {
