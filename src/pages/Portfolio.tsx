@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { createPortal } from "react-dom";
 import Navbar from "@/components/Navbar";
 import { useProperties } from "@/contexts/PropertyContext";
+import MiniMap from "@/components/MiniMap";
 import {
   CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag,
   ExternalLink, ChevronLeft, ChevronRight, Building,
@@ -424,6 +425,11 @@ const DeliveredModal = ({ property, open, onClose }: ModalProps) => {
             {property.construction_year && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><Calendar className="h-3.5 w-3.5 text-muted-foreground" /> {t("Built")} {property.construction_year}</Badge>}
             {property.yield && <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm"><TrendingUp className="h-3.5 w-3.5 text-muted-foreground" /> {property.yield}</Badge>}
           </div>
+          {/* Mini map */}
+          {property.location && (
+            <MiniMap location={property.location} height={180} />
+          )}
+
           {hasBeforeAfter && (
             <div>
               <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">{t("Before & After")}</h4>

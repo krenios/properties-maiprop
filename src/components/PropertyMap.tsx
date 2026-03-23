@@ -52,9 +52,10 @@ const PropertyMap = ({ properties, height = 400, onPropertyClick }: Props) => {
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
+    let cancelled = false;
 
-    importLibrary("maps").then(({ Map }) => {
-      if (!containerRef.current) return;
+    importLibrary("maps").then(({ Map }: any) => {
+      if (cancelled || !containerRef.current) return;
       const g = (window as any).google;
       mapRef.current = new Map(containerRef.current, {
         center: { lat: 37.9838, lng: 23.7275 },
@@ -65,9 +66,12 @@ const PropertyMap = ({ properties, height = 400, onPropertyClick }: Props) => {
         zoomControlOptions: { position: g?.maps?.ControlPosition?.RIGHT_BOTTOM },
         gestureHandling: "cooperative",
       });
-    }).catch(() => setError(true));
+    }).catch(() => { if (!cancelled) setError(true); });
 
-    return () => { mapRef.current = null; };
+    return () => {
+      cancelled = true;
+      mapRef.current = null;
+    };
   }, []);
 
   useEffect(() => {
