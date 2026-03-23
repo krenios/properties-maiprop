@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { createPortal } from "react-dom";
 import Navbar from "@/components/Navbar";
 import { useProperties } from "@/contexts/PropertyContext";
+import MiniMap from "@/components/MiniMap";
 import {
   CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag,
   ExternalLink, ChevronLeft, ChevronRight, Building,
