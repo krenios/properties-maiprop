@@ -115,18 +115,24 @@ const PropertyMap = ({ properties, height = 400, onPropertyClick }: Props) => {
 
         if (!pos) {
           try {
-            const result = await new Promise<any[] | null>((resolve) => {
-              geocoder.geocode(
-                { address: `${p.location}, Greece` },
+            // Use Places text search — same engine as Google Maps Search,
+            // gives consistent results with the external Maps link.
+            const placesService = new g.maps.places.PlacesService(map);
+            const result = await new Promise<any | null>((resolve) => {
+              placesService.findPlaceFromQuery(
+                {
+                  query: `${p.location}, Greece`,
+                  fields: ["geometry"],
+                },
                 (results: any[], status: string) => {
-                  resolve(status === "OK" ? results : null);
+                  resolve(status === g.maps.places.PlacesServiceStatus.OK && results?.[0] ? results[0] : null);
                 }
               );
             });
-            if (result?.[0]) {
+            if (result?.geometry?.location) {
               pos = {
-                lat: result[0].geometry.location.lat(),
-                lng: result[0].geometry.location.lng(),
+                lat: result.geometry.location.lat(),
+                lng: result.geometry.location.lng(),
               };
               cache[key] = pos;
               saveCache(cache);
