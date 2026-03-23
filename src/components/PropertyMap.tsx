@@ -3,7 +3,7 @@ import { importLibrary } from "@/lib/googleMapsLoader";
 import { Property } from "@/data/properties";
 import { optimizeImage } from "@/lib/optimizeImage";
 
-const CACHE_KEY = "maiprop_geocache_v3";
+const CACHE_KEY = "maiprop_geocache_v4";
 function loadCache(): Record<string, { lat: number; lng: number }> {
   try { return JSON.parse(localStorage.getItem(CACHE_KEY) || "{}"); } catch { return {}; }
 }
@@ -117,7 +117,7 @@ const PropertyMap = ({ properties, height = 400, onPropertyClick }: Props) => {
           try {
             const result = await new Promise<any[] | null>((resolve) => {
               geocoder.geocode(
-                { address: `${p.location}, Athens, Greece` },
+                { address: `${p.location}, Greece` },
                 (results: any[], status: string) => {
                   resolve(status === "OK" ? results : null);
                 }
