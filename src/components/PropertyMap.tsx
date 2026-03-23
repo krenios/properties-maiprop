@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { importLibrary, setOptions } from "@googlemaps/js-api-loader";
+import { importLibrary } from "@/lib/googleMapsLoader";
 import { Property } from "@/data/properties";
 import { optimizeImage } from "@/lib/optimizeImage";
 
@@ -32,11 +32,6 @@ const DARK_STYLE = [
   { featureType: "transit.station", elementType: "labels.text.fill", stylers: [{ color: "#4a5a7a" }] },
 ];
 
-// Configure the loader once
-setOptions({
-  key: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
-  v: "weekly",
-});
 
 interface Props {
   properties: Property[];

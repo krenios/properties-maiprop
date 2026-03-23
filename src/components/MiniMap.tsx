@@ -1,12 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { importLibrary, setOptions } from "@googlemaps/js-api-loader";
+import { importLibrary } from "@/lib/googleMapsLoader";
 import { MapPin, ExternalLink } from "lucide-react";
-
-// Reuse same key + cache as PropertyMap
-setOptions({
-  key: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
-  v: "weekly",
-});
 
 const CACHE_KEY = "maiprop_geocache_v2";
 function loadCache(): Record<string, { lat: number; lng: number }> {
