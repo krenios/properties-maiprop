@@ -3,7 +3,7 @@ import { importLibrary } from "@/lib/googleMapsLoader";
 import { Property } from "@/data/properties";
 import { optimizeImage } from "@/lib/optimizeImage";
 
-const CACHE_KEY = "maiprop_geocache_v4";
+const CACHE_KEY = "maiprop_geocache_v5";
 function loadCache(): Record<string, { lat: number; lng: number }> {
   try { return JSON.parse(localStorage.getItem(CACHE_KEY) || "{}"); } catch { return {}; }
 }
