@@ -283,7 +283,7 @@ const Index = () => {
           <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. All rights reserved.</p>
         </div>
       </footer>
-      <Footer />
+      
       <Suspense fallback={null}>
         <CookieConsent />
       </Suspense>
