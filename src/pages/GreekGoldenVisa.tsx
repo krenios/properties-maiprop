@@ -2,7 +2,19 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { Globe, Users, Home, TrendingUp, Sun, Zap, ArrowRight, CheckCircle2, MapPin, Gavel, BadgeCheck } from "lucide-react";
+import {
+  Globe,
+  Users,
+  Home,
+  TrendingUp,
+  Sun,
+  Zap,
+  ArrowRight,
+  CheckCircle2,
+  MapPin,
+  Gavel,
+  BadgeCheck,
+} from "lucide-react";
 import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
 import Footer from "@/components/Footer";
@@ -13,41 +25,43 @@ const PAGE_URL = `${BASE_URL}/greek-golden-visa/`;
 const articleLd = {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Greek Golden Visa — EU Residency Through Real Estate Investment",
-  "description": "Complete guide to the Greek Golden Visa program. Invest €250,000+ in real estate and get EU residency with access to 27 Schengen countries.",
-  "url": `${BASE_URL}/greek-golden-visa/`,
-  "datePublished": "2024-01-01",
-  "dateModified": "2026-03-06",
-  "author": { "@id": "https://properties.maiprop.co/#organization" },
-  "publisher": { "@id": "https://properties.maiprop.co/#organization" },
-  "mainEntityOfPage": { "@type": "WebPage", "@id": `${BASE_URL}/greek-golden-visa/` },
-  "about": { "@type": "Thing", "name": "Greek Golden Visa" },
-  "inLanguage": ["en", "ar", "zh", "tr"],
-  "audience": {
+  headline: "Greek Golden Visa — EU Residency Through Real Estate Investment",
+  description:
+    "Complete guide to the Greek Golden Visa program. Invest €250,000+ in real estate and get EU residency with access to 27 Schengen countries.",
+  url: `${BASE_URL}/greek-golden-visa/`,
+  datePublished: "2024-01-01",
+  dateModified: "2026-03-06",
+  author: { "@id": "https://properties.maiprop.co/#organization" },
+  publisher: { "@id": "https://properties.maiprop.co/#organization" },
+  mainEntityOfPage: { "@type": "WebPage", "@id": `${BASE_URL}/greek-golden-visa/` },
+  about: { "@type": "Thing", name: "Greek Golden Visa" },
+  inLanguage: ["en", "ar", "zh", "tr"],
+  audience: {
     "@type": "Audience",
-    "geographicArea": [
-      { "@type": "Country", "name": "United States" },
-      { "@type": "Country", "name": "United Arab Emirates" },
-      { "@type": "Country", "name": "Turkey" },
-      { "@type": "Country", "name": "United Kingdom" },
-      { "@type": "Country", "name": "China" }
-    ]
-  }
+    geographicArea: [
+      { "@type": "Country", name: "United States" },
+      { "@type": "Country", name: "United Arab Emirates" },
+      { "@type": "Country", name: "Turkey" },
+      { "@type": "Country", name: "United Kingdom" },
+      { "@type": "Country", name: "China" },
+    ],
+  },
 };
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  "name": "Greek Golden Visa Guide — EU Residency Through Real Estate",
-  "description": "Complete guide to the Greek Golden Visa program. Invest €250,000+ in real estate and get EU residency with access to 27 Schengen countries.",
-  "url": PAGE_URL,
-  "datePublished": "2024-01-01",
-  "dateModified": "2026-03-06",
-  "breadcrumb": {
+  name: "Greek Golden Visa Guide — EU Residency Through Real Estate",
+  description:
+    "Complete guide to the Greek Golden Visa program. Invest €250,000+ in real estate and get EU residency with access to 27 Schengen countries.",
+  url: PAGE_URL,
+  datePublished: "2024-01-01",
+  dateModified: "2026-03-06",
+  breadcrumb: {
     "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": BASE_URL + "/" },
-      { "@type": "ListItem", "position": 2, "name": "Greek Golden Visa", "item": PAGE_URL },
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL + "/" },
+      { "@type": "ListItem", position: 2, name: "Greek Golden Visa", item: PAGE_URL },
     ],
   },
 };
@@ -55,49 +69,69 @@ const jsonLd = {
 const faqLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  "mainEntity": [
+  mainEntity: [
     {
       "@type": "Question",
-      "name": "What is the Greek Golden Visa?",
-      "acceptedAnswer": {
+      name: "What is the Greek Golden Visa?",
+      acceptedAnswer: {
         "@type": "Answer",
-        "text": "The Greek Golden Visa is a residency-by-investment program that grants non-EU nationals and their families a 5-year renewable Greek residency permit in exchange for a qualifying real estate investment starting at €250,000.",
+        text: "The Greek Golden Visa is a residency-by-investment program that grants non-EU nationals and their families a 5-year renewable Greek residency permit in exchange for a qualifying real estate investment starting at €250,000.",
       },
     },
     {
       "@type": "Question",
-      "name": "How long does it take to get a Greek Golden Visa?",
-      "acceptedAnswer": {
+      name: "How long does it take to get a Greek Golden Visa?",
+      acceptedAnswer: {
         "@type": "Answer",
-        "text": "The process typically takes 6–9 months from initial consultation to residency permit approval, covering property selection, due diligence, legal registration, and the biometrics appointment.",
+        text: "The process typically takes 6–9 months from initial consultation to residency permit approval, covering property selection, due diligence, legal registration, and the biometrics appointment.",
       },
     },
     {
       "@type": "Question",
-      "name": "Can family members be included in a Greek Golden Visa?",
-      "acceptedAnswer": {
+      name: "Can family members be included in a Greek Golden Visa?",
+      acceptedAnswer: {
         "@type": "Answer",
-        "text": "Yes. The main applicant's spouse, children under 21, and parents (of both spouses) can all be included in a single application at no additional investment threshold.",
+        text: "Yes. The main applicant's spouse, children under 21, and parents (of both spouses) can all be included in a single application at no additional investment threshold.",
       },
     },
     {
       "@type": "Question",
-      "name": "Do I need to live in Greece to keep the Golden Visa?",
-      "acceptedAnswer": {
+      name: "Do I need to live in Greece to keep the Golden Visa?",
+      acceptedAnswer: {
         "@type": "Answer",
-        "text": "No minimum stay is required. You maintain the residency permit simply by holding the qualifying real estate investment.",
+        text: "No minimum stay is required. You maintain the residency permit simply by holding the qualifying real estate investment.",
       },
     },
   ],
 };
 
 const benefits = [
-  { icon: Globe, title: "Schengen Access", desc: "Travel freely across all 27 Schengen Area countries without additional visas." },
-  { icon: Users, title: "Full Family Coverage", desc: "Spouse, children under 21, and parents of both spouses included in one application." },
-  { icon: Zap, title: "6–9 Month Processing", desc: "Streamlined process from initial consultation to residency permit." },
+  {
+    icon: Globe,
+    title: "Schengen Access",
+    desc: "Travel freely across all 27 Schengen Area countries without additional visas.",
+  },
+  {
+    icon: Users,
+    title: "Full Family Coverage",
+    desc: "Spouse, children under 21, and parents of both spouses included in one application.",
+  },
+  {
+    icon: Zap,
+    title: "6–9 Month Processing",
+    desc: "Streamlined process from initial consultation to residency permit.",
+  },
   { icon: Home, title: "No Minimum Stay", desc: "Maintain your permit without any compulsory time spent in Greece." },
-  { icon: TrendingUp, title: "Investment Returns", desc: "Properties targeting 3–5% net rental yields with 8%+ annual appreciation." },
-  { icon: Sun, title: "Mediterranean Quality of Life", desc: "300+ days of sunshine, world-class cuisine, and rich Hellenic culture." },
+  {
+    icon: TrendingUp,
+    title: "Investment Returns",
+    desc: "Properties targeting 3–5% net rental yields with 4%+ annual appreciation.",
+  },
+  {
+    icon: Sun,
+    title: "Mediterranean Quality of Life",
+    desc: "300+ days of sunshine, world-class cuisine, and rich Hellenic culture.",
+  },
 ];
 
 const Inner = () => {
@@ -107,8 +141,14 @@ const Inner = () => {
     <main className="min-h-screen bg-background">
       <Helmet>
         <title>Greek Golden Visa — EU Residency Through Real Estate | mAI Investments</title>
-        <meta name="description" content="Complete guide to the Greek Golden Visa. Invest €250K+ in real estate and get EU residency, Schengen access, and family coverage. Learn requirements, timeline & benefits." />
-        <meta name="keywords" content="Greek Golden Visa, Greece Golden Visa, EU residency Greece, Greek residency by investment, Golden Visa benefits, Schengen access Greece" />
+        <meta
+          name="description"
+          content="Complete guide to the Greek Golden Visa. Invest €250K+ in real estate and get EU residency, Schengen access, and family coverage. Learn requirements, timeline & benefits."
+        />
+        <meta
+          name="keywords"
+          content="Greek Golden Visa, Greece Golden Visa, EU residency Greece, Greek residency by investment, Golden Visa benefits, Schengen access Greece"
+        />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={PAGE_URL} />
         {/* Hreflang — all supported languages */}
@@ -134,7 +174,10 @@ const Inner = () => {
         <meta property="og:locale:alternate" content="ru_RU" />
         <meta property="og:locale:alternate" content="tr_TR" />
         <meta property="og:title" content="Greek Golden Visa — EU Residency Through Real Estate" />
-        <meta property="og:description" content="Complete guide to the Greek Golden Visa. Invest €250K+ in real estate and get EU residency, Schengen access, and family coverage." />
+        <meta
+          property="og:description"
+          content="Complete guide to the Greek Golden Visa. Invest €250K+ in real estate and get EU residency, Schengen access, and family coverage."
+        />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
@@ -150,12 +193,16 @@ const Inner = () => {
           <nav className="mb-6 text-xs text-muted-foreground" aria-label="Breadcrumb">
             <ol className="flex items-center gap-1.5" itemScope itemType="https://schema.org/BreadcrumbList">
               <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                <Link to="/" className="hover:text-primary transition-colors" itemProp="item"><span itemProp="name">Home</span></Link>
+                <Link to="/" className="hover:text-primary transition-colors" itemProp="item">
+                  <span itemProp="name">Home</span>
+                </Link>
                 <meta itemProp="position" content="1" />
               </li>
               <span>/</span>
               <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                <span className="text-foreground" itemProp="name">Greek Golden Visa</span>
+                <span className="text-foreground" itemProp="name">
+                  Greek Golden Visa
+                </span>
                 <meta itemProp="position" content="2" />
               </li>
             </ol>
@@ -171,7 +218,11 @@ const Inner = () => {
             </span>
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-            {t("Greece's Golden Visa program grants non-EU investors and their families a 5-year renewable EU residency permit in exchange for a real estate investment starting at")} <strong className="text-foreground">€250,000</strong>. {t("It is one of Europe's most accessible and rewarding residency-by-investment pathways.")}
+            {t(
+              "Greece's Golden Visa program grants non-EU investors and their families a 5-year renewable EU residency permit in exchange for a real estate investment starting at",
+            )}{" "}
+            <strong className="text-foreground">€250,000</strong>.{" "}
+            {t("It is one of Europe's most accessible and rewarding residency-by-investment pathways.")}
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Button size="lg" className="rounded-full px-8 gap-2" onClick={() => openWithLocation("greek-golden-visa")}>
@@ -188,10 +239,15 @@ const Inner = () => {
       <section className="py-20 bg-background/50">
         <div className="container mx-auto px-6">
           <h2 className="mb-3 text-3xl font-bold text-center">{t("Why Choose the Greek Golden Visa?")}</h2>
-          <p className="mb-12 text-center text-muted-foreground">{t("Six reasons international investors choose Greece over other EU programs.")}</p>
+          <p className="mb-12 text-center text-muted-foreground">
+            {t("Six reasons international investors choose Greece over other EU programs.")}
+          </p>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {benefits.map((b) => (
-              <div key={b.title} className="rounded-xl border border-border bg-background/40 p-6 backdrop-blur transition-all hover:border-primary/30 hover:shadow-[0_0_30px_hsl(179_90%_63%/0.06)]">
+              <div
+                key={b.title}
+                className="rounded-xl border border-border bg-background/40 p-6 backdrop-blur transition-all hover:border-primary/30 hover:shadow-[0_0_30px_hsl(179_90%_63%/0.06)]"
+              >
                 <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10">
                   <b.icon className="h-5 w-5 text-primary" />
                 </div>
@@ -209,13 +265,19 @@ const Inner = () => {
           <h2 className="mb-8 text-3xl font-bold">{t("What Is the Greek Golden Visa Program?")}</h2>
           <div className="prose prose-invert max-w-none space-y-4 text-muted-foreground leading-relaxed">
             <p>
-              {t("Introduced in 2013, Greece's Golden Visa program (Law 4146/2013) allows citizens of non-EU/EEA countries to obtain a long-term EU residency permit by investing in Greek real estate. It has since become one of the most popular investor visa programs in Europe, attracting thousands of applications from Asia, the Middle East, the Americas, and beyond.")}
+              {t(
+                "Introduced in 2013, Greece's Golden Visa program (Law 4146/2013) allows citizens of non-EU/EEA countries to obtain a long-term EU residency permit by investing in Greek real estate. It has since become one of the most popular investor visa programs in Europe, attracting thousands of applications from Asia, the Middle East, the Americas, and beyond.",
+              )}
             </p>
             <p>
-              {t("The permit is valid for 5 years and is fully renewable as long as the investment is maintained. Holders can live, work, and study anywhere in Greece, and travel without visas across the entire Schengen zone.")}
+              {t(
+                "The permit is valid for 5 years and is fully renewable as long as the investment is maintained. Holders can live, work, and study anywhere in Greece, and travel without visas across the entire Schengen zone.",
+              )}
             </p>
             <p>
-              {t("Unlike many competing programs, the Greek Golden Visa imposes no minimum stay requirements — making it ideal for investors who want EU access without relocating. After 7 years of residency, holders may apply for Greek citizenship.")}
+              {t(
+                "Unlike many competing programs, the Greek Golden Visa imposes no minimum stay requirements — making it ideal for investors who want EU access without relocating. After 7 years of residency, holders may apply for Greek citizenship.",
+              )}
             </p>
           </div>
 
@@ -249,7 +311,9 @@ const Inner = () => {
               </span>
               <h2 className="text-2xl font-bold mb-2">{t("Your Golden Visa Journey")}</h2>
               <p className="text-muted-foreground text-sm leading-relaxed">
-                {t("Ready to go deeper? See the complete step-by-step process — from consultation and property selection to biometrics and your 5-year permit — with expected timelines at each stage.")}
+                {t(
+                  "Ready to go deeper? See the complete step-by-step process — from consultation and property selection to biometrics and your 5-year permit — with expected timelines at each stage.",
+                )}
               </p>
             </div>
             <div className="shrink-0 flex flex-col gap-3">
@@ -286,15 +350,28 @@ const Inner = () => {
         <div className="container mx-auto px-6">
           <h2 className="mb-10 text-2xl font-bold text-center">{t("Explore Further")}</h2>
           <div className="grid gap-4 sm:grid-cols-3 max-w-3xl mx-auto">
-            <Link to="/greek-golden-visa-requirements/" className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all">
+            <Link
+              to="/greek-golden-visa-requirements/"
+              className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all"
+            >
               <h3 className="font-semibold group-hover:text-primary transition-colors">{t("Requirements")}</h3>
-              <p className="mt-1 text-xs text-muted-foreground">{t("Full documentation checklist and eligibility criteria.")}</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {t("Full documentation checklist and eligibility criteria.")}
+              </p>
             </Link>
-            <Link to="/250k-golden-visa-properties/" className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all">
+            <Link
+              to="/250k-golden-visa-properties/"
+              className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all"
+            >
               <h3 className="font-semibold group-hover:text-primary transition-colors">{t("€250K Properties")}</h3>
-              <p className="mt-1 text-xs text-muted-foreground">{t("Pre-verified investment properties starting at €250,000.")}</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {t("Pre-verified investment properties starting at €250,000.")}
+              </p>
             </Link>
-            <Link to="/#contact" className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all">
+            <Link
+              to="/#contact"
+              className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all"
+            >
               <h3 className="font-semibold group-hover:text-primary transition-colors">{t("Get a Consultation")}</h3>
               <p className="mt-1 text-xs text-muted-foreground">{t("Speak with our investment advisors today.")}</p>
             </Link>
@@ -307,21 +384,47 @@ const Inner = () => {
         <div className="container mx-auto max-w-4xl px-6">
           <h2 className="mb-8 text-2xl font-bold">{t("Related Guides")}</h2>
           <div className="grid gap-4 sm:grid-cols-2">
-            <Link to="/golden-visa-tax-benefits" className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all">
-              <h3 className="font-semibold group-hover:text-primary transition-colors">{t("Golden Visa Tax Benefits")}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{t("Understand the tax advantages available to Golden Visa holders in Greece.")}</p>
+            <Link
+              to="/golden-visa-tax-benefits"
+              className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all"
+            >
+              <h3 className="font-semibold group-hover:text-primary transition-colors">
+                {t("Golden Visa Tax Benefits")}
+              </h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {t("Understand the tax advantages available to Golden Visa holders in Greece.")}
+              </p>
             </Link>
-            <Link to="/golden-visa-rental-income-properties" className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all">
-              <h3 className="font-semibold group-hover:text-primary transition-colors">{t("Rental Income Properties")}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{t("Properties selected for their rental income potential and net yields.")}</p>
+            <Link
+              to="/golden-visa-rental-income-properties"
+              className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all"
+            >
+              <h3 className="font-semibold group-hover:text-primary transition-colors">
+                {t("Rental Income Properties")}
+              </h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {t("Properties selected for their rental income potential and net yields.")}
+              </p>
             </Link>
-            <Link to="/greek-golden-visa-requirements" className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all">
-              <h3 className="font-semibold group-hover:text-primary transition-colors">{t("Requirements & Eligibility")}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{t("Full documentation checklist and eligibility criteria for the Greek Golden Visa.")}</p>
+            <Link
+              to="/greek-golden-visa-requirements"
+              className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all"
+            >
+              <h3 className="font-semibold group-hover:text-primary transition-colors">
+                {t("Requirements & Eligibility")}
+              </h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {t("Full documentation checklist and eligibility criteria for the Greek Golden Visa.")}
+              </p>
             </Link>
-            <Link to="/properties" className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all">
+            <Link
+              to="/properties"
+              className="group rounded-xl border border-border bg-background/40 p-6 hover:border-primary/40 transition-all"
+            >
               <h3 className="font-semibold group-hover:text-primary transition-colors">{t("Browse Properties")}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{t("Explore the full portfolio of Golden Visa eligible properties in Athens and the Riviera.")}</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {t("Explore the full portfolio of Golden Visa eligible properties in Athens and the Riviera.")}
+              </p>
             </Link>
           </div>
         </div>

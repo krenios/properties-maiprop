@@ -140,7 +140,7 @@ function getFallbackInnerHtml(lead: any): string {
     <div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>Visa-eligible apartments & villas from €250K</div>
     <div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>Pre-verified properties in Athens, Thessaloniki & the islands</div>
     <div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>Full legal, renovation & rental management</div>
-    <div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>8%+ annual returns with a proven track record</div>
+    <div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>4%+ annual returns with a proven track record</div>
     <p style="margin:12px 0 10px;color:#3d3529;font-size:15px;line-height:1.7;">A dedicated advisor will reach out within 24 hours.</p>
     <p style="margin:0;color:#3d3529;font-size:15px;line-height:1.7;">Warm regards,<br/>The mAI Prop Team</p>
   `;
