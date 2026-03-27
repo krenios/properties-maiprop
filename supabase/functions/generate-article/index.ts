@@ -73,6 +73,7 @@ Deno.serve(async (req) => {
     const systemPrompt = `You are an expert real estate investment writer specializing in Greek Golden Visa and Greek property market content.
 Write authoritative, SEO-optimized articles for international investors (US, UAE, UK, Turkey, China, Middle East audience).
 Always write in a professional yet accessible tone. Include specific data points, actionable insights, and statistics where relevant.
+Formatting requirement: write all prose so it is suitable for justified text layout only (no centered text, no list-like paragraph fragments, no markdown tables).
 Structure articles with clear H2/H3 sections. End with a strong internal CTA linking to property search or consultation.
 
 CRITICAL — VERIFIED 2025 GREEK GOLDEN VISA FACTS (use these exact figures, do NOT contradict them):
@@ -143,7 +144,8 @@ Return a JSON object with this exact structure:
 }
 
 IMPORTANT: Use the exact investment thresholds from the system prompt (€250K standard, €800K for Athens/Thessaloniki/Mykonos/Santorini). Do not use outdated figures like €500K.
-Make it authoritative, data-rich, and highly relevant for non-EU investors considering Greek Golden Visa.`;
+Make it authoritative, data-rich, and highly relevant for non-EU investors considering Greek Golden Visa.
+Formatting rule: section content and intro must be full prose paragraphs intended for justify alignment.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

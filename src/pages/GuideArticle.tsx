@@ -362,7 +362,7 @@ const Inner = () => {
           {article && !loading && (
             <div className="space-y-10">
               {/* Intro */}
-              <p className="text-xl text-muted-foreground leading-relaxed border-l-4 border-primary/40 pl-5">
+              <p className="text-xl text-muted-foreground leading-relaxed text-justify border-l-4 border-primary/40 pl-5">
                 {t(article.intro)}
               </p>
 
@@ -370,7 +370,7 @@ const Inner = () => {
               {article.sections.map((section, i) => (
                 <section key={i}>
                   <h2 className="text-2xl font-bold mb-4">{t(section.heading)}</h2>
-                  <div className="text-muted-foreground leading-relaxed space-y-3">
+                  <div className="text-muted-foreground leading-relaxed text-justify space-y-3">
                     {section.content.split("\n\n").map((para, j) => (
                       <p key={j}>{linkifyText(t(para))}</p>
                     ))}
@@ -385,7 +385,7 @@ const Inner = () => {
                   {article.keyTakeaways.map((point, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                      <span className="text-sm text-muted-foreground">{t(point)}</span>
+                      <span className="text-sm text-muted-foreground text-justify">{t(point)}</span>
                     </li>
                   ))}
                 </ul>
