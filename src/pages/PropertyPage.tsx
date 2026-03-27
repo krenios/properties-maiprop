@@ -501,44 +501,44 @@ const PropertyPageInner = () => {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold sm:text-4xl">{property.title}</h1>
-                <div className="flex flex-wrap gap-2 pb-1 text-sm md:flex-nowrap [&>*]:shrink-0">
+                <div className="flex flex-wrap gap-1.5 pb-1 text-xs sm:gap-2 sm:text-sm md:flex-nowrap [&>*]:shrink-0">
                   {effectiveProjectType && (
-                    <Badge className={`gap-1.5 rounded-full border px-3 py-1.5 text-sm font-semibold ${projectTypeColors[effectiveProjectType] || ""}`}>
+                    <Badge className={`gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold sm:px-3 sm:py-1.5 sm:text-sm ${projectTypeColors[effectiveProjectType] || ""}`}>
                       {formatProjectTypeLabel(effectiveProjectType)}
                     </Badge>
                   )}
                   {effectiveStatus && (
-                    <Badge className={`gap-1.5 rounded-full border px-3 py-1.5 text-sm font-semibold ${statusColors[effectiveStatus] || ""}`}>
+                    <Badge className={`gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold sm:px-3 sm:py-1.5 sm:text-sm ${statusColors[effectiveStatus] || ""}`}>
                       {formatStatusLabel(effectiveStatus)}
                     </Badge>
                   )}
                   {property.price && (
-                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-2.5 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm">
                       <span className="font-bold text-primary">€{property.price.toLocaleString()}</span>
                     </Badge>
                   )}
                   {property.size && (
-                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-2.5 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm">
                       <Maximize className="h-3.5 w-3.5 text-muted-foreground" /> {property.size} m²
                     </Badge>
                   )}
                   {property.bedrooms && (
-                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-2.5 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm">
                       <Bed className="h-3.5 w-3.5 text-muted-foreground" /> {property.bedrooms} BR
                     </Badge>
                   )}
                   {property.floor && (
-                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-2.5 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm">
                       <Building className="h-3.5 w-3.5 text-muted-foreground" /> {property.floor}
                     </Badge>
                   )}
                   {property.construction_year && (
-                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-2.5 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm">
                       <Calendar className="h-3.5 w-3.5 text-muted-foreground" /> {property.construction_year}
                     </Badge>
                   )}
                   {property.yield && (
-                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-2.5 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm">
                       <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" /> {property.yield}
                     </Badge>
                   )}
@@ -654,17 +654,6 @@ const PropertyPageInner = () => {
                 referrerPolicy="no-referrer-when-downgrade"
                 allowFullScreen
               />
-              <div className="pointer-events-none absolute left-3 top-3 z-10 max-w-[min(92%,480px)] rounded-lg border border-primary/30 bg-background/85 p-3 backdrop-blur">
-                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-primary">From this pin</p>
-                <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
-                  {displayPoi.slice(0, 6).map((entry) => (
-                    <div key={`map-${entry.name}`} className="flex items-center justify-between gap-2 text-xs">
-                      <span className="truncate text-foreground/90">{entry.name}</span>
-                      <span className="shrink-0 font-medium text-muted-foreground">{entry.distance || "—"}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
               <a
                 href={mapsUrl}
                 target="_blank"
