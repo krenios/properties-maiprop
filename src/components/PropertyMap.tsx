@@ -23,18 +23,18 @@ const PropertyMap = ({ properties, height = 500, onPropertyClick }: Props) => {
 
   return (
     <div
-      className="flex overflow-hidden rounded-2xl border border-border"
+      className="flex flex-col overflow-hidden rounded-2xl border border-border md:flex-row"
       style={{ height }}
     >
       {/* Property list sidebar */}
-      <div className="w-72 shrink-0 overflow-y-auto border-r border-border bg-background/80 backdrop-blur-sm">
+      <div className="order-2 w-full shrink-0 overflow-x-auto border-t border-border bg-background/80 backdrop-blur-sm md:order-1 md:w-72 md:overflow-y-auto md:overflow-x-hidden md:border-t-0 md:border-r">
         {properties.map((p) => {
           const isActive = active?.id === p.id;
           return (
             <button
               key={p.id}
               onClick={() => setSelected(p)}
-              className={`w-full text-left transition-colors border-b border-border last:border-b-0 ${
+              className={`inline-block w-[260px] align-top text-left transition-colors border-r border-border last:border-r-0 md:block md:w-full md:border-r-0 md:border-b md:last:border-b-0 ${
                 isActive
                   ? "bg-primary/10 border-l-2 border-l-primary"
                   : "hover:bg-muted/40 border-l-2 border-l-transparent"
@@ -67,7 +67,7 @@ const PropertyMap = ({ properties, height = 500, onPropertyClick }: Props) => {
       </div>
 
       {/* Map iframe + footer */}
-      <div className="flex flex-col flex-1 min-w-0">
+      <div className="order-1 flex min-h-[320px] min-w-0 flex-1 flex-col md:order-2">
         <iframe
           key={query}
           src={embedUrl}
@@ -79,14 +79,14 @@ const PropertyMap = ({ properties, height = 500, onPropertyClick }: Props) => {
           title={active ? `Map of ${active.location}` : "Map"}
         />
         {/* Footer */}
-        <div className="flex items-center justify-between px-4 py-2 bg-muted/30 border-t border-border shrink-0">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border bg-muted/30 px-3 py-2 md:px-4 shrink-0">
+          <div className="flex min-w-0 items-center gap-2">
             <MapPin className="h-3.5 w-3.5 text-primary" />
-            <span className="text-xs font-medium truncate">
+            <span className="truncate text-xs font-medium">
               {active ? `${active.location}, Greece` : "Athens, Greece"}
             </span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             {onPropertyClick && active && (
               <button
                 onClick={() => onPropertyClick(active)}
