@@ -292,7 +292,7 @@ const Inner = () => {
             <div className="mb-8 flex flex-wrap gap-2">
                   {Array.from(new Set(displayGuides.map((g) => g.category))).map((cat) =>
               <span key={cat} className="rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
-                      {cat}
+                      {t(cat)}
                     </span>
               )}
                 </div>
@@ -334,7 +334,7 @@ const Inner = () => {
                       <div className="mt-6 flex items-center justify-between">
                         <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                           <Clock className="h-3.5 w-3.5" />
-                          {guide.read_time || t("7 min read")}
+                          {guide.read_time ? t(guide.read_time) : t("7 min read")}
                         </span>
                         <span className="flex items-center gap-1 text-sm font-medium text-primary group-hover:gap-2 transition-all">
                           {t("Read")} {guide.title} <ArrowRight className="h-4 w-4" />
@@ -364,7 +364,7 @@ const Inner = () => {
       </section>
 
       <footer className="border-t border-border bg-background text-center py-4">
-        <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. All rights reserved.</p>
+        <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. {t("All rights reserved.")}</p>
       </footer>
     </main>);
 

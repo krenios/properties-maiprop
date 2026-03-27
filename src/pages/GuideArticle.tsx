@@ -175,7 +175,7 @@ const Inner = () => {
 
       // Not in DB — only generate if we have a hardcoded topic (legacy articles)
       if (!meta) {
-        setError("Article not found.");
+        setError(t("Article not found."));
         setLoading(false);
         return;
       }
@@ -188,7 +188,7 @@ const Inner = () => {
       if (fnError) throw new Error(fnError.message);
       if (data?.error) {
         if (data.error.includes("Rate limit")) {
-          toast({ title: "Rate limit reached", description: "Please wait a moment and try again.", variant: "destructive" });
+          toast({ title: t("Rate limit reached"), description: t("Please wait a moment and try again."), variant: "destructive" });
           throw new Error(data.error);
         }
         throw new Error(data.error);
@@ -196,10 +196,10 @@ const Inner = () => {
 
       setArticle(data.article as ArticleContent);
       if (forceRegenerate) {
-        toast({ title: "Article regenerated", description: "Fresh AI content has been saved." });
+        toast({ title: t("Article regenerated"), description: t("Fresh AI content has been saved.") });
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to generate article");
+      setError(e instanceof Error ? e.message : t("Failed to generate article"));
     } finally {
       setLoading(false);
     }
@@ -406,8 +406,8 @@ const Inner = () => {
               .filter(([s]) => s !== slug)
               .map(([s, m]) => (
                 <Link key={s} to={`/guides/${s}`} className="group rounded-xl border border-border bg-background/40 p-5 hover:border-primary/40 transition-all">
-                  <span className="text-xs text-primary font-medium">{m.category}</span>
-                  <h3 className="mt-1 font-semibold text-sm group-hover:text-primary transition-colors leading-snug">{m.title}</h3>
+                  <span className="text-xs text-primary font-medium">{t(m.category)}</span>
+                  <h3 className="mt-1 font-semibold text-sm group-hover:text-primary transition-colors leading-snug">{t(m.title)}</h3>
                 </Link>
               ))}
           </div>
@@ -418,8 +418,8 @@ const Inner = () => {
       {relatedProperties.length > 0 && (
         <section className="py-16 border-t border-border">
           <div className="container mx-auto px-6 max-w-3xl">
-            <h2 className="text-xl font-bold mb-2">Golden Visa Eligible Properties</h2>
-            <p className="text-sm text-muted-foreground mb-8">Pre-verified properties ready for €250K+ Golden Visa investment in Greece.</p>
+            <h2 className="text-xl font-bold mb-2">{t("Golden Visa Eligible Properties")}</h2>
+            <p className="text-sm text-muted-foreground mb-8">{t("Pre-verified properties ready for €250K+ Golden Visa investment in Greece.")}</p>
             <div className="grid gap-4 sm:grid-cols-3">
               {relatedProperties.map((p) => (
                 <Link
@@ -453,7 +453,7 @@ const Inner = () => {
                 to="/250k-golden-visa-properties/"
                 className="inline-flex items-center gap-2 text-sm text-primary hover:underline font-medium"
               >
-                Browse all €250K+ Golden Visa properties in Greece <ArrowRight className="h-3.5 w-3.5" />
+                {t("Browse all €250K+ Golden Visa properties in Greece")} <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
           </div>
@@ -461,7 +461,7 @@ const Inner = () => {
       )}
 
       <footer className="border-t border-border bg-background text-center py-4">
-        <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. All rights reserved.</p>
+        <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. {t("All rights reserved.")}</p>
       </footer>
     </main>
   );
