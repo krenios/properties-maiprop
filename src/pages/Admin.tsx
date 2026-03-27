@@ -28,7 +28,7 @@ import { toast } from "sonner";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "@/contexts/TranslationContext";
-import { getEffectiveProjectType } from "@/lib/propertyMeta";
+import { formatProjectTypeLabel, getEffectiveProjectType, PROJECT_TYPE_PILL_CLASSES } from "@/lib/propertyMeta";
 
 const propertySchema = z.object({
   title: z.string().min(1, "Title is required").max(200, "Title too long"),
@@ -550,6 +550,7 @@ const Admin = () => {
                   <TableHead>Title</TableHead>
                   <TableHead>Price</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Project Status</TableHead>
                   <TableHead>Info</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -559,11 +560,12 @@ const Admin = () => {
                   {(provided) => (
                     <TableBody ref={provided.innerRef} {...provided.droppableProps}>
                       {portfolioProperties.length === 0 && (
-                        <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">No portfolio properties</TableCell></TableRow>
+                        <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground py-8">No portfolio properties</TableCell></TableRow>
                       )}
                       {portfolioProperties.map((p, index) => {
                         const missing = missingInfo(p);
                         const isSold = p.status === "sold";
+                        const projectType = getEffectiveProjectType(p.project_type, p.status);
                         return (
                           <Draggable key={p.id} draggableId={p.id} index={index}>
                             {(provided, snapshot) => (
@@ -591,6 +593,15 @@ const Admin = () => {
                                     };
                                     return <Badge className={`border text-xs capitalize ${sc[p.status] || ""}`}>{p.status || "none"}</Badge>;
                                   })()}
+                                </TableCell>
+                                <TableCell>
+                                  {projectType ? (
+                                    <Badge className={`border text-xs ${PROJECT_TYPE_PILL_CLASSES[projectType] || ""}`}>
+                                      {formatProjectTypeLabel(projectType)}
+                                    </Badge>
+                                  ) : (
+                                    <span className="text-xs text-muted-foreground">—</span>
+                                  )}
                                 </TableCell>
                                 <TableCell>
                                   {missing.length > 0 && (
@@ -642,6 +653,7 @@ const Admin = () => {
                   <TableHead className="w-8" />
                   <TableHead>Title</TableHead>
                   <TableHead>Price</TableHead>
+                  <TableHead>Project Status</TableHead>
                   <TableHead>Yield</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -651,9 +663,11 @@ const Admin = () => {
                   {(provided) => (
                     <TableBody ref={provided.innerRef} {...provided.droppableProps}>
                       {deliveredProperties.length === 0 && (
-                        <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-8">No delivered properties yet</TableCell></TableRow>
+                        <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No delivered properties yet</TableCell></TableRow>
                       )}
-                      {deliveredProperties.map((p, index) => (
+                      {deliveredProperties.map((p, index) => {
+                        const projectType = getEffectiveProjectType(p.project_type, p.status);
+                        return (
                         <Draggable key={p.id} draggableId={p.id} index={index}>
                           {(provided, snapshot) => (
                             <TableRow
@@ -668,6 +682,15 @@ const Admin = () => {
                               </TableCell>
                               <TableCell className="font-medium">{p.title}</TableCell>
                               <TableCell>{p.price ? `€${p.price.toLocaleString()}` : "—"}</TableCell>
+                              <TableCell>
+                                {projectType ? (
+                                  <Badge className={`border text-xs ${PROJECT_TYPE_PILL_CLASSES[projectType] || ""}`}>
+                                    {formatProjectTypeLabel(projectType)}
+                                  </Badge>
+                                ) : (
+                                  <span className="text-xs text-muted-foreground">—</span>
+                                )}
+                              </TableCell>
                               <TableCell className="text-sm">{p.yield || "—"}</TableCell>
                               <TableCell className="text-right">
                                 <div className="flex justify-end gap-1">
@@ -678,7 +701,7 @@ const Admin = () => {
                             </TableRow>
                           )}
                         </Draggable>
-                      ))}
+                      )})}
                       {provided.placeholder}
                     </TableBody>
                   )}
