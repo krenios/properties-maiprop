@@ -28,42 +28,44 @@ const PropertyMap = ({ properties, height = 500, onPropertyClick }: Props) => {
     >
       {/* Property list sidebar */}
       <div className="order-2 w-full shrink-0 overflow-x-auto border-t border-border bg-background/80 backdrop-blur-sm md:order-1 md:w-72 md:overflow-y-auto md:overflow-x-hidden md:border-t-0 md:border-r">
-        {properties.map((p) => {
-          const isActive = active?.id === p.id;
-          return (
-            <button
-              key={p.id}
-              onClick={() => setSelected(p)}
-              className={`inline-block w-[260px] align-top text-left transition-colors border-r border-border last:border-r-0 md:block md:w-full md:border-r-0 md:border-b md:last:border-b-0 ${
-                isActive
-                  ? "bg-primary/10 border-l-2 border-l-primary"
-                  : "hover:bg-muted/40 border-l-2 border-l-transparent"
-              }`}
-            >
-              {p.images?.[0] && (
-                <img
-                  src={optimizeImage(p.images[0], { width: 288, height: 90 })}
-                  alt={p.title}
-                  className="w-full h-20 object-cover"
-                />
-              )}
-              <div className="p-3">
-                <p className={`text-xs font-semibold leading-snug mb-1 ${isActive ? "text-primary" : "text-foreground"}`}>
-                  {p.title}
-                </p>
-                <div className="flex items-center gap-1 text-muted-foreground">
-                  <MapPin className="h-3 w-3 shrink-0" />
-                  <span className="text-xs truncate">{p.location}</span>
-                </div>
-                {p.price && (
-                  <p className="text-xs font-bold text-primary mt-1">
-                    €{p.price.toLocaleString()}
-                  </p>
+        <div className="flex min-w-max flex-nowrap md:block md:min-w-0">
+          {properties.map((p) => {
+            const isActive = active?.id === p.id;
+            return (
+              <button
+                key={p.id}
+                onClick={() => setSelected(p)}
+                className={`w-[260px] shrink-0 text-left transition-colors border-r border-border last:border-r-0 md:block md:w-full md:border-r-0 md:border-b md:last:border-b-0 ${
+                  isActive
+                    ? "bg-primary/10 border-l-2 border-l-primary"
+                    : "hover:bg-muted/40 border-l-2 border-l-transparent"
+                }`}
+              >
+                {p.images?.[0] && (
+                  <img
+                    src={optimizeImage(p.images[0], { width: 288, height: 90 })}
+                    alt={p.title}
+                    className="w-full h-20 object-cover"
+                  />
                 )}
-              </div>
-            </button>
-          );
-        })}
+                <div className="p-3">
+                  <p className={`text-xs font-semibold leading-snug mb-1 ${isActive ? "text-primary" : "text-foreground"}`}>
+                    {p.title}
+                  </p>
+                  <div className="flex items-center gap-1 text-muted-foreground">
+                    <MapPin className="h-3 w-3 shrink-0" />
+                    <span className="text-xs truncate">{p.location}</span>
+                  </div>
+                  {p.price && (
+                    <p className="text-xs font-bold text-primary mt-1">
+                      €{p.price.toLocaleString()}
+                    </p>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Map iframe + footer */}
