@@ -211,10 +211,6 @@ const Index = () => {
         <DeliveredProjects />
       </Suspense>
       <SectionDivider />
-      <Suspense fallback={<div className="min-h-[500px]" />}>
-        <PlatformReference />
-      </Suspense>
-      <SectionDivider />
       <Suspense fallback={<div className="min-h-[600px]" />}>
         <JourneySection />
       </Suspense>
@@ -225,6 +221,10 @@ const Index = () => {
       <SectionDivider />
       <Suspense fallback={<div className="min-h-[400px]" />}>
         <GuidesTeaser />
+      </Suspense>
+      <SectionDivider />
+      <Suspense fallback={<div className="min-h-[500px]" />}>
+        <PlatformReference />
       </Suspense>
       <SectionDivider />
       <Suspense fallback={<div className="min-h-[500px]" />}>
