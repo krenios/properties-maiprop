@@ -5,10 +5,11 @@ import { createPortal } from "react-dom";
 import Navbar from "@/components/Navbar";
 import { useProperties } from "@/contexts/PropertyContext";
 import MiniMap from "@/components/MiniMap";
+import PropertyMap from "@/components/PropertyMap";
 import {
   ArrowLeft, CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag,
   ExternalLink, ChevronLeft, ChevronRight, Building,
-  Calendar, Share2, MessageCircle, Home as HomeIcon,
+  Calendar, Share2, MessageCircle, Home as HomeIcon, LayoutGrid, Map,
 } from "lucide-react";
 import { toast } from "sonner";
 import { optimizeImage } from "@/lib/optimizeImage";
@@ -29,6 +30,7 @@ const Inner = () => {
   const { properties } = useProperties();
   const delivered = properties.filter((p) => getEffectiveProjectType(p.project_type, p.status) === "renovated");
   const [selected, setSelected] = useState<Property | null>(null);
+  const [view, setView] = useState<"grid" | "map">("grid");
   const { setIsOpen } = useLeadBot();
   const { t } = useTranslation();
 
@@ -183,8 +185,42 @@ const Inner = () => {
         {/* Full grid */}
         <section id="delivered" className="py-20">
           <div className="container mx-auto px-6">
+            <div className="mb-8 flex items-center justify-between gap-4">
+              <p className="text-sm text-muted-foreground">
+                {delivered.length} {delivered.length === 1 ? "project" : "projects"}
+              </p>
+              <div className="flex items-center rounded-lg border border-border/60 p-1">
+                <button
+                  onClick={() => setView("grid")}
+                  className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                    view === "grid"
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <LayoutGrid className="h-3.5 w-3.5" /> Grid
+                </button>
+                <button
+                  onClick={() => setView("map")}
+                  className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                    view === "map"
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Map className="h-3.5 w-3.5" /> Map
+                </button>
+              </div>
+            </div>
+
             {delivered.length === 0 ? (
               <p className="text-center text-muted-foreground">{t("No delivered projects yet.")}</p>
+            ) : view === "map" ? (
+              <PropertyMap
+                properties={delivered}
+                height={680}
+                onPropertyClick={(p) => setSelected(p)}
+              />
             ) : (
               <ScrollReveal variant="stagger">
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
