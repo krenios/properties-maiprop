@@ -27,7 +27,10 @@ const Inner = () => {
   const [view, setView] = useState<"grid" | "map">("grid");
   const { setIsOpen } = useLeadBot();
   const { t } = useTranslation();
-  const current = properties.filter((p) => getEffectiveProjectType(p.project_type, p.status) === "ready");
+  const current = properties.filter((p) => {
+    const type = getEffectiveProjectType(p.project_type, p.status);
+    return type === "ready" || type === "under-construction";
+  });
 
   const toggleCompare = (p: Property) => {
     setCompareList((prev) =>
