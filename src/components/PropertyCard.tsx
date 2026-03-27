@@ -1,29 +1,25 @@
-import { useState } from "react";
 import { Property } from "@/data/properties";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, MessageCircle, ExternalLink, Share2, ImageIcon } from "lucide-react";
+import { MapPin, MessageCircle, ExternalLink, Share2, Building, Calendar } from "lucide-react";
 import { useLeadBot } from "@/components/LeadBotProvider";
 import { optimizeImage } from "@/lib/optimizeImage";
+import { formatProjectTypeLabel, formatStatusLabel, getEffectiveStatus, getEffectiveProjectType, PROJECT_TYPE_PILL_CLASSES, STATUS_PILL_CLASSES } from "@/lib/propertyMeta";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import MiniMap from "@/components/MiniMap";
 
 interface Props {
   property: Property;
   onClick: () => void;
 }
 
-const statusColors: Record<string, string> = {
-  available: "bg-primary/20 text-primary border-primary/30",
-  booked: "bg-secondary/20 text-secondary border-secondary/30",
-  sold: "bg-destructive/20 text-destructive border-destructive/30",
-  "under-construction": "bg-muted/30 text-muted-foreground border-muted-foreground/30",
-};
+const statusColors: Record<string, string> = STATUS_PILL_CLASSES;
+const projectTypeColors: Record<string, string> = PROJECT_TYPE_PILL_CLASSES;
 
 const PropertyCard = ({ property, onClick }: Props) => {
   const { openWithLocation } = useLeadBot();
-  const [showMap, setShowMap] = useState(false);
+  const effectiveStatus = getEffectiveStatus(property.status);
+  const effectiveProjectType = getEffectiveProjectType(property.project_type, property.status);
 
   const images = property.images.length > 0 ? property.images : ["/placeholder.svg"];
 
@@ -51,83 +47,63 @@ const PropertyCard = ({ property, onClick }: Props) => {
     <div className="group relative overflow-hidden rounded-xl border border-border/60 bg-card text-left transition-all duration-500 hover:border-primary/50 hover:shadow-[0_0_40px_hsl(179_90%_63%/0.15),0_0_80px_hsl(179_90%_63%/0.05)] hover:-translate-y-1">
       <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
       <div
-        role="button"
-        tabIndex={0}
         onClick={onClick}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            onClick();
-          }
-        }}
-        className="w-full text-left"
+        className="w-full cursor-pointer text-left"
       >
         <div className="relative aspect-[4/3] overflow-hidden">
-          {showMap ? (
-            <div className="h-full w-full">
-              <MiniMap location={property.location} height={300} showFooter={false} />
-            </div>
-          ) : (
-            <img
-              src={optimizeImage(images[0], { width: 600, height: 450 })}
-              alt={`${property.title} — Golden Visa property in ${property.location}`}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
-              decoding="async"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            />
-          )}
-          {property.status && !showMap && (
-            <Badge className={`absolute right-3 top-3 border ${statusColors[property.status] || ""}`}>
-              {property.status.replace("-", " ")}
-            </Badge>
-          )}
-          {/* Photo / Map toggle */}
-          <button
-            onClick={(e) => { e.stopPropagation(); setShowMap((v) => !v); }}
-            className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-background/80 px-2.5 py-1 text-[11px] font-medium text-foreground backdrop-blur hover:text-primary transition-colors"
-            title={showMap ? "Show photo" : "Show map"}
-          >
-            {showMap ? <ImageIcon className="h-3 w-3" /> : <MapPin className="h-3 w-3" />}
-            {showMap ? "Photo" : "Map"}
-          </button>
-          {!showMap && (
-            <div className="absolute bottom-2 left-2 flex flex-wrap gap-1.5">
-              {property.size && (
-                <Badge variant="outline" className="border-background/30 bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
-                  {property.size} m²
-                </Badge>
-              )}
-              {property.bedrooms && (
-                <Badge variant="outline" className="border-background/30 bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
-                  {property.bedrooms} BR
-                </Badge>
-              )}
-              {property.floor && (
-                <Badge variant="outline" className="border-background/30 bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
-                  Floor {property.floor}
-                </Badge>
-              )}
-              {property.construction_year && (
-                <Badge variant="outline" className="border-background/30 bg-background/70 px-2 py-0.5 text-xs backdrop-blur">
-                  {property.construction_year}
-                </Badge>
-              )}
-            </div>
-          )}
+          <img
+            src={optimizeImage(images[0], { width: 600, height: 450 })}
+            alt={`${property.title} — Golden Visa property in ${property.location}`}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+            decoding="async"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
         </div>
-        <div className="p-5">
+        <div className="flex min-h-[156px] flex-col p-5">
           <Link
             to={`/property/${property.id}`}
             onClick={(e) => e.stopPropagation()}
             className="hover:text-primary transition-colors"
           >
-            <h3 className="text-lg font-semibold">{property.title}</h3>
+            <h3 className="line-clamp-2 min-h-[3.1rem] text-lg font-semibold leading-6">{property.title}</h3>
           </Link>
+          <div className="mt-1 flex flex-wrap gap-1.5 pb-1 text-xs md:flex-nowrap [&>*]:shrink-0">
+            {effectiveProjectType && (
+              <Badge className={`border px-2.5 py-1 font-semibold ${projectTypeColors[effectiveProjectType] || ""}`}>
+                {formatProjectTypeLabel(effectiveProjectType)}
+              </Badge>
+            )}
+            {effectiveStatus && (
+              <Badge className={`border px-2.5 py-1 font-semibold ${statusColors[effectiveStatus] || ""}`}>
+                {formatStatusLabel(effectiveStatus)}
+              </Badge>
+            )}
+            {property.size && (
+              <Badge variant="outline" className="border-border/60 bg-background/30 px-2.5 py-1 text-xs text-muted-foreground">
+                {property.size} m²
+              </Badge>
+            )}
+            {property.bedrooms && (
+              <Badge variant="outline" className="border-border/60 bg-background/30 px-2.5 py-1 text-xs text-muted-foreground">
+                {property.bedrooms} BR
+              </Badge>
+            )}
+            {property.floor && (
+              <Badge variant="outline" className="gap-1 border-border/60 bg-background/30 px-2.5 py-1 text-xs text-muted-foreground">
+                <Building className="h-3 w-3" /> {property.floor}
+              </Badge>
+            )}
+            {property.construction_year && (
+              <Badge variant="outline" className="gap-1 border-border/60 bg-background/30 px-2.5 py-1 text-xs text-muted-foreground">
+                <Calendar className="h-3 w-3" /> {property.construction_year}
+              </Badge>
+            )}
+          </div>
           <div className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
             <MapPin className="h-3.5 w-3.5" /> {property.location}
           </div>
-          <div className="mt-3 flex items-end justify-between">
+          <div className="mt-auto pt-3 flex items-end justify-between">
             <p className="text-xl font-bold text-primary">
               {property.price ? `€${property.price.toLocaleString()}` : "Price TBD"}
             </p>

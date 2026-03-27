@@ -4,6 +4,7 @@ import { useProperties } from "@/contexts/PropertyContext";
 import PropertyCard from "@/components/PropertyCard";
 import PropertyModal from "@/components/PropertyModal";
 import { Property } from "@/data/properties";
+import { getEffectiveProjectType } from "@/lib/propertyMeta";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { useTranslation } from "@/contexts/TranslationContext";
 import { Button } from "@/components/ui/button";
@@ -32,7 +33,7 @@ const InvestmentOpportunities = () => {
     return () => window.removeEventListener("hashchange", openFromHash);
   }, [properties]);
 
-  const current = properties.filter((p) => p.project_type === "new");
+  const current = properties.filter((p) => getEffectiveProjectType(p.project_type, p.status) === "ready");
   const preview = current.slice(0, 3);
 
   return (

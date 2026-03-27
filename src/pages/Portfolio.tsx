@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import { useProperties } from "@/contexts/PropertyContext";
 import MiniMap from "@/components/MiniMap";
 import {
-  CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag,
+  ArrowLeft, CheckCircle, MapPin, Bed, Maximize, TrendingUp, Tag,
   ExternalLink, ChevronLeft, ChevronRight, Building,
   Calendar, Share2, MessageCircle, Home as HomeIcon,
 } from "lucide-react";
@@ -21,12 +21,13 @@ import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
 import ImageLightbox from "@/components/ImageLightbox";
 import { Separator } from "@/components/ui/separator";
+import { getEffectiveProjectType } from "@/lib/propertyMeta";
 
 const BASE_URL = "https://properties.maiprop.co";
 
 const Inner = () => {
   const { properties } = useProperties();
-  const delivered = properties.filter((p) => p.project_type === "delivered");
+  const delivered = properties.filter((p) => getEffectiveProjectType(p.project_type, p.status) === "renovated");
   const [selected, setSelected] = useState<Property | null>(null);
   const { setIsOpen } = useLeadBot();
   const { t } = useTranslation();
@@ -149,6 +150,18 @@ const Inner = () => {
             </ol>
           </div>
         </nav>
+
+        {/* Top back button */}
+        <section className="pt-6">
+          <div className="container mx-auto px-6">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/12 px-4 py-2.5 text-base font-semibold text-primary shadow-[0_0_0_1px_hsl(var(--primary)/0.1)] transition-colors hover:bg-primary/20 hover:border-primary/50"
+            >
+              <ArrowLeft className="h-4 w-4" /> {t("Back to home")}
+            </Link>
+          </div>
+        </section>
 
         {/* Hero */}
         <section className="bg-background pt-12 pb-16">

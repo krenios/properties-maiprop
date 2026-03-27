@@ -34,7 +34,7 @@ const HeroSection = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-6 pb-10 pt-32">
+      <div className="relative z-10 container mx-auto px-6 pb-10 pt-24 sm:pt-28 lg:pt-32">
         <span className="mb-4 inline-block rounded-full border border-primary/40 bg-primary/10 px-5 py-1.5 text-xs font-bold uppercase tracking-widest text-primary backdrop-blur-sm">
           {t("Greek Golden Visa Program | EU Residency Through Real Estate")}
         </span>
@@ -62,7 +62,7 @@ const HeroSection = () => {
             size="lg"
             className="rounded-full border-border/50 bg-background/20 px-8 backdrop-blur-sm w-full sm:w-auto"
           >
-            <a href="#opportunities" className="bg-accent">
+            <a href="#opportunities">
               {t("View Properties")}
             </a>
           </Button>

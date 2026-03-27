@@ -68,13 +68,13 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
           : "bg-transparent backdrop-blur-none"
       }`}
     >
-      <div className="container mx-auto flex items-center justify-between px-6 py-4 text-sidebar-primary bg-transparent">
+      <div className="container mx-auto flex items-center justify-between px-4 py-2 text-sidebar-primary bg-transparent sm:px-6 sm:py-3">
         <a href="/" className="flex items-center gap-2">
           <img
             alt="mAI properties"
             width={340}
             height={160}
-            className="h-20 w-auto object-contain transition-all duration-300"
+            className="h-12 w-auto object-contain transition-all duration-300 sm:h-16 md:h-20"
             src={maipropLogo}
             loading="eager"
           />

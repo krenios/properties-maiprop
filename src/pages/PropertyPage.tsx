@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { useProperties } from "@/contexts/PropertyContext";
 import { CONVERSION_ID } from "@/lib/analytics";
 import { Helmet } from "react-helmet-async";
@@ -24,14 +24,10 @@ import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
 import { lazy, Suspense } from "react";
 import ImageLightbox from "@/components/ImageLightbox";
-import MiniMap from "@/components/MiniMap";
+import { formatProjectTypeLabel, formatStatusLabel, getEffectiveProjectType, getEffectiveStatus, PROJECT_TYPE_PILL_CLASSES, STATUS_PILL_CLASSES } from "@/lib/propertyMeta";
 
-const statusColors: Record<string, string> = {
-  available: "bg-primary/20 text-primary border-primary/30",
-  booked: "bg-secondary/20 text-secondary border-secondary/30",
-  sold: "bg-destructive/20 text-destructive border-destructive/30",
-  "under-construction": "bg-muted/30 text-muted-foreground border-muted-foreground/30",
-};
+const statusColors: Record<string, string> = STATUS_PILL_CLASSES;
+const projectTypeColors: Record<string, string> = PROJECT_TYPE_PILL_CLASSES;
 
 const POI_ICONS: Record<string, LucideIcon> = {
   "Airport": Plane, "Sea": Waves, "Ports": Anchor, "Train Stations": TrainFront,
@@ -200,13 +196,16 @@ const PropertyPageInner = () => {
   }
 
   if (!property) return null;
+  const effectiveStatus = getEffectiveStatus(property.status);
+  const effectiveProjectType = getEffectiveProjectType(property.project_type, property.status);
 
   const WHATSAPP_URL = `https://wa.me/306971853470?text=${encodeURIComponent("Hello! I'm interested in this Golden Visa property: " + (typeof window !== "undefined" ? window.location.href : ""))}`;
 
   const images = property.images.length > 0 ? property.images : ["/placeholder.svg"];
   const imagesLen = images.length;
   const currentImg = images[imgIdx % images.length];
-  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ", Greece")}`;
+  const mapQuery = `${property.location}, Greece`;
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`;
   const pageUrl = `${BASE_URL}/property/${property.id}/`;
   const SUPABASE_PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID;
   const ogShareUrl = `https://${SUPABASE_PROJECT_ID}.supabase.co/functions/v1/og-meta?id=${property.id}`;
@@ -441,8 +440,8 @@ const PropertyPageInner = () => {
         <main className="container mx-auto max-w-4xl px-4 pt-24 pb-16 sm:pb-16 max-sm:pb-28">
           {/* Back link */}
           <button
-            onClick={() => window.history.length > 1 ? window.history.back() : window.location.assign("/#opportunities")}
-            className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+            onClick={() => navigate("/properties")}
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/12 px-3.5 py-2 text-sm font-semibold text-primary shadow-[0_0_0_1px_hsl(var(--primary)/0.1)] transition-colors hover:bg-primary/20 hover:border-primary/50 sm:px-4 sm:py-2.5 sm:text-base"
           >
             <ArrowLeft className="h-4 w-4" /> {t("Back to properties")}
           </button>
@@ -456,24 +455,25 @@ const PropertyPageInner = () => {
               loading="eager"
               decoding="async"
             />
-            {property.status && (
-              <Badge className={`absolute left-4 top-4 border ${statusColors[property.status] || ""}`}>
-                {property.status.replace("-", " ")}
-              </Badge>
-            )}
             {images.length > 1 && (
               <>
                 <button onClick={() => setImgIdx((i) => (i - 1 + images.length) % images.length)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background transition-colors">
+                  className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background transition-colors"
+                  aria-label="Previous image"
+                  title="Previous image">
                   <ChevronLeft className="h-5 w-5" />
                 </button>
                 <button onClick={() => setImgIdx((i) => (i + 1) % images.length)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background transition-colors">
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background transition-colors"
+                  aria-label="Next image"
+                  title="Next image">
                   <ChevronRight className="h-5 w-5" />
                 </button>
                 <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
                   {images.map((_, i) => (
                     <button key={i} onClick={() => setImgIdx(i)}
+                      aria-label={`Go to image ${i + 1}`}
+                      title={`Go to image ${i + 1}`}
                       className={`h-1.5 rounded-full transition-all ${i === imgIdx % images.length ? "w-5 bg-primary" : "w-1.5 bg-background/60"}`} />
                   ))}
                 </div>
@@ -498,11 +498,55 @@ const PropertyPageInner = () => {
 
           {/* Header */}
           <div className="mt-8">
-            <div className="flex items-start justify-between gap-3">
-              <h1 className="text-3xl font-bold sm:text-4xl">{property.title}</h1>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="space-y-2">
+                <h1 className="text-3xl font-bold sm:text-4xl">{property.title}</h1>
+                <div className="flex flex-wrap gap-2 pb-1 text-sm md:flex-nowrap [&>*]:shrink-0">
+                  {effectiveProjectType && (
+                    <Badge className={`gap-1.5 rounded-full border px-3 py-1.5 text-sm font-semibold ${projectTypeColors[effectiveProjectType] || ""}`}>
+                      {formatProjectTypeLabel(effectiveProjectType)}
+                    </Badge>
+                  )}
+                  {effectiveStatus && (
+                    <Badge className={`gap-1.5 rounded-full border px-3 py-1.5 text-sm font-semibold ${statusColors[effectiveStatus] || ""}`}>
+                      {formatStatusLabel(effectiveStatus)}
+                    </Badge>
+                  )}
+                  {property.price && (
+                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                      <span className="font-bold text-primary">€{property.price.toLocaleString()}</span>
+                    </Badge>
+                  )}
+                  {property.size && (
+                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                      <Maximize className="h-3.5 w-3.5 text-muted-foreground" /> {property.size} m²
+                    </Badge>
+                  )}
+                  {property.bedrooms && (
+                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                      <Bed className="h-3.5 w-3.5 text-muted-foreground" /> {property.bedrooms} BR
+                    </Badge>
+                  )}
+                  {property.floor && (
+                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                      <Building className="h-3.5 w-3.5 text-muted-foreground" /> {property.floor}
+                    </Badge>
+                  )}
+                  {property.construction_year && (
+                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                      <Calendar className="h-3.5 w-3.5 text-muted-foreground" /> {property.construction_year}
+                    </Badge>
+                  )}
+                  {property.yield && (
+                    <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                      <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" /> {property.yield}
+                    </Badge>
+                  )}
+                </div>
+              </div>
               <button
                 onClick={handleShare}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors mt-1"
+                className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center self-end rounded-full border border-border/60 text-muted-foreground transition-colors hover:border-primary/30 hover:text-primary sm:self-auto"
                 aria-label="Share this property"
                 title="Share this property"
               >
@@ -517,47 +561,6 @@ const PropertyPageInner = () => {
           </div>
 
           <Separator className="my-6 bg-border" />
-
-          {/* Specs — priority-ordered pills */}
-          <div className="flex flex-wrap gap-2">
-            {/* Tier 1: high-signal investment metrics */}
-            {property.price && (
-              <Badge className="gap-1.5 rounded-full bg-primary/15 border border-primary/40 text-primary px-4 py-2 text-sm font-bold hover:bg-primary/20 transition-colors">
-                €{property.price.toLocaleString()}
-              </Badge>
-            )}
-            {property.yield && (
-              <Badge className="gap-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 px-4 py-2 text-sm font-semibold hover:bg-emerald-500/20 transition-colors">
-                <TrendingUp className="h-3.5 w-3.5" /> {property.yield} yield
-              </Badge>
-            )}
-            {property.project_type && (
-              <Badge className="gap-1.5 rounded-full bg-secondary/15 border border-secondary/40 text-secondary px-4 py-2 text-sm font-semibold capitalize hover:bg-secondary/20 transition-colors">
-                {property.project_type}
-              </Badge>
-            )}
-            {/* Tier 2: property specs */}
-            {property.size && (
-              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-4 py-2 text-sm">
-                <Maximize className="h-3.5 w-3.5 text-muted-foreground" /> {property.size} m²
-              </Badge>
-            )}
-            {property.bedrooms && (
-              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-4 py-2 text-sm">
-                <Bed className="h-3.5 w-3.5 text-muted-foreground" /> {property.bedrooms} Bedrooms
-              </Badge>
-            )}
-            {property.floor && (
-              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-4 py-2 text-sm">
-                <Building className="h-3.5 w-3.5 text-muted-foreground" /> Floor {property.floor}
-              </Badge>
-            )}
-            {property.construction_year && (
-              <Badge variant="outline" className="gap-1.5 rounded-full border-border px-4 py-2 text-sm">
-                <Calendar className="h-3.5 w-3.5 text-muted-foreground" /> Built {property.construction_year}
-              </Badge>
-            )}
-          </div>
 
           {/* CTA Row */}
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
@@ -637,6 +640,46 @@ const PropertyPageInner = () => {
             </div>
           </section>
 
+          <Separator className="my-8 bg-border" />
+
+          {/* Embedded Google Map */}
+          <section aria-label="Property map">
+            <h2 className="mb-3 text-base font-semibold uppercase tracking-wider text-primary">Map & Location</h2>
+            <div className="relative overflow-hidden rounded-xl border-2 border-primary/25 bg-primary/5 shadow-[0_0_0_1px_hsl(var(--primary)/0.08)]">
+              <iframe
+                title={`Map of ${mapQuery}`}
+                src={`https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`}
+                className="h-[320px] w-full border-0 sm:h-[420px]"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+              <div className="pointer-events-none absolute left-3 top-3 z-10 max-w-[min(92%,480px)] rounded-lg border border-primary/30 bg-background/85 p-3 backdrop-blur">
+                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-primary">From this pin</p>
+                <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                  {displayPoi.slice(0, 6).map((entry) => (
+                    <div key={`map-${entry.name}`} className="flex items-center justify-between gap-2 text-xs">
+                      <span className="truncate text-foreground/90">{entry.name}</span>
+                      <span className="shrink-0 font-medium text-muted-foreground">{entry.distance || "—"}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center justify-between border-t border-primary/20 bg-muted/30 p-3.5 transition-colors hover:bg-muted/50"
+              >
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-primary" />
+                  <p className="text-sm font-medium">{property.location}, Greece</p>
+                </div>
+                <ExternalLink className="h-3.5 w-3.5 text-muted-foreground transition-colors group-hover:text-primary" />
+              </a>
+            </div>
+          </section>
+
           {/* Tags */}
           {property.tags?.filter(Boolean).length > 0 && (
             <>
@@ -653,14 +696,6 @@ const PropertyPageInner = () => {
               </section>
             </>
           )}
-
-          <Separator className="my-8 bg-border" />
-
-          {/* Location Map */}
-          <section aria-label="Property location map">
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Location</h2>
-            <MiniMap location={property.location} height={320} />
-          </section>
 
           <Separator className="my-8 bg-border" />
 
@@ -739,9 +774,9 @@ const PropertyPageInner = () => {
                 <h2 className="text-xl font-bold mb-6">{t("Similar Properties")}</h2>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {similar.map((p) => (
-                    <a
+                    <Link
                       key={p.id}
-                      href={`/property/${p.id}`}
+                      to={`/property/${p.id}`}
                       className="group flex gap-3 rounded-xl border border-border/60 bg-card p-3 hover:border-primary/40 transition-colors"
                     >
                       {p.images?.[0] && (
@@ -759,7 +794,7 @@ const PropertyPageInner = () => {
                         <p className="mt-1 text-xs text-muted-foreground">{p.location}</p>
                         {p.price && <p className="mt-1 text-sm font-bold text-primary">€{p.price.toLocaleString()}</p>}
                       </div>
-                    </a>
+                    </Link>
                   ))}
                 </div>
               </section>

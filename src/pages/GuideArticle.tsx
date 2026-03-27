@@ -329,19 +329,17 @@ const Inner = () => {
       <Toaster />
       <Navbar forceScrolled />
 
-      <article className="pt-32 pb-20">
+      <article className="pt-24 pb-20">
         <div className="container mx-auto max-w-3xl px-6">
-
-          {/* Breadcrumb */}
-          <nav className="mb-6 text-xs text-muted-foreground" aria-label="Breadcrumb">
-            <ol className="flex items-center gap-1.5">
-              <li><Link to="/" className="hover:text-primary transition-colors">{t("Home")}</Link></li>
-              <span>/</span>
-              <li><Link to="/guides" className="hover:text-primary transition-colors">{t("Guides")}</Link></li>
-              <span>/</span>
-              <li className="text-foreground truncate max-w-[200px]">{t(displayTitle)}</li>
-            </ol>
-          </nav>
+          {/* Top back button (consistent with property page) */}
+          <div className="mb-6">
+            <Link
+              to="/guides"
+              className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/12 px-4 py-2.5 text-base font-semibold text-primary shadow-[0_0_0_1px_hsl(var(--primary)/0.1)] transition-colors hover:bg-primary/20 hover:border-primary/50"
+            >
+              <ArrowLeft className="h-4 w-4" /> {t("Back to resources")}
+            </Link>
+          </div>
 
           {/* Category + read time */}
           <div className="mb-4 flex items-center gap-3">
@@ -396,12 +394,6 @@ const Inner = () => {
             </div>
           )}
 
-          {/* Back link */}
-          <div className="mt-16 flex items-center gap-2">
-            <Link to="/guides" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-              <ArrowLeft className="h-4 w-4" /> {t("Back to all guides")}
-            </Link>
-          </div>
         </div>
       </article>
 

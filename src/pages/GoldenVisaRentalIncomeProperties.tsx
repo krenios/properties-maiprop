@@ -91,7 +91,7 @@ const Inner = () => {
 
   useEffect(() => {
     supabase.from("properties").select("id,title,location,price,size,bedrooms,yield,status,images")
-      .eq("project_type", "new").order("sort_order", { ascending: true })
+      .in("project_type", ["ready", "under-construction", "new"]).order("sort_order", { ascending: true })
       .then(({ data }) => { setProperties((data as Property[]) || []); setLoading(false); });
   }, []);
 

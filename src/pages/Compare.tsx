@@ -8,13 +8,9 @@ import { useLeadBot } from "@/components/LeadBotProvider";
 import { Button } from "@/components/ui/button";
 import { MessageCircle } from "lucide-react";
 import { Helmet } from "react-helmet-async";
+import { getEffectiveStatus, STATUS_PILL_CLASSES } from "@/lib/propertyMeta";
 
-const statusColors: Record<string, string> = {
-  available: "bg-primary/20 text-primary border-primary/30",
-  booked: "bg-secondary/20 text-secondary border-secondary/30",
-  sold: "bg-destructive/20 text-destructive border-destructive/30",
-  "under-construction": "bg-muted/30 text-muted-foreground border-muted-foreground/30",
-};
+const statusColors: Record<string, string> = STATUS_PILL_CLASSES;
 
 const Compare = () => {
   const [params] = useSearchParams();
@@ -30,7 +26,10 @@ const Compare = () => {
     { label: "Bedrooms", render: (p: any) => p.bedrooms ? `${p.bedrooms} BR` : "—" },
     { label: "Floor", render: (p: any) => p.floor ? `Floor ${p.floor}` : "—" },
     { label: "Year Built", render: (p: any) => p.construction_year ?? "—" },
-    { label: "Status", render: (p: any) => p.status ? <Badge className={`border ${statusColors[p.status] || ""}`}>{p.status.replace("-", " ")}</Badge> : "—" },
+    { label: "Status", render: (p: any) => {
+      const s = getEffectiveStatus(p.status);
+      return s ? <Badge className={`border ${statusColors[s] || ""}`}>{s.charAt(0).toUpperCase() + s.slice(1)}</Badge> : "—";
+    } },
   ];
 
   return (

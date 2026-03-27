@@ -13,8 +13,12 @@ export interface Property {
   location: string;
   poi: string[];
   tags: string[];
+  // status: Available / Booked / Sold
+  // (legacy: some older rows used status="under-construction")
   status: "available" | "booked" | "sold" | "under-construction" | "";
-  project_type: "new" | "delivered";
+  // project_type: Renovated / Under Construction / Ready
+  // (legacy: "new" | "delivered")
+  project_type: "ready" | "under-construction" | "renovated" | "new" | "delivered" | "";
   yield: string;
   date_added: string;
   floor: string;

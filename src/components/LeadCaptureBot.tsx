@@ -130,7 +130,7 @@ const getMatchingProperties = (properties: Property[], budget: string): Property
   return properties.filter(
     (p) =>
       p.status === "available" &&
-      p.project_type === "new" &&
+      (p.project_type === "ready" || p.project_type === "under-construction" || p.project_type === "new") &&
       p.price !== null &&
       p.price >= num * 0.5 &&
       p.price <= ceiling,
@@ -328,7 +328,7 @@ const LeadCaptureBot = () => {
       .from("properties")
       .select("*")
       .eq("status", "available")
-      .eq("project_type", "new")
+      .in("project_type", ["ready", "under-construction", "new"])
       .order("sort_order", { ascending: true });
 
     if (!data || data.length === 0) return null;

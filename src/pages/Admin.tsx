@@ -45,7 +45,7 @@ const propertySchema = z.object({
 
 const emptyProperty: Omit<Property, "id" | "date_added" | "sort_order"> = {
   title: "", description: "", images: [], before_image: "", after_image: "", price: null, size: null, bedrooms: null,
-  floor_plan: "", location: "", poi: [], tags: [], status: "", project_type: "new", yield: "", floor: "", construction_year: "", market_report: "",
+  floor_plan: "", location: "", poi: [], tags: [], status: "", project_type: "ready", yield: "", floor: "", construction_year: "", market_report: "",
 };
 
 // ── Articles Tab ────────────────────────────────────────────────────────────
@@ -303,14 +303,20 @@ const Admin = () => {
   const { clearCache } = useTranslation();
   const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editingType, setEditingType] = useState<"new" | "delivered">("new");
+  const [editingType, setEditingType] = useState<"ready" | "under-construction" | "renovated">("ready");
   const [form, setForm] = useState<Omit<Property, "id" | "date_added" | "sort_order">>(emptyProperty);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkStatus, setBulkStatus] = useState<Property["status"]>("available");
 
-  const portfolioProperties = useMemo(() => properties.filter((p) => p.project_type === "new").sort((a, b) => a.sort_order - b.sort_order), [properties]);
-  const deliveredProperties = useMemo(() => properties.filter((p) => p.project_type === "delivered").sort((a, b) => a.sort_order - b.sort_order), [properties]);
+  const portfolioProperties = useMemo(
+    () => properties.filter((p) => (p.project_type === "ready" || p.project_type === "under-construction" || p.project_type === "new")).sort((a, b) => a.sort_order - b.sort_order),
+    [properties]
+  );
+  const deliveredProperties = useMemo(
+    () => properties.filter((p) => (p.project_type === "renovated" || p.project_type === "delivered")).sort((a, b) => a.sort_order - b.sort_order),
+    [properties]
+  );
 
   const onPortfolioDragEnd = (result: DropResult) => {
     if (!result.destination) return;
@@ -336,10 +342,10 @@ const Admin = () => {
     return missing;
   };
 
-  const openNew = () => { setEditingId(null); setEditingType("new"); setForm(emptyProperty); setDescVariants([]); setDescVariantIdx(0); setFormOpen(true); };
+  const openNew = () => { setEditingId(null); setEditingType("ready"); setForm(emptyProperty); setDescVariants([]); setDescVariantIdx(0); setFormOpen(true); };
   const openEdit = (p: Property) => {
     setEditingId(p.id);
-    setEditingType(p.project_type);
+    setEditingType((p.project_type === "delivered" ? "renovated" : p.project_type === "new" ? "ready" : p.project_type) as any);
     setForm({ title: p.title, description: p.description, images: p.images, before_image: p.before_image, after_image: p.after_image, price: p.price, size: p.size, bedrooms: p.bedrooms, floor_plan: p.floor_plan, location: p.location, poi: p.poi, tags: p.tags, status: p.status, project_type: p.project_type, yield: p.yield, floor: p.floor, construction_year: p.construction_year, market_report: p.market_report || "" });
     setDescVariants([]); setDescVariantIdx(0);
     setFormOpen(true);
@@ -362,11 +368,16 @@ const Admin = () => {
   };
 
   const transferToDelivered = (id: string) => {
-    updateProperty(id, { project_type: "delivered", status: "sold", floor_plan: "" });
+    updateProperty(id, { project_type: "renovated", status: "sold", floor_plan: "" });
   };
 
   const toggleSelect = (id: string) => {
-    setSelected((prev) => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
+    setSelected((prev) => {
+      const n = new Set(prev);
+      if (n.has(id)) n.delete(id);
+      else n.add(id);
+      return n;
+    });
   };
 
   const handleBulk = () => {
@@ -439,7 +450,7 @@ const Admin = () => {
     toast.success("All POI caches refreshed!");
   };
 
-  const isDeliveredForm = editingType === "delivered" || form.project_type === "delivered";
+  const isDeliveredForm = editingType === "renovated" || form.project_type === "renovated" || form.project_type === "delivered";
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -495,7 +506,6 @@ const Admin = () => {
                    <SelectItem value="available">Available</SelectItem>
                    <SelectItem value="booked">Booked</SelectItem>
                    <SelectItem value="sold">Sold</SelectItem>
-                   <SelectItem value="under-construction">Under Construction</SelectItem>
                 </SelectContent>
               </Select>
               <Button size="sm" onClick={handleBulk}>Update Status</Button>
@@ -550,9 +560,9 @@ const Admin = () => {
                                       available: "bg-primary/20 text-primary border-primary/30",
                                       booked: "bg-secondary/20 text-secondary border-secondary/30",
                                       sold: "bg-destructive/20 text-destructive border-destructive/30",
-                                      "under-construction": "bg-muted/30 text-muted-foreground border-muted-foreground/30",
                                     };
-                                    return <Badge className={`border text-xs capitalize ${sc[p.status] || ""}`}>{p.status || "none"}</Badge>;
+                                    const display = p.status === "under-construction" ? "" : p.status;
+                                    return <Badge className={`border text-xs capitalize ${sc[display] || ""}`}>{display || "none"}</Badge>;
                                   })()}
                                 </TableCell>
                                 <TableCell>
@@ -787,17 +797,17 @@ const Admin = () => {
                     <SelectItem value="available">Available</SelectItem>
                     <SelectItem value="booked">Booked</SelectItem>
                     <SelectItem value="sold">Sold</SelectItem>
-                    <SelectItem value="under-construction">Under Construction</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="grid gap-2">
                 <Label>Project Type</Label>
-                <Select value={form.project_type} onValueChange={(v) => setForm({ ...form, project_type: v as "new" | "delivered" })}>
+                <Select value={form.project_type} onValueChange={(v) => setForm({ ...form, project_type: v as Property["project_type"] })}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="new">New</SelectItem>
-                    <SelectItem value="delivered">Delivered</SelectItem>
+                    <SelectItem value="ready">Ready</SelectItem>
+                    <SelectItem value="under-construction">Under Construction</SelectItem>
+                    <SelectItem value="renovated">Renovated</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

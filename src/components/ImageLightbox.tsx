@@ -120,12 +120,6 @@ const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
       {/* Close */}
       <button
         className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-background/20 text-white backdrop-blur hover:bg-background/40 transition-colors"
-        onPointerUp={(e) => {
-          e.stopPropagation();
-          ignoreSwipe.current = true;
-          didSwipe.current = false;
-          doClose();
-        }}
         onClick={(e) => {
           e.stopPropagation();
           ignoreSwipe.current = true;
@@ -141,11 +135,6 @@ const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
       {onPrev && images.length > 1 && (
         <button
           className="absolute left-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-background/20 text-white backdrop-blur hover:bg-background/40 transition-colors"
-          onPointerUp={(e) => {
-            e.stopPropagation();
-            ignoreSwipe.current = true;
-            onPrev();
-          }}
           onClick={(e) => {
             e.stopPropagation();
             ignoreSwipe.current = true;
@@ -180,11 +169,6 @@ const ImageLightbox = ({ images, index, onClose, onPrev, onNext }: Props) => {
       {onNext && images.length > 1 && (
         <button
           className="absolute right-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-background/20 text-white backdrop-blur hover:bg-background/40 transition-colors"
-          onPointerUp={(e) => {
-            e.stopPropagation();
-            ignoreSwipe.current = true;
-            onNext();
-          }}
           onClick={(e) => {
             e.stopPropagation();
             ignoreSwipe.current = true;

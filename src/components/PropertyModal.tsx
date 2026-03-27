@@ -4,26 +4,22 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { optimizeImage } from "@/lib/optimizeImage";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { formatProjectTypeLabel, formatStatusLabel, getEffectiveProjectType, getEffectiveStatus, PROJECT_TYPE_PILL_CLASSES, STATUS_PILL_CLASSES } from "@/lib/propertyMeta";
 import {
   MapPin, Bed, Maximize, TrendingUp, ChevronLeft, ChevronRight,
   ExternalLink, Building, Calendar, LayoutGrid, FileText,
   Plane, Waves, Anchor, TrainFront, Car, GraduationCap,
-  ShoppingCart, Cross, Heart, Landmark, TreePine, Loader2,
-  Share2, Expand,
+  ShoppingCart, Cross, Heart, Landmark, TreePine,
+  Share2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { LucideIcon } from "lucide-react";
 import ImageLightbox from "@/components/ImageLightbox";
-import MiniMap from "@/components/MiniMap";
 
-const statusColors: Record<string, string> = {
-  available: "bg-primary/20 text-primary border-primary/30",
-  booked: "bg-secondary/20 text-secondary border-secondary/30",
-  sold: "bg-destructive/20 text-destructive border-destructive/30",
-  "under-construction": "bg-muted/30 text-muted-foreground border-muted-foreground/30",
-};
+const statusColors: Record<string, string> = STATUS_PILL_CLASSES;
+const projectTypeColors: Record<string, string> = PROJECT_TYPE_PILL_CLASSES;
 
 const POI_ICONS: Record<string, LucideIcon> = {
   "Airport": Plane,
@@ -186,6 +182,8 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
   }, [swipeY, onClose]);
 
   if (!property) return null;
+  const effectiveStatus = getEffectiveStatus(property.status);
+  const effectiveProjectType = getEffectiveProjectType(property.project_type, property.status);
 
   // Filter out empty/invalid image URLs so lightbox navigation always cycles real images.
   const images = property.images.filter(Boolean);
@@ -213,7 +211,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
           onInteractOutside={(e) => {
             if (lightboxIdx !== null || floorPlanOpen) e.preventDefault();
           }}
-          className={`max-h-[100dvh] max-w-3xl overflow-hidden border-border bg-card p-0 max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[90vh] ${
+          className={`max-h-[100dvh] max-w-[98vw] xl:max-w-6xl overflow-hidden border-border bg-card p-0 max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[94vh] ${
             lightboxIdx !== null || floorPlanOpen ? "pointer-events-none" : ""
           }`}
           style={{
@@ -236,7 +234,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
             </div>
 
             {/* Gallery */}
-            <div className="relative h-[300px] sm:h-[520px] w-full overflow-hidden">
+            <div className="relative h-[320px] sm:h-[560px] w-full overflow-hidden">
               <img
                 src={optimizeImage(currentImg, { width: 900, height: 600 })}
                 alt={`${property.title} — Golden Visa property in ${property.location}, Greece`}
@@ -244,11 +242,6 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                 loading="lazy"
                 decoding="async"
               />
-              {property.status && (
-                <Badge className={`absolute left-3 top-3 border ${statusColors[property.status] || ""}`}>
-                  {property.status.replace("-", " ")}
-                </Badge>
-              )}
               {/* Enlarge button — bottom-left, opposite the modal close X */}
               <button
                 onClick={() => {
@@ -266,12 +259,16 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                   <button
                     onClick={() => setImgIdx((i) => (i - 1 + safeImages.length) % safeImages.length)}
                     className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background transition-colors"
+                    aria-label="Previous image"
+                    title="Previous image"
                   >
                     <ChevronLeft className="h-5 w-5" />
                   </button>
                   <button
                     onClick={() => setImgIdx((i) => (i + 1) % safeImages.length)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background transition-colors"
+                    aria-label="Next image"
+                    title="Next image"
                   >
                     <ChevronRight className="h-5 w-5" />
                   </button>
@@ -290,6 +287,8 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                             ? "border-primary shadow-lg"
                             : "border-transparent opacity-60 hover:opacity-100"
                         }`}
+                        aria-label={`Go to image ${i + 1}`}
+                        title={`Go to image ${i + 1}`}
                       >
                         <img
                           src={optimizeImage(img, { width: 120, height: 80 })}
@@ -306,7 +305,51 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
             <div className="space-y-4 p-4">
               <DialogHeader>
                 <div className="flex items-start justify-between gap-3">
-                  <DialogTitle className="text-xl leading-snug">{property.title}</DialogTitle>
+                  <div className="min-w-0 space-y-2">
+                    <DialogTitle className="text-xl leading-snug">{property.title}</DialogTitle>
+                    <div className="flex flex-nowrap gap-2 pb-1 text-sm [&>*]:shrink-0">
+                      {effectiveProjectType && (
+                        <Badge className={`gap-1.5 rounded-full border px-3 py-1.5 text-sm font-semibold ${projectTypeColors[effectiveProjectType] || ""}`}>
+                          {formatProjectTypeLabel(effectiveProjectType)}
+                        </Badge>
+                      )}
+                      {effectiveStatus && (
+                        <Badge className={`gap-1.5 rounded-full border px-3 py-1.5 text-sm font-semibold ${statusColors[effectiveStatus] || ""}`}>
+                          {formatStatusLabel(effectiveStatus)}
+                        </Badge>
+                      )}
+                      {property.price && (
+                        <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                          <span className="text-primary font-semibold">€{property.price.toLocaleString()}</span>
+                        </Badge>
+                      )}
+                      {property.size && (
+                        <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                          <Maximize className="h-3.5 w-3.5 text-muted-foreground" /> {property.size} m²
+                        </Badge>
+                      )}
+                      {property.bedrooms && (
+                        <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                          <Bed className="h-3.5 w-3.5 text-muted-foreground" /> {property.bedrooms} Bdr
+                        </Badge>
+                      )}
+                      {property.floor && (
+                        <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                          <Building className="h-3.5 w-3.5 text-muted-foreground" /> {property.floor}
+                        </Badge>
+                      )}
+                      {property.construction_year && (
+                        <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                          <Calendar className="h-3.5 w-3.5 text-muted-foreground" /> {property.construction_year}
+                        </Badge>
+                      )}
+                      {property.yield && (
+                        <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
+                          <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" /> {property.yield}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
                   <button
                     onClick={handleShare}
                     className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
@@ -325,93 +368,93 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                 </button>
               </DialogHeader>
 
+              {/* POI section */}
               <Separator className="bg-border" />
-
-              {/* Key specs as pills */}
-              <div className="flex flex-wrap gap-2">
-                {property.price && (
-                  <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
-                    <span className="text-primary font-semibold">€{property.price.toLocaleString()}</span>
-                  </Badge>
-                )}
-                {property.size && (
-                  <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
-                    <Maximize className="h-3.5 w-3.5 text-muted-foreground" /> {property.size} m²
-                  </Badge>
-                )}
-                {property.bedrooms && (
-                  <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
-                    <Bed className="h-3.5 w-3.5 text-muted-foreground" /> {property.bedrooms} Bdr
-                  </Badge>
-                )}
-                {property.floor && (
-                  <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
-                    <Building className="h-3.5 w-3.5 text-muted-foreground" /> Floor {property.floor}
-                  </Badge>
-                )}
-                {property.construction_year && (
-                  <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
-                    <Calendar className="h-3.5 w-3.5 text-muted-foreground" /> Built {property.construction_year}
-                  </Badge>
-                )}
-                {property.yield && (
-                  <Badge variant="outline" className="gap-1.5 rounded-full border-border px-3 py-1.5 text-sm">
-                    <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" /> {property.yield}
-                  </Badge>
-                )}
-              </div>
-
-              {/* POI pills with distance */}
-              <Separator className="bg-border" />
-              <div>
-                <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Points of Interest
-                  {poiLoading && <Loader2 className="ml-2 inline h-3 w-3 animate-spin" />}
+              <section aria-label="Points of Interest">
+                <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                  {poiLoading ? "Loading nearby places…" : "Nearby"}
                 </h4>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
                   {displayPoi.map((entry) => {
                     const Icon = POI_ICONS[entry.name] || MapPin;
                     return (
-                      <Badge key={entry.name} variant="secondary" className="gap-1.5 rounded-full px-3 py-1 text-xs">
-                        <Icon className="h-3 w-3" />
-                        {entry.name}
-                        {entry.distance && (
-                          <span className="ml-0.5 text-primary font-medium">· {entry.distance}</span>
-                        )}
-                      </Badge>
+                      <div key={entry.name} className="flex items-center gap-2.5 rounded-lg border border-border/50 bg-muted/20 px-3 py-2.5">
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                          <Icon className="h-3.5 w-3.5 text-primary" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="truncate text-xs font-medium">{entry.name}</p>
+                          {entry.distance && <p className="text-[11px] text-muted-foreground">{entry.distance}</p>}
+                        </div>
+                      </div>
                     );
                   })}
                 </div>
-              </div>
+              </section>
 
               {/* Tags pills */}
               {property.tags.filter(Boolean).length > 0 && (
                 <>
                   <Separator className="bg-border" />
-                  <div>
-                    <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Features</h4>
-                    <div className="flex flex-wrap gap-1.5">
+                  <section aria-label="Property features">
+                    <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Features</h4>
+                    <div className="flex flex-wrap gap-2">
                       {property.tags.filter(Boolean).map((t) => (
-                        <Badge key={t} variant="outline" className="rounded-full px-3 py-1 text-xs">
-                          {t}
+                        <Badge key={t} variant="secondary" className="gap-1.5 rounded-full px-3 py-1 text-xs">
+                          <LayoutGrid className="h-3 w-3" /> {t}
                         </Badge>
                       ))}
                     </div>
-                  </div>
+                  </section>
                 </>
               )}
 
               <Separator className="bg-border" />
 
               {/* Embedded Google Map */}
-              <MiniMap location={property.location} height={180} />
+              <section aria-label="Property map">
+                <h4 className="mb-3 text-base font-semibold uppercase tracking-wider text-primary">Map & Location</h4>
+                <div className="relative overflow-hidden rounded-xl border-2 border-primary/25 bg-primary/5 shadow-[0_0_0_1px_hsl(var(--primary)/0.08)]">
+                <iframe
+                  title={`Map of ${property.location}`}
+                  src={`https://www.google.com/maps?q=${encodeURIComponent(property.location + ", Greece")}&output=embed`}
+                  className="h-[240px] w-full border-0 sm:h-[300px]"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
+                <div className="pointer-events-none absolute left-3 top-3 z-10 max-w-[min(92%,480px)] rounded-lg border border-primary/30 bg-background/85 p-3 backdrop-blur">
+                  <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-primary">From this pin</p>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                    {displayPoi.slice(0, 6).map((entry) => (
+                      <div key={`modal-map-${entry.name}`} className="flex items-center justify-between gap-2 text-xs">
+                        <span className="truncate text-foreground/90">{entry.name}</span>
+                        <span className="shrink-0 font-medium text-muted-foreground">{entry.distance || "—"}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <a
+                  href={mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center justify-between border-t border-primary/20 bg-muted/30 p-3.5 transition-colors hover:bg-muted/50"
+                >
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-primary" />
+                    <p className="text-sm font-medium">{property.location}, Greece</p>
+                  </div>
+                  <ExternalLink className="h-3.5 w-3.5 text-muted-foreground transition-colors group-hover:text-primary" />
+                </a>
+                </div>
+              </section>
 
               {/* Floor Plan */}
               {property.floor_plan && (
                 <>
                   <Separator className="bg-border" />
-                  <div className="rounded-xl border-2 border-primary/20 bg-primary/5 p-4">
-                    <div className="mb-2 flex items-center gap-2">
+                  <div className="rounded-xl border-2 border-primary/20 bg-primary/5 p-5">
+                    <div className="mb-3 flex items-center gap-2">
                       <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/15">
                         <LayoutGrid className="h-3.5 w-3.5 text-primary" />
                       </div>
@@ -421,7 +464,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                       <img
                         src={property.floor_plan}
                         alt={`Floor plan of ${property.title} — property layout`}
-                        className="max-h-[200px] w-full cursor-zoom-in rounded-lg border border-border bg-background object-contain transition-opacity hover:opacity-90"
+                        className="max-h-[300px] w-full cursor-zoom-in rounded-lg border border-border bg-background object-contain transition-opacity hover:opacity-90"
                         loading="lazy"
                         decoding="async"
                         onClick={() => {
@@ -435,10 +478,11 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                           saveScrollTop();
                           setFloorPlanOpen(true);
                         }}
-                        className="absolute bottom-2 left-2 flex items-center gap-1.5 rounded-full border border-primary/30 bg-background/80 px-2.5 py-1 text-xs text-primary backdrop-blur hover:bg-background transition-colors"
+                        className="absolute bottom-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100"
                         aria-label="Enlarge floor plan"
+                        title="Enlarge floor plan"
                       >
-                        <Expand className="h-3 w-3" /> Enlarge
+                        <Maximize className="h-4 w-4" />
                       </button>
                     </div>
                   </div>

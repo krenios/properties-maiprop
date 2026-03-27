@@ -135,7 +135,6 @@ const statusColors: Record<string, string> = {
   available: "bg-primary/20 text-primary border-primary/30",
   booked: "bg-secondary/20 text-secondary border-secondary/30",
   sold: "bg-destructive/20 text-destructive border-destructive/30",
-  "under-construction": "bg-muted/30 text-muted-foreground border-muted-foreground/30",
 };
 
 interface Property {
@@ -178,7 +177,7 @@ const Inner = () => {
     supabase
       .from("properties")
       .select("id, title, location, price, size, bedrooms, yield, status, images, tags, project_type")
-      .eq("project_type", "new")
+      .in("project_type", ["ready", "under-construction", "new"])
       .order("sort_order", { ascending: true })
       .then(({ data }) => {
         setProperties((data as Property[]) || []);

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BookOpen, Clock, TrendingUp, Landmark, DollarSign, FileText, Loader2, MessageCircle, ChevronRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Clock, TrendingUp, Landmark, DollarSign, FileText, Loader2, MessageCircle, ChevronRight } from "lucide-react";
 import { useLeadBot } from "@/components/LeadBotProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "@/contexts/TranslationContext";
@@ -245,6 +245,18 @@ const Inner = () => {
           </ol>
         </div>
       </nav>
+
+      {/* Top back button */}
+      <section className="pt-6">
+        <div className="container mx-auto px-6">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/12 px-4 py-2.5 text-base font-semibold text-primary shadow-[0_0_0_1px_hsl(var(--primary)/0.1)] transition-colors hover:bg-primary/20 hover:border-primary/50"
+          >
+            <ArrowLeft className="h-4 w-4" /> {t("Back to home")}
+          </Link>
+        </div>
+      </section>
 
       {/* Hero */}
       <section className="relative overflow-hidden pt-12 pb-16">

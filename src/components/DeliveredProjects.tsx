@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { useTranslation } from "@/contexts/TranslationContext";
 import ImageLightbox from "@/components/ImageLightbox";
+import { getEffectiveProjectType } from "@/lib/propertyMeta";
 
 const whatsappMessage = [
   "Hello! I would like to explore investment opportunities under the Greek Golden Visa program.",
@@ -40,7 +41,7 @@ const trackRecord = [
 const DeliveredProjects = () => {
   const { properties } = useProperties();
   const navigate = useNavigate();
-  const delivered = properties.filter((p) => p.project_type === "delivered");
+  const delivered = properties.filter((p) => getEffectiveProjectType(p.project_type, p.status) === "renovated");
   const preview = delivered.slice(0, 3);
   const [selected, setSelected] = useState<Property | null>(null);
   const { t } = useTranslation();
