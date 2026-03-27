@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useRef } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { LOCALES } from "@/i18n/locales";
 
 export const LANGUAGES = [
   { code: "en", label: "English", flag: "🇬🇧" },
@@ -83,22 +83,11 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
     if (texts.length === 0) return;
     setIsTranslating(true);
     try {
-      const BATCH_SIZE = 50;
-      const targetLang = LANGUAGES.find((l) => l.code === lang)?.label || lang;
       if (!cache.current[lang]) cache.current[lang] = {};
-
-      for (let i = 0; i < texts.length; i += BATCH_SIZE) {
-        const chunk = texts.slice(i, i + BATCH_SIZE);
-        const { data, error } = await supabase.functions.invoke("translate", {
-          body: { texts: chunk, targetLang },
-        });
-        if (error) throw error;
-        const translated: string[] = data?.translated || chunk;
-        chunk.forEach((original, j) => {
-          cache.current[lang][original] = translated[j] || original;
-        });
-      }
-      // Persist updated cache to sessionStorage so navigating pages doesn't re-call AI
+      const dictionary = LOCALES[lang] || {};
+      texts.forEach((original) => {
+        cache.current[lang][original] = dictionary[original] || original;
+      });
       saveCache(cache.current);
       forceRender((n) => n + 1);
     } catch (err) {
