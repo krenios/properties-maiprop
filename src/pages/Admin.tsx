@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "@/contexts/TranslationContext";
+import { getEffectiveProjectType } from "@/lib/propertyMeta";
 
 const propertySchema = z.object({
   title: z.string().min(1, "Title is required").max(200, "Title too long"),
@@ -45,7 +46,7 @@ const propertySchema = z.object({
 
 const emptyProperty: Omit<Property, "id" | "date_added" | "sort_order"> = {
   title: "", description: "", images: [], before_image: "", after_image: "", price: null, size: null, bedrooms: null,
-  floor_plan: "", location: "", poi: [], tags: [], status: "", project_type: "ready", yield: "", floor: "", construction_year: "", market_report: "",
+  floor_plan: "", location: "", poi: [], tags: [], status: "available", project_type: "ready", yield: "", floor: "", construction_year: "", market_report: "",
 };
 
 // ── Articles Tab ────────────────────────────────────────────────────────────
@@ -303,18 +304,26 @@ const Admin = () => {
   const { clearCache } = useTranslation();
   const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editingType, setEditingType] = useState<"ready" | "under-construction" | "renovated">("ready");
   const [form, setForm] = useState<Omit<Property, "id" | "date_added" | "sort_order">>(emptyProperty);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkStatus, setBulkStatus] = useState<Property["status"]>("available");
 
   const portfolioProperties = useMemo(
-    () => properties.filter((p) => (p.project_type === "ready" || p.project_type === "under-construction" || p.project_type === "new")).sort((a, b) => a.sort_order - b.sort_order),
+    () =>
+      properties
+        .filter((p) => {
+          const type = getEffectiveProjectType(p.project_type, p.status);
+          return type === "ready" || type === "under-construction";
+        })
+        .sort((a, b) => a.sort_order - b.sort_order),
     [properties]
   );
   const deliveredProperties = useMemo(
-    () => properties.filter((p) => (p.project_type === "renovated" || p.project_type === "delivered")).sort((a, b) => a.sort_order - b.sort_order),
+    () =>
+      properties
+        .filter((p) => getEffectiveProjectType(p.project_type, p.status) === "renovated")
+        .sort((a, b) => a.sort_order - b.sort_order),
     [properties]
   );
 
@@ -342,11 +351,30 @@ const Admin = () => {
     return missing;
   };
 
-  const openNew = () => { setEditingId(null); setEditingType("ready"); setForm(emptyProperty); setDescVariants([]); setDescVariantIdx(0); setFormOpen(true); };
+  const openNew = () => { setEditingId(null); setForm(emptyProperty); setDescVariants([]); setDescVariantIdx(0); setFormOpen(true); };
   const openEdit = (p: Property) => {
     setEditingId(p.id);
-    setEditingType((p.project_type === "delivered" ? "renovated" : p.project_type === "new" ? "ready" : p.project_type) as any);
-    setForm({ title: p.title, description: p.description, images: p.images, before_image: p.before_image, after_image: p.after_image, price: p.price, size: p.size, bedrooms: p.bedrooms, floor_plan: p.floor_plan, location: p.location, poi: p.poi, tags: p.tags, status: p.status, project_type: p.project_type, yield: p.yield, floor: p.floor, construction_year: p.construction_year, market_report: p.market_report || "" });
+    const effectiveType = getEffectiveProjectType(p.project_type, p.status);
+    setForm({
+      title: p.title,
+      description: p.description,
+      images: p.images,
+      before_image: p.before_image,
+      after_image: p.after_image,
+      price: p.price,
+      size: p.size,
+      bedrooms: p.bedrooms,
+      floor_plan: p.floor_plan,
+      location: p.location,
+      poi: p.poi,
+      tags: p.tags,
+      status: p.status === "under-construction" ? "available" : p.status,
+      project_type: effectiveType || "ready",
+      yield: p.yield,
+      floor: p.floor,
+      construction_year: p.construction_year,
+      market_report: p.market_report || "",
+    });
     setDescVariants([]); setDescVariantIdx(0);
     setFormOpen(true);
   };
@@ -450,7 +478,7 @@ const Admin = () => {
     toast.success("All POI caches refreshed!");
   };
 
-  const isDeliveredForm = editingType === "renovated" || form.project_type === "renovated" || form.project_type === "delivered";
+  const isDeliveredForm = getEffectiveProjectType(form.project_type, form.status) === "renovated";
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -561,8 +589,7 @@ const Admin = () => {
                                       booked: "bg-secondary/20 text-secondary border-secondary/30",
                                       sold: "bg-destructive/20 text-destructive border-destructive/30",
                                     };
-                                    const display = p.status === "under-construction" ? "" : p.status;
-                                    return <Badge className={`border text-xs capitalize ${sc[display] || ""}`}>{display || "none"}</Badge>;
+                                    return <Badge className={`border text-xs capitalize ${sc[p.status] || ""}`}>{p.status || "none"}</Badge>;
                                   })()}
                                 </TableCell>
                                 <TableCell>

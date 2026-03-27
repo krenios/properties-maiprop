@@ -16,6 +16,24 @@ interface PropertyContextType {
 
 const PropertyContext = createContext<PropertyContextType | undefined>(undefined);
 
+const toLegacyProjectType = (projectType: string | undefined) => {
+  if (projectType === "ready" || projectType === "under-construction") return "new";
+  if (projectType === "renovated") return "delivered";
+  return projectType;
+};
+
+const maybeLegacyCompatiblePayload = <T extends { project_type?: string }>(payload: T, error: unknown): T => {
+  const msg = String((error as { message?: string })?.message || "").toLowerCase();
+  const details = String((error as { details?: string })?.details || "").toLowerCase();
+  const violatedProjectTypeCheck = msg.includes("project_type") || details.includes("project_type");
+  if (!violatedProjectTypeCheck) return payload;
+
+  return {
+    ...payload,
+    project_type: toLegacyProjectType(payload.project_type),
+  };
+};
+
 export const PropertyProvider = ({ children }: { children: ReactNode }) => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,14 +59,43 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
   const addProperty = async (p: Omit<Property, "id" | "date_added" | "sort_order">) => {
     // New properties get the highest sort_order
     const maxOrder = properties.length > 0 ? Math.max(...properties.map((x) => x.sort_order)) : 0;
-    const { error } = await supabase.from("properties").insert({ ...p, sort_order: maxOrder + 1 });
-    if (error) { if (import.meta.env.DEV) console.error("Failed to add property:", error); toast.error("Failed to add property."); return; }
+    const payload = { ...p, sort_order: maxOrder + 1 };
+    let { error } = await supabase.from("properties").insert(payload);
+
+    // Backward compatibility: retry once for older DBs still using legacy project_type enum.
+    if (error) {
+      const legacyPayload = maybeLegacyCompatiblePayload(payload, error);
+      if (legacyPayload.project_type !== payload.project_type) {
+        const retry = await supabase.from("properties").insert(legacyPayload);
+        error = retry.error;
+      }
+    }
+
+    if (error) {
+      if (import.meta.env.DEV) console.error("Failed to add property:", error);
+      toast.error(`Failed to add property. ${error.message || ""}`.trim());
+      return;
+    }
     await fetchProperties();
   };
 
   const updateProperty = async (id: string, updates: Partial<Property>) => {
-    const { error } = await supabase.from("properties").update(updates).eq("id", id);
-    if (error) { if (import.meta.env.DEV) console.error("Failed to update property:", error); toast.error("Failed to update property."); return; }
+    let { error } = await supabase.from("properties").update(updates).eq("id", id);
+
+    // Backward compatibility: retry once for older DBs still using legacy project_type enum.
+    if (error) {
+      const legacyUpdates = maybeLegacyCompatiblePayload(updates, error);
+      if (legacyUpdates.project_type !== updates.project_type) {
+        const retry = await supabase.from("properties").update(legacyUpdates).eq("id", id);
+        error = retry.error;
+      }
+    }
+
+    if (error) {
+      if (import.meta.env.DEV) console.error("Failed to update property:", error);
+      toast.error(`Failed to update property. ${error.message || ""}`.trim());
+      return;
+    }
     await fetchProperties();
   };
 
