@@ -27,7 +27,7 @@ return (
           <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">
             {t("Begin Your")}{" "}
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Golden Visa
+              {t("Golden Visa")}
             </span>{" "}
             {t("Journey")}
           </h2>

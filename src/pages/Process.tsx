@@ -117,12 +117,12 @@ const phases = [
     label: "Eligibility requirements",
     content:
     <div className="space-y-3">
-          <p className="text-sm text-muted-foreground mb-4">To qualify for the Greek Golden Visa, you must meet all of the following criteria before we proceed to property selection:</p>
+          <p className="text-sm text-muted-foreground mb-4"><Tr text="To qualify for the Greek Golden Visa, you must meet all of the following criteria before we proceed to property selection:" /></p>
           <div className="grid gap-2 sm:grid-cols-2">
             {eligibilityCriteria.map((item) =>
         <div key={item} className="flex items-start gap-2.5 rounded-lg border border-border/60 bg-background/60 px-3 py-2.5">
                 <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
-                <span className="text-xs text-muted-foreground leading-relaxed">{item}</span>
+                <span className="text-xs text-muted-foreground leading-relaxed"><Tr text={item} /></span>
               </div>
         )}
           </div>
@@ -141,21 +141,21 @@ const phases = [
     label: "Investment thresholds",
     content:
     <div className="space-y-3">
-          <p className="text-sm text-muted-foreground mb-4">Greece uses a two-tier threshold system. The zone where the property is located determines your minimum investment:</p>
+          <p className="text-sm text-muted-foreground mb-4"><Tr text="Greece uses a two-tier threshold system. The zone where the property is located determines your minimum investment:" /></p>
           <div className="space-y-3">
             {investmentTiers.map((tier) =>
         <div key={tier.tier} className="rounded-lg border border-border/60 bg-background/60 p-4 flex items-start gap-4">
                 <span className="shrink-0 text-xl font-bold text-primary">{tier.tier}</span>
                 <div>
-                  <p className="text-xs font-semibold text-foreground mb-1">{tier.zones}</p>
-                  <p className="text-xs text-muted-foreground leading-relaxed">{tier.desc}</p>
+                  <p className="text-xs font-semibold text-foreground mb-1"><Tr text={tier.zones} /></p>
+                  <p className="text-xs text-muted-foreground leading-relaxed"><Tr text={tier.desc} /></p>
                 </div>
               </div>
         )}
           </div>
           <div className="flex items-start gap-2.5 rounded-lg border border-secondary/30 bg-secondary/5 px-3 py-2.5">
             <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-secondary" />
-            <p className="text-xs text-muted-foreground">Always confirm zoning classification with your legal advisor. We do this for you as part of the due diligence step.</p>
+            <p className="text-xs text-muted-foreground"><Tr text="Always confirm zoning classification with your legal advisor. We do this for you as part of the due diligence step." /></p>
           </div>
         </div>
 
@@ -196,12 +196,12 @@ const phases = [
     label: "Required documents checklist",
     content:
     <div className="space-y-3">
-          <p className="text-sm text-muted-foreground mb-4">All foreign documents must be apostilled and accompanied by a certified Greek translation. We coordinate the full document collection on your behalf:</p>
+          <p className="text-sm text-muted-foreground mb-4"><Tr text="All foreign documents must be apostilled and accompanied by a certified Greek translation. We coordinate the full document collection on your behalf:" /></p>
           <div className="grid gap-2 sm:grid-cols-2">
             {requiredDocuments.map((doc) =>
         <div key={doc} className="flex items-start gap-2.5 rounded-lg border border-border/60 bg-background/60 px-3 py-2.5">
                 <FileText className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
-                <span className="text-xs text-muted-foreground leading-relaxed">{doc}</span>
+                <span className="text-xs text-muted-foreground leading-relaxed"><Tr text={doc} /></span>
               </div>
         )}
           </div>
@@ -238,6 +238,11 @@ const whyUs = [
 
 // ── Step card with expandable "Learn more" ────────────────────────────────────
 type Phase = typeof phases[number];
+
+const Tr = ({ text }: { text: string }) => {
+  const { t } = useTranslation();
+  return <>{t(text)}</>;
+};
 
 const StepCard = ({ p, t }: {p: Phase;t: (s: string) => string;}) => {
   const [open, setOpen] = useState(false);

@@ -127,6 +127,7 @@ const MOCK_CARDS = [
 ];
 
 function PropertiesMockup() {
+  const { t } = useTranslation();
   const [scrollY, setScrollY] = useState(0);
   const raf = useRef<number>();
 
@@ -154,7 +155,7 @@ function PropertiesMockup() {
         </span>
         <div className="flex items-center gap-1.5 bg-white/6 border border-white/10 rounded-full px-3 py-1 text-[10px] text-white/50 w-40">
           <Search className="w-3 h-3" />
-          <span>Search properties, areas…</span>
+          <span>{t("Search properties, areas…")}</span>
         </div>
         <div className="flex items-center gap-2">
           <Bell className="w-3.5 h-3.5 text-white/40" />
@@ -199,19 +200,19 @@ function PropertiesMockup() {
       {/* Hero */}
       <div className="relative px-4 pt-4 pb-2">
         <div className="text-[11px] font-black tracking-widest uppercase mb-1" style={{ color: "hsl(192 100% 50%)" }}>
-          Greece's #1 AI Property Portal
+          {t("Greece's #1 AI Property Portal")}
         </div>
         <div className="text-base font-black leading-tight mb-3">
-          Find Your Perfect Greek
+          {t("Find Your Perfect Greek")}
           <br />
-          <span style={{ color: "hsl(192 100% 55%)" }}>Golden Visa Property</span>
+          <span style={{ color: "hsl(192 100% 55%)" }}>{t("Golden Visa Property")}</span>
         </div>
         {/* Stats bar */}
         <div className="flex gap-3 mb-4">
           {[
-            ["12,400+", "Listings"],
-            ["3,200+", "Auctions/mo"],
-            ["€250k", "Min GV"],
+            ["12,400+", t("Listings")],
+            ["3,200+", t("Auctions/mo")],
+            ["€250k", t("Min GV")],
           ].map(([v, l]) => (
             <div key={l} className="flex-1 rounded-lg bg-white/5 border border-white/8 px-2 py-1.5 text-center">
               <div className="text-xs font-black" style={{ color: "hsl(192 100% 60%)" }}>
@@ -284,6 +285,7 @@ const REGIONS = [
 const CHART_POINTS = [38, 42, 40, 46, 44, 52, 50, 58, 56, 62, 60, 68, 66, 72, 70, 76];
 
 function OSDashboardMockup() {
+  const { t } = useTranslation();
   const { prices, flick } = useLiveFlicker();
   const [activeRegion, setActiveRegion] = useState(0);
 
@@ -330,8 +332,8 @@ function OSDashboardMockup() {
         {/* Top bar */}
         <div className="flex items-center justify-between px-3 py-2 border-b border-white/8 bg-[hsl(225_35%_5%)]">
           <div>
-            <div className="text-[11px] font-black text-white">Market Intelligence</div>
-            <div className="text-[9px] text-white/30">Live Greek Real Estate Index</div>
+            <div className="text-[11px] font-black text-white">{t("Market Intelligence")}</div>
+            <div className="text-[9px] text-white/30">{t("Live Greek Real Estate Index")}</div>
           </div>
           <div
             className="flex items-center gap-1.5 px-2 py-1 rounded-full text-[9px] font-black"
@@ -342,7 +344,7 @@ function OSDashboardMockup() {
             }}
           >
             <span className="w-1 h-1 rounded-full animate-pulse" style={{ background: "hsl(263 86% 64%)" }} />
-            LIVE DATA
+            {t("LIVE DATA")}
           </div>
         </div>
 
@@ -352,9 +354,9 @@ function OSDashboardMockup() {
             {/* Mini chart */}
             <div className="px-3 pt-2.5 pb-1">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Attica €/m² Trend</span>
+                <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">{t("Attica €/m² Trend")}</span>
                 <span className="text-[10px] font-black" style={{ color: "hsl(263 86% 75%)" }}>
-                  +4.2% YoY
+                  {t("+4.2% YoY")}
                 </span>
               </div>
               <svg
@@ -423,7 +425,7 @@ function OSDashboardMockup() {
             {/* Regions */}
             <div className="px-3 pt-2 pb-1">
               <div className="text-[9px] font-bold text-white/30 uppercase tracking-widest mb-1.5">
-                AI Investment Score
+                {t("AI Investment Score")}
               </div>
               <div className="space-y-1.5">
                 {REGIONS.map((r, i) => (
@@ -475,7 +477,7 @@ function OSDashboardMockup() {
                     className="text-[9px] font-black tracking-wider uppercase"
                     style={{ color: "hsl(270 75% 75%)" }}
                   >
-                    Judicial Auctions
+                    {t("Judicial Auctions")}
                   </span>
                 </div>
                 <span
@@ -576,10 +578,10 @@ const PlatformReference = () => {
           <div className="mb-4 text-center">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-4 py-1.5 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
               <Sparkles className="h-3.5 w-3.5 text-primary" />
-              Your Ecosystem Partner
+              {t("Your Ecosystem Partner")}
             </div>
             <h2 className="text-2xl font-bold sm:text-4xl lg:text-5xl">
-              Two platforms, <span className="text-primary">one ecosystem</span>
+              {t("Two platforms,")} <span className="text-primary">{t("one ecosystem")}</span>
             </h2>
             <p className="mt-3 mx-auto max-w-2xl text-sm sm:text-base text-muted-foreground leading-relaxed">
               {t(
@@ -600,13 +602,13 @@ const PlatformReference = () => {
                   <div className={p.reverse ? "lg:[direction:ltr]" : ""}>
                     <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-[10px] sm:px-4 sm:py-1.5 sm:text-xs font-semibold tracking-widest text-muted-foreground uppercase">
                       <p.badgeIcon className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                      {p.badge}
+                      {t(p.badge)}
                     </div>
 
                     <h3 className="text-2xl font-bold leading-tight sm:text-4xl lg:text-5xl">
-                      {p.titleLine1}
+                      {t(p.titleLine1)}
                       <br />
-                      <span className={p.titleColor}>{p.titleLine2}</span>
+                      <span className={p.titleColor}>{t(p.titleLine2)}</span>
                     </h3>
 
                     <p className="mt-3 mb-6 text-sm sm:text-base text-muted-foreground leading-relaxed max-w-lg">{t(p.desc)}</p>
@@ -690,7 +692,7 @@ const PlatformReference = () => {
                         animation: "shimmer 3s linear infinite",
                       }}
                     >
-                      Also in the ecosystem
+                      {t("Also in the ecosystem")}
                     </span>
                     <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent opacity-60" />
                   </div>
