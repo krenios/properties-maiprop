@@ -77,6 +77,11 @@ const faqLd = {
 
 };
 
+const Tr = ({ text }: { text: string }) => {
+  const { t } = useTranslation();
+  return <>{t(text)}</>;
+};
+
 // ── Requirements data embedded in steps ─────────────────────────────────────
 const eligibilityCriteria = [
 "Non-EU / non-EEA national (any nationality)",
@@ -239,10 +244,6 @@ const whyUs = [
 // ── Step card with expandable "Learn more" ────────────────────────────────────
 type Phase = typeof phases[number];
 
-const Tr = ({ text }: { text: string }) => {
-  const { t } = useTranslation();
-  return <>{t(text)}</>;
-};
 
 const StepCard = ({ p, t }: {p: Phase;t: (s: string) => string;}) => {
   const [open, setOpen] = useState(false);
