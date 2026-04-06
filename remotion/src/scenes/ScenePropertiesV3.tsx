@@ -11,43 +11,6 @@ const properties = [
   { title: "Glyfada Villa", location: "Athens Riviera", price: "€750,000", beds: "4 Bed", size: "210m²", color: "#E8813A" },
 ];
 
-const PropertyCard = ({ p, index }: { p: typeof properties[0]; index: number }) => {
-  const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const delay = index * 12;
-  const s = spring({ frame: frame - delay, fps, config: { damping: 16, stiffness: 130 } });
-  const op = interpolate(frame, [delay, delay + 25], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const y = interpolate(s, [0, 1], [100, 0]);
-  const scale = interpolate(s, [0, 1], [0.92, 1]);
-
-  return (
-    <div style={{
-      opacity: op, transform: `translateY(${y}px) scale(${scale})`,
-      background: "linear-gradient(135deg, rgba(45,18,0,0.9), rgba(26,10,0,0.95))",
-      border: `1px solid ${p.color}33`, borderRadius: 16,
-      padding: "32px 30px", marginBottom: 24,
-    }}>
-      <div style={{
-        width: 40, height: 3, backgroundColor: p.color, marginBottom: 16, borderRadius: 2,
-      }} />
-      <div style={{ fontFamily: serif, fontSize: 34, color: "#FFF5E6", fontWeight: 700 }}>
-        {p.title}
-      </div>
-      <div style={{ fontFamily: sans, fontSize: 20, color: "#FFD9A0", fontWeight: 300, marginTop: 6 }}>
-        {p.location}
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 20, alignItems: "center" }}>
-        <div style={{ fontFamily: serif, fontSize: 36, color: p.color, fontWeight: 600 }}>
-          {p.price}
-        </div>
-        <div style={{ fontFamily: sans, fontSize: 18, color: "#FFD9A088" }}>
-          {p.beds} · {p.size}
-        </div>
-      </div>
-    </div>
-  );
-};
-
 export const ScenePropertiesV3 = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -61,21 +24,52 @@ export const ScenePropertiesV3 = () => {
     }}>
       <div style={{
         position: "absolute", inset: 0, display: "flex", flexDirection: "column",
-        justifyContent: "center", padding: "60px 50px",
+        justifyContent: "center", alignItems: "center", padding: "60px 50px",
       }}>
         <div style={{
           fontFamily: serif, fontSize: 48, fontWeight: 600, color: "#F5A623",
           textAlign: "center", opacity: headOp, transform: `translateY(${headY}px)`,
-          marginBottom: 50,
+          marginBottom: 50, width: "100%",
         }}>
           Featured Properties
         </div>
 
-        {properties.map((p, i) => (
-          <Sequence key={i} from={15}>
-            <PropertyCard p={p} index={i} />
-          </Sequence>
-        ))}
+        <div style={{ display: "flex", flexDirection: "column", gap: 20, width: "100%" }}>
+          {properties.map((p, i) => {
+            const delay = 20 + i * 22;
+            const s = spring({ frame: frame - delay, fps, config: { damping: 16, stiffness: 130 } });
+            const op = interpolate(frame, [delay, delay + 25], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+            const y = interpolate(s, [0, 1], [60, 0]);
+            const scale = interpolate(s, [0, 1], [0.95, 1]);
+
+            return (
+              <div key={i} style={{
+                opacity: op, transform: `translateY(${y}px) scale(${scale})`,
+                background: "linear-gradient(135deg, rgba(45,18,0,0.9), rgba(26,10,0,0.95))",
+                border: `1px solid ${p.color}33`, borderRadius: 16,
+                padding: "28px 28px",
+              }}>
+                <div style={{
+                  width: 40, height: 3, backgroundColor: p.color, marginBottom: 14, borderRadius: 2,
+                }} />
+                <div style={{ fontFamily: serif, fontSize: 32, color: "#FFF5E6", fontWeight: 700 }}>
+                  {p.title}
+                </div>
+                <div style={{ fontFamily: sans, fontSize: 20, color: "#FFD9A0", fontWeight: 300, marginTop: 4 }}>
+                  {p.location}
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16, alignItems: "center" }}>
+                  <div style={{ fontFamily: serif, fontSize: 34, color: p.color, fontWeight: 600 }}>
+                    {p.price}
+                  </div>
+                  <div style={{ fontFamily: sans, fontSize: 18, color: "#FFD9A088" }}>
+                    {p.beds} · {p.size}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </AbsoluteFill>
   );
