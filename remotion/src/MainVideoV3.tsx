@@ -8,6 +8,7 @@ import { SceneBenefitsV3 } from "./scenes/SceneBenefitsV3";
 import { ScenePropertiesV3 } from "./scenes/ScenePropertiesV3";
 import { SceneStatsV3 } from "./scenes/SceneStatsV3";
 import { SceneCTAV3 } from "./scenes/SceneCTAV3";
+import { CaptionsOverlay } from "./components/CaptionsOverlay";
 
 export const MainVideoV3 = () => {
   const t = springTiming({ config: { damping: 200 }, durationInFrames: 20 });
@@ -35,6 +36,8 @@ export const MainVideoV3 = () => {
           <SceneCTAV3 />
         </TransitionSeries.Sequence>
       </TransitionSeries>
+      {/* Captions overlay on top of everything */}
+      <CaptionsOverlay />
     </AbsoluteFill>
   );
 };

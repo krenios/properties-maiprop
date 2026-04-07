@@ -7,28 +7,31 @@ const { fontFamily: sans } = loadRaleway("normal", { weights: ["300", "400"], su
 
 const properties = [
   {
-    title: "Plaka Residence",
-    location: "Athens Historic Center",
-    price: "€285,000",
-    beds: "2 Bed", size: "78m²",
+    title: "Ideal Investment in a Historical Building",
+    location: "Thessaloniki",
+    price: "€325,000",
+    beds: "2 Bed", size: "75m²",
     color: "#D4622B",
-    opportunity: "Golden Visa eligible · 6.2% rental yield",
+    opportunity: "Golden Visa eligible · 3.5% rental yield",
+    tags: ["Neoclassical", "Ready"],
   },
   {
-    title: "Kolonaki Penthouse",
-    location: "Athens Premium District",
-    price: "€520,000",
-    beds: "3 Bed", size: "125m²",
+    title: "Family House in West Athens",
+    location: "Agioi Anargiroi",
+    price: "€340,000",
+    beds: "3 Bed", size: "102m²",
     color: "#F5A623",
-    opportunity: "Prime location · 18% capital appreciation",
+    opportunity: "Under Construction · 4% rental yield",
+    tags: ["Balcony", "Parking"],
   },
   {
-    title: "Glyfada Villa",
-    location: "Athens Riviera",
-    price: "€750,000",
-    beds: "4 Bed", size: "210m²",
+    title: "Coastline Apartment",
+    location: "Glyfada, Athens Riviera",
+    price: "€360,000",
+    beds: "1 Bed", size: "49m²",
     color: "#E8813A",
-    opportunity: "Beachfront living · Residency for whole family",
+    opportunity: "Beachfront living · 4.2% rental yield",
+    tags: ["Terrace", "Ready"],
   },
 ];
 
@@ -63,7 +66,6 @@ export const ScenePropertiesV3 = () => {
             const y = interpolate(s, [0, 1], [60, 0]);
             const scale = interpolate(s, [0, 1], [0.95, 1]);
 
-            // Opportunity tag fades in after the card
             const tagDelay = delay + 18;
             const tagOp = interpolate(frame, [tagDelay, tagDelay + 20], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
@@ -78,19 +80,34 @@ export const ScenePropertiesV3 = () => {
                   width: 40, height: 3, backgroundColor: p.color, marginBottom: 12, borderRadius: 2,
                 }} />
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                  <div style={{ fontFamily: serif, fontSize: 30, color: "#FFF5E6", fontWeight: 700 }}>
+                  <div style={{ fontFamily: serif, fontSize: 28, color: "#FFF5E6", fontWeight: 700, flex: 1, marginRight: 12 }}>
                     {p.title}
                   </div>
-                  <div style={{ fontFamily: serif, fontSize: 30, color: p.color, fontWeight: 600 }}>
+                  <div style={{ fontFamily: serif, fontSize: 28, color: p.color, fontWeight: 600, whiteSpace: "nowrap" }}>
                     {p.price}
                   </div>
                 </div>
-                <div style={{ fontFamily: sans, fontSize: 18, color: "#FFD9A0", fontWeight: 300, marginTop: 2 }}>
+                <div style={{ fontFamily: sans, fontSize: 17, color: "#FFD9A0", fontWeight: 300, marginTop: 2 }}>
                   {p.location} · {p.beds} · {p.size}
+                </div>
+                {/* Tags row */}
+                <div style={{
+                  marginTop: 10, display: "flex", gap: 8, opacity: tagOp, flexWrap: "wrap",
+                }}>
+                  {p.tags.map((tag, ti) => (
+                    <div key={ti} style={{
+                      fontFamily: sans, fontSize: 14, fontWeight: 400,
+                      color: "#FFE8C8", backgroundColor: `${p.color}22`,
+                      border: `1px solid ${p.color}44`,
+                      borderRadius: 20, padding: "3px 14px",
+                    }}>
+                      {tag}
+                    </div>
+                  ))}
                 </div>
                 {/* Opportunity tag */}
                 <div style={{
-                  marginTop: 12, opacity: tagOp,
+                  marginTop: 10, opacity: tagOp,
                   display: "flex", alignItems: "center", gap: 8,
                 }}>
                   <div style={{
