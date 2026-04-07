@@ -6,10 +6,12 @@
       "name": "remotion",
       "dependencies": {
         "@remotion/bundler": "^4.0.441",
+        "@remotion/captions": "^4.0.446",
         "@remotion/cli": "^4.0.441",
         "@remotion/compositor-linux-x64-musl": "^4.0.441",
         "@remotion/fonts": "^4.0.441",
         "@remotion/google-fonts": "^4.0.441",
+        "@remotion/install-whisper-cpp": "^4.0.446",
         "@remotion/player": "^4.0.441",
         "@remotion/renderer": "^4.0.441",
         "@remotion/transitions": "^4.0.441",
@@ -120,6 +122,8 @@
 
     "@remotion/bundler": ["@remotion/bundler@4.0.441", "https://europe-west4-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@remotion/bundler/-/bundler-4.0.441.tgz", { "dependencies": { "@remotion/media-parser": "4.0.441", "@remotion/studio": "4.0.441", "@remotion/studio-shared": "4.0.441", "@rspack/core": "1.7.6", "@rspack/plugin-react-refresh": "1.6.1", "esbuild": "0.25.0", "loader-utils": "2.0.2", "postcss": "8.5.1", "postcss-value-parser": "4.2.0", "react-refresh": "0.18.0", "remotion": "4.0.441", "source-map": "0.7.3", "style-loader": "4.0.0", "webpack": "5.105.0" }, "peerDependencies": { "react": ">=16.8.0", "react-dom": ">=16.8.0" } }, "sha512-DLNPHeo4FH/nUyr34N6LcxQGzmBpfb1kx5DJz9XIMPYcE6scenV0DwxV2JTK0s1Ln3OFGvK5sQlm6NlPohvTkw=="],
 
+    "@remotion/captions": ["@remotion/captions@4.0.446", "https://europe-west1-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@remotion/captions/-/captions-4.0.446.tgz", {}, "sha512-LvocqWybRZOYGnxvg8Ch6+qwKZFl42BTdstFxzO2k1pmuglpTPLDp+4yMKtduAfjcA4x1wFUQhKYboPdnAjEIg=="],
+
     "@remotion/cli": ["@remotion/cli@4.0.441", "https://europe-west4-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@remotion/cli/-/cli-4.0.441.tgz", { "dependencies": { "@remotion/bundler": "4.0.441", "@remotion/media-utils": "4.0.441", "@remotion/player": "4.0.441", "@remotion/renderer": "4.0.441", "@remotion/studio": "4.0.441", "@remotion/studio-server": "4.0.441", "@remotion/studio-shared": "4.0.441", "dotenv": "17.3.1", "minimist": "1.2.6", "prompts": "2.4.2", "remotion": "4.0.441" }, "peerDependencies": { "react": ">=16.8.0", "react-dom": ">=16.8.0" }, "bin": { "remotion": "remotion-cli.js", "remotionb": "remotionb-cli.js", "remotiond": "remotiond-cli.js" } }, "sha512-qCXJVJFYDPnSoLQ+xNOTN7XcJZxCBO+6BjZatGGBCRnHOx4F3NjclSn/KVcjTVRsHiVK3t1GYWRKeXkX0k3btA=="],
 
     "@remotion/compositor-darwin-arm64": ["@remotion/compositor-darwin-arm64@4.0.441", "https://europe-west4-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@remotion/compositor-darwin-arm64/-/compositor-darwin-arm64-4.0.441.tgz", { "os": "darwin", "cpu": "arm64" }, "sha512-ysfrwyQgH42n3lahMUgge6p8L+8U5bsbqTztBsD7uSBV9h0sIeyaFw1M0tMWRPcDzg6PzazFNvSTfZlCMOGJWA=="],
@@ -139,6 +143,8 @@
     "@remotion/fonts": ["@remotion/fonts@4.0.441", "https://europe-west4-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@remotion/fonts/-/fonts-4.0.441.tgz", { "dependencies": { "remotion": "4.0.441" } }, "sha512-L1oFmyF0cfYhzLs4qYTvXhcjA5rdwRoq/orjHLM6hScVljTPsxBypTz/sqZKlNXU+XHYOdoTSnz8DRvY42cj8g=="],
 
     "@remotion/google-fonts": ["@remotion/google-fonts@4.0.441", "https://europe-west4-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@remotion/google-fonts/-/google-fonts-4.0.441.tgz", { "dependencies": { "remotion": "4.0.441" } }, "sha512-io8HCdm+38g7QrbCs9Jww608HRBJpwv9Fy5T+9Itzt1QNSiKVHHZs/PrRoP/6Ljqn5XGLTI2QrDblUXTbDLytQ=="],
+
+    "@remotion/install-whisper-cpp": ["@remotion/install-whisper-cpp@4.0.446", "https://europe-west1-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@remotion/install-whisper-cpp/-/install-whisper-cpp-4.0.446.tgz", { "dependencies": { "@remotion/captions": "4.0.446" } }, "sha512-KxELrOsDyvqAgSTZ/cunbqiIeaOqXCQMGDyRnUqpGvTZ19ZWxfKHG+s4PTBf9OiUjvCzoSeF+fCp1r+O5DPgRg=="],
 
     "@remotion/licensing": ["@remotion/licensing@4.0.441", "https://europe-west4-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@remotion/licensing/-/licensing-4.0.441.tgz", {}, "sha512-wXeqlXVy9Cstv7m2DR5OPsVCj14nKTNx5/JO/pFoPRi4P5KVE2U9pb2P5Jk4WVKvKWbQTk2fbL+lkOM8vyXXNQ=="],
 
