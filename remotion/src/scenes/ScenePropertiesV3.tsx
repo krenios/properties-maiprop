@@ -13,7 +13,7 @@ const properties = [
     beds: "2 Bed", size: "75m²",
     color: "#D4622B",
     opportunity: "Golden Visa eligible · 3.5% rental yield",
-    tags: ["Neoclassical", "Ready"],
+    tags: ["Neoclassical", "Balcony"],
   },
   {
     title: "Family House in West Athens",
