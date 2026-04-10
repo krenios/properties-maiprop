@@ -2,6 +2,7 @@ import { Composition } from "remotion";
 import { MainVideo } from "./MainVideo";
 import { MainVideoV2 } from "./MainVideoV2";
 import { MainVideoV3 } from "./MainVideoV3";
+import { MainVideoV4 } from "./MainVideoV4";
 
 export const RemotionRoot = () => (
   <>
@@ -25,6 +26,14 @@ export const RemotionRoot = () => (
       id="main-v3"
       component={MainVideoV3}
       durationInFrames={900}
+      fps={30}
+      width={1080}
+      height={1920}
+    />
+    <Composition
+      id="main-v4"
+      component={MainVideoV4}
+      durationInFrames={840}
       fps={30}
       width={1080}
       height={1920}
