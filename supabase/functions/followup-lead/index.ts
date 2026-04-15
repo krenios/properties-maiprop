@@ -13,6 +13,8 @@ function escapeHtml(text: string): string {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
+const CALENDLY_URL = "https://calendly.com/maipropos/consultation";
+
 function brandWrap(innerHtml: string, ctaText: string, ctaHref: string): string {
   return `
 <!DOCTYPE html>
@@ -22,7 +24,7 @@ function brandWrap(innerHtml: string, ctaText: string, ctaHref: string): string 
   <div style="max-width:520px;margin:0 auto;padding:0;">
     <!-- Header -->
     <div style="background:#000014;padding:28px 0;text-align:center;border-radius:8px 8px 0 0;">
-      <img src="${LOGO_URL}" alt="mAI Prop" width="140" style="display:block;margin:0 auto;" />
+      <img src="${LOGO_URL}" alt="mAI Prop" width="180" style="display:block;margin:0 auto;" />
     </div>
 
     <!-- Body -->
@@ -32,17 +34,17 @@ function brandWrap(innerHtml: string, ctaText: string, ctaHref: string): string 
 
     <!-- CTA -->
     <div style="text-align:center;padding:30px 0;">
-      <a href="${ctaHref}" style="display:inline-block;background:#4ef5f1;color:#000014;font-weight:600;font-size:15px;padding:14px 28px;border-radius:8px;text-decoration:none;">
+      <a href="${ctaHref}" style="display:inline-block;background:#4ef5f1;color:#000014;font-weight:700;font-size:16px;padding:16px 32px;border-radius:8px;text-decoration:none;letter-spacing:0.3px;">
         ${ctaText}
       </a>
     </div>
 
     <!-- Footer -->
     <div style="text-align:center;padding:0 0 20px;">
-      <p style="margin:0 0 8px;font-size:12px;color:#888;">
+      <p style="margin:0 0 8px;font-size:13px;color:#777;">
         You received this because you submitted an inquiry on our platform.
       </p>
-      <p style="margin:0;font-size:12px;color:#666;">
+      <p style="margin:0;font-size:13px;color:#666;">
         © ${new Date().getFullYear()} mAI Prop · <a href="${SITE_URL}" style="color:#8755f2;text-decoration:none;">properties.maiprop.co</a>
       </p>
     </div>
@@ -84,10 +86,10 @@ function textToHtml(text: string): string {
     .map((line) => {
       const trimmed = line.trim();
       if (trimmed.startsWith("•")) {
-        return `<div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
+        return `<div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
       }
       if (!trimmed) return "<br/>";
-      return `<p style="margin:0 0 10px;color:#3d3529;font-size:15px;line-height:1.7;">${trimmed}</p>`;
+      return `<p style="margin:0 0 12px;color:#2a2318;font-size:16px;line-height:1.75;">${trimmed}</p>`;
     })
     .join("");
 }
