@@ -243,14 +243,14 @@ Do NOT use markdown or bullet lists. Plain text only. Keep it professional and w
                 .map((line: string) => {
                   const trimmed = line.trim();
                   if (!trimmed) return "<br/>";
-                  return `<p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">${trimmed}</p>`;
+                  return `<p style="margin:0 0 10px;color:#3d3529;font-size:15px;line-height:1.7;">${trimmed}</p>`;
                 })
                 .join("");
               // Insert property cards IN THE MIDDLE — after the AI intro text, before the CTA
               const fullContent =
                 htmlContent +
                 (propertyCardsHtml
-                  ? `<div style="margin-top:20px;border-top:1px solid #1a1e3a;padding-top:16px;"><p style="margin:0 0 10px;color:#4ef5f1;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Properties Selected For You</p>${propertyCardsHtml}</div>`
+                  ? `<div style="margin-top:20px;border-top:1px solid #e0d8cc;padding-top:16px;"><p style="margin:0 0 10px;color:#0a0e2a;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Properties Selected For You</p>${propertyCardsHtml}</div>`
                   : "");
               subject = `${firstName}, we have properties matching your criteria — mAI Prop`;
               htmlBody = brandWrap(fullContent);
@@ -264,11 +264,11 @@ Do NOT use markdown or bullet lists. Plain text only. Keep it professional and w
       // Fallback if AI failed
       if (!htmlBody!) {
         const fallback = `
-          <p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">Hi ${firstName},</p>
-          <p style="margin:0 0 12px;color:#e0fafa;font-size:15px;line-height:1.6;">We've reviewed your profile and found some exciting opportunities that align with your investment goals. We currently have visa-eligible apartments and villas starting from €250,000 in prime Athens locations, offering strong rental yields and full renovation potential.</p>
-          <p style="margin:0 0 12px;color:#e0fafa;font-size:15px;line-height:1.6;">Our team provides end-to-end support — from legal assistance and property verification to renovation and rental management — so you can invest with complete confidence.</p>
-          <p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">We'd love to schedule a quick call to walk you through the options. Let us know a time that works for you.</p>
-          <p style="margin:0;color:#e0fafa;font-size:15px;line-height:1.6;">Warm regards,<br/>The mAI Prop Team</p>
+          <p style="margin:0 0 10px;color:#3d3529;font-size:15px;line-height:1.7;">Hi ${firstName},</p>
+          <p style="margin:0 0 12px;color:#3d3529;font-size:15px;line-height:1.7;">We've reviewed your profile and found some exciting opportunities that align with your investment goals. We currently have visa-eligible apartments and villas starting from €250,000 in prime Athens locations, offering strong rental yields and full renovation potential.</p>
+          <p style="margin:0 0 12px;color:#3d3529;font-size:15px;line-height:1.7;">Our team provides end-to-end support — from legal assistance and property verification to renovation and rental management — so you can invest with complete confidence.</p>
+          <p style="margin:0 0 10px;color:#3d3529;font-size:15px;line-height:1.7;">We'd love to schedule a quick call to walk you through the options. Let us know a time that works for you.</p>
+          <p style="margin:0;color:#3d3529;font-size:15px;line-height:1.7;">Warm regards,<br/>The mAI Prop Team</p>
         `;
         subject = `${firstName}, we have properties matching your criteria — mAI Prop`;
         htmlBody = brandWrap(fallback);
