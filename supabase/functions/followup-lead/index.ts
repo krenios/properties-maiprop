@@ -367,12 +367,12 @@ Deno.serve(async (req) => {
       result = {
         subject: `${firstName}, an update from mAI Prop`,
         body: brandWrap(
-          `<p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">Hi ${firstName},</p>
-           <p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">We wanted to follow up on your Golden Visa inquiry. Our team has curated a selection of properties that match your investment profile.</p>
-           <p style="margin:0;color:#e0fafa;font-size:15px;line-height:1.6;">We'd love to schedule a call — reply to this email or visit our website.</p>
-           <p style="margin:12px 0 0;color:#e0fafa;font-size:15px;">Warm regards,<br/>The mAI Prop Team</p>`,
-          "Browse Our Portfolio →",
-          `${SITE_URL}/#opportunities`
+          `<p style="margin:0 0 12px;color:#2a2318;font-size:16px;line-height:1.75;">Hi ${firstName},</p>
+           <p style="margin:0 0 12px;color:#2a2318;font-size:16px;line-height:1.75;">We wanted to follow up on your Golden Visa inquiry. Our team has curated a selection of properties that match your investment profile.</p>
+           <p style="margin:0 0 12px;color:#2a2318;font-size:16px;line-height:1.75;">We'd love to schedule a quick call to walk you through the options — book a free consultation at your convenience.</p>
+           <p style="margin:12px 0 0;color:#2a2318;font-size:16px;line-height:1.75;">Warm regards,<br/>The mAI Prop Team</p>`,
+          "Book Your Free Consultation →",
+          CALENDLY_URL
         ),
       };
     }
