@@ -12,6 +12,8 @@ function escapeHtml(text: string): string {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
+const CALENDLY_URL = "https://calendly.com/maipropos/consultation";
+
 function brandWrap(innerHtml: string): string {
   return `
 <!DOCTYPE html>
@@ -31,17 +33,17 @@ function brandWrap(innerHtml: string): string {
 
     <!-- CTA -->
     <div style="text-align:center;padding:30px 0;">
-      <a href="${SITE_URL}/#opportunities" style="display:inline-block;background:#4ef5f1;color:#000014;font-weight:600;font-size:15px;padding:14px 28px;border-radius:8px;text-decoration:none;">
-        Browse Our Portfolio →
+      <a href="${CALENDLY_URL}" style="display:inline-block;background:#4ef5f1;color:#000014;font-weight:700;font-size:16px;padding:16px 32px;border-radius:8px;text-decoration:none;letter-spacing:0.3px;">
+        Book Your Free Consultation →
       </a>
     </div>
 
     <!-- Footer -->
     <div style="text-align:center;padding:0 0 20px;">
-      <p style="margin:0 0 8px;font-size:12px;color:#888;">
+      <p style="margin:0 0 8px;font-size:13px;color:#777;">
         You received this because you submitted an inquiry on our platform.
       </p>
-      <p style="margin:0;font-size:12px;color:#666;">
+      <p style="margin:0;font-size:13px;color:#666;">
         © ${new Date().getFullYear()} mAI Prop · <a href="${SITE_URL}" style="color:#8755f2;text-decoration:none;">properties.maiprop.co</a>
       </p>
     </div>
@@ -61,22 +63,22 @@ async function generateLeadEmail(lead: any): Promise<{ subject: string; body: st
   }
 
   try {
-    const prompt = `You are mAI Prop's investment assistant. Write a SHORT welcome email (max 8 lines total) for a new Golden Visa lead.
+    const prompt = `You are mAI Prop's investment assistant. Write a SHORT welcome email (max 10 lines total) for a new Golden Visa lead. The PRIMARY goal is to get them to book a free consultation.
 
 Lead: ${escapeHtml(lead.full_name)}, ${escapeHtml(lead.nationality)}, budget €${Number(lead.investment_budget).toLocaleString()}, prefers ${escapeHtml(lead.preferred_location || "Greece")}, interested in ${escapeHtml(lead.property_type || "properties")}, timeline: ${escapeHtml(lead.investment_timeline || "flexible")}.
 
 Format rules — follow EXACTLY:
 1. One greeting line addressing them by first name (e.g. "Hi Kostis,")
-2. One sentence acknowledging their interest
-3. A bullet list (3-4 bullets) of what we offer, focusing on our property inventory:
-   • Visa-eligible apartments from €250K
-   • Pre-verified properties in Athens & Thessaloniki  
-   • Full legal, renovation & rental management
-   • 3%+ annual returns with proven track record
-4. One closing sentence: advisor will reach out within 24 hours
-5. Sign off: "The mAI Prop Team"
+2. One sentence acknowledging their interest and inviting them to a free consultation
+3. A short line: "Here are 3 opportunities we've selected for you:"
+4. A bullet list of exactly 3 property opportunities:
+   • Ideal Investment in a Historical Building, Thessaloniki — €325,000 · 3.5% yield
+   • Family House in Agioi Anargiroi, Athens — €370,000 · Golden Visa eligible
+   • Coastline Apartment in Glyfada, Athens — €320,000 · Premium coastal location
+5. One closing sentence: "Book a free consultation to discuss these and more — our advisor will walk you through the best options for your goals."
+6. Sign off: "The mAI Prop Team"
 
-Use bullet character • for list items. Do NOT use markdown. Plain text only. Keep it punchy.`;
+Use bullet character • for list items. Do NOT use markdown. Plain text only. Keep it punchy and consultation-focused.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -115,10 +117,10 @@ Use bullet character • for list items. Do NOT use markdown. Plain text only. K
       .map((line) => {
         const trimmed = line.trim();
         if (trimmed.startsWith("•")) {
-          return `<div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
+          return `<div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
         }
         if (!trimmed) return "<br/>";
-        return `<p style="margin:0 0 10px;color:#3d3529;font-size:15px;line-height:1.7;">${trimmed}</p>`;
+        return `<p style="margin:0 0 12px;color:#2a2318;font-size:16px;line-height:1.75;">${trimmed}</p>`;
       })
       .join("");
 
@@ -135,14 +137,14 @@ Use bullet character • for list items. Do NOT use markdown. Plain text only. K
 function getFallbackInnerHtml(lead: any): string {
   const firstName = escapeHtml(lead.full_name.split(" ")[0]);
   return `
-    <p style="margin:0 0 10px;color:#3d3529;font-size:15px;line-height:1.7;">Hi ${firstName},</p>
-    <p style="margin:0 0 12px;color:#3d3529;font-size:15px;line-height:1.7;">Thank you for your interest in the Greek Golden Visa. Here's what we have ready for you:</p>
-    <div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>Visa-eligible apartments & villas from €250K</div>
-    <div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>Pre-verified properties in Athens, Thessaloniki & the islands</div>
-    <div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>Full legal, renovation & rental management</div>
-    <div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>4%+ annual returns with a proven track record</div>
-    <p style="margin:12px 0 10px;color:#3d3529;font-size:15px;line-height:1.7;">A dedicated advisor will reach out within 24 hours.</p>
-    <p style="margin:0;color:#3d3529;font-size:15px;line-height:1.7;">Warm regards,<br/>The mAI Prop Team</p>
+    <p style="margin:0 0 12px;color:#2a2318;font-size:16px;line-height:1.75;">Hi ${firstName},</p>
+    <p style="margin:0 0 14px;color:#2a2318;font-size:16px;line-height:1.75;">Thank you for your interest in the Greek Golden Visa. We'd love to walk you through the best investment options in a <strong>free consultation</strong>.</p>
+    <p style="margin:0 0 10px;color:#2a2318;font-size:16px;line-height:1.75;font-weight:600;">Here are 3 opportunities we've selected for you:</p>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>Historical Building, Thessaloniki</strong> — €325,000 · 3.5% rental yield</div>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>Family House, Agioi Anargiroi</strong> — €370,000 · Golden Visa eligible</div>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>Coastline Apartment, Glyfada</strong> — €320,000 · Premium coastal location</div>
+    <p style="margin:14px 0 10px;color:#2a2318;font-size:16px;line-height:1.75;">Book a free consultation to discuss these and more — our advisor will walk you through the best options for your goals.</p>
+    <p style="margin:0;color:#2a2318;font-size:16px;line-height:1.75;">Warm regards,<br/>The mAI Prop Team</p>
   `;
 }
 
