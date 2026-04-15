@@ -13,6 +13,8 @@ function escapeHtml(text: string): string {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
+const CALENDLY_URL = "https://calendly.com/maipropos/consultation";
+
 function brandWrap(innerHtml: string, ctaText: string, ctaHref: string): string {
   return `
 <!DOCTYPE html>
@@ -22,7 +24,7 @@ function brandWrap(innerHtml: string, ctaText: string, ctaHref: string): string 
   <div style="max-width:520px;margin:0 auto;padding:0;">
     <!-- Header -->
     <div style="background:#000014;padding:28px 0;text-align:center;border-radius:8px 8px 0 0;">
-      <img src="${LOGO_URL}" alt="mAI Prop" width="140" style="display:block;margin:0 auto;" />
+      <img src="${LOGO_URL}" alt="mAI Prop" width="180" style="display:block;margin:0 auto;" />
     </div>
 
     <!-- Body -->
@@ -32,17 +34,17 @@ function brandWrap(innerHtml: string, ctaText: string, ctaHref: string): string 
 
     <!-- CTA -->
     <div style="text-align:center;padding:30px 0;">
-      <a href="${ctaHref}" style="display:inline-block;background:#4ef5f1;color:#000014;font-weight:600;font-size:15px;padding:14px 28px;border-radius:8px;text-decoration:none;">
+      <a href="${ctaHref}" style="display:inline-block;background:#4ef5f1;color:#000014;font-weight:700;font-size:16px;padding:16px 32px;border-radius:8px;text-decoration:none;letter-spacing:0.3px;">
         ${ctaText}
       </a>
     </div>
 
     <!-- Footer -->
     <div style="text-align:center;padding:0 0 20px;">
-      <p style="margin:0 0 8px;font-size:12px;color:#888;">
+      <p style="margin:0 0 8px;font-size:13px;color:#777;">
         You received this because you submitted an inquiry on our platform.
       </p>
-      <p style="margin:0;font-size:12px;color:#666;">
+      <p style="margin:0;font-size:13px;color:#666;">
         © ${new Date().getFullYear()} mAI Prop · <a href="${SITE_URL}" style="color:#8755f2;text-decoration:none;">properties.maiprop.co</a>
       </p>
     </div>
@@ -84,10 +86,10 @@ function textToHtml(text: string): string {
     .map((line) => {
       const trimmed = line.trim();
       if (trimmed.startsWith("•")) {
-        return `<div style="padding:4px 0 4px 16px;position:relative;color:#3d3529;font-size:15px;line-height:1.7;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
+        return `<div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>${trimmed.slice(1).trim()}</div>`;
       }
       if (!trimmed) return "<br/>";
-      return `<p style="margin:0 0 10px;color:#3d3529;font-size:15px;line-height:1.7;">${trimmed}</p>`;
+      return `<p style="margin:0 0 12px;color:#2a2318;font-size:16px;line-height:1.75;">${trimmed}</p>`;
     })
     .join("");
 }
@@ -170,147 +172,118 @@ Do NOT use markdown. Plain text only. Sign off: "The mAI Prop Team"`;
   };
 }
 
-// Step 2: Extensive property details with more info
+// Step 2: Consultation-focused with property highlights
 async function generateStep2(lead: any, supabase: any, LOVABLE_API_KEY: string) {
-  const budget = Number(lead.investment_budget) || 250000;
-  const location = (lead.preferred_location || "").toLowerCase();
-
-  const { data: props } = await supabase
-    .from("properties")
-    .select("id, title, location, price, size, bedrooms, yield, project_type, images, description, floor, construction_year")
-    .eq("status", "available")
-    .lte("price", budget * 1.5)
-    .order("price", { ascending: true })
-    .limit(3);
-
-  const topProps = props || [];
-
-  // Build detailed property cards with more info
-  const detailedCardsHtml = topProps.map((p: any) => {
-    const img = (p.images || [])[0] || "";
-    const link = `${SITE_URL}/#property-${p.id}`;
-    const priceStr = p.price ? `€${Number(p.price).toLocaleString()}` : "";
-    const details = [
-      p.size ? `${p.size}m²` : "",
-      p.bedrooms ? `${p.bedrooms} bedroom${p.bedrooms > 1 ? "s" : ""}` : "",
-      p.floor ? `Floor ${p.floor}` : "",
-      p.yield ? `Yield: ${p.yield}` : "",
-      p.construction_year ? `Built: ${p.construction_year}` : "",
-    ].filter(Boolean).join(" · ");
-
-    return `
-    <a href="${link}" style="display:block;text-decoration:none;margin:14px 0;border-radius:8px;overflow:hidden;border:1px solid #1a1e3a;">
-      ${img ? `<img src="${img}" alt="${escapeHtml(p.title)}" width="460" style="display:block;width:100%;max-height:200px;object-fit:cover;" />` : ""}
-      <div style="padding:16px 18px;background:#0f1340;">
-        <p style="margin:0 0 6px;color:#4ef5f1;font-size:16px;font-weight:600;">${escapeHtml(p.title)}</p>
-        <p style="margin:0 0 6px;color:#e0fafa;font-size:14px;">${escapeHtml(p.location)} ${priceStr ? `— ${priceStr}` : ""}</p>
-        <p style="margin:0 0 8px;color:#a0b0c0;font-size:12px;">${details}</p>
-        ${p.description ? `<p style="margin:0;color:#c0d0e0;font-size:13px;line-height:1.5;">${escapeHtml(p.description).substring(0, 150)}…</p>` : ""}
-      </div>
-    </a>`;
-  }).join("");
-
+  const firstName = escapeHtml(lead.full_name.split(" ")[0]);
   const budgetStr = `€${Number(lead.investment_budget).toLocaleString()}`;
-  const prompt = `You are mAI Prop's senior investment advisor. Write a personalized follow-up email (max 10 lines) for a Golden Visa lead.
+
+  const prompt = `You are mAI Prop's investment advisor. Write a SHORT follow-up email (max 10 lines total) to a Golden Visa lead. The PRIMARY goal is to get them to book a free consultation.
 
 Lead: ${escapeHtml(lead.full_name)}, ${escapeHtml(lead.nationality)}, budget ${budgetStr}, prefers ${escapeHtml(lead.preferred_location || "Greece")}.
 
-CRITICAL: Make the entire email a ${budgetStr} investment breakdown:
-- Open with: "We've analysed what ${budgetStr} can achieve in the Greek property market"
-- Break down how their budget maps to: property acquisition, renovation costs, legal fees, and expected returns
-- Mention specific ROI projections for the ${budgetStr} range (e.g. rental yield %, capital appreciation)
-- If budget ≥€250k: emphasise Golden Visa + passive income combo at this tier
-- If budget <€250k: focus on high-yield renovation projects and rental returns
-- Mention our end-to-end service covers everything within their budget
-- Invite them for a video call to walk through the ${budgetStr} investment plan
+Format rules — follow EXACTLY:
+1. One greeting line addressing them by first name
+2. One sentence: "We've been reviewing opportunities in the ${budgetStr} range and have updates for you."
+3. A short line: "Here are 3 opportunities matched to your profile:"
+4. A bullet list of exactly 3 property opportunities:
+   • Ideal Investment in a Historical Building, Thessaloniki — €325,000 · 3.5% yield
+   • Family House in Agioi Anargiroi, Athens — €370,000 · Golden Visa eligible
+   • Coastline Apartment in Glyfada, Athens — €320,000 · Premium coastal location
+5. One sentence about why a consultation would help: "In a 15-minute call, we'll walk you through the numbers, rental projections, and visa timeline for these properties."
+6. Sign off: "The mAI Prop Team"
 
-Do NOT list specific property details. Detailed property cards appear below.
-Do NOT use markdown. Plain text only. Sign off: "The mAI Prop Team"`;
+Use bullet character • for list items. Do NOT use markdown. Plain text only. Keep it consultation-focused.`;
 
   const aiText = await callAI(LOVABLE_API_KEY, prompt);
-  const htmlContent = textToHtml(aiText);
-  const firstName = escapeHtml(lead.full_name.split(" ")[0]);
 
-  const fullContent = htmlContent +
-    (detailedCardsHtml ? `<div style="margin-top:20px;border-top:1px solid #e0d8cc;padding-top:16px;"><p style="margin:0 0 10px;color:#0a0e2a;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">📋 Your Detailed Property Portfolio</p>${detailedCardsHtml}</div>` : "");
+  if (aiText) {
+    const htmlContent = textToHtml(aiText);
+    return {
+      subject: `${firstName}, we've matched 3 properties to your profile — let's talk`,
+      body: brandWrap(htmlContent, "Book Your Free Consultation →", CALENDLY_URL),
+    };
+  }
 
+  // Fallback
   return {
-    subject: `${firstName}, your personalized investment portfolio — mAI Prop`,
-    body: brandWrap(fullContent, "Schedule a Video Call →", "https://calendly.com/maipropos/consultation"),
+    subject: `${firstName}, we've matched 3 properties to your profile — let's talk`,
+    body: brandWrap(getStep2FallbackHtml(lead), "Book Your Free Consultation →", CALENDLY_URL),
   };
 }
 
-// Step 3: Golden Visa benefits deep dive
+function getStep2FallbackHtml(lead: any): string {
+  const firstName = escapeHtml(lead.full_name.split(" ")[0]);
+  return `
+    <p style="margin:0 0 12px;color:#2a2318;font-size:16px;line-height:1.75;">Hi ${firstName},</p>
+    <p style="margin:0 0 14px;color:#2a2318;font-size:16px;line-height:1.75;">We've been reviewing opportunities in your budget range and have updates we'd love to share in a <strong>free consultation</strong>.</p>
+    <p style="margin:0 0 10px;color:#2a2318;font-size:16px;line-height:1.75;font-weight:600;">Here are 3 opportunities matched to your profile:</p>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>Historical Building, Thessaloniki</strong> — €325,000 · 3.5% rental yield</div>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>Family House, Agioi Anargiroi</strong> — €370,000 · Golden Visa eligible</div>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>Coastline Apartment, Glyfada</strong> — €320,000 · Premium coastal location</div>
+    <p style="margin:14px 0 10px;color:#2a2318;font-size:16px;line-height:1.75;">In a 15-minute call, we'll walk you through the numbers, rental projections, and visa timeline for these properties.</p>
+    <p style="margin:0;color:#2a2318;font-size:16px;line-height:1.75;">Warm regards,<br/>The mAI Prop Team</p>
+  `;
+}
+
+// Step 3: Final push — urgency + consultation booking
 async function generateStep3(lead: any, supabase: any, LOVABLE_API_KEY: string) {
   const firstName = escapeHtml(lead.full_name.split(" ")[0]);
-
   const budgetStr = `€${Number(lead.investment_budget).toLocaleString()}`;
-  const prompt = `You are mAI Prop's Golden Visa specialist. Write a compelling email (max 12 lines) about the Greek Golden Visa benefits for a lead who hasn't converted yet.
+
+  const prompt = `You are mAI Prop's senior Golden Visa advisor. Write a SHORT final follow-up email (max 10 lines total) for a lead who hasn't booked a consultation yet. The PRIMARY goal is to get them to book NOW.
 
 Lead: ${escapeHtml(lead.full_name)}, ${escapeHtml(lead.nationality)}, budget ${budgetStr}.
 
-CRITICAL: Frame every benefit through the lens of their ${budgetStr} budget:
-Cover these benefits with bullet points (use • character), tying each to their budget:
-• EU Residency — at ${budgetStr}, they qualify for full Schengen access across 27 countries
-• Family Inclusion — their ${budgetStr} investment covers the whole family (spouse, children, parents)
-• Strong Returns — at this price point, expect X% rental yield + capital appreciation
-• Fast Processing — from signing to residency in 6-9 months
-• No Minimum Stay — earn returns on their ${budgetStr} property without relocating
+Format rules — follow EXACTLY:
+1. One greeting line addressing them by first name
+2. One sentence creating gentle urgency: the Golden Visa threshold may increase and their ${budgetStr} budget qualifies now
+3. A short line: "Quick reminder of opportunities still available for you:"
+4. A bullet list of exactly 3 property opportunities:
+   • Ideal Investment in a Historical Building, Thessaloniki — €325,000 · 3.5% yield
+   • Family House in Agioi Anargiroi, Athens — €370,000 · Golden Visa eligible
+   • Coastline Apartment in Glyfada, Athens — €320,000 · Premium coastal location
+5. Key benefits as bullets:
+   • EU residency for your entire family
+   • No minimum stay requirement
+   • Passive rental income from day one
+6. One closing sentence: "Let's lock this in — book a free 15-minute consultation and we'll create your personalised investment plan."
+7. Sign off: "The mAI Prop Team"
 
-After the bullets, add 2-3 lines about:
-- The minimum threshold is rising — their ${budgetStr} budget qualifies NOW but may not later
-- At current prices, ${budgetStr} buys significantly more than it will in 12 months
-- Final invitation to lock in their ${budgetStr} investment before thresholds increase
-
-Do NOT use markdown formatting. Use • for bullets. Plain text only. Sign off: "The mAI Prop Team"`;
+Use bullet character • for list items. Do NOT use markdown. Plain text only. Keep it urgent and consultation-focused.`;
 
   const aiText = await callAI(LOVABLE_API_KEY, prompt);
-  const htmlContent = textToHtml(aiText);
 
-  // Add a visual benefits summary section
-  const benefitsHtml = `
-    <div style="margin-top:20px;border-top:1px solid #e0d8cc;padding-top:16px;">
-      <p style="margin:0 0 14px;color:#0a0e2a;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">🇬🇷 Golden Visa At A Glance</p>
-      <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-        <tr>
-          <td style="padding:12px 14px;background:#0f1340;border-radius:6px 6px 0 0;border-bottom:1px solid #1a1e3a;">
-            <p style="margin:0 0 2px;color:#4ef5f1;font-size:13px;font-weight:600;">Minimum Investment</p>
-            <p style="margin:0;color:#e0fafa;font-size:15px;">€250,000</p>
-          </td>
-          <td style="padding:12px 14px;background:#0f1340;border-radius:6px 6px 0 0;border-bottom:1px solid #1a1e3a;">
-            <p style="margin:0 0 2px;color:#4ef5f1;font-size:13px;font-weight:600;">Processing Time</p>
-            <p style="margin:0;color:#e0fafa;font-size:15px;">6-9 Months</p>
-          </td>
-        </tr>
-        <tr>
-          <td style="padding:12px 14px;background:#0f1340;border-bottom:1px solid #1a1e3a;">
-            <p style="margin:0 0 2px;color:#4ef5f1;font-size:13px;font-weight:600;">Validity</p>
-            <p style="margin:0;color:#e0fafa;font-size:15px;">5 Years (Renewable)</p>
-          </td>
-          <td style="padding:12px 14px;background:#0f1340;border-bottom:1px solid #1a1e3a;">
-            <p style="margin:0 0 2px;color:#4ef5f1;font-size:13px;font-weight:600;">Family Members</p>
-            <p style="margin:0;color:#e0fafa;font-size:15px;">Spouse + Children + Parents</p>
-          </td>
-        </tr>
-        <tr>
-          <td style="padding:12px 14px;background:#0f1340;border-radius:0 0 6px 6px;">
-            <p style="margin:0 0 2px;color:#4ef5f1;font-size:13px;font-weight:600;">Schengen Access</p>
-            <p style="margin:0;color:#e0fafa;font-size:15px;">27 Countries</p>
-          </td>
-          <td style="padding:12px 14px;background:#0f1340;border-radius:0 0 6px 6px;">
-            <p style="margin:0 0 2px;color:#4ef5f1;font-size:13px;font-weight:600;">Min. Stay Required</p>
-            <p style="margin:0;color:#e0fafa;font-size:15px;">None</p>
-          </td>
-        </tr>
-      </table>
-    </div>`;
+  if (aiText) {
+    const htmlContent = textToHtml(aiText);
+    return {
+      subject: `${firstName}, last chance — your Golden Visa portfolio is waiting`,
+      body: brandWrap(htmlContent, "Book Your Free Consultation →", CALENDLY_URL),
+    };
+  }
 
-  const fullContent = htmlContent + benefitsHtml;
-
+  // Fallback
   return {
-    subject: `${firstName}, your Golden Visa guide — act before thresholds increase`,
-    body: brandWrap(fullContent, "Book Your Free Consultation →", "https://calendly.com/maipropos/consultation"),
+    subject: `${firstName}, last chance — your Golden Visa portfolio is waiting`,
+    body: brandWrap(getStep3FallbackHtml(lead), "Book Your Free Consultation →", CALENDLY_URL),
   };
+}
+
+function getStep3FallbackHtml(lead: any): string {
+  const firstName = escapeHtml(lead.full_name.split(" ")[0]);
+  return `
+    <p style="margin:0 0 12px;color:#2a2318;font-size:16px;line-height:1.75;">Hi ${firstName},</p>
+    <p style="margin:0 0 14px;color:#2a2318;font-size:16px;line-height:1.75;">The Golden Visa threshold may increase soon — your budget qualifies <strong>now</strong>, but this window won't last.</p>
+    <p style="margin:0 0 10px;color:#2a2318;font-size:16px;line-height:1.75;font-weight:600;">Quick reminder of opportunities still available for you:</p>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>Historical Building, Thessaloniki</strong> — €325,000 · 3.5% rental yield</div>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>Family House, Agioi Anargiroi</strong> — €370,000 · Golden Visa eligible</div>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>Coastline Apartment, Glyfada</strong> — €320,000 · Premium coastal location</div>
+    <br/>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>EU residency for your entire family</div>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>No minimum stay requirement</div>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span>Passive rental income from day one</div>
+    <p style="margin:14px 0 10px;color:#2a2318;font-size:16px;line-height:1.75;">Let's lock this in — book a free 15-minute consultation and we'll create your personalised investment plan.</p>
+    <p style="margin:0;color:#2a2318;font-size:16px;line-height:1.75;">Warm regards,<br/>The mAI Prop Team</p>
+  `;
 }
 
 async function callAI(apiKey: string, prompt: string): Promise<string> {
@@ -394,12 +367,12 @@ Deno.serve(async (req) => {
       result = {
         subject: `${firstName}, an update from mAI Prop`,
         body: brandWrap(
-          `<p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">Hi ${firstName},</p>
-           <p style="margin:0 0 8px;color:#e0fafa;font-size:15px;line-height:1.6;">We wanted to follow up on your Golden Visa inquiry. Our team has curated a selection of properties that match your investment profile.</p>
-           <p style="margin:0;color:#e0fafa;font-size:15px;line-height:1.6;">We'd love to schedule a call — reply to this email or visit our website.</p>
-           <p style="margin:12px 0 0;color:#e0fafa;font-size:15px;">Warm regards,<br/>The mAI Prop Team</p>`,
-          "Browse Our Portfolio →",
-          `${SITE_URL}/#opportunities`
+          `<p style="margin:0 0 12px;color:#2a2318;font-size:16px;line-height:1.75;">Hi ${firstName},</p>
+           <p style="margin:0 0 12px;color:#2a2318;font-size:16px;line-height:1.75;">We wanted to follow up on your Golden Visa inquiry. Our team has curated a selection of properties that match your investment profile.</p>
+           <p style="margin:0 0 12px;color:#2a2318;font-size:16px;line-height:1.75;">We'd love to schedule a quick call to walk you through the options — book a free consultation at your convenience.</p>
+           <p style="margin:12px 0 0;color:#2a2318;font-size:16px;line-height:1.75;">Warm regards,<br/>The mAI Prop Team</p>`,
+          "Book Your Free Consultation →",
+          CALENDLY_URL
         ),
       };
     }
