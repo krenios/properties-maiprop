@@ -10,7 +10,7 @@ const corsHeaders = {
 const SCHEDULE = [
   { step: 1, daysAfter: 1 },
   { step: 2, daysAfter: 8 },
-  { step: 3, daysAfter: 29 },
+  { step: 3, daysAfter: 28 },
 ];
 
 Deno.serve(async (req) => {
@@ -55,9 +55,7 @@ Deno.serve(async (req) => {
       const currentStep = lead.followup_step || 0;
 
       // Find the next step that should be sent based on timing
-      const nextSchedule = SCHEDULE.find(
-        (s) => s.step === currentStep + 1 && daysSinceCreation >= s.daysAfter
-      );
+      const nextSchedule = SCHEDULE.find((s) => s.step === currentStep + 1 && daysSinceCreation >= s.daysAfter);
 
       if (!nextSchedule) continue;
 
@@ -83,9 +81,7 @@ Deno.serve(async (req) => {
           error: followupRes.ok ? undefined : followupData.error,
         });
 
-        console.log(
-          `Followup step ${nextSchedule.step} for ${lead.full_name}: ${followupRes.ok ? "OK" : "FAILED"}`
-        );
+        console.log(`Followup step ${nextSchedule.step} for ${lead.full_name}: ${followupRes.ok ? "OK" : "FAILED"}`);
       } catch (e) {
         console.error(`Failed to send followup to ${lead.full_name}:`, e);
         results.push({
@@ -106,7 +102,7 @@ Deno.serve(async (req) => {
       {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
+      },
     );
   } catch (error: unknown) {
     console.error("Scheduled followup error:", error);
