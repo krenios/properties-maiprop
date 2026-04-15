@@ -63,7 +63,7 @@ async function generateLeadEmail(lead: any): Promise<{ subject: string; body: st
   }
 
   try {
-    const prompt = `You are mAI Prop's investment assistant. Write a SHORT welcome email (max 10 lines total) for a new Golden Visa lead. The PRIMARY goal is to get them to book a free consultation.
+    const prompt = `You are mAI Prop's investment assistant. Write a SHORT welcome email for a new Golden Visa lead. The PRIMARY goal is to get them to book a free consultation.
 
 Lead: ${escapeHtml(lead.full_name)}, ${escapeHtml(lead.nationality)}, budget €${Number(lead.investment_budget).toLocaleString()}, prefers ${escapeHtml(lead.preferred_location || "Greece")}, interested in ${escapeHtml(lead.property_type || "properties")}, timeline: ${escapeHtml(lead.investment_timeline || "flexible")}.
 
@@ -75,8 +75,18 @@ Format rules — follow EXACTLY:
    • Ideal Investment in a Historical Building, Thessaloniki — €325,000 · 3.5% yield
    • Family House in Agioi Anargiroi, Athens — €370,000 · Golden Visa eligible
    • Coastline Apartment in Glyfada, Athens — €320,000 · Premium coastal location
-5. One closing sentence: "Book a free consultation to discuss these and more — our advisor will walk you through the best options for your goals."
-6. Sign off: "The mAI Prop Team"
+5. A short line: "Why the Greek Golden Visa?"
+6. Exactly 3 benefit bullets:
+   • EU Residency — Schengen access across 27 countries for your whole family
+   • Fast Processing — from application to residency in 6-9 months
+   • Asset Diversification — earn rental income with strong capital appreciation
+7. A short line: "How it works:"
+8. Exactly 3 process bullets:
+   • Free Consultation — we discuss your goals, budget & timeline
+   • Property Selection — we curate Golden Visa-eligible properties matched to you
+   • End-to-End Support — legal, renovation & visa paperwork handled for you
+9. One closing sentence: "Book a free consultation to get started — our advisor will walk you through the best options for your goals."
+10. Sign off: "The mAI Prop Team"
 
 Use bullet character • for list items. Do NOT use markdown. Plain text only. Keep it punchy and consultation-focused.`;
 
@@ -143,7 +153,15 @@ function getFallbackInnerHtml(lead: any): string {
     <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>Historical Building, Thessaloniki</strong> — €325,000 · 3.5% rental yield</div>
     <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>Family House, Agioi Anargiroi</strong> — €370,000 · Golden Visa eligible</div>
     <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>Coastline Apartment, Glyfada</strong> — €320,000 · Premium coastal location</div>
-    <p style="margin:14px 0 10px;color:#2a2318;font-size:16px;line-height:1.75;">Book a free consultation to discuss these and more — our advisor will walk you through the best options for your goals.</p>
+    <p style="margin:18px 0 10px;color:#2a2318;font-size:16px;line-height:1.75;font-weight:600;">Why the Greek Golden Visa?</p>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>EU Residency</strong> — Schengen access across 27 countries for your whole family</div>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>Fast Processing</strong> — from application to residency in 6-9 months</div>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>Asset Diversification</strong> — earn rental income with strong capital appreciation</div>
+    <p style="margin:18px 0 10px;color:#2a2318;font-size:16px;line-height:1.75;font-weight:600;">How it works:</p>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>Free Consultation</strong> — we discuss your goals, budget & timeline</div>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>Property Selection</strong> — we curate Golden Visa-eligible properties matched to you</div>
+    <div style="padding:6px 0 6px 20px;position:relative;color:#2a2318;font-size:16px;line-height:1.75;"><span style="color:#0a0e2a;font-weight:bold;position:absolute;left:0;">•</span><strong>End-to-End Support</strong> — legal, renovation & visa paperwork handled for you</div>
+    <p style="margin:14px 0 10px;color:#2a2318;font-size:16px;line-height:1.75;">Book a free consultation to get started — our advisor will walk you through the best options for your goals.</p>
     <p style="margin:0;color:#2a2318;font-size:16px;line-height:1.75;">Warm regards,<br/>The mAI Prop Team</p>
   `;
 }
