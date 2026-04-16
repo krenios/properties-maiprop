@@ -190,22 +190,7 @@ Deno.serve(async (req) => {
         });
       }
       lead = dbLead;
-    } else if (body.email && typeof body.email === "string") {
-      const { data: dbLead, error } = await supabase
-        .from("leads")
-        .select("*")
-        .eq("email", body.email)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      if (error || !dbLead) {
-        return new Response(JSON.stringify({ error: "Lead not found" }), {
-          status: 404,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      lead = dbLead;
-    } else if (body.full_name && body.email) {
+    } else if (body.full_name && body.email && body.phone) {
       lead = body;
       if (typeof lead.full_name !== "string" || lead.full_name.length > 100) {
         return new Response(JSON.stringify({ error: "Invalid name" }), {
@@ -225,6 +210,21 @@ Deno.serve(async (req) => {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
+    } else if (body.email && typeof body.email === "string") {
+      const { data: dbLead, error } = await supabase
+        .from("leads")
+        .select("*")
+        .eq("email", body.email)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error || !dbLead) {
+        return new Response(JSON.stringify({ error: "Lead not found" }), {
+          status: 404,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      lead = dbLead;
     } else {
       return new Response(JSON.stringify({ error: "Missing lead_id, email, or lead data" }), {
         status: 400,
