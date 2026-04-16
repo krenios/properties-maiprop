@@ -43,9 +43,9 @@ const STATUS_OPTIONS = [
 ];
 
 const FOLLOWUP_STEPS = [
-  { step: 1, label: "New Properties", desc: "Push new listings matching their profile", icon: "🏠" },
-  { step: 2, label: "Detailed Portfolio", desc: "Extensive property details & services", icon: "📋" },
-  { step: 3, label: "Golden Visa Guide", desc: "Benefits deep-dive & urgency", icon: "🇬🇷" },
+  { step: 1, label: "Welcome & Consultation", desc: "3 properties, visa benefits & book consultation CTA", icon: "📞" },
+  { step: 2, label: "Portfolio Deep-Dive", desc: "Detailed opportunities, process steps & consultation reminder", icon: "🏠" },
+  { step: 3, label: "Final Nudge", desc: "Urgency-driven consultation push with key benefits recap", icon: "⏰" },
 ];
 
 const getStatusStyle = (status: string) =>
