@@ -415,6 +415,88 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                 </>
               )}
 
+              {/* ROI / Investment assumptions */}
+              {(property.gross_yield || property.net_yield || property.occupancy_rate || property.annual_expenses || property.roi_notes) && (
+                <>
+                  <Separator className="bg-border" />
+                  <section aria-label="Investment returns and assumptions" className="rounded-xl border-2 border-primary/20 bg-primary/5 p-5">
+                    <div className="mb-4 flex items-center gap-2">
+                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/15">
+                        <TrendingUp className="h-3.5 w-3.5 text-primary" />
+                      </div>
+                      <h4 className="text-xs font-semibold uppercase tracking-wider text-primary">
+                        Investment Returns
+                      </h4>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                      {property.gross_yield && (
+                        <div className="rounded-lg border border-border/60 bg-background/40 p-3">
+                          <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-muted-foreground">
+                            <Percent className="h-3 w-3" /> Gross Yield
+                          </div>
+                          <p className="mt-1 text-lg font-bold text-primary">{property.gross_yield}</p>
+                        </div>
+                      )}
+                      {property.net_yield && (
+                        <div className="rounded-lg border border-border/60 bg-background/40 p-3">
+                          <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-muted-foreground">
+                            <Percent className="h-3 w-3" /> Net Yield
+                          </div>
+                          <p className="mt-1 text-lg font-bold text-primary">{property.net_yield}</p>
+                        </div>
+                      )}
+                      {property.occupancy_rate && (
+                        <div className="rounded-lg border border-border/60 bg-background/40 p-3">
+                          <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-muted-foreground">
+                            <Calendar className="h-3 w-3" /> Occupancy
+                          </div>
+                          <p className="mt-1 text-lg font-bold">{property.occupancy_rate}</p>
+                        </div>
+                      )}
+                      {property.annual_expenses && (
+                        <div className="rounded-lg border border-border/60 bg-background/40 p-3">
+                          <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-muted-foreground">
+                            <Wallet className="h-3 w-3" /> Expenses
+                          </div>
+                          <p className="mt-1 text-sm font-semibold">{property.annual_expenses}</p>
+                        </div>
+                      )}
+                    </div>
+                    {property.roi_notes && (
+                      <p className="mt-4 rounded-lg border border-border/40 bg-background/30 px-3 py-2 text-xs italic leading-relaxed text-muted-foreground">
+                        <span className="font-semibold not-italic">Assumptions: </span>
+                        {property.roi_notes}
+                      </p>
+                    )}
+                  </section>
+                </>
+              )}
+
+              {/* Location Highlights */}
+              {property.location_highlights && property.location_highlights.filter(Boolean).length > 0 && (
+                <>
+                  <Separator className="bg-border" />
+                  <section aria-label="Location highlights">
+                    <div className="mb-3 flex items-center gap-2">
+                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/15">
+                        <Sparkles className="h-3.5 w-3.5 text-primary" />
+                      </div>
+                      <h4 className="text-xs font-semibold uppercase tracking-wider text-primary">
+                        Location Highlights
+                      </h4>
+                    </div>
+                    <ul className="grid gap-2 sm:grid-cols-2">
+                      {property.location_highlights.filter(Boolean).map((h) => (
+                        <li key={h} className="flex items-start gap-2 rounded-lg border border-border/50 bg-muted/20 px-3 py-2.5 text-sm">
+                          <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                          <span>{h}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                </>
+              )}
+
               <Separator className="bg-border" />
 
               {/* Embedded Google Map */}
