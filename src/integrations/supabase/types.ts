@@ -104,22 +104,29 @@ export type Database = {
       properties: {
         Row: {
           after_image: string
+          annual_expenses: string
           bedrooms: number | null
           before_image: string
           construction_year: string
           created_at: string
           date_added: string
+          delivery_eta: string
           description: string
           floor: string
           floor_plan: string
+          gross_yield: string
           id: string
           images: string[]
           location: string
+          location_highlights: string[]
           market_report: string
+          net_yield: string
+          occupancy_rate: string
           poi: string[]
           poi_cache: Json | null
           price: number | null
           project_type: string
+          roi_notes: string
           size: number | null
           sort_order: number
           status: string
@@ -130,22 +137,29 @@ export type Database = {
         }
         Insert: {
           after_image?: string
+          annual_expenses?: string
           bedrooms?: number | null
           before_image?: string
           construction_year?: string
           created_at?: string
           date_added?: string
+          delivery_eta?: string
           description?: string
           floor?: string
           floor_plan?: string
+          gross_yield?: string
           id?: string
           images?: string[]
           location?: string
+          location_highlights?: string[]
           market_report?: string
+          net_yield?: string
+          occupancy_rate?: string
           poi?: string[]
           poi_cache?: Json | null
           price?: number | null
           project_type?: string
+          roi_notes?: string
           size?: number | null
           sort_order?: number
           status?: string
@@ -156,22 +170,29 @@ export type Database = {
         }
         Update: {
           after_image?: string
+          annual_expenses?: string
           bedrooms?: number | null
           before_image?: string
           construction_year?: string
           created_at?: string
           date_added?: string
+          delivery_eta?: string
           description?: string
           floor?: string
           floor_plan?: string
+          gross_yield?: string
           id?: string
           images?: string[]
           location?: string
+          location_highlights?: string[]
           market_report?: string
+          net_yield?: string
+          occupancy_rate?: string
           poi?: string[]
           poi_cache?: Json | null
           price?: number | null
           project_type?: string
+          roi_notes?: string
           size?: number | null
           sort_order?: number
           status?: string

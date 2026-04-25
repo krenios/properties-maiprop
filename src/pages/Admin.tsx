@@ -47,6 +47,7 @@ const propertySchema = z.object({
 const emptyProperty: Omit<Property, "id" | "date_added" | "sort_order"> = {
   title: "", description: "", images: [], before_image: "", after_image: "", price: null, size: null, bedrooms: null,
   floor_plan: "", location: "", poi: [], tags: [], status: "available", project_type: "ready", yield: "", floor: "", construction_year: "", market_report: "",
+  delivery_eta: "", gross_yield: "", net_yield: "", occupancy_rate: "", annual_expenses: "", roi_notes: "", location_highlights: [],
 };
 
 // ── Articles Tab ────────────────────────────────────────────────────────────
@@ -374,6 +375,13 @@ const Admin = () => {
       floor: p.floor,
       construction_year: p.construction_year,
       market_report: p.market_report || "",
+      delivery_eta: p.delivery_eta || "",
+      gross_yield: p.gross_yield || "",
+      net_yield: p.net_yield || "",
+      occupancy_rate: p.occupancy_rate || "",
+      annual_expenses: p.annual_expenses || "",
+      roi_notes: p.roi_notes || "",
+      location_highlights: p.location_highlights || [],
     });
     setDescVariants([]); setDescVariantIdx(0);
     setFormOpen(true);
@@ -526,18 +534,30 @@ const Admin = () => {
           </div>
 
           {selected.size > 0 && (
-            <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-primary/30 bg-primary/5 p-3">
-              <span className="text-sm font-medium">{selected.size} selected</span>
-              <Select value={bulkStatus} onValueChange={(v) => setBulkStatus(v as Property["status"])}>
-                <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                   <SelectItem value="available">Available</SelectItem>
-                   <SelectItem value="booked">Booked</SelectItem>
-                   <SelectItem value="sold">Sold</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button size="sm" onClick={handleBulk}>Update Status</Button>
-              <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>Clear</Button>
+            <div className="sticky top-2 z-30 mb-4 flex flex-wrap items-center gap-3 rounded-xl border-2 border-primary/40 bg-primary/10 p-4 shadow-[0_8px_30px_-12px_hsl(var(--primary)/0.5)] backdrop-blur-md">
+              <div className="flex items-center gap-2">
+                <Badge className="rounded-full border-primary/40 bg-primary/20 px-3 py-1 text-sm font-bold text-primary">
+                  {selected.size}
+                </Badge>
+                <span className="text-sm font-semibold">
+                  {selected.size === 1 ? "property selected" : "properties selected"}
+                </span>
+              </div>
+              <div className="ml-auto flex flex-wrap items-center gap-2">
+                <Label className="text-xs font-medium text-muted-foreground">Set status to:</Label>
+                <Select value={bulkStatus} onValueChange={(v) => setBulkStatus(v as Property["status"])}>
+                  <SelectTrigger className="w-44 border-primary/30"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="available">Available</SelectItem>
+                    <SelectItem value="booked">Booked</SelectItem>
+                    <SelectItem value="sold">Sold</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button size="sm" className="gap-1.5 rounded-full" onClick={handleBulk}>
+                  <CheckCircle className="h-3.5 w-3.5" /> Apply to {selected.size}
+                </Button>
+                <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>Clear</Button>
+              </div>
             </div>
           )}
 
@@ -779,9 +799,80 @@ const Admin = () => {
                 <Input value={form.yield} onChange={(e) => setForm({ ...form, yield: e.target.value })} placeholder="e.g. 5.2%" />
               </div>
             </div>
+            {/* ── Deal details: ETA + ROI assumptions ───────────────── */}
+            <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-4">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-primary">Deal Details</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label>Delivery ETA</Label>
+                  <Input
+                    value={form.delivery_eta}
+                    onChange={(e) => setForm({ ...form, delivery_eta: e.target.value })}
+                    placeholder="e.g. Q3 2026"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Occupancy Rate</Label>
+                  <Input
+                    value={form.occupancy_rate}
+                    onChange={(e) => setForm({ ...form, occupancy_rate: e.target.value })}
+                    placeholder="e.g. 90%"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label>Gross Yield</Label>
+                  <Input
+                    value={form.gross_yield}
+                    onChange={(e) => setForm({ ...form, gross_yield: e.target.value })}
+                    placeholder="e.g. 6.5%"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Net Yield</Label>
+                  <Input
+                    value={form.net_yield}
+                    onChange={(e) => setForm({ ...form, net_yield: e.target.value })}
+                    placeholder="e.g. 5.1%"
+                  />
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label>Annual Expenses</Label>
+                <Input
+                  value={form.annual_expenses}
+                  onChange={(e) => setForm({ ...form, annual_expenses: e.target.value })}
+                  placeholder="e.g. €2,400 / year (HOA, utilities, mgmt fees)"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label>ROI Notes / Assumptions</Label>
+                <Textarea
+                  value={form.roi_notes}
+                  onChange={(e) => setForm({ ...form, roi_notes: e.target.value })}
+                  rows={2}
+                  placeholder="e.g. Yields based on long-term lease, before tax. Excludes property appreciation."
+                />
+              </div>
+            </div>
             <div className="grid gap-2">
               <Label>Location</Label>
               <Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
+            </div>
+            <div className="grid gap-2">
+              <Label>Location Highlights (one per line)</Label>
+              <Textarea
+                value={form.location_highlights.join("\n")}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    location_highlights: e.target.value.split("\n").map((s) => s.trim()).filter(Boolean),
+                  })
+                }
+                rows={3}
+                placeholder={"Walkable neighborhood with cafés & boutiques\nBlue Flag beach 5 min away\nMetro line 2 expansion underway"}
+              />
             </div>
             <ImageUpload
               label="Property Images (drag to reorder)"

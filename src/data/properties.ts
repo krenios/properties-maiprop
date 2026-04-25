@@ -25,4 +25,12 @@ export interface Property {
   construction_year: string;
   sort_order: number;
   market_report: string;
+  // Optional deal-detail fields (added 2026-04)
+  delivery_eta: string;
+  gross_yield: string;
+  net_yield: string;
+  occupancy_rate: string;
+  annual_expenses: string;
+  roi_notes: string;
+  location_highlights: string[];
 }
