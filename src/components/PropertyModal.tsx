@@ -10,7 +10,7 @@ import {
   ExternalLink, Building, Calendar, LayoutGrid, FileText,
   Plane, Waves, Anchor, TrainFront, Car, GraduationCap,
   ShoppingCart, Cross, Heart, Landmark, TreePine,
-  Share2,
+  Share2, Clock, Percent, Wallet, Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useState, useRef, useCallback, useEffect } from "react";
@@ -346,6 +346,12 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                       {property.yield && (
                         <Badge variant="outline" className="gap-1.5 rounded-full border-border px-2.5 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm">
                           <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" /> {property.yield}
+                        </Badge>
+                      )}
+                      {property.delivery_eta && (
+                        <Badge variant="outline" className="gap-1.5 rounded-full border-primary/40 bg-primary/5 px-2.5 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm">
+                          <Clock className="h-3.5 w-3.5 text-primary" />
+                          <span className="text-primary font-medium">ETA: {property.delivery_eta}</span>
                         </Badge>
                       )}
                     </div>
