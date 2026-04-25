@@ -799,9 +799,80 @@ const Admin = () => {
                 <Input value={form.yield} onChange={(e) => setForm({ ...form, yield: e.target.value })} placeholder="e.g. 5.2%" />
               </div>
             </div>
+            {/* ── Deal details: ETA + ROI assumptions ───────────────── */}
+            <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-4">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-primary">Deal Details</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label>Delivery ETA</Label>
+                  <Input
+                    value={form.delivery_eta}
+                    onChange={(e) => setForm({ ...form, delivery_eta: e.target.value })}
+                    placeholder="e.g. Q3 2026"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Occupancy Rate</Label>
+                  <Input
+                    value={form.occupancy_rate}
+                    onChange={(e) => setForm({ ...form, occupancy_rate: e.target.value })}
+                    placeholder="e.g. 90%"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label>Gross Yield</Label>
+                  <Input
+                    value={form.gross_yield}
+                    onChange={(e) => setForm({ ...form, gross_yield: e.target.value })}
+                    placeholder="e.g. 6.5%"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Net Yield</Label>
+                  <Input
+                    value={form.net_yield}
+                    onChange={(e) => setForm({ ...form, net_yield: e.target.value })}
+                    placeholder="e.g. 5.1%"
+                  />
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label>Annual Expenses</Label>
+                <Input
+                  value={form.annual_expenses}
+                  onChange={(e) => setForm({ ...form, annual_expenses: e.target.value })}
+                  placeholder="e.g. €2,400 / year (HOA, utilities, mgmt fees)"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label>ROI Notes / Assumptions</Label>
+                <Textarea
+                  value={form.roi_notes}
+                  onChange={(e) => setForm({ ...form, roi_notes: e.target.value })}
+                  rows={2}
+                  placeholder="e.g. Yields based on long-term lease, before tax. Excludes property appreciation."
+                />
+              </div>
+            </div>
             <div className="grid gap-2">
               <Label>Location</Label>
               <Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
+            </div>
+            <div className="grid gap-2">
+              <Label>Location Highlights (one per line)</Label>
+              <Textarea
+                value={form.location_highlights.join("\n")}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    location_highlights: e.target.value.split("\n").map((s) => s.trim()).filter(Boolean),
+                  })
+                }
+                rows={3}
+                placeholder={"Walkable neighborhood with cafés & boutiques\nBlue Flag beach 5 min away\nMetro line 2 expansion underway"}
+              />
             </div>
             <ImageUpload
               label="Property Images (drag to reorder)"
