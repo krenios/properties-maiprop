@@ -47,6 +47,7 @@ const propertySchema = z.object({
 const emptyProperty: Omit<Property, "id" | "date_added" | "sort_order"> = {
   title: "", description: "", images: [], before_image: "", after_image: "", price: null, size: null, bedrooms: null,
   floor_plan: "", location: "", poi: [], tags: [], status: "available", project_type: "ready", yield: "", floor: "", construction_year: "", market_report: "",
+  delivery_eta: "", gross_yield: "", net_yield: "", occupancy_rate: "", annual_expenses: "", roi_notes: "", location_highlights: [],
 };
 
 // ── Articles Tab ────────────────────────────────────────────────────────────
@@ -374,6 +375,13 @@ const Admin = () => {
       floor: p.floor,
       construction_year: p.construction_year,
       market_report: p.market_report || "",
+      delivery_eta: p.delivery_eta || "",
+      gross_yield: p.gross_yield || "",
+      net_yield: p.net_yield || "",
+      occupancy_rate: p.occupancy_rate || "",
+      annual_expenses: p.annual_expenses || "",
+      roi_notes: p.roi_notes || "",
+      location_highlights: p.location_highlights || [],
     });
     setDescVariants([]); setDescVariantIdx(0);
     setFormOpen(true);
