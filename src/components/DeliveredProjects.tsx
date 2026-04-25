@@ -15,22 +15,6 @@ import { useTranslation } from "@/contexts/TranslationContext";
 import ImageLightbox from "@/components/ImageLightbox";
 import { getEffectiveProjectType } from "@/lib/propertyMeta";
 
-const whatsappMessage = [
-  "Hello! I would like to explore investment opportunities under the Greek Golden Visa program.",
-  "",
-  "Please share the following details:",
-  "",
-  "1. Full Name:",
-  "2. Phone (International format):",
-  "3. Email:",
-  "4. Nationality (Country of citizenship):",
-  "5. Investment Budget (in EUR - minimum 250000):",
-  "6. Preferred Property Location:",
-  "7. Property Type (Apartment or Villa):",
-  "8. When are you planning to invest (0-6 months or 6-12 months):",
-].join("\n");
-const WHATSAPP_URL = `https://wa.me/306971853470?text=${encodeURIComponent(whatsappMessage)}`;
-
 const trackRecord = [
 { value: "€6.3M", label: "Successfully Closed" },
 { value: "19", label: "Projects Delivered" },

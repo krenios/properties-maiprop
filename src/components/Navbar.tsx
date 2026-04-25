@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link, NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, MessageCircle, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "@/contexts/TranslationContext";
 import maipropLogo from "@/assets/maiprop-logo-dark.png";
@@ -15,22 +15,6 @@ const navLinks = [
   { label: "FAQ", href: "#faq" },
   { label: "Resources", href: "#resources" },
 ];
-
-const whatsappMessage = [
-  "Hello! I would like to explore investment opportunities under the Greek Golden Visa program.",
-  "",
-  "Please share the following details:",
-  "",
-  "1. Full Name:",
-  "2. Phone (International format):",
-  "3. Email:",
-  "4. Nationality (Country of citizenship):",
-  "5. Investment Budget (in EUR - minimum 250000):",
-  "6. Preferred Property Location:",
-  "7. Property Type (Apartment or Villa):",
-  "8. When are you planning to invest (0-6 months or 6-12 months):",
-].join("\n");
-const WHATSAPP_URL = `https://wa.me/306971853470?text=${encodeURIComponent(whatsappMessage)}`;
 
 const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
   const { t } = useTranslation();
@@ -115,15 +99,6 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
               </a>
             ),
           )}
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-full border border-green-500/40 bg-green-500/10 px-3 py-1.5 text-xs font-medium text-green-400 hover:bg-green-500/20 transition-colors"
-          >
-            <MessageCircle className="h-3.5 w-3.5" />
-            WhatsApp
-          </a>
           <LanguageSwitcher />
           <Button
             size="sm"
@@ -191,16 +166,6 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
                 </a>
               ),
             )}
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-green-400 transition-colors hover:bg-green-500/10"
-            >
-              <MessageCircle className="h-4 w-4" />
-              WhatsApp
-            </a>
             <LanguageSwitcher />
             <Button
               size="sm"
