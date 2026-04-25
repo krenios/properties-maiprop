@@ -534,18 +534,30 @@ const Admin = () => {
           </div>
 
           {selected.size > 0 && (
-            <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-primary/30 bg-primary/5 p-3">
-              <span className="text-sm font-medium">{selected.size} selected</span>
-              <Select value={bulkStatus} onValueChange={(v) => setBulkStatus(v as Property["status"])}>
-                <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                   <SelectItem value="available">Available</SelectItem>
-                   <SelectItem value="booked">Booked</SelectItem>
-                   <SelectItem value="sold">Sold</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button size="sm" onClick={handleBulk}>Update Status</Button>
-              <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>Clear</Button>
+            <div className="sticky top-2 z-30 mb-4 flex flex-wrap items-center gap-3 rounded-xl border-2 border-primary/40 bg-primary/10 p-4 shadow-[0_8px_30px_-12px_hsl(var(--primary)/0.5)] backdrop-blur-md">
+              <div className="flex items-center gap-2">
+                <Badge className="rounded-full border-primary/40 bg-primary/20 px-3 py-1 text-sm font-bold text-primary">
+                  {selected.size}
+                </Badge>
+                <span className="text-sm font-semibold">
+                  {selected.size === 1 ? "property selected" : "properties selected"}
+                </span>
+              </div>
+              <div className="ml-auto flex flex-wrap items-center gap-2">
+                <Label className="text-xs font-medium text-muted-foreground">Set status to:</Label>
+                <Select value={bulkStatus} onValueChange={(v) => setBulkStatus(v as Property["status"])}>
+                  <SelectTrigger className="w-44 border-primary/30"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="available">Available</SelectItem>
+                    <SelectItem value="booked">Booked</SelectItem>
+                    <SelectItem value="sold">Sold</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button size="sm" className="gap-1.5 rounded-full" onClick={handleBulk}>
+                  <CheckCircle className="h-3.5 w-3.5" /> Apply to {selected.size}
+                </Button>
+                <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>Clear</Button>
+              </div>
             </div>
           )}
 
