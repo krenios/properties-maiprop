@@ -110,6 +110,24 @@
   </url>
 
   <url>
+    <loc>https://properties.maiprop.co/portfolio/</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://properties.maiprop.co/portfolio/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://properties.maiprop.co/portfolio/" />
+  </url>
+
+  <url>
+    <loc>https://properties.maiprop.co/compare/</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://properties.maiprop.co/compare/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://properties.maiprop.co/compare/" />
+  </url>
+
+  <url>
     <loc>https://properties.maiprop.co/guides/</loc>
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
