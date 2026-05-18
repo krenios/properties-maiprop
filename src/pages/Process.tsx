@@ -306,7 +306,7 @@ const Inner = () => {
   return (
     <main className="min-h-screen bg-background">
       <Helmet>
-        <title>How We Work — Greek Golden Visa Advisory Process | mAI Investments</title>
+        <title>Our Golden Visa Process | mAI Investments</title>
         <meta name="description" content="See exactly how mAI Investments guides you from first call to Golden Visa permit — 8 advisory steps, one trip to Greece, 6–9 months end-to-end. Full-service, no surprises." />
         <meta name="keywords" content="Greek Golden Visa advisory, how to get Golden Visa Greece, mAI Investments process, Golden Visa investment service, Greece residency investment advisor" />
         <meta name="robots" content="index, follow" />
@@ -327,7 +327,7 @@ const Inner = () => {
         <link rel="alternate" hrefLang="x-default" href={PAGE_URL} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={PAGE_URL} />
-        <meta property="og:title" content="How We Work — Greek Golden Visa Advisory Process | mAI Investments" />
+        <meta property="og:title" content="Our Golden Visa Process | mAI Investments" />
         <meta property="og:description" content="8 advisory steps from first call to Golden Visa permit. One trip. Full family included. 6–9 months." />
         <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
         <meta property="og:locale" content="en_US" />
