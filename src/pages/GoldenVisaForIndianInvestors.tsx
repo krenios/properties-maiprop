@@ -150,8 +150,8 @@ const Inner = () => {
       .filter((p) => {
         const type = getEffectiveProjectType(p.project_type, p.status);
         const status = getEffectiveStatus(p.status);
-        if (type === "delivered") return false;
         if (status === "sold") return false;
+        if (!type) return false;
         const price = p.price ?? 0;
         return price >= 220_000 && price <= 600_000;
       })
@@ -277,7 +277,7 @@ const Inner = () => {
                   <div className="relative aspect-[4/3] overflow-hidden bg-muted/30">
                     {p.images?.[0] && (
                       <img
-                        src={optimizeImage(p.images[0], 600)}
+                        src={optimizeImage(p.images[0], { width: 600 })}
                         alt={p.title}
                         loading="lazy"
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
