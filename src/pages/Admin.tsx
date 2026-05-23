@@ -742,6 +742,10 @@ const Admin = () => {
           <TabsContent value="articles">
             <ArticlesTab />
           </TabsContent>
+
+          <TabsContent value="semrush">
+            <SemrushTab />
+          </TabsContent>
         </Tabs>
       </div>
 
