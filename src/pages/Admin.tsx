@@ -23,6 +23,8 @@ import { Plus, Pencil, Trash2, AlertTriangle, Home, ArrowRightCircle, CheckCircl
 import ImageUpload from "@/components/ImageUpload";
 import FileUpload from "@/components/FileUpload";
 import CrmTab from "@/components/CrmTab";
+import SemrushTab from "@/components/SemrushTab";
+import { TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
@@ -521,6 +523,7 @@ const Admin = () => {
             <TabsTrigger value="properties" className="gap-2"><Home className="h-4 w-4" /> Properties</TabsTrigger>
             <TabsTrigger value="crm" className="gap-2"><Users className="h-4 w-4" /> CRM</TabsTrigger>
             <TabsTrigger value="articles" className="gap-2"><BookOpen className="h-4 w-4" /> Articles</TabsTrigger>
+            <TabsTrigger value="semrush" className="gap-2"><TrendingUp className="h-4 w-4" /> SEO Keywords</TabsTrigger>
           </TabsList>
 
           <TabsContent value="properties">
@@ -738,6 +741,10 @@ const Admin = () => {
 
           <TabsContent value="articles">
             <ArticlesTab />
+          </TabsContent>
+
+          <TabsContent value="semrush">
+            <SemrushTab />
           </TabsContent>
         </Tabs>
       </div>
