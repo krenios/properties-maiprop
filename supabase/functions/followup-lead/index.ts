@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { requireAdmin } from "../_shared/admin-auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -317,6 +318,16 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Allow either an admin JWT (manual trigger from Admin UI) or the cron secret
+    // (used by the scheduled-followups dispatcher running as a pg_cron job).
+    const cronSecret = Deno.env.get("CRON_SECRET");
+    const providedCron = req.headers.get("x-cron-secret");
+    const isCron = !!cronSecret && providedCron === cronSecret;
+    if (!isCron) {
+      const auth = await requireAdmin(req, corsHeaders);
+      if (!auth.ok) return auth.response;
+    }
+
     const { lead_id, step, preview_only } = await req.json();
 
     if (!lead_id || typeof lead_id !== "string") {

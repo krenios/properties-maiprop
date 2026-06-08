@@ -84,6 +84,27 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Fire-and-forget: trigger the welcome notification email server-side using
+    // the shared internal secret so notify-new-lead can stay locked down.
+    try {
+      const internalSecret = Deno.env.get("INTERNAL_NOTIFY_SECRET");
+      if (internalSecret) {
+        fetch(`${supabaseUrl}/functions/v1/notify-new-lead`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${supabaseKey}`,
+            "x-internal-secret": internalSecret,
+          },
+          body: JSON.stringify({ email: lead.email.trim().toLowerCase() }),
+        }).catch((e) => console.warn("notify-new-lead trigger failed:", e));
+      } else {
+        console.warn("INTERNAL_NOTIFY_SECRET not set; skipping welcome email trigger");
+      }
+    } catch (e) {
+      console.warn("notify dispatch error:", e);
+    }
+
     return new Response(JSON.stringify({ success: true }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

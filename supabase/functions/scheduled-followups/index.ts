@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { requireCronSecret } from "../_shared/admin-auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -19,6 +20,10 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Restrict invocations to the pg_cron job carrying the shared secret.
+    const guard = requireCronSecret(req, corsHeaders);
+    if (!guard.ok) return guard.response;
+
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -66,6 +71,7 @@ Deno.serve(async (req) => {
           headers: {
             Authorization: `Bearer ${supabaseKey}`,
             "Content-Type": "application/json",
+            "x-cron-secret": Deno.env.get("CRON_SECRET") ?? "",
           },
           body: JSON.stringify({
             lead_id: lead.id,

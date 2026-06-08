@@ -172,6 +172,44 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Restrict to trusted callers: either an admin JWT (Admin UI manual resend)
+    // or the internal shared secret (used by submit-lead after a CAPTCHA-verified insert).
+    const internalSecret = Deno.env.get("INTERNAL_NOTIFY_SECRET");
+    const providedInternal = req.headers.get("x-internal-secret");
+    const isInternal = !!internalSecret && providedInternal === internalSecret;
+    if (!isInternal) {
+      const authHeader = req.headers.get("Authorization");
+      if (!authHeader) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      const SUPABASE_URL_ENV = Deno.env.get("SUPABASE_URL")!;
+      const SUPABASE_SRV_ENV = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+      const adminClient = createClient(SUPABASE_URL_ENV, SUPABASE_SRV_ENV);
+      const token = authHeader.replace("Bearer ", "");
+      const { data: { user }, error: uerr } = await adminClient.auth.getUser(token);
+      if (uerr || !user) {
+        return new Response(JSON.stringify({ error: "Invalid token" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      const { data: roleData } = await adminClient
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+      if (!roleData) {
+        return new Response(JSON.stringify({ error: "Forbidden — admin access required" }), {
+          status: 403,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
     const body = await req.json();
 
     // Accept lead_id, email lookup, or full lead object
