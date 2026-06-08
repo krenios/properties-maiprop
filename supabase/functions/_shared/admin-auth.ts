@@ -74,25 +74,23 @@ export function requireCronSecret(
   req: Request,
   corsHeaders: Record<string, string>,
 ): { ok: true } | { ok: false; response: Response } {
-  const expected = Deno.env.get("CRON_SECRET");
-  if (!expected) {
-    return {
-      ok: false,
-      response: new Response(JSON.stringify({ error: "CRON_SECRET not configured" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }),
-    };
-  }
-  const provided = req.headers.get("x-cron-secret");
-  if (!provided || provided !== expected) {
-    return {
-      ok: false,
-      response: new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }),
-    };
-  }
-  return { ok: true };
+  // Accept either the dedicated CRON_SECRET (preferred) OR an Authorization
+  // bearer matching the service-role key. This lets the existing pg_cron job
+  // continue to work without needing to refresh its secret material.
+  const cronSecret = Deno.env.get("CRON_SECRET");
+  const providedCron = req.headers.get("x-cron-secret");
+  if (cronSecret && providedCron && providedCron === cronSecret) return { ok: true };
+
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  const authHeader = req.headers.get("Authorization") ?? "";
+  const bearer = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+  if (serviceKey && bearer && bearer === serviceKey) return { ok: true };
+
+  return {
+    ok: false,
+    response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    }),
+  };
 }
