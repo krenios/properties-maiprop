@@ -469,7 +469,7 @@ const LeadCaptureBot = () => {
         }
       } catch (_) { /* sessionStorage unavailable */ }
     }
-    supabase.functions.invoke("notify-new-lead", { body: { email: form.email.trim() } }).catch(() => {});
+    // Welcome email is now dispatched server-side from submit-lead using a shared internal secret.
   };
 
   const handleClose = () => {
