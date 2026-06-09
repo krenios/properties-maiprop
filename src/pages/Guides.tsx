@@ -288,7 +288,7 @@ const Inner = () => {
 
           <>
               {/* Category filter summary */}
-              {displayGuides.length > 3 &&
+              {displayGuides.length >= 1 &&
             <div className="mb-8 flex flex-wrap gap-2">
                   {Array.from(new Set(displayGuides.map((g) => g.category))).map((cat) =>
               <span key={cat} className="rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
@@ -336,8 +336,8 @@ const Inner = () => {
                           <Clock className="h-3.5 w-3.5" />
                           {guide.read_time ? t(guide.read_time) : t("7 min read")}
                         </span>
-                        <span className="flex items-center gap-1 text-sm font-medium text-primary group-hover:gap-2 transition-all">
-                          {t("Read")} {guide.title} <ArrowRight className="h-4 w-4" />
+                        <span className="flex items-center gap-1 text-sm font-medium text-primary group-hover:gap-2 transition-all" aria-label={`Read ${guide.title}`}>
+                          {t("Read Guide")} <ArrowRight className="h-4 w-4" />
                         </span>
                       </div>
                     </Link>);

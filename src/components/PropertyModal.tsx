@@ -211,9 +211,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
           onInteractOutside={(e) => {
             if (lightboxIdx !== null || floorPlanOpen) e.preventDefault();
           }}
-          className={`max-h-[100dvh] max-w-[98vw] xl:max-w-6xl overflow-hidden border-border bg-card p-0 max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[94vh] ${
-            lightboxIdx !== null || floorPlanOpen ? "pointer-events-none" : ""
-          }`}
+          className="max-h-[100dvh] max-w-[98vw] xl:max-w-6xl overflow-hidden border-border bg-card p-0 max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[94vh]"
           style={{
             transform: swipeY > 0 ? `translateY(${swipeY}px)` : undefined,
             opacity: swipeY > 0 ? Math.max(1 - swipeY / 300, 0.5) : undefined,

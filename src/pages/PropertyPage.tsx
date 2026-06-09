@@ -439,7 +439,7 @@ const PropertyPageInner = () => {
           {/* Back link */}
           <button
             onClick={() => navigate("/properties")}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/12 px-3.5 py-2 text-sm font-semibold text-primary shadow-[0_0_0_1px_hsl(var(--primary)/0.1)] transition-colors hover:bg-primary/20 hover:border-primary/50 sm:px-4 sm:py-2.5 sm:text-base"
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3.5 py-2 text-sm font-semibold text-primary shadow-[0_0_0_1px_hsl(var(--primary)/0.1)] transition-colors hover:bg-primary/20 hover:border-primary/50 sm:px-4 sm:py-2.5 sm:text-base"
           >
             <ArrowLeft className="h-4 w-4" /> {t("Back to properties")}
           </button>

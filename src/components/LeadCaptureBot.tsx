@@ -26,7 +26,7 @@ const STEPS = [
     key: "phone",
     label: "Your phone number (international format)",
     type: "tel",
-    placeholder: "+351 912 345 678",
+    placeholder: "+1 555 000 0000",
     emoji: "📱",
   },
   { key: "email", label: "What's your email address?", type: "email", placeholder: "john@example.com", emoji: "✉️" },
@@ -551,6 +551,7 @@ const LeadCaptureBot = () => {
             <div className="relative bg-gradient-to-r from-primary/15 via-primary/10 to-secondary/10 px-5 py-4">
               <button
                 onClick={handleClose}
+                aria-label="Close chat"
                 className="absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
                 <X className="h-4 w-4" />

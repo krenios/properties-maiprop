@@ -9,11 +9,12 @@ import maipropLogo from "@/assets/maiprop-logo-dark.png";
 const navLinks = [
   { label: "Benefits", href: "#overview" },
   { label: "Opportunities", href: "#opportunities" },
-  { label: "Track Record", href: "#delivered" },
+  { label: "Track Record", href: "/trackrecord", isPage: true },
+  { label: "Properties", href: "/properties", isPage: true },
   { label: "Platform", href: "#platform" },
-  { label: "Process", href: "#journey" },
+  { label: "Process", href: "/process", isPage: true },
   { label: "FAQ", href: "#faq" },
-  { label: "Resources", href: "#resources" },
+  { label: "Resources", href: "/guides", isPage: true },
 ];
 
 const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
@@ -117,7 +118,12 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
         </nav>
 
         {/* Mobile toggle */}
-        <button className="md:hidden" onClick={() => setMobileOpen(!mobileOpen)}>
+        <button
+          className="md:hidden flex h-11 w-11 items-center justify-center"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileOpen}
+        >
           {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
