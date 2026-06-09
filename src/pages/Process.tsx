@@ -305,6 +305,7 @@ const Inner = () => {
   const { t } = useTranslation();
 
   return (
+    <>
     <main className="min-h-screen bg-background">
       <Helmet>
         <title>Our Golden Visa Process | mAI Investments</title>

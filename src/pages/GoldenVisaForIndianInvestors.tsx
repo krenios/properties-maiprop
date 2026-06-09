@@ -161,6 +161,7 @@ const Inner = () => {
   }, [properties]);
 
   return (
+    <>
     <main className="min-h-screen bg-background">
       <Helmet>
         <title>Greek Golden Visa for Indian Investors — EU Residency from €250K</title>
