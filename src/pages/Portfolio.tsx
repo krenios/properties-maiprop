@@ -18,6 +18,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
+import Footer from "@/components/Footer";
 import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
 import ImageLightbox from "@/components/ImageLightbox";
@@ -303,6 +304,7 @@ const Inner = () => {
         </section>
       </main>
 
+      <Footer />
       <DeliveredModal property={selected} open={!!selected} onClose={() => setSelected(null)} />
     </>
   );

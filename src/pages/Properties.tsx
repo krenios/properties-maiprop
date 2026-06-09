@@ -16,6 +16,7 @@ import { useTranslation } from "@/contexts/TranslationContext";
 import { CONVERSION_ID } from "@/lib/analytics";
 import CompareBar from "@/components/CompareBar";
 import { getEffectiveProjectType } from "@/lib/propertyMeta";
+import Footer from "@/components/Footer";
 
 
 const BASE_URL = "https://properties.maiprop.co";
@@ -313,6 +314,7 @@ const Inner = () => {
         </section>
       </main>
 
+      <Footer />
       <PropertyModal property={selected} open={!!selected} onClose={() => setSelected(null)} />
       <CompareBar
         selected={compareList}

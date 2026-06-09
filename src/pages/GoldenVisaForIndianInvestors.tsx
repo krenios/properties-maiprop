@@ -14,6 +14,7 @@ import { useProperties } from "@/contexts/PropertyContext";
 import { Property } from "@/data/properties";
 import { getEffectiveProjectType, getEffectiveStatus } from "@/lib/propertyMeta";
 import { optimizeImage } from "@/lib/optimizeImage";
+import Footer from "@/components/Footer";
 
 const BASE_URL = "https://properties.maiprop.co";
 const PAGE_URL = `${BASE_URL}/greek-golden-visa-indian-investors/`;
@@ -460,12 +461,10 @@ const Inner = () => {
         </div>
       </section>
 
-      <footer className="border-t border-border bg-background text-center py-4">
-        <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. All rights reserved.</p>
-      </footer>
-
       <PropertyModal property={selected} open={!!selected} onClose={() => setSelected(null)} />
     </main>
+    <Footer />
+    </>
   );
 };
 
