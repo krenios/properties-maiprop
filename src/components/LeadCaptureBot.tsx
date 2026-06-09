@@ -545,7 +545,7 @@ const LeadCaptureBot = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 40, scale: 0.9 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed bottom-6 right-6 z-50 flex w-[420px] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[0_25px_60px_-12px_hsl(var(--primary)/0.25)] max-sm:bottom-0 max-sm:right-0 max-sm:left-0 max-sm:w-full max-sm:rounded-none max-sm:rounded-t-2xl max-sm:max-h-[90dvh]"
+            className="fixed bottom-6 right-6 z-50 flex w-[420px] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[0_25px_60px_-12px_hsl(var(--primary)/0.25)] max-sm:bottom-0 max-sm:right-0 max-sm:left-0 max-sm:w-full max-sm:rounded-none max-sm:rounded-t-2xl max-sm:max-h-[90dvh] max-sm:pb-[env(safe-area-inset-bottom)]"
           >
             {/* Header */}
             <div className="relative bg-gradient-to-r from-primary/15 via-primary/10 to-secondary/10 px-5 py-4">
@@ -714,9 +714,9 @@ const LeadCaptureBot = () => {
             {/* Resources quick links */}
             {!submitted && (
               <div className="border-t border-border bg-background/50 px-4 py-3">
-                <div className="flex items-center justify-between gap-3 text-[11px] text-muted-foreground whitespace-nowrap overflow-x-auto">
+                <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
                   <span className="shrink-0">{t("Want to research first?")}</span>
-                  <div className="flex items-center gap-3 flex-nowrap">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                     <a
                       href="/guides"
                       target="_blank"
@@ -816,7 +816,8 @@ const LeadCaptureBot = () => {
                     {step > 0 && (
                       <button
                         onClick={goBack}
-                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                      aria-label="Go back"
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                       >
                         <ChevronLeft className="h-4 w-4" />
                       </button>
@@ -833,7 +834,8 @@ const LeadCaptureBot = () => {
                     <button
                       onClick={advanceStep}
                       disabled={loading || !currentValue.trim()}
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-all hover:bg-primary/90 disabled:opacity-40"
+                      aria-label="Send"
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-all hover:bg-primary/90 disabled:opacity-40"
                     >
                       {loading ? (
                         <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
