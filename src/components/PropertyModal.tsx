@@ -211,9 +211,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
           onInteractOutside={(e) => {
             if (lightboxIdx !== null || floorPlanOpen) e.preventDefault();
           }}
-          className={`max-h-[100dvh] max-w-[98vw] xl:max-w-6xl overflow-hidden border-border bg-card p-0 max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[94vh] ${
-            lightboxIdx !== null || floorPlanOpen ? "pointer-events-none" : ""
-          }`}
+          className="max-h-[100dvh] max-w-[98vw] xl:max-w-6xl overflow-hidden border-border bg-card p-0 max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[94vh]"
           style={{
             transform: swipeY > 0 ? `translateY(${swipeY}px)` : undefined,
             opacity: swipeY > 0 ? Math.max(1 - swipeY / 300, 0.5) : undefined,
@@ -248,7 +246,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                   saveScrollTop();
                   setLightboxIdx(imgIdx % safeImages.length);
                 }}
-                className="absolute bottom-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100"
+                className="absolute bottom-3 left-3 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100"
                 aria-label="Enlarge image"
                 title="Enlarge image"
               >
@@ -258,7 +256,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                 <>
                   <button
                     onClick={() => setImgIdx((i) => (i - 1 + safeImages.length) % safeImages.length)}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background transition-colors"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-background/80 backdrop-blur hover:bg-background transition-colors"
                     aria-label="Previous image"
                     title="Previous image"
                   >
@@ -266,7 +264,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                   </button>
                   <button
                     onClick={() => setImgIdx((i) => (i + 1) % safeImages.length)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-background/80 backdrop-blur hover:bg-background transition-colors"
                     aria-label="Next image"
                     title="Next image"
                   >
@@ -358,11 +356,11 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                   </div>
                   <button
                     onClick={handleShare}
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
                     aria-label="Share property"
                     title="Share this property"
                   >
-                    <Share2 className="h-3.5 w-3.5" />
+                    <Share2 className="h-4 w-4" />
                   </button>
                 </div>
                 <button
@@ -555,7 +553,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                           saveScrollTop();
                           setFloorPlanOpen(true);
                         }}
-                        className="absolute bottom-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100"
+                        className="absolute bottom-3 left-3 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100"
                         aria-label="Enlarge floor plan"
                         title="Enlarge floor plan"
                       >

@@ -125,19 +125,19 @@ const PropertyCard = ({ property, onClick }: Props) => {
         <Link
           to={`/property/${property.id}`}
           onClick={(e) => e.stopPropagation()}
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
           aria-label="View property page"
           title="View full property page"
         >
-          <ExternalLink className="h-3.5 w-3.5" />
+          <ExternalLink className="h-4 w-4" />
         </Link>
         <button
           onClick={handleShare}
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
           aria-label="Share property"
           title="Share this property"
         >
-          <Share2 className="h-3.5 w-3.5" />
+          <Share2 className="h-4 w-4" />
         </button>
       </div>
     </div>

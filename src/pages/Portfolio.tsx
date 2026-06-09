@@ -18,6 +18,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
+import Footer from "@/components/Footer";
 import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
 import ImageLightbox from "@/components/ImageLightbox";
@@ -158,7 +159,7 @@ const Inner = () => {
           <div className="container mx-auto px-6">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/12 px-4 py-2.5 text-base font-semibold text-primary shadow-[0_0_0_1px_hsl(var(--primary)/0.1)] transition-colors hover:bg-primary/20 hover:border-primary/50"
+              className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2.5 text-base font-semibold text-primary shadow-[0_0_0_1px_hsl(var(--primary)/0.1)] transition-colors hover:bg-primary/20 hover:border-primary/50"
             >
               <ArrowLeft className="h-4 w-4" /> {t("Back to home")}
             </Link>
@@ -303,6 +304,7 @@ const Inner = () => {
         </section>
       </main>
 
+      <Footer />
       <DeliveredModal property={selected} open={!!selected} onClose={() => setSelected(null)} />
     </>
   );

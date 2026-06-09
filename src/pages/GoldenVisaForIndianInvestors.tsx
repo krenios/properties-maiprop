@@ -14,6 +14,7 @@ import { useProperties } from "@/contexts/PropertyContext";
 import { Property } from "@/data/properties";
 import { getEffectiveProjectType, getEffectiveStatus } from "@/lib/propertyMeta";
 import { optimizeImage } from "@/lib/optimizeImage";
+import Footer from "@/components/Footer";
 
 const BASE_URL = "https://properties.maiprop.co";
 const PAGE_URL = `${BASE_URL}/greek-golden-visa-indian-investors/`;
@@ -56,8 +57,8 @@ const articleLd = {
   "headline": "Greek Golden Visa for Indian Investors — 2026 Guide",
   "description": "How Indian nationals can secure EU residency through Greek real estate from €250,000. LRS guidance, family coverage, Schengen travel and pre-verified properties.",
   "url": PAGE_URL,
-  "datePublished": "2026-03-15",
-  "dateModified": "2026-05-23",
+  "datePublished": "2025-09-01",
+  "dateModified": "2026-06-09",
   "author": { "@id": `${BASE_URL}/#organization` },
   "publisher": { "@id": `${BASE_URL}/#organization` },
   "mainEntityOfPage": { "@type": "WebPage", "@id": PAGE_URL },
@@ -81,8 +82,8 @@ const pageLd = {
   "name": "Greek Golden Visa for Indian Investors — 2026 Guide",
   "description": "EU residency for Indian nationals from €250,000. Real opportunities curated for LRS-friendly budgets.",
   "url": PAGE_URL,
-  "datePublished": "2026-03-15",
-  "dateModified": "2026-05-23",
+  "datePublished": "2025-09-01",
+  "dateModified": "2026-06-09",
   "isPartOf": { "@id": `${BASE_URL}/#website` },
   "author": { "@id": `${BASE_URL}/#organization` },
   "publisher": { "@id": `${BASE_URL}/#organization` },
@@ -160,6 +161,7 @@ const Inner = () => {
   }, [properties]);
 
   return (
+    <>
     <main className="min-h-screen bg-background">
       <Helmet>
         <title>Greek Golden Visa for Indian Investors — EU Residency from €250K</title>
@@ -264,7 +266,7 @@ const Inner = () => {
 
           {shortlist.length === 0 ? (
             <div className="rounded-xl border border-border bg-background/40 p-10 text-center text-muted-foreground text-sm">
-              Loading the latest available opportunities…
+              No LRS-sized opportunities are live right now — <Link to="/properties/" className="text-primary underline">browse the full portfolio</Link> or contact us for off-market options.
             </div>
           ) : (
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -460,12 +462,10 @@ const Inner = () => {
         </div>
       </section>
 
-      <footer className="border-t border-border bg-background text-center py-4">
-        <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} mAI Prop. All rights reserved.</p>
-      </footer>
-
       <PropertyModal property={selected} open={!!selected} onClose={() => setSelected(null)} />
     </main>
+    <Footer />
+    </>
   );
 };
 

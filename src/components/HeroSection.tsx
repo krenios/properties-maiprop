@@ -69,7 +69,7 @@ const HeroSection = () => {
         </div>
 
         {/* Stats bar */}
-        <div className="mt-12 grid grid-cols-3 gap-4 border-t border-border/40 pt-8 sm:grid-cols-4">
+        <div className="mt-12 grid grid-cols-3 gap-4 border-t border-border/40 pt-8">
           {stats.map((s) => (
             <div key={s.label}>
               <p className="text-xl font-bold sm:text-3xl">{s.value}</p>

@@ -14,7 +14,7 @@ const services = [
 const ValueSection = () => {
 const { t } = useTranslation();
 return (
-<section id="platform" className="relative bg-background py-24">
+<section className="relative bg-background py-24">
     <div className="pointer-events-none absolute left-1/4 bottom-0 h-[350px] w-[350px] rounded-full bg-secondary/10 blur-[120px]" />
     <div className="relative container mx-auto px-6">
       <ScrollReveal>

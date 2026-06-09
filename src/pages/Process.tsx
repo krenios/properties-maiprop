@@ -12,6 +12,7 @@ import {
 "lucide-react";
 import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
+import Footer from "@/components/Footer";
 
 const BASE_URL = "https://properties.maiprop.co";
 const PAGE_URL = `${BASE_URL}/process/`;
@@ -304,6 +305,7 @@ const Inner = () => {
   const { t } = useTranslation();
 
   return (
+    <>
     <main className="min-h-screen bg-background">
       <Helmet>
         <title>Our Golden Visa Process | mAI Investments</title>
@@ -526,7 +528,9 @@ const Inner = () => {
         </div>
       </section>
 
-    </main>);
+    </main>
+    <Footer />
+    </>);
 
 };
 
