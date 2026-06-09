@@ -139,7 +139,7 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
                   to={l.href}
                   onClick={() => setMobileOpen(false)}
                   className={({ isActive }) =>
-                    `rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${isActive ? "text-foreground bg-muted" : "text-muted-foreground"}`
+                    `rounded-lg px-3 py-3 text-left text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${isActive ? "text-foreground bg-muted" : "text-muted-foreground"}`
                   }
                 >
                   {t(l.label)}
@@ -149,7 +149,7 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
                   key={l.href}
                   href={l.href}
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  className="rounded-lg px-3 py-3 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 >
                   {t(l.label)}
                 </a>
@@ -157,7 +157,7 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
                 <button
                   key={l.href}
                   onClick={() => handleClick(l.href)}
-                  className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  className="rounded-lg px-3 py-3 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 >
                   {t(l.label)}
                 </button>
@@ -166,7 +166,7 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
                   key={l.href}
                   href={`/${l.href}`}
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  className="rounded-lg px-3 py-3 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 >
                   {t(l.label)}
                 </a>
