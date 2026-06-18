@@ -54,6 +54,8 @@ const PropertyCard = ({ property, onClick }: Props) => {
           <img
             src={optimizeImage(images[0], { width: 600, height: 450 })}
             alt={`${property.title} — Golden Visa property in ${property.location}`}
+            width={600}
+            height={450}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
             decoding="async"
@@ -114,6 +116,7 @@ const PropertyCard = ({ property, onClick }: Props) => {
         <Button
           size="sm"
           variant="outline"
+          aria-label={`Inquire about ${property.title}`}
           className="flex-1 gap-2 rounded-full border-primary/30 text-primary hover:bg-primary/10"
           onClick={(e) => {
             e.stopPropagation();
@@ -125,19 +128,19 @@ const PropertyCard = ({ property, onClick }: Props) => {
         <Link
           to={`/property/${property.id}`}
           onClick={(e) => e.stopPropagation()}
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
-          aria-label="View property page"
-          title="View full property page"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+          aria-label={`View ${property.title}`}
+          title={`View ${property.title}`}
         >
-          <ExternalLink className="h-4 w-4" />
+          <ExternalLink className="h-3.5 w-3.5" />
         </Link>
         <button
           onClick={handleShare}
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
-          aria-label="Share property"
-          title="Share this property"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+          aria-label={`Share ${property.title}`}
+          title={`Share ${property.title}`}
         >
-          <Share2 className="h-4 w-4" />
+          <Share2 className="h-3.5 w-3.5" />
         </button>
       </div>
     </div>

@@ -23,7 +23,6 @@ const HeroSection = () => {
           sizes="100vw"
           alt="Aerial view of Greek coastline — Golden Visa real estate investment destination"
           className="h-full w-full object-cover"
-          fetchPriority="high"
           loading="eager"
           decoding="sync"
           width="1440"

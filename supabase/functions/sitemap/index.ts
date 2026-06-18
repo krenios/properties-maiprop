@@ -1,12 +1,8 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { createCorsHeaders, preflightResponse } from "../_shared/security.ts";
 
 const BASE_URL = "https://properties.maiprop.co";
 const HREFLANG_LOCALES = ["el", "ar", "ar-AE", "zh", "zh-CN", "ru", "fr", "hi", "he", "tr"];
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
 
 // All static pages — kept here so no static file dependency
 const STATIC_PAGES: Array<{ path: string; changefreq: string; priority: string; lastmod: string; hreflang: boolean }> = [
@@ -61,8 +57,10 @@ function urlEntry(path: string, lastmod: string, changefreq: string, priority: s
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return preflightResponse(req);
   }
+
+  const corsHeaders = createCorsHeaders(req);
 
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,

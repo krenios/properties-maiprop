@@ -22,14 +22,27 @@ const CookieConsent = () => {
     localStorage.setItem(CONSENT_KEY, value);
     setVisible(false);
 
+    const w = window as unknown as {
+      dataLayer: unknown[];
+      loadGoogleTag?: () => void;
+      gtag?: (...args: unknown[]) => void;
+    };
+    w.dataLayer = w.dataLayer || [];
+
     if (value === "rejected") {
       // Disable Google Analytics cookies
-      const w = window as unknown as { dataLayer: unknown[] };
-      w.dataLayer = w.dataLayer || [];
       w.dataLayer.push(["consent", "update", {
         analytics_storage: "denied",
         ad_storage: "denied",
       }]);
+    } else {
+      w.gtag?.("consent", "update", {
+        analytics_storage: "granted",
+        ad_storage: "granted",
+        ad_user_data: "granted",
+        ad_personalization: "granted",
+      });
+      w.loadGoogleTag?.();
     }
   };
 
@@ -37,9 +50,10 @@ const CookieConsent = () => {
 
   return (
     <div
-      className="fixed bottom-4 left-4 right-4 z-[9999] mx-auto max-w-lg animate-in slide-in-from-bottom-4 duration-500"
+      className="fixed bottom-4 left-4 right-4 z-[9999] mx-auto max-w-lg animate-in slide-in-from-bottom-4 duration-500 max-sm:bottom-auto max-sm:left-3 max-sm:right-3 max-sm:top-20 max-sm:max-w-none max-sm:slide-in-from-top-4"
       role="dialog"
       aria-label="Cookie consent"
+      data-mobile-nav-hidden="true"
     >
       <div className="rounded-xl border border-border bg-card p-5 shadow-2xl backdrop-blur-sm">
         <div className="flex items-start gap-3">

@@ -10,11 +10,10 @@ import {
   ExternalLink, Building, Calendar, LayoutGrid, FileText,
   Plane, Waves, Anchor, TrainFront, Car, GraduationCap,
   ShoppingCart, Cross, Heart, Landmark, TreePine,
-  Share2, Clock, Percent, Wallet, Sparkles,
+  Share2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useState, useRef, useCallback, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import type { LucideIcon } from "lucide-react";
 import ImageLightbox from "@/components/ImageLightbox";
 
@@ -51,12 +50,17 @@ const SWIPE_THRESHOLD = 120;
 // Module-level cache for POI results keyed by property id
 const poiCache: Record<string, PoiEntry[]> = {};
 
+const isPoiEntry = (entry: unknown): entry is PoiEntry =>
+  typeof entry === "object" &&
+  entry !== null &&
+  typeof (entry as PoiEntry).name === "string" &&
+  typeof (entry as PoiEntry).distance === "string";
+
 const PropertyModal = ({ property, open, onClose }: Props) => {
   const [imgIdx, setImgIdx] = useState(0);
   const [swipeY, setSwipeY] = useState(0);
   const [isSwiping, setIsSwiping] = useState(false);
   const [poiEntries, setPoiEntries] = useState<PoiEntry[] | null>(null);
-  const [poiLoading, setPoiLoading] = useState(false);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const [floorPlanOpen, setFloorPlanOpen] = useState(false);
 
@@ -95,36 +99,29 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
     el.scrollTop = scrollTopBeforeLightbox.current;
   }, []);
 
-  // Fetch POI with distances when modal opens
+  // Use precomputed POI cache. Refreshing the cache is an admin-only action.
   useEffect(() => {
-    if (!open || !property?.location) {
+    if (!open || !property) {
       setPoiEntries(null);
       return;
     }
 
-    // Check module-level cache first
     if (poiCache[property.id]) {
       setPoiEntries(poiCache[property.id]);
       return;
     }
 
-    setPoiLoading(true);
-    supabase.functions
-      .invoke("location-poi", {
-        body: { location: property.location, property_id: property.id },
-      })
-      .then(({ data, error }) => {
-        if (error) {
-          console.error("POI fetch error:", error);
-          setPoiEntries(null);
-        } else {
-          const entries: PoiEntry[] = data?.poi || [];
-          poiCache[property.id] = entries;
-          setPoiEntries(entries);
-        }
-      })
-      .finally(() => setPoiLoading(false));
-  }, [open, property?.id, property?.location]);
+    const rawPoiEntries: unknown[] = Array.isArray(property.poi_cache) ? property.poi_cache : [];
+    const cachedEntries = rawPoiEntries.filter(isPoiEntry);
+
+    if (cachedEntries.length > 0) {
+      poiCache[property.id] = cachedEntries;
+      setPoiEntries(cachedEntries);
+      return;
+    }
+
+    setPoiEntries(null);
+  }, [open, property]);
 
   // If the modal closes while the lightbox is open, reset lightbox state.
   // Otherwise the lightbox can re-render instantly when opening another modal.
@@ -211,7 +208,9 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
           onInteractOutside={(e) => {
             if (lightboxIdx !== null || floorPlanOpen) e.preventDefault();
           }}
-          className="max-h-[100dvh] max-w-[98vw] xl:max-w-6xl overflow-hidden border-border bg-card p-0 max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[94vh]"
+          className={`max-h-[100dvh] max-w-[98vw] xl:max-w-6xl overflow-hidden border-border bg-card p-0 max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:border-0 sm:max-h-[94vh] ${
+            lightboxIdx !== null || floorPlanOpen ? "pointer-events-none" : ""
+          }`}
           style={{
             transform: swipeY > 0 ? `translateY(${swipeY}px)` : undefined,
             opacity: swipeY > 0 ? Math.max(1 - swipeY / 300, 0.5) : undefined,
@@ -246,7 +245,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                   saveScrollTop();
                   setLightboxIdx(imgIdx % safeImages.length);
                 }}
-                className="absolute bottom-3 left-3 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100"
+                className="absolute bottom-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100"
                 aria-label="Enlarge image"
                 title="Enlarge image"
               >
@@ -256,7 +255,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                 <>
                   <button
                     onClick={() => setImgIdx((i) => (i - 1 + safeImages.length) % safeImages.length)}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-background/80 backdrop-blur hover:bg-background transition-colors"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background transition-colors"
                     aria-label="Previous image"
                     title="Previous image"
                   >
@@ -264,7 +263,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                   </button>
                   <button
                     onClick={() => setImgIdx((i) => (i + 1) % safeImages.length)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-background/80 backdrop-blur hover:bg-background transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 backdrop-blur hover:bg-background transition-colors"
                     aria-label="Next image"
                     title="Next image"
                   >
@@ -346,21 +345,15 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                           <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" /> {property.yield}
                         </Badge>
                       )}
-                      {property.delivery_eta && (
-                        <Badge variant="outline" className="gap-1.5 rounded-full border-primary/40 bg-primary/5 px-2.5 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm">
-                          <Clock className="h-3.5 w-3.5 text-primary" />
-                          <span className="text-primary font-medium">ETA: {property.delivery_eta}</span>
-                        </Badge>
-                      )}
                     </div>
                   </div>
                   <button
                     onClick={handleShare}
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
                     aria-label="Share property"
                     title="Share this property"
                   >
-                    <Share2 className="h-4 w-4" />
+                    <Share2 className="h-3.5 w-3.5" />
                   </button>
                 </div>
                 <button
@@ -376,7 +369,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
               <Separator className="bg-border" />
               <section aria-label="Points of Interest">
                 <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                  {poiLoading ? "Loading nearby places…" : "Nearby"}
+                  Nearby
                 </h4>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
                   {displayPoi.map((entry) => {
@@ -409,88 +402,6 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                         </Badge>
                       ))}
                     </div>
-                  </section>
-                </>
-              )}
-
-              {/* ROI / Investment assumptions */}
-              {(property.gross_yield || property.net_yield || property.occupancy_rate || property.annual_expenses || property.roi_notes) && (
-                <>
-                  <Separator className="bg-border" />
-                  <section aria-label="Investment returns and assumptions" className="rounded-xl border-2 border-primary/20 bg-primary/5 p-5">
-                    <div className="mb-4 flex items-center gap-2">
-                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/15">
-                        <TrendingUp className="h-3.5 w-3.5 text-primary" />
-                      </div>
-                      <h4 className="text-xs font-semibold uppercase tracking-wider text-primary">
-                        Investment Returns
-                      </h4>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                      {property.gross_yield && (
-                        <div className="rounded-lg border border-border/60 bg-background/40 p-3">
-                          <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-muted-foreground">
-                            <Percent className="h-3 w-3" /> Gross Yield
-                          </div>
-                          <p className="mt-1 text-lg font-bold text-primary">{property.gross_yield}</p>
-                        </div>
-                      )}
-                      {property.net_yield && (
-                        <div className="rounded-lg border border-border/60 bg-background/40 p-3">
-                          <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-muted-foreground">
-                            <Percent className="h-3 w-3" /> Net Yield
-                          </div>
-                          <p className="mt-1 text-lg font-bold text-primary">{property.net_yield}</p>
-                        </div>
-                      )}
-                      {property.occupancy_rate && (
-                        <div className="rounded-lg border border-border/60 bg-background/40 p-3">
-                          <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-muted-foreground">
-                            <Calendar className="h-3 w-3" /> Occupancy
-                          </div>
-                          <p className="mt-1 text-lg font-bold">{property.occupancy_rate}</p>
-                        </div>
-                      )}
-                      {property.annual_expenses && (
-                        <div className="rounded-lg border border-border/60 bg-background/40 p-3">
-                          <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-muted-foreground">
-                            <Wallet className="h-3 w-3" /> Expenses
-                          </div>
-                          <p className="mt-1 text-sm font-semibold">{property.annual_expenses}</p>
-                        </div>
-                      )}
-                    </div>
-                    {property.roi_notes && (
-                      <p className="mt-4 rounded-lg border border-border/40 bg-background/30 px-3 py-2 text-xs italic leading-relaxed text-muted-foreground">
-                        <span className="font-semibold not-italic">Assumptions: </span>
-                        {property.roi_notes}
-                      </p>
-                    )}
-                  </section>
-                </>
-              )}
-
-              {/* Location Highlights */}
-              {property.location_highlights && property.location_highlights.filter(Boolean).length > 0 && (
-                <>
-                  <Separator className="bg-border" />
-                  <section aria-label="Location highlights">
-                    <div className="mb-3 flex items-center gap-2">
-                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/15">
-                        <Sparkles className="h-3.5 w-3.5 text-primary" />
-                      </div>
-                      <h4 className="text-xs font-semibold uppercase tracking-wider text-primary">
-                        Location Highlights
-                      </h4>
-                    </div>
-                    <ul className="grid gap-2 sm:grid-cols-2">
-                      {property.location_highlights.filter(Boolean).map((h) => (
-                        <li key={h} className="flex items-start gap-2 rounded-lg border border-border/50 bg-muted/20 px-3 py-2.5 text-sm">
-                          <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
-                          <span>{h}</span>
-                        </li>
-                      ))}
-                    </ul>
                   </section>
                 </>
               )}
@@ -553,7 +464,7 @@ const PropertyModal = ({ property, open, onClose }: Props) => {
                           saveScrollTop();
                           setFloorPlanOpen(true);
                         }}
-                        className="absolute bottom-3 left-3 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100"
+                        className="absolute bottom-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur opacity-100"
                         aria-label="Enlarge floor plan"
                         title="Enlarge floor plan"
                       >

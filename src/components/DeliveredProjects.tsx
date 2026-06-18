@@ -55,6 +55,7 @@ const DeliveredProjects = () => {
             <RevealItem key={p.id}>
               <div className="group overflow-hidden rounded-xl border border-border bg-card text-left transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5">
                 <button
+                  type="button"
                   onClick={() => setSelected(p)}
                   className="w-full text-left">
                   <div className="relative aspect-[4/3] overflow-hidden">
@@ -70,50 +71,45 @@ const DeliveredProjects = () => {
                       Delivered
                     </Badge>
                   </div>
-                  <div className="p-4 pb-3">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="min-w-0">
-                        <h3 className="font-semibold leading-snug">{p.title}</h3>
-                        <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-                          <MapPin className="h-3 w-3" /> {p.location}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-1 shrink-0" onClick={(e) => e.stopPropagation()}>
-                        <Link
-                          to={`/property/${p.id}`}
-                          onClick={(e) => e.stopPropagation()}
-                          className="flex h-7 w-7 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
-                          aria-label="View full property page"
-                          title="View full property page"
-                        >
-                          <ExternalLink className="h-3 w-3" />
-                        </Link>
-                        <button
-                          onClick={async (e) => {
-                            e.stopPropagation();
-                            const shareUrl = `${window.location.origin}/property/${p.id}`;
-                            const shareData = { title: p.title, url: shareUrl };
-                            if (navigator.share && navigator.canShare?.(shareData)) {
-                              try { await navigator.share(shareData); } catch { /* cancelled */ }
-                            } else {
-                              try {
-                                await navigator.clipboard.writeText(shareUrl);
-                                toast.success("Link copied!", { description: "Property link copied to clipboard." });
-                              } catch {
-                                window.prompt("Copy this link:", shareUrl);
-                              }
-                            }
-                          }}
-                          className="flex h-7 w-7 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
-                          aria-label="Share property"
-                          title="Share property"
-                        >
-                          <Share2 className="h-3 w-3" />
-                        </button>
-                      </div>
-                    </div>
+                  <div className="p-4 pb-2">
+                    <h3 className="font-semibold leading-snug">{p.title}</h3>
+                    <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+                      <MapPin className="h-3 w-3" /> {p.location}
+                    </p>
                   </div>
                 </button>
+                <div className="flex items-center justify-end gap-1 px-4 pb-4">
+                  <Link
+                    to={`/property/${p.id}`}
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+                    aria-label={`View ${p.title}`}
+                    title={`View ${p.title}`}
+                  >
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const shareUrl = `${window.location.origin}/property/${p.id}`;
+                      const shareData = { title: p.title, url: shareUrl };
+                      if (navigator.share && navigator.canShare?.(shareData)) {
+                        try { await navigator.share(shareData); } catch { /* cancelled */ }
+                      } else {
+                        try {
+                          await navigator.clipboard.writeText(shareUrl);
+                          toast.success("Link copied!", { description: "Property link copied to clipboard." });
+                        } catch {
+                          window.prompt("Copy this link:", shareUrl);
+                        }
+                      }
+                    }}
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+                    aria-label={`Share ${p.title}`}
+                    title={`Share ${p.title}`}
+                  >
+                    <Share2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
               </div>
             </RevealItem>
             )}

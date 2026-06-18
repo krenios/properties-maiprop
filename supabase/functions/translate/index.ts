@@ -1,14 +1,11 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { createCorsHeaders, preflightResponse, requireAdmin } from "../_shared/security.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS")
-    return new Response(null, { headers: corsHeaders });
+    return preflightResponse(req);
+
+  const corsHeaders = createCorsHeaders(req);
 
   try {
     const { texts, targetLang, cacheOnly = false } = await req.json();
@@ -73,6 +70,9 @@ Deno.serve(async (req) => {
     if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) throw new Error("Supabase env vars missing");
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+    const auth = await requireAdmin(req, supabase);
+    if (!auth.ok) return auth.response;
+
     const uniqueTexts = Array.from(new Set(texts));
     const cacheMap = new Map<string, string>();
 

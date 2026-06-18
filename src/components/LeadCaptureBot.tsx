@@ -26,7 +26,7 @@ const STEPS = [
     key: "phone",
     label: "Your phone number (international format)",
     type: "tel",
-    placeholder: "+1 555 000 0000",
+    placeholder: "+351 912 345 678",
     emoji: "📱",
   },
   { key: "email", label: "What's your email address?", type: "email", placeholder: "john@example.com", emoji: "✉️" },
@@ -469,7 +469,6 @@ const LeadCaptureBot = () => {
         }
       } catch (_) { /* sessionStorage unavailable */ }
     }
-    // Welcome email is now dispatched server-side from submit-lead using a shared internal secret.
   };
 
   const handleClose = () => {
@@ -514,6 +513,7 @@ const LeadCaptureBot = () => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <motion.button
+                  data-mobile-nav-hidden="true"
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0, opacity: 0 }}
@@ -541,15 +541,17 @@ const LeadCaptureBot = () => {
       <AnimatePresence>
         {open && (
           <motion.div
+            data-mobile-nav-hidden="true"
             initial={{ opacity: 0, y: 40, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 40, scale: 0.9 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed bottom-6 right-6 z-50 flex w-[420px] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[0_25px_60px_-12px_hsl(var(--primary)/0.25)] max-sm:bottom-0 max-sm:right-0 max-sm:left-0 max-sm:w-full max-sm:rounded-none max-sm:rounded-t-2xl max-sm:max-h-[90dvh] max-sm:pb-[env(safe-area-inset-bottom)]"
+            className="fixed bottom-6 right-6 z-50 flex w-[420px] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[0_25px_60px_-12px_hsl(var(--primary)/0.25)] max-sm:bottom-0 max-sm:right-0 max-sm:left-0 max-sm:w-full max-sm:rounded-none max-sm:rounded-t-2xl max-sm:max-h-[90dvh]"
           >
             {/* Header */}
             <div className="relative bg-gradient-to-r from-primary/15 via-primary/10 to-secondary/10 px-5 py-4">
               <button
+                type="button"
                 onClick={handleClose}
                 aria-label="Close chat"
                 className="absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
@@ -605,6 +607,7 @@ const LeadCaptureBot = () => {
                         {isShowingProperties && (
                           <div className="flex items-center gap-2 pt-1">
                             <button
+                              type="button"
                               onClick={handleSkipPropertySelection}
                               className="text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground transition-colors"
                             >
@@ -695,6 +698,7 @@ const LeadCaptureBot = () => {
                   <p className="text-xs text-destructive">{t("Verification failed. Please refresh and try again.")}</p>
                 )}
                 <button
+                  type="button"
                   onClick={() => turnstileToken && handleSubmit(turnstileToken)}
                   disabled={!turnstileToken || loading}
                   className="w-full rounded-full bg-primary py-2.5 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 disabled:opacity-40 flex items-center justify-center gap-2"
@@ -714,9 +718,9 @@ const LeadCaptureBot = () => {
             {/* Resources quick links */}
             {!submitted && (
               <div className="border-t border-border bg-background/50 px-4 py-3">
-                <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+                <div className="flex items-center justify-between gap-3 text-[11px] text-muted-foreground whitespace-nowrap overflow-x-auto">
                   <span className="shrink-0">{t("Want to research first?")}</span>
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <div className="flex items-center gap-3 flex-nowrap">
                     <a
                       href="/guides"
                       target="_blank"
@@ -751,6 +755,7 @@ const LeadCaptureBot = () => {
                   >
                     {currentStep.options.map((opt) => (
                       <button
+                        type="button"
                         key={opt}
                         onClick={() => {
                           const updatedForm = { ...form, [currentStep.key]: opt };
@@ -815,9 +820,10 @@ const LeadCaptureBot = () => {
                   <div className="flex items-center gap-2">
                     {step > 0 && (
                       <button
+                        type="button"
                         onClick={goBack}
-                      aria-label="Go back"
-                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                        aria-label="Go back to previous question"
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                       >
                         <ChevronLeft className="h-4 w-4" />
                       </button>
@@ -832,10 +838,11 @@ const LeadCaptureBot = () => {
                       className="flex-1 rounded-full border-border/50 bg-muted/30 px-4 text-sm focus-visible:ring-primary/30"
                     />
                     <button
+                      type="button"
                       onClick={advanceStep}
                       disabled={loading || !currentValue.trim()}
-                      aria-label="Send"
-                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-all hover:bg-primary/90 disabled:opacity-40"
+                      aria-label="Send answer"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-all hover:bg-primary/90 disabled:opacity-40"
                     >
                       {loading ? (
                         <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />

@@ -1,11 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { requireAdmin } from "../_shared/admin-auth.ts";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { createCorsHeaders, preflightResponse, requireAdmin } from "../_shared/security.ts";
 
 const SITE_URL = "https://properties.maiprop.co";
 
@@ -53,11 +47,17 @@ function escapeHtml(text: string): string {
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return preflightResponse(req);
   }
 
+  const corsHeaders = createCorsHeaders(req);
+
   try {
-    const auth = await requireAdmin(req, corsHeaders);
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const auth = await requireAdmin(req, supabase);
     if (!auth.ok) return auth.response;
 
     const { lead, customMessage, preview_only } = await req.json();
@@ -79,10 +79,6 @@ Deno.serve(async (req) => {
     }
 
     // Fetch lead from database instead of trusting client data
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
     const { data: dbLead, error: dbError } = await supabase.from("leads").select("*").eq("id", lead.id).single();
 
     if (dbError || !dbLead) {

@@ -24,7 +24,7 @@ export function optimizeImage(
   if (width) params.set('width', String(width));
   if (height) params.set('height', String(height));
   params.set('resize', 'cover');
-  params.set('format', 'origin');
+  params.set('format', 'webp');
   params.set('quality', String(quality));
 
   return `${transformedUrl}?${params.toString()}`;

@@ -1,6 +1,6 @@
 import { MapPin, ExternalLink } from "lucide-react";
 
-const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "AIzaSyD42TB3L5KeQfvqOu6NfelXL5EOVNzz_cY";
+const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 interface Props {
   location: string;
@@ -15,16 +15,22 @@ const MiniMap = ({ location, height = 200, showFooter = true }: Props) => {
 
   return (
     <div className="overflow-hidden rounded-lg border border-border">
-      <iframe
-        src={embedUrl}
-        width="100%"
-        height={height}
-        style={{ border: 0 }}
-        allowFullScreen={false}
-        loading="lazy"
-        referrerPolicy="no-referrer-when-downgrade"
-        title={`Map of ${location}`}
-      />
+      {API_KEY ? (
+        <iframe
+          src={embedUrl}
+          width="100%"
+          height={height}
+          style={{ border: 0 }}
+          allowFullScreen={false}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          title={`Map of ${location}`}
+        />
+      ) : (
+        <div className="flex items-center justify-center bg-muted/30 px-4 text-center text-sm text-muted-foreground" style={{ height }}>
+          Map preview unavailable. Open the location in Google Maps.
+        </div>
+      )}
       {showFooter && (
         <a
           href={mapsUrl}

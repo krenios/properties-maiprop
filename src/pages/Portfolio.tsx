@@ -18,7 +18,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
-import Footer from "@/components/Footer";
 import { useLeadBot } from "@/components/LeadBotProvider";
 import { useTranslation } from "@/contexts/TranslationContext";
 import ImageLightbox from "@/components/ImageLightbox";
@@ -159,7 +158,7 @@ const Inner = () => {
           <div className="container mx-auto px-6">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2.5 text-base font-semibold text-primary shadow-[0_0_0_1px_hsl(var(--primary)/0.1)] transition-colors hover:bg-primary/20 hover:border-primary/50"
+              className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/12 px-4 py-2.5 text-base font-semibold text-primary shadow-[0_0_0_1px_hsl(var(--primary)/0.1)] transition-colors hover:bg-primary/20 hover:border-primary/50"
             >
               <ArrowLeft className="h-4 w-4" /> {t("Back to home")}
             </Link>
@@ -228,7 +227,7 @@ const Inner = () => {
                   {delivered.map((p) => (
                     <RevealItem key={p.id}>
                       <div className="group overflow-hidden rounded-xl border border-border bg-card transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5">
-                        <button onClick={() => setSelected(p)} className="w-full text-left">
+                        <button type="button" onClick={() => setSelected(p)} className="w-full text-left">
                           <div className="relative aspect-[4/3] overflow-hidden">
                             <img
                               src={optimizeImage(
@@ -243,43 +242,40 @@ const Inner = () => {
                                 {t("Delivered")}
                               </Badge>
                           </div>
-                          <div className="p-4 pb-3">
-                            <div className="flex items-start justify-between gap-2">
-                              <div className="min-w-0">
-                                <h3 className="font-semibold leading-snug">{p.title}</h3>
-                                <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-                                  <MapPin className="h-3 w-3" /> {p.location}
-                                </p>
-                              </div>
-                              <div className="flex items-center gap-1 shrink-0" onClick={(e) => e.stopPropagation()}>
-                                <Link
-                                  to={`/property/${p.id}`}
-                                  onClick={(e) => e.stopPropagation()}
-                                  className="flex h-7 w-7 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
-                                  aria-label="View full property page"
-                                >
-                                  <ExternalLink className="h-3 w-3" />
-                                </Link>
-                                <button
-                                  onClick={async (e) => {
-                                    e.stopPropagation();
-                                    const shareUrl = `${window.location.origin}/property/${p.id}`;
-                                    try {
-                                      await navigator.clipboard.writeText(shareUrl);
-                                      toast.success("Link copied!");
-                                    } catch {
-                                      window.prompt("Copy this link:", shareUrl);
-                                    }
-                                  }}
-                                  className="flex h-7 w-7 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
-                                  aria-label="Share property"
-                                >
-                                  <Share2 className="h-3 w-3" />
-                                </button>
-                              </div>
-                            </div>
+                          <div className="p-4 pb-2">
+                            <h3 className="font-semibold leading-snug">{p.title}</h3>
+                            <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+                              <MapPin className="h-3 w-3" /> {p.location}
+                            </p>
                           </div>
                         </button>
+                        <div className="flex items-center justify-end gap-1 px-4 pb-4">
+                          <Link
+                            to={`/property/${p.id}`}
+                            className="flex h-8 w-8 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+                            aria-label={`View ${p.title}`}
+                            title={`View ${p.title}`}
+                          >
+                            <ExternalLink className="h-3.5 w-3.5" />
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              const shareUrl = `${window.location.origin}/property/${p.id}`;
+                              try {
+                                await navigator.clipboard.writeText(shareUrl);
+                                toast.success("Link copied!");
+                              } catch {
+                                window.prompt("Copy this link:", shareUrl);
+                              }
+                            }}
+                            className="flex h-8 w-8 items-center justify-center rounded-full border border-border/60 text-muted-foreground hover:border-primary/30 hover:text-primary transition-colors"
+                            aria-label={`Share ${p.title}`}
+                            title={`Share ${p.title}`}
+                          >
+                            <Share2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
                       </div>
                     </RevealItem>
                   ))}
@@ -304,7 +300,6 @@ const Inner = () => {
         </section>
       </main>
 
-      <Footer />
       <DeliveredModal property={selected} open={!!selected} onClose={() => setSelected(null)} />
     </>
   );
