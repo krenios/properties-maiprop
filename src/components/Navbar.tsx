@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate, Link, NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
@@ -24,6 +24,7 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
   const isHome = location.pathname === "/";
   const [scrolled, setScrolled] = useState(forceScrolled);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const headerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (forceScrolled) return;
@@ -31,6 +32,50 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, [forceScrolled]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileOpen(false);
+    };
+
+    const header = headerRef.current;
+    const appShell = header?.parentElement;
+    const siblings = appShell
+      ? Array.from(appShell.children).filter((child) => child !== header)
+      : [];
+    const overlays = Array.from(document.querySelectorAll("[data-mobile-nav-hidden='true']"));
+    const hiddenTargets = [...siblings, ...overlays] as HTMLElement[];
+    const previousStates = hiddenTargets.map((element) => ({
+      element,
+      ariaHidden: element.getAttribute("aria-hidden"),
+      inert: element.inert,
+    }));
+
+    previousStates.forEach(({ element }) => {
+      element.setAttribute("aria-hidden", "true");
+      element.inert = true;
+    });
+
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+      previousStates.forEach(({ element, ariaHidden, inert }) => {
+        if (ariaHidden === null) {
+          element.removeAttribute("aria-hidden");
+        } else {
+          element.setAttribute("aria-hidden", ariaHidden);
+        }
+        element.inert = inert;
+      });
+    };
+  }, [mobileOpen]);
 
   const handleClick = (href: string) => {
     setMobileOpen(false);
@@ -47,6 +92,7 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
 
   return (
     <header
+      ref={headerRef}
       className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
         scrolled
           ? "border-b border-border/30 bg-background/40 backdrop-blur-xl shadow-lg"
@@ -121,8 +167,9 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
         <button
           className="md:hidden flex h-11 w-11 items-center justify-center"
           onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={mobileOpen}
+          aria-controls="mobile-navigation"
         >
           {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
@@ -130,8 +177,13 @@ const Navbar = ({ forceScrolled = false }: { forceScrolled?: boolean }) => {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-border bg-background/95 backdrop-blur-xl md:hidden">
-          <nav className="container mx-auto flex flex-col gap-1 px-6 py-4">
+        <div
+          className="fixed inset-x-0 bottom-0 top-16 z-[60] border-t border-border bg-background/95 backdrop-blur-xl md:hidden sm:top-20"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile navigation"
+        >
+          <nav id="mobile-navigation" className="container mx-auto flex h-full flex-col gap-1 overflow-y-auto px-6 py-5">
             {navLinks.map((l) =>
               (l as any).isPage ? (
                 <NavLink

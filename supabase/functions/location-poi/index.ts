@@ -1,10 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { createCorsHeaders, preflightResponse, requireAdmin } from "../_shared/security.ts";
 
 const ALL_POI = [
   "Airport",
@@ -22,8 +17,10 @@ const ALL_POI = [
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return preflightResponse(req);
   }
+
+  const corsHeaders = createCorsHeaders(req);
 
   try {
     const { location, property_id } = await req.json();
@@ -38,6 +35,9 @@ Deno.serve(async (req) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const auth = await requireAdmin(req, supabase);
+    if (!auth.ok) return auth.response;
 
     if (property_id) {
       const { data: prop } = await supabase

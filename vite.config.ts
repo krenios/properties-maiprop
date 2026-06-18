@@ -1,9 +1,33 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
+import { defineConfig, type PluginOption } from "vite";
+import react from "@vitejs/plugin-react";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
-// https://vitejs.dev/config/
+const chunkGroups: Array<[string, string[]]> = [
+  ["vendor-react", ["react", "react-dom"]],
+  ["vendor-router", ["react-router-dom", "react-router"]],
+  ["vendor-supabase", ["@supabase"]],
+  ["vendor-framer", ["framer-motion", "motion-dom", "motion-utils"]],
+  ["vendor-lucide", ["lucide-react"]],
+  ["vendor-radix", ["@radix-ui"]],
+  ["vendor-utils", ["clsx", "tailwind-merge", "class-variance-authority", "date-fns"]],
+];
+
+const packageMatcher = (normalizedId: string, packageName: string) =>
+  normalizedId.includes(`/node_modules/${packageName}/`) ||
+  normalizedId.includes(`/node_modules/${packageName}.`);
+
+const manualChunks = (id: string) => {
+  const normalizedId = id.replace(/\\/g, "/");
+  if (!normalizedId.includes("/node_modules/")) return undefined;
+
+  const match = chunkGroups.find(([, packageNames]) =>
+    packageNames.some((packageName) => packageMatcher(normalizedId, packageName))
+  );
+
+  return match?.[0] || "vendor";
+};
+
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
@@ -19,7 +43,7 @@ export default defineConfig(({ mode }) => ({
       },
     },
   },
-  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+  plugins: [react(), mode === "development" ? componentTagger() : null].filter(Boolean) as PluginOption[],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -29,29 +53,7 @@ export default defineConfig(({ mode }) => ({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          // React core — smallest, most-cached chunk
-          "vendor-react": ["react", "react-dom", "react/jsx-runtime"],
-          // Router — needed for all pages
-          "vendor-router": ["react-router-dom"],
-          // Supabase — large, rarely changes
-          "vendor-supabase": ["@supabase/supabase-js"],
-          // Framer Motion — heavy animation library, lazy-loaded sections
-          "vendor-framer": ["framer-motion"],
-          // Lucide icons — tree-shaken but still benefits from isolation
-          "vendor-lucide": ["lucide-react"],
-          // Radix UI primitives
-          "vendor-radix": [
-            "@radix-ui/react-dialog",
-            "@radix-ui/react-dropdown-menu",
-            "@radix-ui/react-tooltip",
-            "@radix-ui/react-accordion",
-            "@radix-ui/react-tabs",
-            "@radix-ui/react-select",
-          ],
-          // Misc utilities
-          "vendor-utils": ["clsx", "tailwind-merge", "class-variance-authority", "date-fns"],
-        },
+        manualChunks,
       },
     },
   },

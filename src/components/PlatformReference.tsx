@@ -229,7 +229,15 @@ function PropertiesMockup() {
         <div style={{ transform: `translateY(-${scrollY}px)`, transition: "none", willChange: "transform" }}>
           {[...MOCK_CARDS, ...MOCK_CARDS].map((card, i) => (
             <div key={i} className="flex gap-3 mb-2.5 rounded-xl bg-white/5 border border-white/8 overflow-hidden">
-              <img src={card.img} alt="" className="w-20 h-16 object-cover shrink-0" />
+              <img
+                src={card.img}
+                alt={`${card.title} property preview`}
+                width={80}
+                height={64}
+                loading="lazy"
+                decoding="async"
+                className="w-20 h-16 object-cover shrink-0"
+              />
               <div className="flex-1 py-2 pr-3 min-w-0">
                 <div className="flex items-center gap-1.5 mb-0.5">
                   <span
@@ -314,8 +322,9 @@ function OSDashboardMockup() {
         </div>
         <div className="w-px h-3 bg-white/10" />
         {[BarChart2, MapPin, Gavel, Home, Layers].map((Icon, i) => (
-          <button
+          <div
             key={i}
+            aria-hidden="true"
             className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
             style={{
               background: i === 0 ? "hsl(263 86% 64% / 0.2)" : "transparent",
@@ -323,7 +332,7 @@ function OSDashboardMockup() {
             }}
           >
             <Icon className="w-3.5 h-3.5" style={{ color: i === 0 ? "hsl(263 86% 75%)" : "hsl(215 20% 40%)" }} />
-          </button>
+          </div>
         ))}
       </div>
 

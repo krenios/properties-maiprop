@@ -1,28 +1,23 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { requireCronSecret } from "../_shared/admin-auth.ts";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { createCorsHeaders, preflightResponse, requireScheduler } from "../_shared/security.ts";
 
 // Schedule: step 1 at 1 day after welcome, step 2 at 7 days after step 1 (8 days total), step 3 at 21 days after step 2 (29 days total)
 const SCHEDULE = [
   { step: 1, daysAfter: 1 },
   { step: 2, daysAfter: 8 },
-  { step: 3, daysAfter: 28 },
+  { step: 3, daysAfter: 29 },
 ];
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return preflightResponse(req);
   }
 
+  const corsHeaders = createCorsHeaders(req);
+
   try {
-    // Restrict invocations to the pg_cron job carrying the shared secret.
-    const guard = requireCronSecret(req, corsHeaders);
-    if (!guard.ok) return guard.response;
+    const schedulerAuth = requireScheduler(req);
+    if (!schedulerAuth.ok) return schedulerAuth.response;
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -60,7 +55,9 @@ Deno.serve(async (req) => {
       const currentStep = lead.followup_step || 0;
 
       // Find the next step that should be sent based on timing
-      const nextSchedule = SCHEDULE.find((s) => s.step === currentStep + 1 && daysSinceCreation >= s.daysAfter);
+      const nextSchedule = SCHEDULE.find(
+        (s) => s.step === currentStep + 1 && daysSinceCreation >= s.daysAfter
+      );
 
       if (!nextSchedule) continue;
 
@@ -71,7 +68,6 @@ Deno.serve(async (req) => {
           headers: {
             Authorization: `Bearer ${supabaseKey}`,
             "Content-Type": "application/json",
-            "x-cron-secret": Deno.env.get("CRON_SECRET") ?? "",
           },
           body: JSON.stringify({
             lead_id: lead.id,
@@ -87,7 +83,9 @@ Deno.serve(async (req) => {
           error: followupRes.ok ? undefined : followupData.error,
         });
 
-        console.log(`Followup step ${nextSchedule.step} for ${lead.full_name}: ${followupRes.ok ? "OK" : "FAILED"}`);
+        console.log(
+          `Followup step ${nextSchedule.step} for ${lead.full_name}: ${followupRes.ok ? "OK" : "FAILED"}`
+        );
       } catch (e) {
         console.error(`Failed to send followup to ${lead.full_name}:`, e);
         results.push({
@@ -108,7 +106,7 @@ Deno.serve(async (req) => {
       {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
-      },
+      }
     );
   } catch (error: unknown) {
     console.error("Scheduled followup error:", error);

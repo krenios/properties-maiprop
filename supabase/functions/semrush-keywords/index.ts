@@ -1,10 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2.45.0";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+import { jsonResponse, preflightResponse, requireAdmin } from "../_shared/security.ts";
 
 const GATEWAY = "https://connector-gateway.lovable.dev/semrush";
 
@@ -40,25 +35,15 @@ function rowsFromResponse(json: any): Record<string, string>[] {
 }
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  if (req.method === "OPTIONS") return preflightResponse(req);
 
   try {
-    // Verify admin
-    const auth = req.headers.get("Authorization") ?? "";
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: auth } } },
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
-    const { data: userData } = await supabase.auth.getUser();
-    if (!userData?.user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-    }
-    const { data: roleRow } = await supabase
-      .from("user_roles").select("role").eq("user_id", userData.user.id).eq("role", "admin").maybeSingle();
-    if (!roleRow) {
-      return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-    }
+    const authResult = await requireAdmin(req, supabase);
+    if (!authResult.ok) return authResult.response;
 
     const body = await req.json().catch(() => ({}));
     const keywords: string[] = Array.isArray(body.keywords) && body.keywords.length
@@ -140,14 +125,12 @@ Deno.serve(async (req) => {
       errors.push(`questions: ${(e as Error).message}`);
     }
 
-    return new Response(JSON.stringify({
+    return jsonResponse(req, {
       matrix, opportunities, questions, keywords, databases, opportunitySeed, opportunityDb,
       fetched_at: new Date().toISOString(),
       errors: errors.slice(0, 10),
-    }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
-  } catch (e) {
-    return new Response(JSON.stringify({ error: (e as Error).message }), {
-      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
+  } catch (e) {
+    return jsonResponse(req, { error: (e as Error).message }, { status: 500 });
   }
 });

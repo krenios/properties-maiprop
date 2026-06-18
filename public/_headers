@@ -4,6 +4,7 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://images.unsplash.com https://storage.googleapis.com https://cqxcztafhnwkhxgaylne.supabase.co https://maps.gstatic.com https://*.googleapis.com https://*.ggpht.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://cqxcztafhnwkhxgaylne.supabase.co https://www.google-analytics.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://challenges.cloudflare.com; frame-src 'self' https://www.google.com https://maps.google.com https://challenges.cloudflare.com; form-action 'self'; upgrade-insecure-requests
 
 # Long-term cache for hashed JS/CSS assets
 /assets/*

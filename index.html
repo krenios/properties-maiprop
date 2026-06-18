@@ -27,22 +27,40 @@
       imagesizes="100vw"
     />
     <!-- Google tag (gtag.js) — async per Google's recommendation -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17031338731"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+      gtag('consent', 'default', {
+        analytics_storage: 'denied',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied'
+      });
       gtag('js', new Date());
-      gtag('config', 'AW-17031338731');
+      window.loadGoogleTag = function() {
+        if (document.getElementById('google-tag-script')) return;
+        var script = document.createElement('script');
+        script.id = 'google-tag-script';
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17031338731';
+        document.head.appendChild(script);
+        gtag('config', 'AW-17031338731');
+      };
+      try {
+        if (localStorage.getItem('cookie-consent') === 'accepted') {
+          window.requestIdleCallback ? requestIdleCallback(window.loadGoogleTag) : setTimeout(window.loadGoogleTag, 1200);
+        }
+      } catch (e) {}
     </script>
 
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Primary SEO -->
-    <title>Greek Golden Visa Properties | mAI Investments</title>
+    <title>Greek Golden Visa Properties | mAI properties</title>
     <meta
       name="description"
-      content="Greek Golden Visa from €250K. Pre-verified Athens & Riviera properties with full legal support for EU residency."
+      content="Secure your Greek Golden Visa through €250K+ real estate investments. AI-powered platform for EU residency with full legal support and pre-verified properties."
     />
     <meta name="author" content="mAI Prop" />
     <meta
@@ -152,15 +170,15 @@
       }
     </script>
 
-    <meta property="og:title" content="Greek Golden Visa Properties | mAI Investments" />
-    <meta name="twitter:title" content="Greek Golden Visa Properties | mAI Investments" />
+    <meta property="og:title" content="Greek Golden Visa Properties | mAI properties" />
+    <meta name="twitter:title" content="Greek Golden Visa Properties | mAI properties" />
     <meta
       property="og:description"
-      content="Greek Golden Visa from €250K. Pre-verified Athens & Riviera properties with full legal support for EU residency."
+      content="Secure your Greek Golden Visa through €250K+ real estate investments. AI-powered platform for EU residency with full legal support and pre-verified properties."
     />
     <meta
       name="twitter:description"
-      content="Greek Golden Visa from €250K. Pre-verified Athens & Riviera properties with full legal support for EU residency."
+      content="Secure your Greek Golden Visa through €250K+ real estate investments. AI-powered platform for EU residency with full legal support and pre-verified properties."
     />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   </head>

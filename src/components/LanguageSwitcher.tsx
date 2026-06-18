@@ -18,6 +18,8 @@ const LanguageSwitcher = () => {
         <Button
           variant="ghost"
           size="sm"
+          type="button"
+          aria-label={`Change language. Current language: ${current?.label ?? language}`}
           className="gap-1.5 rounded-full px-3 text-sm font-medium text-muted-foreground hover:text-foreground"
         >
           {isTranslating ? (

@@ -1,15 +1,12 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { createCorsHeaders, preflightResponse } from "../_shared/security.ts";
 
 const TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  if (req.method === "OPTIONS") return preflightResponse(req);
+
+  const corsHeaders = createCorsHeaders(req);
 
   try {
     const body = await req.json();
@@ -66,7 +63,7 @@ Deno.serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { error: insertError } = await supabase.from("leads").insert({
+    const { data: insertedLead, error: insertError } = await supabase.from("leads").insert({
       full_name: lead.full_name.trim(),
       phone: lead.phone.trim(),
       email: lead.email.trim().toLowerCase(),
@@ -75,7 +72,7 @@ Deno.serve(async (req) => {
       preferred_location: (lead.preferred_location || "").trim().slice(0, 100),
       property_type: (lead.property_type || "").slice(0, 50),
       investment_timeline: (lead.investment_timeline || "").slice(0, 50),
-    });
+    }).select("id").single();
 
     if (insertError) {
       console.error("Insert error:", insertError);
@@ -84,25 +81,19 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Fire-and-forget: trigger the welcome notification email server-side using
-    // the shared internal secret so notify-new-lead can stay locked down.
     try {
-      const internalSecret = Deno.env.get("INTERNAL_NOTIFY_SECRET");
-      if (internalSecret) {
-        fetch(`${supabaseUrl}/functions/v1/notify-new-lead`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${supabaseKey}`,
-            "x-internal-secret": internalSecret,
-          },
-          body: JSON.stringify({ email: lead.email.trim().toLowerCase() }),
-        }).catch((e) => console.warn("notify-new-lead trigger failed:", e));
-      } else {
-        console.warn("INTERNAL_NOTIFY_SECRET not set; skipping welcome email trigger");
-      }
-    } catch (e) {
-      console.warn("notify dispatch error:", e);
+      const internalSecret = Deno.env.get("INTERNAL_FUNCTION_SECRET");
+      await fetch(`${supabaseUrl}/functions/v1/notify-new-lead`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${supabaseKey}`,
+          ...(internalSecret ? { "x-internal-function-secret": internalSecret } : {}),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ lead_id: insertedLead.id }),
+      });
+    } catch (notifyError) {
+      console.error("Lead notification failed:", notifyError);
     }
 
     return new Response(JSON.stringify({ success: true }), {

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useRef } from "react";
 import { toast } from "sonner";
-import { LOCALES } from "@/i18n/locales";
+import { loadLocale, type LocaleDictionary } from "@/i18n/locales";
 
 export const LANGUAGES = [
   { code: "en", label: "English", flag: "🇬🇧" },
@@ -36,6 +36,15 @@ const STORAGE_KEY = "mai_prop_language";
 // Bump this version string whenever the site copy changes significantly to bust stale caches.
 const CACHE_VERSION = "v1";
 const CACHE_KEY = `mai_prop_translation_cache_${CACHE_VERSION}`;
+
+const localePromises = new Map<string, Promise<LocaleDictionary>>();
+
+function loadLocaleDictionary(lang: string): Promise<LocaleDictionary> {
+  if (!localePromises.has(lang)) {
+    localePromises.set(lang, loadLocale(lang));
+  }
+  return localePromises.get(lang)!;
+}
 
 /** Load persisted cache from localStorage (survives page reloads AND browser restarts) */
 function loadCache(): Record<string, Record<string, string>> {
@@ -84,7 +93,7 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
     setIsTranslating(true);
     try {
       if (!cache.current[lang]) cache.current[lang] = {};
-      const dictionary = LOCALES[lang] || {};
+      const dictionary = await loadLocaleDictionary(lang);
       texts.forEach((original) => {
         cache.current[lang][original] = dictionary[original] || original;
       });

@@ -1,10 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { createCorsHeaders, preflightResponse, requireInternalRequest } from "../_shared/security.ts";
 
 const SITE_URL = "https://properties.maiprop.co";
 
@@ -168,47 +163,14 @@ function getFallbackInnerHtml(lead: any): string {
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return preflightResponse(req);
   }
 
+  const corsHeaders = createCorsHeaders(req);
+
   try {
-    // Restrict to trusted callers: either an admin JWT (Admin UI manual resend)
-    // or the internal shared secret (used by submit-lead after a CAPTCHA-verified insert).
-    const internalSecret = Deno.env.get("INTERNAL_NOTIFY_SECRET");
-    const providedInternal = req.headers.get("x-internal-secret");
-    const isInternal = !!internalSecret && providedInternal === internalSecret;
-    if (!isInternal) {
-      const authHeader = req.headers.get("Authorization");
-      if (!authHeader) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), {
-          status: 401,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      const SUPABASE_URL_ENV = Deno.env.get("SUPABASE_URL")!;
-      const SUPABASE_SRV_ENV = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-      const adminClient = createClient(SUPABASE_URL_ENV, SUPABASE_SRV_ENV);
-      const token = authHeader.replace("Bearer ", "");
-      const { data: { user }, error: uerr } = await adminClient.auth.getUser(token);
-      if (uerr || !user) {
-        return new Response(JSON.stringify({ error: "Invalid token" }), {
-          status: 401,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      const { data: roleData } = await adminClient
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", user.id)
-        .eq("role", "admin")
-        .maybeSingle();
-      if (!roleData) {
-        return new Response(JSON.stringify({ error: "Forbidden — admin access required" }), {
-          status: 403,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-    }
+    const internalAuth = requireInternalRequest(req);
+    if (!internalAuth.ok) return internalAuth.response;
 
     const body = await req.json();
 
@@ -228,7 +190,22 @@ Deno.serve(async (req) => {
         });
       }
       lead = dbLead;
-    } else if (body.full_name && body.email && body.phone) {
+    } else if (body.email && typeof body.email === "string") {
+      const { data: dbLead, error } = await supabase
+        .from("leads")
+        .select("*")
+        .eq("email", body.email)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error || !dbLead) {
+        return new Response(JSON.stringify({ error: "Lead not found" }), {
+          status: 404,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      lead = dbLead;
+    } else if (body.full_name && body.email) {
       lead = body;
       if (typeof lead.full_name !== "string" || lead.full_name.length > 100) {
         return new Response(JSON.stringify({ error: "Invalid name" }), {
@@ -248,21 +225,6 @@ Deno.serve(async (req) => {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-    } else if (body.email && typeof body.email === "string") {
-      const { data: dbLead, error } = await supabase
-        .from("leads")
-        .select("*")
-        .eq("email", body.email)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      if (error || !dbLead) {
-        return new Response(JSON.stringify({ error: "Lead not found" }), {
-          status: 404,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      lead = dbLead;
     } else {
       return new Response(JSON.stringify({ error: "Missing lead_id, email, or lead data" }), {
         status: 400,

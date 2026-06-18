@@ -1,3 +1,5 @@
+import type { Json } from "@/integrations/supabase/types";
+
 // Property type matching the database schema (snake_case)
 export interface Property {
   id: string;
@@ -12,6 +14,7 @@ export interface Property {
   floor_plan: string;
   location: string;
   poi: string[];
+  poi_cache?: Json;
   tags: string[];
   // status: Available / Booked / Sold
   // (legacy: some older rows used status="under-construction")
@@ -20,17 +23,16 @@ export interface Property {
   // (legacy: "new" | "delivered")
   project_type: "ready" | "under-construction" | "renovated" | "new" | "delivered" | "";
   yield: string;
+  delivery_eta?: string | null;
+  gross_yield?: string | null;
+  net_yield?: string | null;
+  occupancy_rate?: string | null;
+  annual_expenses?: string | null;
+  roi_notes?: string | null;
+  location_highlights?: string[] | null;
   date_added: string;
   floor: string;
   construction_year: string;
   sort_order: number;
   market_report: string;
-  // Optional deal-detail fields (added 2026-04)
-  delivery_eta: string;
-  gross_yield: string;
-  net_yield: string;
-  occupancy_rate: string;
-  annual_expenses: string;
-  roi_notes: string;
-  location_highlights: string[];
 }
